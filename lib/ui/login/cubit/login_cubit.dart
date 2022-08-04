@@ -1,0 +1,51 @@
+import 'package:api_repo/api_repo.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
+
+import '../../select_role/view/select_role_page.dart';
+
+part 'login_state.dart';
+
+class LoginCubit extends Cubit<LoginState> {
+  final AuthRepo auth;
+  LoginCubit({required AuthRepo repository})
+      : auth = repository,
+        super(const LoginState());
+
+  void onChangedEmail(String email) {
+    emit(state.copyWith(email: email));
+  }
+
+  void onChangedPassword(String password) {
+    emit(state.copyWith(password: password));
+  }
+
+  Future<void> onPressedLogin() async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final model = SignInModel(email: state.email, password: state.password);
+      final result = await auth.signIn(data: model);
+      
+      result.when(success: (data) {
+        Get.offAll(() => SelectRolePage());
+      }, failure: (error) {
+        DialogService.showDialog(
+          child: NetworkErrorDialog(
+            message: 'Something went wrong',
+            onCancel: () {
+              Get.back();
+            },
+          ),
+        );
+      });
+      emit(state.copyWith(isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+    }
+  }
+
+  void clearError() => emit(state.copyWith(error: ''));
+}
