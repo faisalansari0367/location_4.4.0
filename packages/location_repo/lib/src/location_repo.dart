@@ -7,7 +7,7 @@ import 'get_address_utils.dart';
 
 class LocationRepo {
   bool _isInitiated = false;
-  static late GeolocatorPlatform instance;
+  static final GeolocatorPlatform instance = GeolocatorPlatform.instance;
 
   LocationRepo() {
     if (_isInitiated) return;
@@ -16,7 +16,7 @@ class LocationRepo {
   }
 
   Future<void> _init() async {
-    instance = GeolocatorPlatform.instance;
+    // instance = GeolocatorPlatform.instance;
   }
 
   static num getDistance(double lat1, double lng1, double lat2, double lng2) {
@@ -65,4 +65,6 @@ class LocationRepo {
     }
     return currentLocation;
   }
+
+  
 }

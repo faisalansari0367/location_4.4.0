@@ -1,8 +1,10 @@
 import 'package:background_location/constants/constans.dart';
 import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/ui/forgot_password/view/forgot_password.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/strings.dart';
@@ -45,11 +47,25 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 SizedBox(height: 2.height),
                 EmailField(
+                  controller: cubit.emailController,
                   onChanged: cubit.onChangedEmail,
                 ),
                 SizedBox(height: 2.height),
                 PasswordField(
                   onChanged: cubit.onChangedPassword,
+                ),
+                Gap(1.height),
+                GestureDetector(
+                  onTap: () => Get.to(ForgotPassword()),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      Strings.forgotPassword + '?',
+                      style: context.textTheme.subtitle2?.copyWith(
+                        color: context.theme.primaryColor,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 2.height),
                 BlocListener<LoginCubit, LoginState>(
@@ -85,8 +101,6 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
-
-  
 
   Future<void> onLogin() async {
     if (_formKey.currentState?.validate() ?? false) {

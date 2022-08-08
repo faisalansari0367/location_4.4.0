@@ -15,10 +15,18 @@ class MyDecoration {
     borderSide: BorderSide(color: Colors.transparent),
   );
 
-  static BoxDecoration decoration({Color color = Colors.white}) {
+  static BoxDecoration decoration({Color color = Colors.white, bool isCircle = false}) {
     return BoxDecoration(
       color: color,
-      borderRadius: kBorderRadius,
+      shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
+      boxShadow: [
+        BoxShadow(
+          color: Color.fromARGB(158, 152, 152, 152),
+          blurRadius: 10,
+          offset: Offset(0, 5),
+        ),
+      ],
+      borderRadius: isCircle ? null : kBorderRadius,
     );
   }
 }

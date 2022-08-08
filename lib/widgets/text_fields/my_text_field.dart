@@ -62,7 +62,9 @@ class MyTextField extends StatelessWidget {
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
       autofocus: autoFocus,
+      
       decoration: InputDecoration(
+        labelText: hintText,
         // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
         contentPadding: contentPadding ?? const EdgeInsets.fromLTRB(20, 15, 12, 15),
         isDense: isDense,
@@ -71,12 +73,14 @@ class MyTextField extends StatelessWidget {
         suffixIcon: suffixIcon,
         // labelText: hintText,
         // fillColor: fillColor ?? theme.inputDecorationTheme.fillColor,
-        hintText: hintText,
+        // hintText: hintText,
         hintStyle: hintStyle ?? TextStyle(color: theme.iconTheme.color),
         // filled: true,
         // focusColor: theme.primaryColor,
         enabledBorder: MyDecoration.inputBorder,
-        focusedBorder: MyDecoration.inputBorder,
+        focusedBorder: MyDecoration.inputBorder.copyWith(
+          borderSide: BorderSide(color: theme.primaryColor),
+        ),
         border: MyDecoration.inputBorder,
 
         // contentPadding: EdgeInsets.only(left: .padding),

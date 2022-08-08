@@ -12,6 +12,7 @@ import '../my_elevated_button.dart';
 class NetworkErrorDialog extends StatelessWidget {
   final String message;
   final Widget? subtitle;
+  final String buttonText;
   // final VoidCallback onRetry;
   final VoidCallback onCancel;
 
@@ -20,6 +21,7 @@ class NetworkErrorDialog extends StatelessWidget {
     required this.message,
     required this.onCancel,
     this.subtitle,
+    this.buttonText = 'Ok',
   }) : super(key: key);
 
   @override
@@ -29,15 +31,21 @@ class NetworkErrorDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Lottie.asset(Assets.animations.networkError),
-          Text(
-            message,
-            style: context.textTheme.headline6,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.width),
+            child: Text(
+              message,
+              style: context.textTheme.bodyText1?.copyWith(
+                color: Colors.grey[600],
+                fontSize: 4.4.width,
+              ),
+            ),
           ),
           if (subtitle != null) Gap(1.height),
           if (subtitle != null) subtitle!,
           Gap(2.height),
           MyElevatedButton(
-            text: ('Close'),
+            text: buttonText,
             padding: EdgeInsets.all(10.sp),
             width: 30.width,
             onPressed: () async => onCancel(),

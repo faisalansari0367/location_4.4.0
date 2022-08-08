@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/ui/otp/otp/otp_screen.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/mail_sent_dialog.dart';
@@ -32,8 +33,17 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(password: value));
   }
 
+  void setTermsAndConditions(bool? value) {
+    emit(state.copyWith(termsAndConditions: value ?? false));
+  }
+
   Future<void> signUp() async {
     
+    if (!state.termsAndConditions) {
+      Get.snackbar('T&C Required', 'Please accept terms and conditions');
+      return;
+    }
+
     final model = SignUpModel(
       firstName: state.firstName,
       lastName: state.lastName,
@@ -59,7 +69,15 @@ class SignUpCubit extends Cubit<SignUpState> {
           ),
         );
       },
-      failure: (error) => DialogService.failure(error: error),
+      failure: (error) {
+        DialogService.failure(
+          error: error,
+          onCancel: () {
+            Get.back();
+            Get.off(() => LoginPage());
+          },
+        );
+      },
     );
   }
 }

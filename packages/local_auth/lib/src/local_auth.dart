@@ -30,12 +30,17 @@ class LocalAuth {
   }
 
   Future<bool> authenticate() async {
-    await _isInstantiated.future;
-    final result = await _localAuth.authenticate(
-      localizedReason: 'Please authenticate to login',
-    );
-    _isAuthenticated = result;
+    try {
+      await _isInstantiated.future;
+      if(!isSupported) return false;
+      final result = await _localAuth.authenticate(
+        localizedReason: 'Please authenticate to login',
+      );
+      _isAuthenticated = result;
 
-    return result;
+      return result;
+    } on Exception {
+      return false;
+    }
   }
 }

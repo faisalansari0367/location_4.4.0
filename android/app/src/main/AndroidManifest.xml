@@ -1,7 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.codanto.itrack">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <application android:label="iTrack" android:name="${applicationName}" android:icon="@mipmap/launcher_icon">
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <application android:label="iTrak" android:name="${applicationName}" android:icon="@mipmap/launcher_icon">
+        <service android:name="com.pravera.flutter_foreground_task.service.ForegroundService" android:foregroundServiceType="location" android:stopWithTask="true" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBxMIupdGzYQM6yk1ix1xGhgIyPw_42wlI" />
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as

@@ -1,3 +1,4 @@
+import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -15,11 +16,12 @@ class DialogService {
 
   static void failure({
     required error,
+    void Function()? onCancel,
   }) {
     Get.dialog(
       NetworkErrorDialog(
-        message: 'Something Went Wrong',
-        onCancel: Get.back,
+        message: NetworkExceptions.getErrorMessage(error),
+        onCancel: onCancel ?? Get.back,
       ),
       transitionCurve: Curves.elasticOut,
       transitionDuration: Duration(milliseconds: 400),

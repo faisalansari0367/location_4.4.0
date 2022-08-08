@@ -32,8 +32,12 @@ class _SplashScreenState extends State<SplashScreen> {
       if (user == null) return;
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
-      if (!result) return;
-      Get.off(() => SelectRolePage());
+      if (!result) {
+        Get.off(() => LoginPage(email: user.email));
+      } else {
+        Get.off(() => SelectRolePage());
+      }
+      // Get.off(() => SelectRolePage());
       // Navigator.pushReplacement(
       //   context,
       //   MaterialPageRoute(

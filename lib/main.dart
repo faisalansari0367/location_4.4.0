@@ -1,31 +1,60 @@
+import 'dart:async';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/api_constants.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-void main() async {
+const enableCrashlytics = !kDebugMode;
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final repo = ApiRepo();
-  await repo.init(baseUrl: ApiConstants.baseUrl);
-  runApp(MyApp(api: repo));
+  await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    // await Firebase.initializeApp();
+    final repo = ApiRepo();
+    await repo.init(baseUrl: ApiConstants.baseUrl);
+    runApp(MyApp(api: repo));
+    // runApp(MyApp());
+    // if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  }, (error, stackTrace) {
+    // FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final Api api;
   const MyApp({Key? key, required this.api}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // Future<void> _initializeFlutterFire() async {
+  //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enableCrashlytics);
+  // }
+
+  @override
+  void initState() {
+    // _initializeFlutterFire();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<Api>.value(value: api),
+        RepositoryProvider<Api>.value(value: widget.api),
       ],
       child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           backgroundColor: Colors.white,
           // primarySwatch: Colors.blue,

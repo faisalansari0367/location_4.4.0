@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // import 'package:auth_repo/src/auth_repo_impl.dart';
+import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
@@ -108,7 +109,7 @@ class Client {
 
   Future<Client> setProtectedApiHeader() async {
     // final authRepository = AuthRepoImpl(_client);
-    // final token = authRepository.getToken();
+    // final token = StorageService(box: ).getToken();
     header!.putIfAbsent('Authorization', () => 'Bearer $token');
     return this;
   }

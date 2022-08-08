@@ -74,7 +74,12 @@ abstract class NetworkExceptions with _$NetworkExceptions {
               // networkExceptions = NetworkExceptions.defaultError(error.response!.statusCode.toString());
               switch (error.response!.statusCode) {
                 case 400:
-                  networkExceptions = const NetworkExceptions.unauthorisedRequest();
+                  final map = json.decode(error.response!.toString()) as Map;
+                  if (map.containsKey('message')) {
+                    networkExceptions = NetworkExceptions.defaultError(map['message']);
+                  } else {
+                    networkExceptions = const NetworkExceptions.unauthorisedRequest();
+                  }
                   break;
                 case 401:
                   networkExceptions = const NetworkExceptions.unauthorisedRequest();

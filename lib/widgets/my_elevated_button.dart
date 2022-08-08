@@ -29,6 +29,7 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
   bool isLoading = false;
 
   void setLoading(bool value) {
+    if (!mounted) return;
     setState(() {
       isLoading = value;
     });

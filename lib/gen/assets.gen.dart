@@ -25,6 +25,10 @@ class $AssetsAnimationsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/forgot_password.jpeg
+  AssetGenImage get forgotPassword =>
+      const AssetGenImage('assets/images/forgot_password.jpeg');
+
   /// File path: assets/images/login.jpeg
   AssetGenImage get login => const AssetGenImage('assets/images/login.jpeg');
 

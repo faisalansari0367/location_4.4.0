@@ -1,5 +1,5 @@
-import 'package:api_repo/src/auth/auth_repo.dart';
+import 'package:api_repo/api_repo.dart';
 
-abstract class Api with AuthRepo {
+abstract class Api with AuthRepo, UserRepo {
   Future<void> init({required String baseUrl});
 }

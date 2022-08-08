@@ -12,9 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class SignUpView extends StatelessWidget {
+class SignUpView extends StatefulWidget {
   const SignUpView({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<SignUpView> {
   @override
   Widget build(BuildContext context) {
     final key = GlobalKey<FormState>();
@@ -63,11 +68,29 @@ class SignUpView extends StatelessWidget {
               PasswordField(
                 onChanged: cubit.onPasswordChanged,
               ),
+              Gap(1.height),
+              Row(
+                children: [
+                  BlocBuilder<SignUpCubit, SignUpState>(
+                    builder: (context, state) {
+                      return Checkbox(
+                        value: state.termsAndConditions,
+                        onChanged: cubit.setTermsAndConditions,
+                      );
+                    },
+                  ),
+                  Text(
+                    'Terms And Conditions',
+                    style: context.textTheme.bodyText2,
+                  ),
+                ],
+              ),
               Gap(3.height),
               MyElevatedButton(
                 text: Strings.submit,
                 onPressed: () async {
                   final isValidated = key.currentState?.validate();
+                  
                   if (isValidated ?? false) {
                     await cubit.signUp();
                   }

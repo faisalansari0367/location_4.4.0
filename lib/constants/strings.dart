@@ -28,15 +28,19 @@ class Strings {
       are = 'Are',
       a = 'A',
       i = 'I',
-      am = 'Am';
+      am = 'Am',
+      retry = 'Retry',
+      forgot = 'Forgot';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';
-  static String get iAmA => '$i $am $a';
+  static String get selectYourRole => '$select $your $role';
   static String get roleDetails => '$role $details';
   static String get yourDetails => '$your $details';
   static String get properyName => '$property $name';
   static String get propertyAddress => '$property $address';
   static String get welcomeTo => '$welcome $to';
   static String get signUp => '$sign $up';
+  static String get forgotPassword => '$forgot $password';
+
 }

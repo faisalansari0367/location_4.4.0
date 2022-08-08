@@ -1,7 +1,10 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:background_location/constants/strings.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
@@ -10,12 +13,21 @@ import '../../select_role/view/select_role_page.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
+  final String? email;
   final AuthRepo auth;
-  LoginCubit({required AuthRepo repository})
+  LoginCubit({required AuthRepo repository, this.email})
       : auth = repository,
-        super(const LoginState());
+        super(const LoginState()) {
+    emailController = TextEditingController(text: email);
+    state.copyWith(email: email);
+  }
+
+  late TextEditingController emailController;
+
+  
 
   void onChangedEmail(String email) {
+    
     emit(state.copyWith(email: email));
   }
 
@@ -26,7 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> onPressedLogin() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final model = SignInModel(email: state.email, password: state.password);
+      final model = SignInModel(email: emailController.text, password: state.password);
       final result = await auth.signIn(data: model);
       
       result.when(success: (data) {
@@ -34,7 +46,8 @@ class LoginCubit extends Cubit<LoginState> {
       }, failure: (error) {
         DialogService.showDialog(
           child: NetworkErrorDialog(
-            message: 'Something went wrong',
+            message: NetworkExceptions.getErrorMessage(error),
+            buttonText: Strings.retry,
             onCancel: () {
               Get.back();
             },

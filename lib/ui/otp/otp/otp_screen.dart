@@ -84,6 +84,26 @@ class _OtpScreenState extends State<OtpScreen> {
             ],
           ),
         ),
+        Gap(2.height),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.info, color: context.theme.errorColor.withOpacity(0.7)),
+            Gap(2.width),
+            Expanded(
+              child: Text(
+                'If you do not see the email in a few minutes, check your “junk mail” folder or “spam” folder.',
+                style: TextStyle(
+                  color: context.theme.errorColor.withOpacity(0.8),
+                  fontSize: 12.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Gap(2.height),
+
         SizedBox(
           width: 70.width,
           height: 10.height,
