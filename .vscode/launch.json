@@ -21,65 +21,6 @@
             "type": "dart",
             "flutterMode": "release"
         },
-        {
-            "name": "api_repo",
-            "cwd": "packages/api_repo",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "api_repo (profile mode)",
-            "cwd": "packages/api_repo",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "api_repo (release mode)",
-            "cwd": "packages/api_repo",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "auth_repo",
-            "cwd": "packages/auth_repo",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "auth_repo (profile mode)",
-            "cwd": "packages/auth_repo",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "auth_repo (release mode)",
-            "cwd": "packages/auth_repo",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
-            "name": "location_repo",
-            "cwd": "packages/location_repo",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "location_repo (profile mode)",
-            "cwd": "packages/location_repo",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "location_repo (release mode)",
-            "cwd": "packages/location_repo",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        }
+        
     ]
 }

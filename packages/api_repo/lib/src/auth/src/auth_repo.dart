@@ -6,6 +6,8 @@ abstract class AuthRepo {
   Future<ApiResult<ResponseModel>> signUp({required SignUpModel data});
   Future<ApiResult<User>> signIn({required SignInModel data});
   Future<ApiResult<User>> verifyOtp({required OtpModel otpModel});
+  Future<ApiResult<User>> updateUser({required User user});
+
   User? getUser();
   Future<void> logout();
   // Stream<User?> get userStream;

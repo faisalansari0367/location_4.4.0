@@ -22,6 +22,23 @@ class $AssetsAnimationsGen {
   String get welcome => 'assets/animations/welcome.json';
 }
 
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/App icon.png
+  AssetGenImage get appIcon => const AssetGenImage('assets/icons/App icon.png');
+
+  /// File path: assets/icons/background.png
+  AssetGenImage get background =>
+      const AssetGenImage('assets/icons/background.png');
+
+  $AssetsIconsBottomNavbarGen get bottomNavbar =>
+      const $AssetsIconsBottomNavbarGen();
+
+  /// File path: assets/icons/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/icons/logo.png');
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -36,10 +53,31 @@ class $AssetsImagesGen {
   AssetGenImage get signup => const AssetGenImage('assets/images/signup.jpeg');
 }
 
+class $AssetsIconsBottomNavbarGen {
+  const $AssetsIconsBottomNavbarGen();
+
+  /// File path: assets/icons/bottom_navbar/color-picker.png
+  AssetGenImage get colorPicker =>
+      const AssetGenImage('assets/icons/bottom_navbar/color-picker.png');
+
+  /// File path: assets/icons/bottom_navbar/home.png
+  AssetGenImage get home =>
+      const AssetGenImage('assets/icons/bottom_navbar/home.png');
+
+  /// File path: assets/icons/bottom_navbar/map.png
+  AssetGenImage get map =>
+      const AssetGenImage('assets/icons/bottom_navbar/map.png');
+
+  /// File path: assets/icons/bottom_navbar/square.png
+  AssetGenImage get square =>
+      const AssetGenImage('assets/icons/bottom_navbar/square.png');
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 

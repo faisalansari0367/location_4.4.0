@@ -66,5 +66,13 @@ class LocationRepo {
     return currentLocation;
   }
 
+  bool isInsidePolygon({
+    required LatLng latLng,
+    required List<LatLng> polygon,
+    bool geodesic = false,
+  }) {
+    return mt.PolygonUtil.containsLocation(latLng, polygon, geodesic);
+  }
+
   
 }

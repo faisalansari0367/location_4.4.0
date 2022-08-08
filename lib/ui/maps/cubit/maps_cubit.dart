@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:background_location/ui/maps/models/enums/filed_assets.dart';
+import 'package:background_location/ui/maps/models/polygon_data.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,13 +27,15 @@ class MapsCubit extends Cubit<MapsState> {
     emit(state.copyWith(addingGeofence: !state.addingGeofence));
     if (!state.addingGeofence) {
       addPolygon(state.latLngs);
-      // emit(state.copyWith(polygons: ))
-      // state.copyWith(latLngs: []);
     }
   }
 
+  void setAssetColor(FieldAssets fieldAsset) {
+    emit(state.copyWith(fieldAsset: fieldAsset));
+  }
+
   // final list = <LatLng>[];
-  void latLngs(LatLng latLng) {
+  void addLatLng(LatLng latLng) {
     print(state.latLngs);
     emit(state.copyWith(latLngs: List<LatLng>.from([...state.latLngs, latLng])));
   }
@@ -43,19 +47,32 @@ class MapsCubit extends Cubit<MapsState> {
 
     emit(
       state.copyWith(
-        polygons: {...state.polygons, List<LatLng>.from(latLngs)},
+        polygons: {...state.polygons, PolygonData(points: latLngs, type: state.fieldAsset)},
         latLngs: [],
       ),
     );
   }
 
-  void changeMapType(MapType type) {
-    emit(state.copyWith(mapType: type));
+  void zoom() async {
+    final zoom = await _mapController.getZoomLevel();
+    emit(state.copyWith(zoom: zoom + 5));
   }
 
-  void updateCurrentLocation() async {
+  void changeMapType(MapType type) async {
+    emit(state.copyWith(mapType: type));
+    //  final mapController = await controller.future;
+    //  mapController.setMapStyle(type);
+  }
+
+  void onMarkerDragEnd(LatLng latLng, int index) {
+    final latlngs = state.latLngs;
+    latlngs[index] = latLng;
+    emit(state.copyWith(latLngs: List<LatLng>.from(latlngs)));
+  }
+
+  Future<void> updateCurrentLocation() async {
     final currentPosition = await LocationRepo.getCurrentLatLng();
-    print(currentPosition);
+
     _mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -66,6 +83,10 @@ class MapsCubit extends Cubit<MapsState> {
     );
     emit(
       state.copyWith(
+        // insideFence: LocationRepo().isInsidePolygon(latLng: LatLng(
+        //   currentPosition.latitude,
+        //   currentPosition.longitude,
+        // ), polygon: ),
         currentLocation: LatLng(
           currentPosition.latitude,
           currentPosition.longitude,

@@ -42,6 +42,17 @@ class User {
     return data;
   }
 
+
+  Map<String, dynamic> updateUser() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data[UserKeys.firstName] = firstName;
+    data[UserKeys.lastName] = lastName;
+    data[UserKeys.email] = email;
+    data[UserKeys.phoneNumber] = phoneNumber;
+    data[UserKeys.role] = role;
+    return data;
+  }
+
   
 }
 

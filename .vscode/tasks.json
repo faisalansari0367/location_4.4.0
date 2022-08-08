@@ -5,13 +5,17 @@
 			"type": "flutter",
 			"command": "flutter",
 			"args": [
-				"build",
-				"ios"
+				"pub",
+				"run",
+				"build_runner",
+				"build"
+			],
+			"problemMatcher": [
+				"$dart-build_runner"
 			],
 			"group": "build",
-			"problemMatcher": [],
-			"label": "flutter: flutter build ios",
-			"detail": "packages/location_repo"
+			"label": "flutter: flutter pub run build_runner build",
+			"detail": ""
 		}
 	]
 }

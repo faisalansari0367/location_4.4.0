@@ -4,19 +4,34 @@ import 'package:equatable/equatable.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/dialogs/dialog_service.dart';
+import '../../role_details/view/role_details_page.dart';
 
 part 'select_role_state.dart';
 
 class SelectRoleCubit extends Cubit<SelectRoleState> {
   final Api api;
-  SelectRoleCubit(this.api) : super(SelectRoleState()) {
+  SelectRoleCubit(this.api)
+      : super(SelectRoleState(
+          user: api.getUser()!,
+        )) {
     getRoles();
-    getUser();
+    // getUser();
   }
 
-  void getUser() {
-    final result = api.getUser();
-    emit(state.copyWith(userName: (result?.firstName?.capitalize) ?? ''));
+  // void getUser() {
+  //   final result = api.getUser();
+  //   emit(state.copyWith(userName: (result?.firstName?.capitalize) ?? ''));
+  // }
+
+  Future<void> updateRole(String role) async {
+    // Get.to(() => RoleDetailsPage(role: role));
+    final user = state.user;
+    user.role = role;
+    final result = await api.updateUser(user: user);
+    result.when(
+      success: (data) => Get.to(() => RoleDetailsPage(role: role)),
+      failure: (error) => DialogService.failure(error: error),
+    );
   }
 
   Future<void> getRoles() async {
@@ -34,5 +49,4 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
       emit(state.copyWith(isLoading: false));
     }
   }
-
 }

@@ -2,24 +2,25 @@
 part of 'select_role_cubit.dart';
 class SelectRoleState extends Equatable {
   final List<String> roles;
-  final bool isLoading;
-  final String userName;
 
-  const SelectRoleState({this.isLoading = true, this.roles = const [], this.userName = ''});
+  final bool isLoading;
+  final User user;
+
+  const SelectRoleState({this.isLoading = true, this.roles = const [],required this.user});
 
 
   @override
-  List<Object> get props => [roles, isLoading, userName];
+  List<Object> get props => [roles, isLoading, user];
 
   SelectRoleState copyWith({
     List<String>? roles,
     bool? isLoading,
-    String? userName,
+    User? user,
   }) {
     return SelectRoleState(
       roles: roles ?? this.roles,
       isLoading: isLoading ?? this.isLoading,
-      userName: userName ?? this.userName,
+      user: user ?? this.user,
     );
   }
 }

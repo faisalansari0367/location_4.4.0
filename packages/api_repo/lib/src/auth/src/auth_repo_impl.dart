@@ -7,7 +7,6 @@ import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
-import 'package:dio/dio.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import 'auth_repo.dart';
@@ -46,7 +45,7 @@ class AuthRepoImpl implements AuthRepo {
       storage.setToken(model.token!);
       storage.setUser(model.data!.user!.toJson());
       return ApiResult.success(data: model.data!.user!);
-    } on DioError catch (e) {
+    } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
@@ -59,7 +58,19 @@ class AuthRepoImpl implements AuthRepo {
       storage.setToken(model.token!);
       storage.setUser(model.data!.user!.toJson());
       return ApiResult.success(data: model.data!.user!);
-    } on DioError catch (e) {
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<User>> updateUser({required User user}) async {
+    try {
+      final result = await client.patch(Endpoints.updateUser, data: user.updateUser());
+      final model = User.fromJson((result.data));
+      storage.setUser(user.toJson());
+      return ApiResult.success(data: model);
+    } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }

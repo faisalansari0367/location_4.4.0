@@ -7,11 +7,6 @@ import 'models/models.dart';
 abstract class UserRepo {
   Future<ApiResult<UserRoles>> getUserRoles();
   Future<ApiResult<RoleDetailsModel>> getFields();
-
-  // Future<ApiResult<UserRoles>> getUserRolesById(int id);
-  // Future<ApiResult<UserRoles>> createUserRoles(UserRoles userRoles);
-  // Future<ApiResult<UserRoles>> updateUserRoles(UserRoles userRoles);
-  // Future<ApiResult<UserRoles>> deleteUserRoles(int id);
 }
 
 class UserRepoImpl extends UserRepo {
@@ -40,4 +35,5 @@ class UserRepoImpl extends UserRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
 }

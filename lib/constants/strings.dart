@@ -1,6 +1,6 @@
 class Strings {
 // AppName
-  static const String appName = 'iTrak';
+  static const String appName = 'iTRAK';
 
   static const name = 'Name',
       email = 'Email',

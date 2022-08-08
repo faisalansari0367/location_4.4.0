@@ -1,8 +1,7 @@
 import 'package:background_location/constants/constans.dart';
-import 'package:background_location/constants/my_decoration.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/ui/role_details/view/role_details_page.dart';
+import 'package:background_location/ui/select_role/view/role_tile.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:background_location/widgets/my_appbar.dart';
@@ -27,7 +26,7 @@ class SelectRoleView extends StatelessWidget {
       appBar: MyAppBar(
         title: BlocBuilder<SelectRoleCubit, SelectRoleState>(
           builder: (context, state) {
-            return Text('Hi, ${cubit.state.userName}');
+            return Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}');
           },
         ),
         actions: [
@@ -55,7 +54,12 @@ class SelectRoleView extends StatelessWidget {
               return MyListview(
                 isLoading: state.isLoading,
                 shrinkWrap: true,
-                itemBuilder: (context, index) => _buildRole(state.roles[index], context),
+                itemBuilder: (context, index) => RoleTile(
+                  role: state.roles[index],
+                  onTap: () async => cubit.updateRole(
+                    state.roles[index],
+                  ),
+                ),
                 data: state.roles,
                 onRetry: cubit.getRoles,
               );
@@ -66,20 +70,24 @@ class SelectRoleView extends StatelessWidget {
     );
   }
 
-  Widget _buildRole(String role, BuildContext context) {
-    return ListTile(
-      dense: false,
-      selected: true,
-      shape: MyDecoration.inputBorder.copyWith(
-        borderRadius: kBorderRadius,
-      ),
-      onTap: () => Get.to(() => RoleDetailsPage(role: role)),
-      selectedColor: Colors.black,
-      title: Text(role),
-      trailing: Icon(
-        Icons.arrow_forward_ios,
-        color: Colors.grey.shade800,
-      ),
-    );
-  }
+  // Widget _buildRole(String role, BuildContext context) {
+  //   return ListTile(
+  //     dense: false,
+  //     selected: true,
+  //     shape: MyDecoration.inputBorder.copyWith(
+  //       borderRadius: kBorderRadius,
+  //     ),
+  //     onTap: () async {
+  //       final cubit = context.read<SelectRoleCubit>();
+  //       await cubit.updateRole(role);
+  //       Get.to(() => RoleDetailsPage(role: role));
+  //     },
+  //     selectedColor: Colors.black,
+  //     title: Text(role),
+  //     trailing: Icon(
+  //       Icons.arrow_forward_ios,
+  //       color: Colors.grey.shade800,
+  //     ),
+  //   );
+  // }
 }

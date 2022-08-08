@@ -1,8 +1,9 @@
-import 'package:background_location/ui/maps/cubit/view/maps_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../maps_cubit.dart';
+import '../cubit/maps_cubit.dart';
+import 'maps_view.dart';
+
 
 class MapsPage extends StatelessWidget {
   const MapsPage({Key? key}) : super(key: key);

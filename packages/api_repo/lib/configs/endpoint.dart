@@ -4,7 +4,8 @@ class Endpoints {
       users = '/users',
       signIn = '/auth/signin',
       getRoles = '/users/roles',
-      getFields = '/users/fields';
+      getFields = '/users/fields',
+      updateUser = '/users/me';
 
   // static String user(int id) => '/user/$id';
 }

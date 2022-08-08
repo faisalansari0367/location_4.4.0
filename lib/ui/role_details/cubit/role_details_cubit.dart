@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../maps/cubit/view/maps_page.dart';
+import '../../maps/view/maps_page.dart';
 import '../models/field_data.dart';
 
 part 'role_details_state.dart';

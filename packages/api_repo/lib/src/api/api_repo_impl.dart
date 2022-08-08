@@ -14,6 +14,26 @@ class ApiRepo implements Api {
 
   ApiRepo();
 
+  
+  @override
+  Future<void> init({required String baseUrl}) async {
+    await Hive.initFlutter();
+    _box = await Hive.openBox('storage');
+    final storage = StorageService(box: _box);
+    final token = storage.getToken();
+    _client = Client(baseUrl: baseUrl, token: token);
+    _userStream(_box, storage.userKey);
+    _authRepo = AuthRepoImpl(client: _client, box: _box);
+    _userRepo = UserRepoImpl(client: _client);
+  }
+
+  void _userStream(Box box, String key) {
+    box.watch(key: key).listen((event) {
+      final storage = StorageService(box: _box);
+      _client.token = storage.getToken();
+    });
+  }
+
   @override
   Future<ApiResult<User>> signIn({required SignInModel data}) {
     return _authRepo.signIn(data: data);
@@ -29,15 +49,6 @@ class ApiRepo implements Api {
     return _authRepo.verifyOtp(otpModel: otpModel);
   }
 
-  @override
-  Future<void> init({required String baseUrl}) async {
-    await Hive.initFlutter();
-    _box = await Hive.openBox('storage');
-    final storage = StorageService(box: _box);
-    _client = Client(baseUrl: baseUrl, token: storage.getToken());
-    _authRepo = AuthRepoImpl(client: _client, box: _box);
-    _userRepo = UserRepoImpl(client: _client);
-  }
 
   @override
   User? getUser() => _authRepo.getUser();
@@ -50,4 +61,9 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<RoleDetailsModel>> getFields() => _userRepo.getFields();
+
+  @override
+  Future<ApiResult<User>> updateUser({required User user}) async {
+    return await _authRepo.updateUser(user: user);
+  }
 }

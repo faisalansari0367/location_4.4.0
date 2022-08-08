@@ -23,6 +23,9 @@ class StorageService implements UserStorage {
   StorageService({
     required this.box,
   });
+
+  String get userKey => _Keys.user;
+
   @override
   User? getUser() {
     final map = box.get(_Keys.user);

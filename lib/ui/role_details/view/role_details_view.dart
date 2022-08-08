@@ -1,7 +1,6 @@
 import 'package:background_location/constants/constans.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/ui/maps/cubit/view/maps_page.dart';
 import 'package:background_location/ui/role_details/cubit/role_details_cubit.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/my_cross_fade.dart';
@@ -13,6 +12,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/my_appbar.dart';
+import '../../maps/view/maps_page.dart';
 
 class RoleDetailsView extends StatelessWidget {
   const RoleDetailsView({Key? key}) : super(key: key);
@@ -83,7 +83,7 @@ class RoleDetailsView extends StatelessWidget {
                   ),
                   gap,
                   gap,
-                  if (!state.isLoading)
+                  if (!state.isLoading && state.fields.isNotEmpty)
                     MyElevatedButton(
                       onPressed: cubit.onSubmit,
                       text: ('Submit'),
