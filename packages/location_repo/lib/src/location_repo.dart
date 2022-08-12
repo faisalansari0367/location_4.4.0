@@ -6,18 +6,9 @@ import 'package:maps_toolkit/maps_toolkit.dart';
 import 'get_address_utils.dart';
 
 class LocationRepo {
-  bool _isInitiated = false;
   static final GeolocatorPlatform instance = GeolocatorPlatform.instance;
 
-  LocationRepo() {
-    if (_isInitiated) return;
-    _isInitiated = true;
-    _init();
-  }
-
-  Future<void> _init() async {
-    // instance = GeolocatorPlatform.instance;
-  }
+  
 
   static num getDistance(double lat1, double lng1, double lat2, double lng2) {
     final distance = mt.SphericalUtil.computeDistanceBetween(
@@ -66,7 +57,7 @@ class LocationRepo {
     return currentLocation;
   }
 
-  bool isInsidePolygon({
+  static bool isInsidePolygon({
     required LatLng latLng,
     required List<LatLng> polygon,
     bool geodesic = false,
@@ -74,5 +65,11 @@ class LocationRepo {
     return mt.PolygonUtil.containsLocation(latLng, polygon, geodesic);
   }
 
-  
+  static num calculatePolygonArea(List<LatLng> polygon) {
+    return mt.SphericalUtil.computeArea(polygon);
+  }
+
+  static bool isClosedPolygon(List<LatLng> polygon) {
+    return mt.PolygonUtil.isClosedPolygon(polygon);
+  }
 }

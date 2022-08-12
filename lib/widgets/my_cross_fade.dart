@@ -12,13 +12,14 @@ class MyCrossFade extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      firstCurve: kCurve,
-      secondCurve: kCurve,
+    return AnimatedSwitcher(
+      // firstCurve: kCurve,
+      // secondCurve: kCurve,
       duration: kDuration,
-      crossFadeState: !isLoading ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      firstChild: placeHolder ?? _loader(),
-      secondChild: child,
+      // crossFadeState: !isLoading ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      // firstChild: placeHolder ?? _loader(),
+      // secondChild: child,
+      child: isLoading ? _loader() : child,
     );
   }
 

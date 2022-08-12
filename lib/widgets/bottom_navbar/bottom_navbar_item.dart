@@ -1,10 +1,8 @@
-import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../animations/animated_button.dart';
 
 class BottomNavbarItem extends StatelessWidget {
   final VoidCallback? onTap;
@@ -28,43 +26,41 @@ class BottomNavbarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final iconColor = color ?? (isSelected ? context.theme.primaryColor : Colors.grey.shade900);
 
-    return AnimatedButton(
-      onTap: onTap ?? () {},
-      child: AnimatedContainer(
-        padding: EdgeInsets.only(
-          // bottom: 10.sp,
-          left: 10.sp,
-          right: 10.sp,
-        ),
-        duration: 300.milliseconds,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 14.h),
-            SizedBox(
-              height: 24.sp,
-              child: _image(iconColor),
-            ),
-            SizedBox(height: 2.h),
-            SizedBox(
-              width: 15.width,
-              // height: 3.height,
-              child: Text(
+    return Material(
+      child: InkWell(
+        onTap: onTap ?? () {},
+      
+        child: AnimatedContainer(
+          padding: EdgeInsets.only(
+            left: 10.sp,
+            right: 10.sp,
+          ),
+          duration: 300.milliseconds,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 14.h),
+              SizedBox(
+                height: 24.sp,
+                child: _image(iconColor),
+              ),
+              SizedBox(height: 2.h),
+              Text(
                 title,
                 overflow: TextOverflow.ellipsis,
                 softWrap: true,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: context.textTheme.subtitle2?.copyWith(
-                  fontSize: 10.w,
+                  fontSize: 11.w,
                   color: iconColor,
                 ),
               ),
-            ),
-            SizedBox(height: 14.h),
-          ],
+              SizedBox(height: 14.h),
+            ],
+          ),
         ),
       ),
     );

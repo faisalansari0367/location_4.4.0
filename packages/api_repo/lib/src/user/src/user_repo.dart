@@ -7,6 +7,8 @@ import 'models/models.dart';
 abstract class UserRepo {
   Future<ApiResult<UserRoles>> getUserRoles();
   Future<ApiResult<RoleDetailsModel>> getFields();
+  Future<ApiResult<void>> updateRole(Map<String, dynamic> data);
+
 }
 
 class UserRepoImpl extends UserRepo {
@@ -31,6 +33,16 @@ class UserRepoImpl extends UserRepo {
       final result = await client.get(Endpoints.getFields);
       final model = RoleDetailsModel.fromMap(result.data);
       return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<void>> updateRole(Map<String, dynamic> data) async {
+    try {
+      final result = await client.patch(Endpoints.updateUser, data: data);
+      return ApiResult.success(data: result.data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

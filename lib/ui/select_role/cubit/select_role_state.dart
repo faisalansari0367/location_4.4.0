@@ -1,5 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'select_role_cubit.dart';
+// part of 'select_role_cubit.dart';
+import 'package:api_repo/api_repo.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'select_role_state.g.dart';
+
+@JsonSerializable()
 class SelectRoleState extends Equatable {
   final List<String> roles;
 
@@ -23,5 +30,9 @@ class SelectRoleState extends Equatable {
       user: user ?? this.user,
     );
   }
+
+  factory SelectRoleState.fromJson(Map<String, dynamic> json) => _$SelectRoleStateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SelectRoleStateToJson(this);
 }
 

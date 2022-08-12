@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import 'bottom_navbar_item.dart';
 
@@ -36,8 +35,19 @@ class _BottomNavbarState extends State<BottomNavbar> {
         // ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: widget.items,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: widget.items
+            .map(
+              (e) => Expanded(
+                child: Material(
+                  child: InkWell(
+                    onTap: e.onTap,
+                    child: e,
+                  ),
+                ),
+              ),
+            )
+            .toList(),
       ),
       // borderRadius: kBorderRadius,
     );

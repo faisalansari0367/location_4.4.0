@@ -1,7 +1,7 @@
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
-import 'package:background_location/ui/maps/models/enums/filed_assets.dart';
+import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import 'map_type_widget.dart';
-import 'select_color.dart';
 
 class MapsBottomNavbar extends StatefulWidget {
   final MapsCubit cubit;
@@ -44,7 +43,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
                   ),
                   _positioned(
                     left: state.addingGeofence ? 0 : 100.width,
-                    child: addingFence(),
+                    child: AddFence(cubit: widget.cubit),
                   ),
                 ],
               ),
@@ -63,7 +62,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
       child: SizedBox(
         child: child,
         width: 100.width,
-        height: 8.height,
+        // height: 8.height,
       ),
     );
   }
@@ -101,52 +100,82 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
   }
 
   Widget addingFence() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Center(
-            child: Text(
-              'Tap on the screen to draw fence',
-              style: context.textTheme.subtitle2,
-            ),
-          ),
-        ),
-        _selectColorWidget(),
-        // Divider(),
-        Container(
-          width: 0.5.width,
-          height: 7.height,
-          color: Color.fromARGB(58, 0, 0, 0),
-        ),
-        Flexible(
-          flex: 1,
-          child: Center(
-            child: GestureDetector(
-              onTap: widget.cubit.setIsAddingGeofence,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.check),
-                  Text('done'),
-                ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          // Expanded(
+          //   flex: 3,
+          //   child: Center(
+          //     child: Text(
+          //       'Tap on the screen to draw fence',
+          //       style: context.textTheme.subtitle2,
+          //     ),
+          //   ),
+          // ),
+          Expanded(child: _selectColorWidget()),
+          // clear icon button
+          Expanded(
+            child: Material(
+              child: InkWell(
+                onTap: widget.cubit.clearLastMarker,
+                child: Column(
+                  children: [
+                    Icon(Icons.clear),
+                    // clear text
+                    Text(
+                      'Clear',
+                      style: context.textTheme.subtitle2,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+          // Divider(),
+          // Container(
+          //   width: 0.5.width,
+          //   height: 7.height,
+          //   color: Color.fromARGB(58, 0, 0, 0),
+          // ),
+          Expanded(
+            child: Material(
+              child: InkWell(
+                onTap: widget.cubit.setIsAddingGeofence,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.check),
+                    Text(
+                      'done',
+                      style: context.textTheme.subtitle2,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _selectColorWidget() {
     return BlocBuilder<MapsCubit, MapsState>(
-      builder: (context, state) => BottomNavbarItem(
-        icon: icons.colorPicker.path,
-        title: ('Select color'),
-        // isSelected: ,
-        color: state.fieldAsset.color,
-        onTap: () => DialogService.showDialog(
-          child: DialogLayout(child: SelectColor(cubit: widget.cubit)),
+      builder: (context, state) => Material(
+        child: InkWell(
+          onTap: widget.cubit.setIsAddingGeofence,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              icons.colorPicker.image(height: 20),
+              Text(
+                'Select color',
+                style: context.textTheme.subtitle2,
+              ),
+            ],
+          ),
         ),
       ),
     );

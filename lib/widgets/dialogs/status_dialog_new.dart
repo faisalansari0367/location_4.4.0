@@ -26,9 +26,13 @@ class StatusDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Lottie.asset(lottieAsset),
-          Text(
-            message,
-            style: context.textTheme.headline6,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.width),
+            child: Text(
+              message,
+              textAlign: TextAlign.center,
+              style: context.textTheme.headline6,
+            ),
           ),
           Gap(2.height),
           MyElevatedButton(

@@ -90,7 +90,7 @@ class _SignUpViewState extends State<SignUpView> {
                 text: Strings.submit,
                 onPressed: () async {
                   final isValidated = key.currentState?.validate();
-                  
+
                   if (isValidated ?? false) {
                     await cubit.signUp();
                   }

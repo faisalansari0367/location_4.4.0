@@ -35,7 +35,6 @@ class RoleDetailsView extends StatelessWidget {
             return Form(
               key: cubit.formKey,
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -43,42 +42,18 @@ class RoleDetailsView extends StatelessWidget {
                     style: context.textTheme.headline5,
                   ),
                   Gap(3.height),
-                  // MyListview(
-                  //   isLoading: state.isLoading,
-                  //   isPrimary: false,
-                  //   shrinkWrap: true,
-                  //   data: state.fields,
-                  //   spacing: gap,
-                  //   onRetry: cubit.getFields,
-                  //   itemBuilder: (context, index) {
-                  //     final item = state.fields[index];
-                  //     return MyTextField(
-                  //       hintText: item.name,
-                  //       controller: item.controller,
-                  //     );
-                  //   },
-                  // ),
                   MyCrossFade(
                     isLoading: state.isLoading,
                     child: AutoSpacing(
-                      // startSpacing: Gap(3.height),
                       spacing: SizedBox.shrink(),
-                      children: state.fields
-                          .map(
-                            (item) => Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: MyTextField(
-                                // contentPadding: EdgeInsets.symmetric(
-                                //   vertical: 20.h,
-                                //   horizontal: 20.w,
-                                // ),
-                                validator: item.getValidator(),
-                                hintText: item.name,
-                                controller: item.controller,
-                              ),
-                            ),
-                          )
-                          .toList(),
+                      children: state.fields.map(
+                        (item) {
+                          return Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child: item.fieldWidget,
+                          );
+                        },
+                      ).toList(),
                     ),
                   ),
                   gap,

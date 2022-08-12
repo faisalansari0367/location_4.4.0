@@ -1,14 +1,18 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+// import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../../role_details/view/role_details_page.dart';
+export 'select_role_state.dart';
+import 'select_role_state.dart';
 
-part 'select_role_state.dart';
+// import 'select_role_state.g.dart';
 
-class SelectRoleCubit extends Cubit<SelectRoleState> {
+
+
+class SelectRoleCubit extends HydratedCubit<SelectRoleState> {
   final Api api;
   SelectRoleCubit(this.api)
       : super(SelectRoleState(
@@ -17,11 +21,6 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     getRoles();
     // getUser();
   }
-
-  // void getUser() {
-  //   final result = api.getUser();
-  //   emit(state.copyWith(userName: (result?.firstName?.capitalize) ?? ''));
-  // }
 
   Future<void> updateRole(String role) async {
     // Get.to(() => RoleDetailsPage(role: role));
@@ -48,5 +47,15 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     } catch (e) {
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  @override
+  SelectRoleState? fromJson(Map<String, dynamic> json) {
+    return SelectRoleState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(SelectRoleState state) {
+    return state.toJson();
   }
 }

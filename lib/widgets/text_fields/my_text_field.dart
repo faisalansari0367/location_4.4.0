@@ -1,10 +1,13 @@
+import 'package:background_location/constants/index.dart';
+import 'package:background_location/helpers/validator.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../constants/my_decoration.dart';
 
 class MyTextField extends StatelessWidget {
   final void Function(String)? onChanged;
+  final VoidCallback? onTap;
   final TextEditingController? controller;
   final String? hintText;
   final Widget? prefixIcon;
@@ -22,10 +25,14 @@ class MyTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final List<TextInputFormatter>? inputFormatters;
   final bool autoFocus;
+  final bool enabled;
+
+  final TextCapitalization textCapitalization;
 
   const MyTextField(
       {Key? key,
       this.onChanged,
+    this.enabled = true,
       this.autoFocus = false,
       this.hintText,
       this.prefixIcon,
@@ -42,8 +49,11 @@ class MyTextField extends StatelessWidget {
       this.contentPadding,
       this.isDense = true,
       this.hintStyle,
-      i,
-      this.inputFormatters})
+      
+    this.inputFormatters,
+    this.textCapitalization = TextCapitalization.sentences,
+    this.onTap,
+  })
       : super(key: key);
 
   @override
@@ -51,22 +61,26 @@ class MyTextField extends StatelessWidget {
     final theme = Theme.of(context);
     return TextFormField(
       maxLength: maxLength,
-      inputFormatters: inputFormatters,
+      textCapitalization: textCapitalization,
+      inputFormatters: inputFormatters ?? [CapitalizeFirstLetterFormatter()],
       focusNode: focusNode,
       obscureText: obscureText,
+      
+      enabled: enabled,
       controller: controller,
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
       keyboardType: textInputType,
-      validator: validator,
+      validator: validator ?? Validator.text,
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
+      onTap: onTap,
       autofocus: autoFocus,
       
       decoration: InputDecoration(
         labelText: hintText,
         // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-        contentPadding: contentPadding ?? const EdgeInsets.fromLTRB(20, 15, 12, 15),
+        contentPadding: contentPadding ?? kInputPadding,
         isDense: isDense,
 
         prefixIcon: prefixIcon,
@@ -81,6 +95,7 @@ class MyTextField extends StatelessWidget {
         focusedBorder: MyDecoration.inputBorder.copyWith(
           borderSide: BorderSide(color: theme.primaryColor),
         ),
+        disabledBorder: MyDecoration.inputBorder,
         border: MyDecoration.inputBorder,
 
         // contentPadding: EdgeInsets.only(left: .padding),

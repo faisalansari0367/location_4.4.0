@@ -26,6 +26,12 @@ class Validator {
     return result;
   }
 
+  static String? pic(String? value) {
+    final validate = ValidationBuilder().minLength(8).build();
+    final result = validate(value);
+    return result;
+  }
+
   static String? mobileNo(String? value) {
     final validate = ValidationBuilder().phone('Mobile is not valid').build();
     final result = validate(value);

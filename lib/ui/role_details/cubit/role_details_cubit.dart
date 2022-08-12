@@ -1,13 +1,14 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/user/src/models/role_details_model.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
+import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../maps/view/maps_page.dart';
 import '../models/field_data.dart';
 
 part 'role_details_state.dart';
@@ -58,7 +59,34 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
   Future<void> onSubmit() async {
     if (formKey.currentState?.validate() ?? false) {
-      Get.to(() => const MapsPage());
+      // Get.to(() => const MapsPage());
+      final data = <String, dynamic>{};
+      state.fields.forEach((field) {
+        if (field.fieldType.isAddress) {
+          // data[field.fieldType.name] =
+          //     '${field.address?.street} ${field.address?.town} ${field.address?.state} ${field.address?.postcode}';
+          // data['address'] = '';
+        } else if (field.fieldType.isPhoneNumber) {
+          data[field.fieldType.name] = field.controller.text;
+        } else {
+          data[field.name.camelCase!] = field.controller.text;
+        }
+      });
+
+      print(data);
+
+      final result = await api.updateRole(data);
+      result.when(
+        success: (data) {
+          Get.to(() => MapsPage());
+        },
+        failure: (error) {
+          DialogService.failure(
+            error: error,
+            onCancel: () => Get.to(() => MapsPage()),
+          );
+        },
+      );
     }
   }
 }

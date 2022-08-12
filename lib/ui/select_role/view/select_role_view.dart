@@ -2,7 +2,6 @@ import 'package:background_location/constants/constans.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/select_role/view/role_tile.dart';
-import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import 'package:get/get.dart';
 
 // import 'package:get/get.dart';
 
+import '../../splash/splash_screen.dart';
 import '../cubit/select_role_cubit.dart';
 
 class SelectRoleView extends StatelessWidget {
@@ -24,18 +24,28 @@ class SelectRoleView extends StatelessWidget {
 
     return Scaffold(
       appBar: MyAppBar(
+        showBackButton: false,
         title: BlocBuilder<SelectRoleCubit, SelectRoleState>(
           builder: (context, state) {
             return Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}');
           },
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () {
+          InkWell(
+            onTap: () {
               cubit.api.logout();
               Get.offAll(() => SplashScreen());
             },
+            child: Row(
+              children: [
+                Icon(Icons.exit_to_app),
+                Gap(10.w),
+                Text(
+                  'Logout',
+                  style: context.textTheme.subtitle2,
+                ),
+              ],
+            ),
           ),
           Gap(10.w),
         ],

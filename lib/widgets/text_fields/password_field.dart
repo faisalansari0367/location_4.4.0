@@ -52,6 +52,7 @@ class _PasswordFieldState extends State<PasswordField> {
       onSubmitted: widget.onSubmitted,
       textInputAction: widget.textInputAction,
       textInputType: TextInputType.visiblePassword,
+      inputFormatters: [],
       prefixIcon: Icon(
         Icons.lock_outlined,
       ),

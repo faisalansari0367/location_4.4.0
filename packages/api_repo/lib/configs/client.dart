@@ -2,7 +2,6 @@
 import 'dart:io';
 
 // import 'package:auth_repo/src/auth_repo_impl.dart';
-import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
@@ -60,7 +59,7 @@ class Client {
 
     _dio = Dio(options);
     _dio!.interceptors.add(dioInterceptor);
-    _dio!.options.baseUrl = "http://cupidknot.com:5555/api";
+    _dio!.options.baseUrl = baseUrl;
     _dio!.options.headers = header;
     return this;
   }
@@ -107,9 +106,10 @@ class Client {
     return this;
   }
 
-  Future<Client> setProtectedApiHeader() async {
+  Client setProtectedApiHeader() {
     // final authRepository = AuthRepoImpl(_client);
     // final token = StorageService(box: ).getToken();
+    if (token == null) return this;
     header!.putIfAbsent('Authorization', () => 'Bearer $token');
     return this;
   }
@@ -131,7 +131,7 @@ class Client {
     CancelToken? cancelToken,
     void Function(int, int)? onReceiveProgress,
   }) async {
-    final headers = await builder().setProtectedApiHeader();
+    final headers = builder().setProtectedApiHeader();
     final dio = headers.setUrlEncoded().build();
     return await dio.get(
       baseUrl + path,
@@ -150,7 +150,7 @@ class Client {
     void Function(int, int)? onSendProgress,
     void Function(int, int)? onReceiveProgress,
   }) async {
-    final headers = await builder().setProtectedApiHeader();
+    final headers = builder().setProtectedApiHeader();
     final dio = headers.setUrlEncoded().build();
     final result = await dio.post<T>(
       baseUrl + path,
@@ -171,7 +171,7 @@ class Client {
     void Function(int, int)? onSendProgress,
     void Function(int, int)? onReceiveProgress,
   }) async {
-    final headers = await builder().setProtectedApiHeader();
+    final headers = builder().setProtectedApiHeader();
     final dio = headers.setUrlEncoded().build();
     final result = await dio.patch<T>(
       baseUrl + path,

@@ -1,6 +1,7 @@
 import 'package:background_location/constants/constans.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/forgot_password/view/forgot_password.dart';
+import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,9 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+        showBackButton: false,
+      ),
       body: Padding(
         padding: kPadding,
         child: Form(
@@ -34,9 +37,11 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  Assets.images.login.path,
-                  height: 40.height,
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset(
+                    Assets.images.login.path,
+                  ),
                 ),
                 Text(
                   Strings.login,
@@ -45,15 +50,13 @@ class _LoginViewState extends State<LoginView> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 2.height),
+                SizedBox(height: 4.height),
                 EmailField(
                   controller: cubit.emailController,
                   onChanged: cubit.onChangedEmail,
                 ),
                 SizedBox(height: 2.height),
-                PasswordField(
-                  onChanged: cubit.onChangedPassword,
-                ),
+                PasswordField(onChanged: cubit.onChangedPassword, onSubmitted: (s) => onLogin()),
                 Gap(1.height),
                 GestureDetector(
                   onTap: () => Get.to(ForgotPassword()),
@@ -68,31 +71,41 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 SizedBox(height: 2.height),
-                BlocListener<LoginCubit, LoginState>(
-                  listenWhen: (previous, current) => previous.error != current.error,
-                  listener: (context, state) {
-                    print(state.error);
-                    if (state.error.isEmpty) return;
-                    ScaffoldMessenger.maybeOf(context)
-                      ?..removeCurrentSnackBar()
-                      ..showSnackBar(
-                        SnackBar(
-                          backgroundColor: context.theme.colorScheme.secondary.withAlpha(50),
-                          content: Text(
-                            state.error,
-                            style: context.textTheme.bodyText2?.copyWith(
-                              color: const Color.fromARGB(255, 233, 83, 72),
-                            ),
-                          ),
-                        ),
-                      );
-                    cubit.clearError();
-                  },
-                  child: MyElevatedButton(
-                    onPressed: onLogin,
-                    text: (Strings.login),
+                MyElevatedButton(
+                  onPressed: onLogin,
+                  text: Strings.login,
+                ),
+
+                Gap(5.height),
+                Align(
+                  child: TextButton(
+                    onPressed: () => Get.to(SignUpPage()),
+                    child: Text('${Strings.newToItrack} ${Strings.register}'),
                   ),
                 ),
+                // New to Itrack ? Register
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       Strings.newToItrack,
+                //       style: context.textTheme.subtitle2?.copyWith(
+                //           // color: context.theme.primaryColor,s
+                //           ),
+                //     ),
+                //     SizedBox(width: 10.w),
+                //     GestureDetector(
+                //       onTap: () => Get.to(SignUpPage()),
+                //       child: Text(
+                //         Strings.register,
+                //         style: context.textTheme.subtitle2?.copyWith(
+                //           color: context.theme.primaryColor,
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+
                 SizedBox(height: 1.height),
               ],
             ),

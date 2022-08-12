@@ -80,11 +80,32 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<void> logout() async {
-    await Future.wait(
-      [
-        storage.removeToken(),
-        storage.removeUser(),
-      ],
-    );
+    await Future.wait([
+      storage.removeToken(),
+      storage.removeUser(),
+    ]);
+  }
+
+  @override
+  Future<ApiResult<ResponseModel>> forgotPassword({required String email}) async {
+    try {
+      final result =
+          await client.post(Endpoints.forgotPassword, data: {"email": email.toLowerCase().trim()});
+      final model = ResponseModel.fromMap((result.data));
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model}) async {
+    try {
+      final result = await client.post(Endpoints.resetPassword, data: model.toMap());
+      final data = ResponseModel.fromMap(result.data);
+      return ApiResult.success(data: data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
   }
 }

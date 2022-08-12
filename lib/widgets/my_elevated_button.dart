@@ -8,6 +8,7 @@ import 'animations/my_slide_animation.dart';
 class MyElevatedButton extends StatefulWidget {
   final Widget? child;
   final String? text;
+  final Color? color;
   final bool isLoading;
   final Future<void> Function()? onPressed;
   final EdgeInsets? padding;
@@ -18,7 +19,9 @@ class MyElevatedButton extends StatefulWidget {
     this.onPressed,
     this.isLoading = false,
     this.width,
-    this.text, this.padding,
+    this.text,
+    this.padding,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -72,7 +75,8 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
         onPressed: !isLoading ? onTap : null,
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          primary: theme.primaryColor,
+          primary: widget.color ?? theme.primaryColor,
+          // minimumSize: Size(70.width, 6.height),
           side: MyDecoration.inputBorder.borderSide,
           shape: const StadiumBorder(),
           shadowColor: theme.primaryColor.withOpacity(0.5),
@@ -104,7 +108,8 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
                     style: context.textTheme.button?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontSize: 4.width,
+                      // fontSize: 4.width,
+                      fontSize: 3.5.width,
                     ),
                   ),
         ),

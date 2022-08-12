@@ -66,7 +66,13 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Gap(10.height),
-            Lottie.asset(Assets.animations.welcome),
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Lottie.asset(
+                Assets.animations.welcome,
+                repeat: false,
+              ),
+            ),
             Gap(10.height),
             Gap(2.height),
             AnimatedOpacity(
@@ -81,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   Gap(5.height),
                   MyElevatedButton(
                     text: (Strings.login),
-                    onPressed: () async => Get.to(() => LoginPage()),
+                    onPressed: () async => Get.off(() => LoginPage()),
                   ),
                   // Gap(2.height),
                   _orSeperator(context),

@@ -1,5 +1,6 @@
 import 'package:background_location/helpers/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'my_text_field.dart';
 
@@ -19,6 +20,8 @@ class EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     // final iconColor = Theme.of(context).iconTheme.color;
     return MyTextField(
+      // textCapitalization: TextCapitalization.,
+      inputFormatters: [LowerCaseTextFormatter()],
       focusNode: focusNode,
       controller: controller,
       hintText: 'Email ID',
@@ -28,5 +31,13 @@ class EmailField extends StatelessWidget {
       textInputType: TextInputType.emailAddress,
       prefixIcon: Icon(Icons.email_outlined),
     );
+  }
+}
+
+
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: newValue.text.toLowerCase());
   }
 }

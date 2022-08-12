@@ -1,4 +1,5 @@
 import 'package:api_repo/configs/client.dart';
+import 'package:api_repo/src/locale/currency_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
@@ -11,6 +12,7 @@ class ApiRepo implements Api {
   late AuthRepo _authRepo;
   late UserRepo _userRepo;
   late Box _box;
+  late LocalesApi _localesApi;
 
   ApiRepo();
 
@@ -25,6 +27,8 @@ class ApiRepo implements Api {
     _userStream(_box, storage.userKey);
     _authRepo = AuthRepoImpl(client: _client, box: _box);
     _userRepo = UserRepoImpl(client: _client);
+    _localesApi = LocalesRepo();
+    // await _localesApi.initLocale();
   }
 
   void _userStream(Box box, String key) {
@@ -65,5 +69,40 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<User>> updateUser({required User user}) async {
     return await _authRepo.updateUser(user: user);
+  }
+
+  @override
+  void changeCountry({required String code, required String dial, required String name}) {
+    return _localesApi.changeCountry(code: code, dial: dial, name: name);
+  }
+
+  @override
+  String? get countryCode => _localesApi.countryCode;
+
+  @override
+  String? get countryName => _localesApi.countryName;
+
+  @override
+  String? get dialCode => _localesApi.dialCode;
+
+  @override
+  Future<void> initLocale() {
+    // TODO: implement initLocale
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<ResponseModel>> forgotPassword({required String email}) {
+    return _authRepo.forgotPassword(email: email);
+  }
+
+  @override
+  Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model}) {
+    return _authRepo.resetPassword(model: model);
+  }
+
+  @override
+  Future<ApiResult<void>> updateRole(Map<String, dynamic> data) {
+    return _userRepo.updateRole(data);
   }
 }

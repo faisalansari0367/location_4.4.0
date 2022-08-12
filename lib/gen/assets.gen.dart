@@ -49,6 +49,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/login.jpeg
   AssetGenImage get login => const AssetGenImage('assets/images/login.jpeg');
 
+  /// File path: assets/images/reset_password.jpeg
+  AssetGenImage get resetPassword =>
+      const AssetGenImage('assets/images/reset_password.jpeg');
+
   /// File path: assets/images/signup.jpeg
   AssetGenImage get signup => const AssetGenImage('assets/images/signup.jpeg');
 }

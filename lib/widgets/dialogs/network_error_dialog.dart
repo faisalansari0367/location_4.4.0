@@ -30,11 +30,14 @@ class NetworkErrorDialog extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(Assets.animations.networkError),
+          Lottie.asset(
+            Assets.animations.networkError,
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.width),
             child: Text(
               message,
+              textAlign: TextAlign.center,
               style: context.textTheme.bodyText1?.copyWith(
                 color: Colors.grey[600],
                 fontSize: 4.4.width,
@@ -48,6 +51,7 @@ class NetworkErrorDialog extends StatelessWidget {
             text: buttonText,
             padding: EdgeInsets.all(10.sp),
             width: 30.width,
+            color: Colors.red,
             onPressed: () async => onCancel(),
           ),
           Gap(2.height),
