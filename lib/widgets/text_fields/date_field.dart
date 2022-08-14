@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 class MyDateField extends StatefulWidget {
   final String label;
   final ValueChanged<String>? onChanged;
-  const MyDateField({Key? key, this.onChanged, required this.label}) : super(key: key);
+  final String? date;
+  const MyDateField({Key? key, this.onChanged, required this.label, this.date}) : super(key: key);
 
   @override
   State<MyDateField> createState() => _MyDateFieldState();
@@ -13,6 +14,16 @@ class MyDateField extends StatefulWidget {
 
 class _MyDateFieldState extends State<MyDateField> {
   final controller = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.date != null) {
+      final dt = DateTime.parse(widget.date!);
+      controller.text = formatDate(dt);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -39,9 +50,12 @@ class _MyDateFieldState extends State<MyDateField> {
     );
     if (pickedDate != null) {
       setState(() {
-        controller.text = DateFormat('dd-MM-yyyy').format(pickedDate);
+        controller.text = formatDate(pickedDate);
         widget.onChanged?.call(pickedDate.toIso8601String());
       });
     }
   }
+
+  // create a function to format date
+  String formatDate(DateTime date) => DateFormat('dd-MM-yyyy').format(date);
 }

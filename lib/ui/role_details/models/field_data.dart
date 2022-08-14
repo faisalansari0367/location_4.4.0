@@ -1,7 +1,7 @@
-import 'package:api_repo/api_repo.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
+import 'package:background_location/widgets/text_fields/country_field.dart';
 import 'package:background_location/widgets/text_fields/date_field.dart';
 import 'package:background_location/widgets/text_fields/phone_text_field.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -12,31 +12,14 @@ import '../widgets/property_address.dart';
 
 class FieldData {
   final String name;
-  // String? data;
   Address? address;
   final TextEditingController controller;
 
   FieldData({
-    // this.data,
     required this.name,
     required this.controller,
+    this.address,
   });
-
-  static FieldType getFieldType(String field) {
-    switch (field.camelCase) {
-      case UserKeys.email:
-        return FieldType.email;
-      case UserKeys.phoneNumber:
-      case 'mobile':
-        return FieldType.phoneNumber;
-      case UserKeys.firstName:
-        return FieldType.firstName;
-      case UserKeys.lastName:
-        return FieldType.lastName;
-      default:
-        return FieldType.text;
-    }
-  }
 
   FieldType get fieldType {
     switch (name.camelCase) {
@@ -54,6 +37,9 @@ class FieldData {
       case 'entryDate':
       case 'exitDate':
         return FieldType.date;
+      case 'countryOfOrigin':
+      case 'countryVisiting':
+        return FieldType.country;
       default:
         return FieldType.text;
     }
@@ -72,6 +58,7 @@ class FieldData {
       case FieldType.pic:
         return MyTextField(
           textCapitalization: TextCapitalization.characters,
+          inputFormatters: [],
           controller: controller,
           hintText: FieldType.pic.name.toUpperCase(),
           validator: Validator.pic,
@@ -79,6 +66,7 @@ class FieldData {
         );
       case FieldType.signature:
         return SignatureWidget(
+          signature: controller.text,
           // controller: controller,
           onChanged: (value) => controller.text = value,
         );
@@ -86,12 +74,27 @@ class FieldData {
         return PropertyAddress(
           onChanged: (value) {
             address = value;
+            print(address?.toMap());
           },
         );
       case FieldType.date:
         return MyDateField(
           label: name,
+          date: controller.text,
           onChanged: (value) => controller.text = value,
+        );
+      // case FieldType.exitDate:
+      //   return MyDateField(
+      //     label: name,
+      //     onChanged: (value) => controller.text = value,
+      //   );
+
+      case FieldType.country:
+        return CountryField(
+          label: name,
+          controller: controller,
+          countryName: controller.text,
+          onCountryChanged: (value) => controller.text = value,
         );
 
       default:

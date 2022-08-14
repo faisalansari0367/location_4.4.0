@@ -7,16 +7,19 @@ class User {
   String? role;
   String? createdAt;
   String? updatedAt;
+  String? countryCode;
 
-  User(
-      {this.firstName,
-      this.lastName,
-      this.email,
-      this.phoneNumber,
-      this.id,
-      this.role,
-      this.createdAt,
-      this.updatedAt});
+  User({
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phoneNumber,
+    this.id,
+    this.role,
+    this.createdAt,
+    this.updatedAt,
+    this.countryCode,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     firstName = json[UserKeys.firstName];
@@ -27,6 +30,7 @@ class User {
     role = json[UserKeys.role];
     createdAt = json[UserKeys.createdAt];
     updatedAt = json['updatedAt'];
+    countryCode = json['countryCode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -39,9 +43,9 @@ class User {
     data[UserKeys.role] = role;
     data[UserKeys.createdAt] = createdAt;
     data[UserKeys.updatedAt] = updatedAt;
+    data['countryCode'] = countryCode;
     return data;
   }
-
 
   Map<String, dynamic> updateUser() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -52,8 +56,6 @@ class User {
     data[UserKeys.role] = role;
     return data;
   }
-
-  
 }
 
 class UserKeys {

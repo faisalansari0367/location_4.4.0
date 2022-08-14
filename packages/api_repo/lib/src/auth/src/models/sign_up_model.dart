@@ -1,9 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class SignUpModel {
   String? firstName;
   String? lastName;
   String? email;
   int? phoneNumber;
   String? password;
+  String? countryCode;
 
   SignUpModel({
     this.firstName,
@@ -11,6 +13,7 @@ class SignUpModel {
     this.email,
     this.phoneNumber,
     this.password,
+    this.countryCode,
   });
 
   SignUpModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +22,7 @@ class SignUpModel {
     email = json['email'];
     phoneNumber = json['phoneNumber'];
     password = json['password'];
+    countryCode = json['countryCode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +32,7 @@ class SignUpModel {
     data['email'] = email?.trim();
     data['phoneNumber'] = phoneNumber;
     data['password'] = password?.trim();
+    data['countryCode'] = countryCode?.trim();
     return data;
   }
 }

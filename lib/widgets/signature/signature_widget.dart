@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:background_location/constants/index.dart';
@@ -26,14 +25,17 @@ class _SignatureWidgetState extends State<SignatureWidget> {
 
   @override
   void initState() {
-    if(widget.signature != null) {
-      _image = base64Decode(widget.signature!);
-      showImage = true;
+    if (widget.signature != null) {
+      try {
+        _image = base64Decode(widget.signature!);
+        showImage = true;
+      } on Exception {}
     }
     super.initState();
   }
 
   void onDone(Uint8List? signature) {
+    
     if (signature != null) {
       setState(() {
         _image = signature;

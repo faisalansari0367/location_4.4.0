@@ -1,24 +1,40 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'role_details_cubit.dart';
+// part of 'role_details_cubit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'role_details_state.g.dart';
+
+@JsonSerializable()
 class RoleDetailsState extends Equatable {
-  final List<FieldData> fields;
+  // final List<FieldData> fieldsData;
+  final List<String> fields;
+  final Map<String, dynamic> userRoleDetails;
   final bool isLoading;
-  
-  const RoleDetailsState({this.isLoading = false, this.fields = const []});
+
+  const RoleDetailsState({
+    // this.fieldsData = const [],
+    this.fields = const [],
+    this.userRoleDetails = const <String, dynamic>{},
+    this.isLoading = false,
+  });
 
   @override
-  List<Object> get props => [fields, isLoading];
+  List<Object> get props => [isLoading, fields, userRoleDetails];
 
   RoleDetailsState copyWith({
-    List<FieldData>? fields,
+    List<String>? fields,
+    Map<String, dynamic>? userRoleDetails,
     bool? isLoading,
   }) {
     return RoleDetailsState(
       fields: fields ?? this.fields,
+      userRoleDetails: userRoleDetails ?? this.userRoleDetails,
       isLoading: isLoading ?? this.isLoading,
     );
   }
+
+  factory RoleDetailsState.fromJson(Map<String, dynamic> json) => _$RoleDetailsStateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RoleDetailsStateToJson(this);
 }
-
-

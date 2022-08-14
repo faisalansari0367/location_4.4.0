@@ -1,5 +1,6 @@
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/locale/currency_repo.dart';
+import 'package:api_repo/src/user/src/models/role_details_response.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
@@ -104,5 +105,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<void>> updateRole(Map<String, dynamic> data) {
     return _userRepo.updateRole(data);
+  }
+
+  @override
+  Future<ApiResult<RoleDetailsResponse>> getRoleData() {
+    return _userRepo.getRoleData();
   }
 }

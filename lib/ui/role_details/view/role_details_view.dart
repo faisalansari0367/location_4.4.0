@@ -12,7 +12,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/my_appbar.dart';
-import '../../maps/view/maps_page.dart';
 
 class RoleDetailsView extends StatelessWidget {
   const RoleDetailsView({Key? key}) : super(key: key);
@@ -22,12 +21,7 @@ class RoleDetailsView extends StatelessWidget {
     final cubit = context.read<RoleDetailsCubit>();
     final gap = Gap(1.height);
     return Scaffold(
-      appBar: MyAppBar(
-        title: Text(
-          cubit.role,
-        ),
-      ),
-      // body: _body(context, gap),
+      appBar: MyAppBar(title: Text(cubit.role)),
       body: SingleChildScrollView(
         padding: kPadding,
         child: BlocBuilder<RoleDetailsCubit, RoleDetailsState>(
@@ -46,7 +40,7 @@ class RoleDetailsView extends StatelessWidget {
                     isLoading: state.isLoading,
                     child: AutoSpacing(
                       spacing: SizedBox.shrink(),
-                      children: state.fields.map(
+                      children: cubit.getFieldsData().map(
                         (item) {
                           return Padding(
                             padding: EdgeInsets.only(top: 10.h),
@@ -72,51 +66,51 @@ class RoleDetailsView extends StatelessWidget {
     );
   }
 
-  Padding _body(BuildContext context, Gap gap) {
-    return Padding(
-      padding: EdgeInsets.all(20.sp),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              Strings.yourDetails,
-              style: context.textTheme.headline5,
-            ),
-            Gap(5.height),
-            MyTextField(
-              hintText: Strings.firstName,
-            ),
-            gap,
-            MyTextField(
-              hintText: Strings.lastName,
-            ),
-            gap,
-            const EmailField(),
-            gap,
-            const MyTextField(
-              hintText: Strings.mobile,
-            ),
-            gap,
-            const MyTextField(
-              hintText: Strings.pic,
-            ),
-            gap,
-            MyTextField(
-              hintText: Strings.properyName,
-            ),
-            gap,
-            MyTextField(
-              hintText: Strings.propertyAddress,
-            ),
-            gap,
-            MyElevatedButton(
-              onPressed: () async => Get.to(() => const MapsPage()),
-              text: ('Submit'),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Padding _body(BuildContext context, Gap gap) {
+  //   return Padding(
+  //     padding: EdgeInsets.all(20.sp),
+  //     child: SingleChildScrollView(
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text(
+  //             Strings.yourDetails,
+  //             style: context.textTheme.headline5,
+  //           ),
+  //           Gap(5.height),
+  //           MyTextField(
+  //             hintText: Strings.firstName,
+  //           ),
+  //           gap,
+  //           MyTextField(
+  //             hintText: Strings.lastName,
+  //           ),
+  //           gap,
+  //           const EmailField(),
+  //           gap,
+  //           const MyTextField(
+  //             hintText: Strings.mobile,
+  //           ),
+  //           gap,
+  //           const MyTextField(
+  //             hintText: Strings.pic,
+  //           ),
+  //           gap,
+  //           MyTextField(
+  //             hintText: Strings.properyName,
+  //           ),
+  //           gap,
+  //           MyTextField(
+  //             hintText: Strings.propertyAddress,
+  //           ),
+  //           gap,
+  //           MyElevatedButton(
+  //             onPressed: () async => Get.to(() => const MapsPage()),
+  //             text: ('Submit'),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

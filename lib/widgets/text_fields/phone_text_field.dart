@@ -6,7 +6,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 
 class PhoneTextField extends StatefulWidget {
-  final ValueChanged<String>? onChanged;
+  final void Function(String, String)? onChanged;
   final TextEditingController? controller;
   const PhoneTextField({Key? key, this.onChanged, this.controller}) : super(key: key);
 
@@ -65,8 +65,9 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
                 print(c);
               },
               onChanged: (phone) {
+                
                 print(phone.completeNumber);
-                if (widget.onChanged != null) widget.onChanged!(phone.number);
+                if (widget.onChanged != null) widget.onChanged!(phone.number, phone.countryCode);
                 // print('country code ${phone.countryCode}');
               },
             ),

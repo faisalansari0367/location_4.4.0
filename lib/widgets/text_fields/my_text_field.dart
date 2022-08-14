@@ -4,7 +4,6 @@ import 'package:background_location/widgets/text_fields/text_formatters/Capitali
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 class MyTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final VoidCallback? onTap;
@@ -25,36 +24,37 @@ class MyTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final List<TextInputFormatter>? inputFormatters;
   final bool autoFocus;
-  final bool enabled;
+  final bool enabled, readOnly;
+  final AutovalidateMode autovalidateMode;
 
   final TextCapitalization textCapitalization;
 
-  const MyTextField(
-      {Key? key,
-      this.onChanged,
+  const MyTextField({
+    Key? key,
+    this.onChanged,
+    this.readOnly = false,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
     this.enabled = true,
-      this.autoFocus = false,
-      this.hintText,
-      this.prefixIcon,
-      this.controller,
-      this.onSubmitted,
-      this.fillColor,
-      this.validator,
-      this.textInputAction,
-      this.textInputType,
-      this.obscureText = false,
-      this.suffixIcon,
-      this.focusNode,
-      this.maxLength,
-      this.contentPadding,
-      this.isDense = true,
-      this.hintStyle,
-      
+    this.autoFocus = false,
+    this.hintText,
+    this.prefixIcon,
+    this.controller,
+    this.onSubmitted,
+    this.fillColor,
+    this.validator,
+    this.textInputAction,
+    this.textInputType,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.focusNode,
+    this.maxLength,
+    this.contentPadding,
+    this.isDense = true,
+    this.hintStyle,
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.sentences,
     this.onTap,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class MyTextField extends StatelessWidget {
       inputFormatters: inputFormatters ?? [CapitalizeFirstLetterFormatter()],
       focusNode: focusNode,
       obscureText: obscureText,
-      
+      autovalidateMode: autovalidateMode,
       enabled: enabled,
       controller: controller,
       onChanged: onChanged,
@@ -76,7 +76,8 @@ class MyTextField extends StatelessWidget {
       buildCounter: _buildCounter,
       onTap: onTap,
       autofocus: autoFocus,
-      
+      enableSuggestions: true,
+      readOnly: readOnly,
       decoration: InputDecoration(
         labelText: hintText,
         // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
@@ -97,6 +98,7 @@ class MyTextField extends StatelessWidget {
         ),
         disabledBorder: MyDecoration.inputBorder,
         border: MyDecoration.inputBorder,
+        // enabled: false,
 
         // contentPadding: EdgeInsets.only(left: .padding),
       ),

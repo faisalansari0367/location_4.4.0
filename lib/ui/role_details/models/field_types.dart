@@ -8,6 +8,9 @@ enum FieldType {
   pic,
   address,
   date,
+  entryDate,
+  exitDate,
+  country,
 }
 
 
@@ -22,5 +25,8 @@ extension FieldTypeExt on FieldType {
   // address
   bool get isAddress => this == FieldType.address;
   bool get isDate => this == FieldType.date;
+  bool get isCountry => this == FieldType.country;
+  bool get isEntryDate => this == FieldType.entryDate;
+  bool get isExitDate => this == FieldType.exitDate;
 
 }

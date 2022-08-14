@@ -80,7 +80,7 @@ class _SignUpViewState extends State<SignUpView> {
                     },
                   ),
                   Text(
-                    'Terms And Conditions',
+                    'I Agree to accept Terms And Conditions',
                     style: context.textTheme.bodyText2,
                   ),
                 ],

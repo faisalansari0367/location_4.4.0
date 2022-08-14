@@ -5,12 +5,11 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../../role_details/view/role_details_page.dart';
-export 'select_role_state.dart';
 import 'select_role_state.dart';
 
+export 'select_role_state.dart';
+
 // import 'select_role_state.g.dart';
-
-
 
 class SelectRoleCubit extends HydratedCubit<SelectRoleState> {
   final Api api;
@@ -34,7 +33,7 @@ class SelectRoleCubit extends HydratedCubit<SelectRoleState> {
   }
 
   Future<void> getRoles() async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: state.roles.isEmpty));
     try {
       final result = await api.getUserRoles();
       result.when(

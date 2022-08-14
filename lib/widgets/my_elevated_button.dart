@@ -74,6 +74,7 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
       child: ElevatedButton(
         onPressed: !isLoading ? onTap : null,
         style: ElevatedButton.styleFrom(
+          onSurface: Colors.white,
           elevation: 0,
           primary: widget.color ?? theme.primaryColor,
           // minimumSize: Size(70.width, 6.height),
@@ -93,7 +94,10 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text('Loading...'),
+                    Text(
+                      'Loading...',
+                      style: TextStyle(color: Colors.black),
+                    ),
                     SizedBox(width: 15),
                     SizedBox(
                       height: 20,

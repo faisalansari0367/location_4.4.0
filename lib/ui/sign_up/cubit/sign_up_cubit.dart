@@ -17,8 +17,8 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(email: value));
   }
 
-  void onPhoneChanged(String value) {
-    emit(state.copyWith(phoneNumber: value));
+  void onPhoneChanged(String value, String countryCode) {
+    emit(state.copyWith(phoneNumber: value, countryCode: countryCode));
   }
 
   void onFirstNameChanged(String value) {
@@ -38,7 +38,6 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUp() async {
-    
     if (!state.termsAndConditions) {
       Get.snackbar('T&C Required', 'Please accept terms and conditions');
       return;
@@ -50,6 +49,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       email: state.email,
       phoneNumber: int.parse(state.phoneNumber),
       password: state.password,
+      countryCode: state.countryCode,
     );
     final result = await authRepo.signUp(data: model);
     result.when(
