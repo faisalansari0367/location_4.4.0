@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/features/drawer/view/drawer_page.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
@@ -13,7 +14,6 @@ import 'package:local_auth_repo/local_auth.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../constants/constans.dart';
-import '../select_role/view/select_role_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -28,14 +28,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     final user = context.read<Api>().getUser();
-    Future.delayed((kSplashDuration.inMilliseconds - 500).milliseconds, () async {
+    Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
       if (user == null) return;
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
       if (!result) {
         Get.off(() => LoginPage(email: user.email));
       } else {
-        Get.off(() => SelectRolePage());
+        Get.off(() => DrawerPage());
       }
       // Get.off(() => SelectRolePage());
       // Navigator.pushReplacement(

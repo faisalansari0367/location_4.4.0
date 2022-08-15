@@ -43,15 +43,6 @@ dependencies:
   gap: ^2.0.0
   # auth_repo: main
 
-  api_repo:
-    path: packages/api_repo
-  local_auth_repo:
-    path: packages/local_auth
-  location_repo:
-    path: packages/location_repo
-  local_notification:
-    path: packages/local_notification
-
   lottie: ^1.4.0
   pin_code_fields: ^7.4.0
   change_app_package_name: ^1.1.0
@@ -77,6 +68,20 @@ dependencies:
   # flutter_country_picker:
   # storage_path: ^0.2.0
   # country_list_pick: ^1.0.1+6
+  maps_toolkit: ^2.0.0
+  api_repo:
+    path: packages/api_repo
+  local_auth_repo:
+    path: packages/local_auth
+  # location_repo:
+  #   path: packages/location_repo
+  local_notification:
+    path: packages/local_notification
+  geolocator: ^8.2.1
+  fluttertoast: ^8.0.9
+  provider: ^6.0.3
+  animations: ^2.0.2
+  rxdart: ^0.27.5
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.3

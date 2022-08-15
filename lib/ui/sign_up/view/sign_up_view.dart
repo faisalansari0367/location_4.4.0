@@ -1,5 +1,4 @@
-import 'package:background_location/constants/constans.dart';
-import 'package:background_location/constants/strings.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/helpers/validator.dart';
@@ -27,7 +26,9 @@ class _SignUpViewState extends State<SignUpView> {
     final gap = Gap(0.5.height);
 
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+          // leading: SizedBox(),
+          ),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Form(
@@ -69,21 +70,31 @@ class _SignUpViewState extends State<SignUpView> {
                 onChanged: cubit.onPasswordChanged,
               ),
               Gap(1.height),
-              Row(
-                children: [
-                  BlocBuilder<SignUpCubit, SignUpState>(
-                    builder: (context, state) {
-                      return Checkbox(
-                        value: state.termsAndConditions,
-                        onChanged: cubit.setTermsAndConditions,
-                      );
-                    },
-                  ),
-                  Text(
-                    'I Agree to accept Terms And Conditions',
-                    style: context.textTheme.bodyText2,
-                  ),
-                ],
+              InkWell(
+                onTap: () => cubit.setTermsAndConditions(!cubit.state.termsAndConditions),
+                child: Row(
+                  children: [
+                    BlocBuilder<SignUpCubit, SignUpState>(
+                      builder: (context, state) {
+                        return Checkbox(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          value: state.termsAndConditions,
+                          onChanged: cubit.setTermsAndConditions,
+                        );
+                      },
+                    ),
+                    Expanded(
+                      child: Text(
+                        // 'I Agree to accept Terms And Conditions',
+                        Strings.privacyPolicyMessage,
+
+                        style: context.textTheme.bodyText2,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Gap(3.height),
               MyElevatedButton(

@@ -138,6 +138,7 @@ class _PropertyAddressState extends State<PropertyAddress> {
                   hintText: Strings.postCode,
                   maxLength: 4,
                   validator: Validator.text,
+                  textInputType: TextInputType.number,
                   onChanged: (s) {
                     // final code = int.tryParse(s);
                     // if (s != null) {

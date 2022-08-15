@@ -62,27 +62,32 @@ class SelectColor extends StatelessWidget {
                 ),
                 Gap(5.height),
                 // ..._options(context),
-                Wrap(
-                  spacing: 7.width,
-                  runSpacing: 7.width,
-                  children: colors
-                      .map(
-                        (e) => AnimatedButton(
-                          onTap: () {
-                            cubit.setAssetColor(e);
-                            Get.back();
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: MyDecoration.decoration(isCircle: true, color: e),
+                SizedBox(
+                  width: 100.width,
+                  child: Wrap(
+                    spacing: 10.width,
+                    runSpacing: 7.width,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    runAlignment: WrapAlignment.center,
+                    children: colors
+                        .map(
+                          (e) => AnimatedButton(
+                            onTap: () {
+                              cubit.setAssetColor(e);
+                              Get.back();
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: MyDecoration.decoration(isCircle: true, color: e),
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                  ),
                 ),
                 Gap(context.mediaQueryViewPadding.bottom),
-
               ],
             ),
           );

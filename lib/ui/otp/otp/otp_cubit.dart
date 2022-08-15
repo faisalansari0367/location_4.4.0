@@ -1,12 +1,12 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:background_location/features/drawer/view/drawer_page.dart';
 import 'package:background_location/ui/otp/otp/otp_state.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/dialogs/mail_sent_dialog.dart';
-import '../../select_role/view/select_role_page.dart';
 
 class OtpCubit extends Cubit<OtpState> {
   final AuthRepo authRepo;
@@ -42,7 +42,7 @@ class OtpCubit extends Cubit<OtpState> {
         message: 'Otp verified successfully',
         onContinue: () async {
           Get.back();
-          await Get.offAll(() => SelectRolePage());
+          await Get.offAll(() => DrawerPage());
         },
       ),
     );

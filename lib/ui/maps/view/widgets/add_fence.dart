@@ -124,7 +124,7 @@ class AddFence extends StatelessWidget {
                     children: [
                       // Name
                       MyTextField(
-                        hintText: Strings.fieldName,
+                        hintText: Strings.fieldNameMsg,
                         validator: Validator.text,
                         controller: controller,
                       ),

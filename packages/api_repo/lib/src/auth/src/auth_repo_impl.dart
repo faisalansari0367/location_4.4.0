@@ -80,6 +80,7 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<void> logout() async {
+    print('user logged out');
     await Future.wait([
       storage.removeToken(),
       storage.removeUser(),
@@ -89,8 +90,7 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<ApiResult<ResponseModel>> forgotPassword({required String email}) async {
     try {
-      final result =
-          await client.post(Endpoints.forgotPassword, data: {"email": email.toLowerCase().trim()});
+      final result = await client.post(Endpoints.forgotPassword, data: {"email": email.toLowerCase().trim()});
       final model = ResponseModel.fromMap((result.data));
       return ApiResult.success(data: model);
     } catch (e) {
@@ -107,5 +107,10 @@ class AuthRepoImpl implements AuthRepo {
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
+  }
+
+  @override
+  String? getToken() {
+    return storage.getToken();
   }
 }

@@ -66,10 +66,12 @@ class LocationRepo {
   }
 
   static num calculatePolygonArea(List<LatLng> polygon) {
-    return mt.SphericalUtil.computeArea(polygon);
+        return mt.SphericalUtil.computeArea(polygon);
+
   }
 
   static bool isClosedPolygon(List<LatLng> polygon) {
+    
     return mt.PolygonUtil.isClosedPolygon(polygon);
   }
 }

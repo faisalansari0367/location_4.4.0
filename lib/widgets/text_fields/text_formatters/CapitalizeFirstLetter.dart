@@ -7,3 +7,10 @@ class CapitalizeFirstLetterFormatter extends TextInputFormatter {
     return newValue.copyWith(text: newValue.text.capitalizeFirst!);
   }
 }
+
+class CapitalizeAllInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: newValue.text.toUpperCase());
+  }
+}

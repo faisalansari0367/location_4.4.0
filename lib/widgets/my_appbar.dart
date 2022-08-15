@@ -1,4 +1,5 @@
 import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   final List<Widget> actions;
   final Color? backgroundColor;
   final Widget? title;
-  // final Widget? leading;
+  final Widget? leading;
   final VoidCallback? onBackPressed;
 
   final PreferredSizeWidget? bottom;
@@ -24,6 +25,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
     this.showBackButton = true,
     this.bottom,
     this.onBackPressed,
+    this.leading,
   });
 
   @override
@@ -59,8 +61,8 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                 // foregroundColor: Colors.,
                 // primary: true,
                 backgroundColor: backgroundColor,
-                leading: (showBackButton ? leadingArrow : SizedBox.shrink()),
-                leadingWidth: showBackButton ? null : 0.0,
+                leading: leading ?? (showBackButton ? leadingArrow : DrawerMenuIcon()),
+                leadingWidth: showBackButton ? null : null,
                 actions: actions,
                 title: title,
                 elevation: elevation,

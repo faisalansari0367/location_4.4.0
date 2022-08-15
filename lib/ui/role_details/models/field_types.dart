@@ -11,6 +11,8 @@ enum FieldType {
   entryDate,
   exitDate,
   country,
+  countryOfOrigin,
+  countryVisiting,
 }
 
 
@@ -28,5 +30,7 @@ extension FieldTypeExt on FieldType {
   bool get isCountry => this == FieldType.country;
   bool get isEntryDate => this == FieldType.entryDate;
   bool get isExitDate => this == FieldType.exitDate;
+  bool get isCountryOfOrigin => this == FieldType.countryOfOrigin;
+  bool get isCountryVisiting => this == FieldType.countryVisiting;
 
 }

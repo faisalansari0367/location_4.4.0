@@ -34,14 +34,38 @@ class _CountryFieldState extends State<CountryField> {
   @override
   initState() {
     if (widget.isOriginCountry) {
-      final user = context.read<AuthRepo>().getUser();
-      country = countryList.firstWhere((country) => sameCountryCode(country, user!.countryCode!));
-    }
-    country = widget.countryName != null ? countryList.firstWhere(sameCountryName) : null;
+      _getCountryFromCode();
+    } else
+      _getCountryFromName();
     super.initState();
   }
 
-  bool sameCountryCode(Country country, String countryCode) {
+  void _getCountryFromName() =>
+      country = ![null, ''].contains(widget.countryName) ? countryList.firstWhere(sameCountryName) : null;
+
+  void _getCountryFromCode() {
+    if (widget.isOriginCountry) {
+      final user = context.read<Api>().getUser();
+      final foundCountry = countryList.where((country) => sameCountryCode(country, user?.countryCode)).toList();
+      if (foundCountry.isNotEmpty) {
+        country = foundCountry.first;
+        widget.controller?.text = country!.name;
+      }
+    }
+  }
+
+  @override
+  didUpdateWidget(CountryField oldWidget) {
+    if (oldWidget.countryName != widget.countryName) {
+      _getCountryFromName();
+    } else {
+      _getCountryFromCode();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  bool sameCountryCode(Country country, String? countryCode) {
+    if (countryCode == null) return false;
     final hasPlus = countryCode.startsWith('+');
     final countryCodeWithoutPlus = hasPlus ? countryCode.substring(1) : countryCode;
     return country.phoneCode.toLowerCase() == countryCodeWithoutPlus.toLowerCase();
@@ -123,6 +147,7 @@ class _CountrySelectionState extends State<CountrySelection> {
       builder: (context, scrollController) {
         return Column(
           children: [
+            // divider
             Gap(2.height),
             MyTextField(
               hintText: 'Type here to search country',

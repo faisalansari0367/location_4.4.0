@@ -6,13 +6,11 @@ import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 // import 'package:get/get.dart';
 
-import '../../splash/splash_screen.dart';
 import '../cubit/select_role_cubit.dart';
 
 class SelectRoleView extends StatelessWidget {
@@ -30,25 +28,25 @@ class SelectRoleView extends StatelessWidget {
             return Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}');
           },
         ),
-        actions: [
-          InkWell(
-            onTap: () {
-              cubit.api.logout();
-              Get.offAll(() => SplashScreen());
-            },
-            child: Row(
-              children: [
-                Icon(Icons.exit_to_app),
-                Gap(10.w),
-                Text(
-                  'Logout',
-                  style: context.textTheme.subtitle2,
-                ),
-              ],
-            ),
-          ),
-          Gap(10.w),
-        ],
+        // actions: [
+        //   InkWell(
+        //     onTap: () {
+        //       cubit.api.logout();
+        //       Get.offAll(() => SplashScreen());
+        //     },
+        //     child: Row(
+        //       children: [
+        //         Icon(Icons.exit_to_app),
+        //         Gap(10.w),
+        //         Text(
+        //           'Logout',
+        //           style: context.textTheme.subtitle2,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        //   Gap(10.w),
+        // ],
       ),
       body: ListView(
         padding: kPadding,
@@ -79,25 +77,4 @@ class SelectRoleView extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildRole(String role, BuildContext context) {
-  //   return ListTile(
-  //     dense: false,
-  //     selected: true,
-  //     shape: MyDecoration.inputBorder.copyWith(
-  //       borderRadius: kBorderRadius,
-  //     ),
-  //     onTap: () async {
-  //       final cubit = context.read<SelectRoleCubit>();
-  //       await cubit.updateRole(role);
-  //       Get.to(() => RoleDetailsPage(role: role));
-  //     },
-  //     selectedColor: Colors.black,
-  //     title: Text(role),
-  //     trailing: Icon(
-  //       Icons.arrow_forward_ios,
-  //       color: Colors.grey.shade800,
-  //     ),
-  //   );
-  // }
 }

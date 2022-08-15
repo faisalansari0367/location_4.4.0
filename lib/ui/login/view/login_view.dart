@@ -28,6 +28,7 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: MyAppBar(
         showBackButton: false,
+        leading: SizedBox(),
       ),
       body: Padding(
         padding: kPadding,
@@ -59,7 +60,7 @@ class _LoginViewState extends State<LoginView> {
                 PasswordField(onChanged: cubit.onChangedPassword, onSubmitted: (s) => onLogin()),
                 Gap(1.height),
                 GestureDetector(
-                  onTap: () => Get.to(ForgotPassword()),
+                  onTap: () => Get.to(() => ForgotPassword()),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
@@ -79,8 +80,16 @@ class _LoginViewState extends State<LoginView> {
                 Gap(5.height),
                 Align(
                   child: TextButton(
-                    onPressed: () => Get.to(SignUpPage()),
-                    child: Text('${Strings.newToItrack} ${Strings.register}'),
+                    onPressed: () => Get.to(() => SignUpPage()),
+                    child: Text(
+                      '${Strings.newToItrack} ${Strings.register}',
+                      // style: context.textTheme.bodyText2.copy,
+                    ),
+                    style: TextButton.styleFrom(
+                      textStyle: context.textTheme.bodyText2?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
                 // New to Itrack ? Register

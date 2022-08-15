@@ -17,7 +17,6 @@ class ApiRepo implements Api {
 
   ApiRepo();
 
-  
   @override
   Future<void> init({required String baseUrl}) async {
     await Hive.initFlutter();
@@ -53,7 +52,6 @@ class ApiRepo implements Api {
   Future<ApiResult<User>> verifyOtp({required OtpModel otpModel}) {
     return _authRepo.verifyOtp(otpModel: otpModel);
   }
-
 
   @override
   User? getUser() => _authRepo.getUser();
@@ -110,5 +108,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<RoleDetailsResponse>> getRoleData() {
     return _userRepo.getRoleData();
+  }
+
+  @override
+  String? getToken() {
+    return _authRepo.getToken();
   }
 }

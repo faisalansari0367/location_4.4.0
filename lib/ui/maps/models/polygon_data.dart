@@ -1,86 +1,53 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// class PolygonModel {
+//   final String? id;
+//   final Color color;
+//   final String name;
+//   final List<LatLng> points;
 
+//   PolygonModel({
+//     required this.name,
+//     this.id,
+//     required this.color,
+//     required this.points,
+//   });
 
-import 'dart:convert';
+//   Map<String, dynamic> toJson() {
+//     return <String, dynamic>{
+//       'id': id,
+//       'color': colorToHex(color),
+//       'points': points.map((x) => _latLngToJson(x)).toList(),
+//       'name': name,
+//     };
+//   }
 
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:json_annotation/json_annotation.dart';
+//   Map<String, dynamic> _latLngToJson(LatLng latLng) {
+//     return <String, dynamic>{
+//       'latitude': latLng.latitude,
+//       'longitude': latLng.longitude,
+//     };
+//   }
 
-// import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
+//   static LatLng _latLngFromJson(Map<String, dynamic> latLng) {
+//     return LatLng(latLng['latitude'], latLng['longitude']);
+//   }
 
+//   factory PolygonModel.fromJson(Map<String, dynamic> json) {
+//     return PolygonModel(
+//       id: json['id'],
+//       color: colorFromHex(json['color']),
+//       points: List<LatLng>.from(
+//           (json['points'] as List<dynamic>).map((x) => _latLngFromJson(Map<String, dynamic>.from(x))).toList()),
+//       name: json['name'],
+//     );
+//   }
 
-// part 'polygon_data.g.dart';
+//   // color to hex
+//   static String colorToHex(Color color) {
+//     return color.value.toRadixString(16).padLeft(6, '0');
+//   }
 
-// @JsonSerializable()
-class PolygonData extends Equatable {
-  // @JsonKey(fromJson: pointsFromJson, toJson: pointsTOJson)
-  final List<LatLng> points;
-  final String name;
-  // @ColorSerialiser()
-  final Color color;
-  PolygonData({
-    required this.name, 
-    required this.points,
-    required this.color,
-  });
-
-  @override
-  List<Object?> get props => [points, color, name];
-
-  // factory PolygonData.fromJson(Map<String, dynamic> json) => _$PolygonDataFromJson(json);
-
-  /// Connect the generated [_$PolygonDataToJson] function to the `toJson` method.
-  // Map<String, dynamic> toJson() => _$PolygonDataToJson(this);
-
-  // static LatLng latlngFromJson(Map<String, dynamic> json) {
-  //   return LatLng(json['latitude'], json['longitude']);
-  // }
-
-  // // latlng to json
-  // static Map<String, dynamic> latlngToJson(LatLng latlng) {
-  //   return {
-  //     'latitude': latlng.latitude,
-  //     'longitude': latlng.longitude,
-  //   };
-  // }
-
-  // static List<Map<String, dynamic>> pointsFromJson(List<dynamic> json) {
-  //   return json.map((e) => latlngToJson(e)).toList();
-  // }
-
-  // static List<LatLng> pointsTOJson(List<dynamic> json) {
-  //   return json.map((e) => latlngFromJson(e)).toList();
-  // }
-
-  // static PolygonData fromJson(Map<String, dynamic> json) {
-  //   return PolygonData(
-  //     name: json['name'] as String,
-  //     points: (json['points'] as List<dynamic>)
-  //         .map((e) => PolygonData.latlngFromJson(e as Map<String, dynamic>))
-  //         .toList(),
-  //     color: Color(int.parse(json['color'] as String)),
-  //   );
-  // }
-
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'points': points.map((x) => x.toMap()).toList(),
-  //     'name': name,
-  //     'color': color.value,
-  //   };
-  // }
-
-  // factory PolygonData.fromMap(Map<String, dynamic> map) {
-  //   return PolygonData(
-  //     points: List<LatLng>.from((map['points'] as List<int>).map<LatLng>((x) => LatLng.fromMap(x as Map<String,dynamic>),),),
-  //     name: map['name'] as String,
-  //     color: Color(map['color'] as int),
-  //   );
-  // }
-
-  // String toJson() => json.encode(toMap());
-
-  // factory PolygonData.fromJson(String source) => PolygonData.fromMap(json.decode(source) as Map<String, dynamic>);
-}
+//   // color from hex
+//   static Color colorFromHex(String hex) {
+//     return Color(int.parse(hex, radix: 16));
+//   }
+// }

@@ -4,6 +4,7 @@ import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:background_location/widgets/text_fields/country_field.dart';
 import 'package:background_location/widgets/text_fields/date_field.dart';
 import 'package:background_location/widgets/text_fields/phone_text_field.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -38,8 +39,9 @@ class FieldData {
       case 'exitDate':
         return FieldType.date;
       case 'countryOfOrigin':
+        return FieldType.countryOfOrigin;
       case 'countryVisiting':
-        return FieldType.country;
+        return FieldType.countryVisiting;
       default:
         return FieldType.text;
     }
@@ -57,8 +59,8 @@ class FieldData {
         );
       case FieldType.pic:
         return MyTextField(
-          textCapitalization: TextCapitalization.characters,
-          inputFormatters: [],
+          // textCapitalization: TextCapitalization.characters,
+          inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,
           hintText: FieldType.pic.name.toUpperCase(),
           validator: Validator.pic,
@@ -89,8 +91,17 @@ class FieldData {
       //     onChanged: (value) => controller.text = value,
       //   );
 
-      case FieldType.country:
+      case FieldType.countryOfOrigin:
         return CountryField(
+          isOriginCountry: fieldType.isCountryOfOrigin,
+          label: name,
+          controller: controller,
+          countryName: controller.text,
+          onCountryChanged: (value) => controller.text = value,
+        );
+      case FieldType.countryVisiting:
+        return CountryField(
+          // isOriginCountry: fieldType.isCountryOfOrigin,
           label: name,
           controller: controller,
           countryName: controller.text,
@@ -98,8 +109,11 @@ class FieldData {
         );
 
       default:
+        if (controller.text.isNotEmpty) controller.text = controller.text.capitalize!;
         return MyTextField(
           hintText: name,
+          // textCapitalization: TextCapitalization.characters,
+          // inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,
           validator: getValidator(),
         );

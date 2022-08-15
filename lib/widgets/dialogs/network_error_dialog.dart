@@ -32,6 +32,7 @@ class NetworkErrorDialog extends StatelessWidget {
         children: [
           Lottie.asset(
             Assets.animations.networkError,
+            frameRate: FrameRate.max,
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.width),
@@ -50,7 +51,7 @@ class NetworkErrorDialog extends StatelessWidget {
           MyElevatedButton(
             text: buttonText,
             padding: EdgeInsets.all(10.sp),
-            width: 30.width,
+            width: 35.width,
             color: Colors.red,
             onPressed: () async => onCancel(),
           ),

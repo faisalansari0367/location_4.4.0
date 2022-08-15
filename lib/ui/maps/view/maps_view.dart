@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
+import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/view/widgets/current_location.dart';
 import 'package:background_location/ui/maps/view/widgets/maps_bottom_nav_bar.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
@@ -12,14 +14,18 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:local_notification/local_notification.dart';
-import 'package:location_repo/location_repo.dart' as location_repo;
+// import 'package:location_repo/location_repo.dart' as location_repo;
 import 'package:permission_handler/permission_handler.dart';
+
+import '../location_service/maps_repo.dart';
+import '../models/polygon_model.dart';
 
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapsView extends StatefulWidget {
-  const MapsView({Key? key}) : super(key: key);
+  final bool fromDrawer;
+  const MapsView({Key? key, this.fromDrawer = false}) : super(key: key);
 
   @override
   State<MapsView> createState() => _MapsViewState();
@@ -29,6 +35,8 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     final cubit = context.read<MapsCubit>();
+    final stream = context.read<MapsRepo>().polygonStream;
+    // stream.
     switch (state) {
       case AppLifecycleState.detached:
         print('AppLifecycleState.detached');
@@ -37,9 +45,6 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         print('AppLifecycleState.resumed');
         final controller = await cubit.controller.future;
         cubit.onMapCreated(controller);
-
-        // stateResumeHandler();
-        // saveIncompleteTripTimer?.cancel();
         break;
       case AppLifecycleState.paused:
         print('AppLifecycleState.paused');
@@ -90,10 +95,6 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         return true;
       },
       child: Scaffold(
-        // extendBodyBehindAppBar: true,
-        // drawer: Drawer(
-
-        // ),
         extendBody: false,
         backgroundColor: Colors.transparent,
         bottomNavigationBar: MapsBottomNavbar(cubit: cubit),
@@ -101,7 +102,9 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           mainAxisSize: MainAxisSize.min,
           children: [
             // _addGeofence(cubit),
-            CurrentLocation(onPressed: cubit.updateCurrentLocation),
+            CurrentLocation(
+              onPressed: cubit.updateCurrentLocation,
+            ),
             // FloatingActionButton(
             //   onPressed: cubit.updateCurrentLocation,
             //   backgroundColor: Colors.white,
@@ -162,39 +165,35 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   //   );
   // }
 
-  BlocListener<MapsCubit, MapsState> _buildMaps(MapsCubit cubit) {
-    return BlocListener<MapsCubit, MapsState>(
-      listener: _listener,
-      listenWhen: (previous, current) => previous.insideFence != current.insideFence,
-      child: BlocBuilder<MapsCubit, MapsState>(
-        builder: (context, state) {
-          return GoogleMap(
-            initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
-            onMapCreated: cubit.onMapCreated,
-            // mapToolbarEnabled: true,
-
-            mapType: state.mapType,
-            zoomControlsEnabled: true,
-            // tiltGesturesEnabled: false,
-            myLocationButtonEnabled: false,
-            myLocationEnabled: true,
-            polylines: _polylines(state),
-            markers: _markers(state),
-            // circles: _circles(state),
-            polygons: state.polygons
-                .map(
-                  (e) => addPolygon(
-                    e.points,
-                    e.color,
-                    e.name,
-                  ),
-                )
-                .toSet(),
-            onTap: state.addingGeofence ? cubit.addLatLng : null,
+  Widget _buildMaps(MapsCubit cubit) {
+    return StreamBuilder<List<PolygonModel>>(
+        stream: context.read<MapsRepo>().polygonStream,
+        builder: (context, snapshot) {
+          print(snapshot.data);
+          return BlocListener<MapsCubit, MapsState>(
+            listener: _listener,
+            listenWhen: (previous, current) => previous.insideFence != current.insideFence,
+            child: BlocBuilder<MapsCubit, MapsState>(
+              builder: (context, state) {
+                return GoogleMap(
+                  initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
+                  onMapCreated: cubit.onMapCreated,
+                  mapType: state.mapType,
+                  zoomControlsEnabled: true,
+                  myLocationButtonEnabled: false,
+                  myLocationEnabled: true,
+                  polylines: _polylines(state),
+                  markers: _markers(state),
+                  polygons: (snapshot.data ?? []).map((e) => addPolygon(e)).toSet(),
+                  onTap: state.addingGeofence ? cubit.addLatLng : null,
+                  // mapToolbarEnabled: true,
+                  // tiltGesturesEnabled: false,
+                  // circles: _circles(state),
+                );
+              },
+            ),
           );
-        },
-      ),
-    );
+        });
   }
 
   Set<Marker> _markers(MapsState state) {
@@ -215,8 +214,11 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     ).toSet();
   }
 
-  Polygon addPolygon(List<LatLng> latLngs, Color color, String name) {
-    final polygonId = PolygonId(Random().nextInt(100000000).toString());
+  Polygon addPolygon(PolygonModel data) {
+    final polygonId = PolygonId(data.id!);
+    final latLngs = data.points;
+    final color = data.color;
+    final name = data.name;
     return Polygon(
       polygonId: polygonId,
       points: latLngs,
@@ -292,17 +294,19 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     );
   }
 
-  List<location_repo.LatLng> _getMtLatLangs(List<LatLng> polypoints) =>
-      polypoints.map((e) => location_repo.LatLng(e.latitude, e.longitude)).toList();
+  List<LatLng> _getMtLatLangs(List<LatLng> polypoints) {
+    return polypoints;
+    // return polypoints.map((e) => PolygonLatLng(e.latitude, e.longitude)).toList();
+  }
 
   num getPolygonArea(List<LatLng> polypoints) {
-    final points = _getMtLatLangs(polypoints);
-    final area = location_repo.LocationRepo.calculatePolygonArea(points);
+    // final points = _getMtLatLangs(polypoints);
+    final area = MapsToolkitService.calculatePolygonArea(polypoints);
     return area;
   }
 
   bool isClosedPolygon(List<LatLng> polypoints) {
-    final area = location_repo.LocationRepo.isClosedPolygon(_getMtLatLangs(polypoints));
+    final area = MapsToolkitService.isClosedPolygon(_getMtLatLangs(polypoints));
     // print('is closed polygon: $area');
     return area;
   }
@@ -356,12 +360,14 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   Widget _buildBackButton() {
     return Container(
-      padding: EdgeInsets.only(left: 8),
-      decoration: MyDecoration.decoration(isCircle: true, color: Colors.white.withOpacity(1)),
-      child: IconButton(
-        onPressed: goBack,
-        icon: Icon(Icons.arrow_back_ios),
-      ),
+      padding: EdgeInsets.only(left: widget.fromDrawer ? 0 : 8),
+      decoration: MyDecoration.decoration(isCircle: true, color: Color.fromARGB(26, 255, 255, 255).withOpacity(.71)),
+      child: widget.fromDrawer
+          ? DrawerMenuIcon()
+          : IconButton(
+              onPressed: goBack,
+              icon: Icon(Icons.arrow_back_ios),
+            ),
     );
   }
 

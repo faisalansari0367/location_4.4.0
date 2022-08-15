@@ -1,14 +1,13 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:background_location/constants/strings.dart';
+import 'package:background_location/features/drawer/view/drawer_page.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import '../../select_role/view/select_role_page.dart';
 
 part 'login_state.dart';
 
@@ -24,10 +23,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   late TextEditingController emailController;
 
-  
-
   void onChangedEmail(String email) {
-    
     emit(state.copyWith(email: email));
   }
 
@@ -40,9 +36,9 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(isLoading: true));
       final model = SignInModel(email: emailController.text, password: state.password);
       final result = await auth.signIn(data: model);
-      
+
       result.when(success: (data) {
-        Get.offAll(() => SelectRolePage());
+        Get.offAll(() => DrawerPage());
       }, failure: (error) {
         DialogService.showDialog(
           child: NetworkErrorDialog(

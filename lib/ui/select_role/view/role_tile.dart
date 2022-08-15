@@ -1,5 +1,6 @@
 import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/index.dart';
 
@@ -27,6 +28,7 @@ class _RoleTileState extends State<RoleTile> {
     return ListTile(
       dense: false,
       selected: true,
+      // selectedTileColor: context.theme.primaryColor.withOpacity(1.0),
       shape: MyDecoration.inputBorder.copyWith(
         borderRadius: kBorderRadius,
       ),
@@ -36,7 +38,12 @@ class _RoleTileState extends State<RoleTile> {
         setLoading(false);
       },
       selectedColor: Colors.black,
-      title: Text(widget.role),
+      title: Text(
+        widget.role,
+        style: context.textTheme.subtitle2?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
       trailing: isLoading
           ? SizedBox.square(
               dimension: 5.width,

@@ -26,6 +26,7 @@ class Strings {
       welcome = 'Welcome',
       to = 'To',
       login = 'Login',
+      logout = 'Logout',
       you = 'You',
       are = 'Are',
       a = 'A',
@@ -50,24 +51,10 @@ class Strings {
       something = 'Somthing',
       went = 'Went',
       wrong = 'Wrong',
-      successfully = 'Successfully';
-
-  /// Otp
-  static String get otpSentToVerifiedEmail =>
-      '$otp $sent $to $your $verified $email'.capitalizeFirst!;
-
-  // otp verified successfully
-  static String get otpVerifiedSuccessfully => '$otp $verified $successfully'.capitalizeFirst!;
-
-  // forgot password
-  static String get forgotPasswordMessage =>
-      "Don't worry! it happens. Please enter the address associated with your account.";
-
-  // Errors
-  // something went wrong
-  static String somethingWentWrong = '$something $went $wrong'.capitalizeFirst!;
-
-
+      successfully = 'Successfully',
+      home = 'Home',
+      map = 'Map',
+      settings = 'Settings';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';
@@ -87,8 +74,22 @@ class Strings {
   static String get selectState => '$select $state';
 
   // field name
-  static String get fieldName => '$field $name';
+  static String get fieldNameMsg => '$please $enter $the $field $name'.capitalizeFirst!;
 
+  /// Otp
+  static String get otpSentToVerifiedEmail => '$otp $sent $to $your $verified $email'.capitalizeFirst!;
 
+  // otp verified successfully
+  static String get otpVerifiedSuccessfully => '$otp $verified $successfully'.capitalizeFirst!;
 
+  // forgot password
+  static String get forgotPasswordMessage =>
+      "Don't worry! it happens. Please enter the address associated with your account.";
+
+  // Errors
+  // something went wrong
+  static String somethingWentWrong = '$something $went $wrong'.capitalizeFirst!;
+
+  // privacy policy message
+  static String get privacyPolicyMessage => 'By signing up, you agree to our Terms of Service and Privacy Policy.';
 }

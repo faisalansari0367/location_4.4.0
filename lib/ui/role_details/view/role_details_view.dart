@@ -40,7 +40,7 @@ class RoleDetailsView extends StatelessWidget {
                     isLoading: state.isLoading,
                     child: AutoSpacing(
                       spacing: SizedBox.shrink(),
-                      children: cubit.getFieldsData().map(
+                      children: state.fieldsData.map(
                         (item) {
                           return Padding(
                             padding: EdgeInsets.only(top: 10.h),

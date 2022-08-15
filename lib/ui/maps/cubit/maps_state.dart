@@ -9,12 +9,12 @@ class MapsState extends Equatable {
   final LatLng currentLocation;
   final MapType mapType;
   final List<LatLng> latLngs;
-  final Set<PolygonData> polygons;
+  final Set<PolygonModel> polygons;
   final Set<Circle> circles;
   final bool addingGeofence;
   final FieldAssets fieldAsset;
   final double zoom;
-  final PolygonData? currentPolygon;
+  final PolygonModel? currentPolygon;
   final Color selectedColor;
 
   const MapsState({
@@ -24,7 +24,7 @@ class MapsState extends Equatable {
     required this.currentLocation,
     this.mapType = MapType.hybrid,
     this.latLngs = const <LatLng>[],
-    this.polygons = const <PolygonData>{},
+    this.polygons = const <PolygonModel>{},
     this.circles = const <Circle>{},
     this.addingGeofence = false,
     this.fieldAsset = FieldAssets.paddyFields,
@@ -36,12 +36,12 @@ class MapsState extends Equatable {
     LatLng? currentLocation,
     MapType? mapType,
     List<LatLng>? latLngs,
-    Set<PolygonData>? polygons,
+    Set<PolygonModel>? polygons,
     Set<Circle>? circles,
     bool? addingGeofence,
     FieldAssets? fieldAsset,
     double? zoom,
-    PolygonData? currentPolygon,
+    PolygonModel? currentPolygon,
     Color? selectedColor,
   }) {
     return MapsState(

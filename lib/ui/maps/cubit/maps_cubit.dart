@@ -1,25 +1,43 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
+import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/models/enums/filed_assets.dart';
-import 'package:background_location/ui/maps/models/polygon_data.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:local_notification/local_notification.dart';
+
+import '../location_service/maps_repo.dart';
+import '../models/polygon_model.dart';
+
 // import 'package:google_maps_flutter/google_maps_flutter.dart'
 //     show CameraPosition, CameraUpdate, GoogleMapController, LatLng, LatLngBounds;
-import 'package:location_repo/location_repo.dart' show LocationRepo, Position;
-import 'package:location_repo/location_repo.dart' as location_repo;
+// import 'package:location_repo/location_repo.dart' show LocationRepo, MapsRepo, PolygonLatLng, PolygonModel, Position;
+// import 'package:location_repo/location_repo.dart' as location_repo;
 
 part 'maps_state.dart';
 // part 'maps_state.g.dart';
 
 class MapsCubit extends Cubit<MapsState> {
   final NotificationService _notificationService;
-  MapsCubit(this._notificationService)
-      : super(MapsState(currentLocation: LatLng(-25.185575842417077, 134.68900724218238)));
+  final MapsRepo _mapsRepo;
+
+  MapsCubit(
+    this._notificationService,
+    this._mapsRepo,
+  ) : super(
+          MapsState(
+            currentLocation: LatLng(
+              -25.185575842417077,
+              134.68900724218238,
+            ),
+          ),
+        );
 
   final Completer<GoogleMapController> controller = Completer();
   late GoogleMapController mapController;
@@ -28,6 +46,24 @@ class MapsCubit extends Cubit<MapsState> {
   Future<void> init() async {
     updateCurrentLocation();
     getLocationUpdates();
+    _getAllPolygon();
+  }
+
+  Future<void> _getAllPolygon() async {
+    var allPolygon = await _mapsRepo.getAllPolygon();
+    final polygonSet = <PolygonModel>{};
+    // allPolygon.then((polygons) {
+    allPolygon.forEach((element) {
+      final data = PolygonModel(
+        id: element.id!,
+        name: element.name,
+        points: element.points,
+        color: element.color,
+      );
+      polygonSet.add(data);
+    });
+    emit(state.copyWith(polygons: polygonSet));
+    // });
   }
 
   void setIsAddingGeofence() {
@@ -51,7 +87,6 @@ class MapsCubit extends Cubit<MapsState> {
   void addLatLng(LatLng latLng) {
     // print(state.latLngs);
     emit(state.copyWith(latLngs: List<LatLng>.from([...state.latLngs, latLng])));
-
   }
 
   // void clearLastLatLng
@@ -87,14 +122,28 @@ class MapsCubit extends Cubit<MapsState> {
   //   );
   // }
 
-  void addPolygon(String name) {
+  List<LatLng> convertPoints(List<LatLng> list) {
+    return list.map((e) => LatLng(e.latitude, e.longitude)).toList();
+  }
+
+  void addPolygon(String name) async {
+    final model = PolygonModel(
+      name: name,
+      color: state.selectedColor,
+      // points: state.latLngs,
+      points: convertPoints(state.latLngs),
+      id: Random().nextInt(100000000).toString(),
+    );
+    await _mapsRepo.savePolygon(model);
+    _getAllPolygon();
     emit(
       state.copyWith(
         polygons: {
           ...state.polygons,
-          PolygonData(
+          PolygonModel(
+            id: model.id!,
             name: name,
-            points: state.latLngs,
+            points: convertPoints(state.latLngs),
             // type: state.fieldAsset,
             color: state.selectedColor,
           )
@@ -104,10 +153,10 @@ class MapsCubit extends Cubit<MapsState> {
     );
   }
 
-  void zoom() async {
-    final zoom = await mapController.getZoomLevel();
-    emit(state.copyWith(zoom: zoom + 5));
-  }
+  // void zoom() async {
+  //   final zoom = await mapController.getZoomLevel();
+  //   emit(state.copyWith(zoom: zoom + 5));
+  // }
 
   void changeMapType(MapType type) async {
     emit(state.copyWith(mapType: type));
@@ -123,7 +172,7 @@ class MapsCubit extends Cubit<MapsState> {
 
   Future<void> updateCurrentLocation() async {
     await controller.future;
-    final currentPosition = await LocationRepo.getCurrentLatLng();
+    final currentPosition = await GeolocatorService.getCurrentLatLng();
     mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -157,14 +206,14 @@ class MapsCubit extends Cubit<MapsState> {
   }
 
   void getLocationUpdates() {
-    _positionSubscription = LocationRepo.instance.getPositionStream().listen((event) {
+    _positionSubscription = GeolocatorService.instance.getPositionStream().listen((event) {
       // print(event);
-      final distance = LocationRepo.getDistance(
-        state.currentLocation.latitude,
-        state.currentLocation.longitude,
-        event.latitude,
-        event.longitude,
-      );
+      // final distance = LocationRepo.getDistance(
+      //   state.currentLocation.latitude,
+      //   state.currentLocation.longitude,
+      //   event.latitude,
+      //   event.longitude,
+      // );
 
       // _mapController.animateCamera(
       //   CameraUpdate.newCameraPosition(
@@ -177,12 +226,15 @@ class MapsCubit extends Cubit<MapsState> {
       // for (var i = 0; i < state.polygons.length; i++) {
 
       // }
+      print(event.toJson());
       state.polygons.forEach((element) {
-        final polygonPoints = _getMtLatLangs(element.points);
-        final isInsidePolygon = LocationRepo.isInsidePolygon(
-            latLng: location_repo.LatLng(event.latitude, event.longitude), polygon: polygonPoints);
+        // final polygonPoints = _getMtLatLangs(element.points);
+        final isInsidePolygon = MapsToolkitService.isInsidePolygon(
+          latLng: LatLng(event.latitude, event.longitude),
+          polygon: element.points,
+        );
         // if (state.insideFence == isInsidePolygon) return;
-        emit(state.copyWith(insideFence: isInsidePolygon, currentPolygon: element));
+        // emit(state.copyWith(insideFence: isInsidePolygon, currentPolygon: element));
       });
       // if (distance > 40) {
       //   emit(state.copyWith(insideFence: false));
@@ -193,8 +245,8 @@ class MapsCubit extends Cubit<MapsState> {
     });
   }
 
-  List<location_repo.LatLng> _getMtLatLangs(List<LatLng> polypoints) =>
-      polypoints.map((e) => location_repo.LatLng(e.latitude, e.longitude)).toList();
+  // List<location_repo.LatLng> _getMtLatLangs(List<PolygonLatLng> polypoints) =>
+  //     polypoints.map((e) => location_repo.LatLng(e.latitude, e.longitude)).toList();
 
   @override
   Future<void> close() {
@@ -204,13 +256,11 @@ class MapsCubit extends Cubit<MapsState> {
 
   // @override
   // MapsState? fromJson(Map<String, dynamic> json) {
-  //   // TODO: implement fromJson
   //   throw UnimplementedError();
   // }
 
   // @override
   // Map<String, dynamic>? toJson(MapsState state) {
-  //   // TODO: implement toJson
   //   throw UnimplementedError();
   // }
 
