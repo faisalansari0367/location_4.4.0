@@ -12,4 +12,5 @@ abstract class AuthRepo {
   User? getUser();
   Future<void> logout();
   String? getToken();
+  Stream<User?> get userStream;
 }

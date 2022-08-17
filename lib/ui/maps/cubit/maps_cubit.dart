@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/models/enums/filed_assets.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -44,25 +45,30 @@ class MapsCubit extends Cubit<MapsState> {
   StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
+    _getAllPolygon();
     updateCurrentLocation();
     getLocationUpdates();
-    _getAllPolygon();
   }
 
   Future<void> _getAllPolygon() async {
     var allPolygon = await _mapsRepo.getAllPolygon();
     final polygonSet = <PolygonModel>{};
     // allPolygon.then((polygons) {
-    allPolygon.forEach((element) {
-      final data = PolygonModel(
-        id: element.id!,
-        name: element.name,
-        points: element.points,
-        color: element.color,
-      );
-      polygonSet.add(data);
-    });
-    emit(state.copyWith(polygons: polygonSet));
+    allPolygon.when(
+      success: (allPolygon) {
+        allPolygon.forEach((element) {
+          final data = PolygonModel(
+            id: element.id!,
+            name: element.name,
+            points: element.points,
+            color: element.color,
+          );
+          polygonSet.add(data);
+        });
+        emit(state.copyWith(polygons: polygonSet));
+      },
+      failure: (error) => DialogService.failure(error: error),
+    );
     // });
   }
 
@@ -226,7 +232,7 @@ class MapsCubit extends Cubit<MapsState> {
       // for (var i = 0; i < state.polygons.length; i++) {
 
       // }
-      print(event.toJson());
+
       state.polygons.forEach((element) {
         // final polygonPoints = _getMtLatLangs(element.points);
         final isInsidePolygon = MapsToolkitService.isInsidePolygon(

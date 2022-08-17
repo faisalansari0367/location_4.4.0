@@ -35,6 +35,12 @@ class _CountryFieldState extends State<CountryField> {
   initState() {
     if (widget.isOriginCountry) {
       _getCountryFromCode();
+      // WidgetsBinding.instance?.addPersistentFrameCallback((_) async {
+      //   // await CountryCodes.init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
+
+      //   // final _countryDetails = CountryCodes.detailsForLocale();
+      //   // _countryDetails.dialCode;
+      // });
     } else
       _getCountryFromName();
     super.initState();
@@ -43,13 +49,14 @@ class _CountryFieldState extends State<CountryField> {
   void _getCountryFromName() =>
       country = ![null, ''].contains(widget.countryName) ? countryList.firstWhere(sameCountryName) : null;
 
-  void _getCountryFromCode() {
+  void _getCountryFromCode({String? countryCode}) {
     if (widget.isOriginCountry) {
       final user = context.read<Api>().getUser();
-      final foundCountry = countryList.where((country) => sameCountryCode(country, user?.countryCode)).toList();
+      final foundCountry =
+          countryList.where((country) => sameCountryCode(country, countryCode ?? user?.countryCode)).toList();
       if (foundCountry.isNotEmpty) {
         country = foundCountry.first;
-        widget.controller?.text = country!.name;
+        widget.controller?.text = country!.name.toUpperCase();
       }
     }
   }
@@ -79,6 +86,7 @@ class _CountryFieldState extends State<CountryField> {
   Widget build(BuildContext context) {
     return MyTextField(
       focusNode: AlwaysDisabledFocusNode(),
+      // inputFormatters: [CapitalizeAllInputFormatter()],
       onTap: showCountrySheet,
       enabled: true,
       controller: widget.controller,
@@ -109,7 +117,7 @@ class _CountryFieldState extends State<CountryField> {
         onCountryChanged: (country) {
           setState(() {
             this.country = country;
-            widget.controller?.text = country.name;
+            widget.controller?.text = country.name.toUpperCase();
           });
         },
       ),

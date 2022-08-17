@@ -11,7 +11,7 @@ export 'select_role_state.dart';
 
 // import 'select_role_state.g.dart';
 
-class SelectRoleCubit extends HydratedCubit<SelectRoleState> {
+class SelectRoleCubit extends Cubit<SelectRoleState> {
   final Api api;
   SelectRoleCubit(this.api)
       : super(SelectRoleState(

@@ -7,6 +7,7 @@ import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/widgets/states.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,12 +21,14 @@ class Address {
   String? street;
   String? state;
   String? town;
+  Map<String, bool>? fieldsToShow;
 
   Address({
-    this.town,
+    this.postcode,
     this.street,
     this.state,
-    this.postcode,
+    this.town,
+    this.fieldsToShow,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,7 +43,7 @@ class Address {
   factory Address.fromMap(Map<String, dynamic> map) {
     return Address(
       // postcode: ![null, ''].contains(map['postcode']) ? map['postcode'] : null,
-      postcode: map['postcode'],
+      postcode: map['postcode'] != null ? map['postcode'].toString() : null,
       street: map['street'] != null ? map['street'] as String : null,
       state: map['state'] != null ? map['state'] as String : null,
       town: map['town'] != null ? map['town'] as String : null,
@@ -54,7 +57,10 @@ class Address {
 
 class PropertyAddress extends StatefulWidget {
   final bool showStreet, showTown, showState, showPostcode;
+  final Address? address;
+  final String? title;
   final ValueChanged<Address>? onChanged;
+
   const PropertyAddress({
     Key? key,
     this.onChanged,
@@ -62,6 +68,8 @@ class PropertyAddress extends StatefulWidget {
     this.showTown = true,
     this.showState = true,
     this.showPostcode = true,
+    this.address,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -69,11 +77,45 @@ class PropertyAddress extends StatefulWidget {
 }
 
 class _PropertyAddressState extends State<PropertyAddress> {
-  // String state = '';
-  final state = TextEditingController();
-  final address = Address();
+  final controllers = <String, TextEditingController>{};
+
+  // final address = Address();
+  late Address address;
+
+  @override
+  void initState() {
+    address = widget.address ?? Address();
+    address.toMap().forEach((key, value) {
+      controllers[key] = TextEditingController(text: value as String?);
+    });
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant PropertyAddress oldWidget) {
+    if (oldWidget.address != widget.address) {
+      address = widget.address ?? Address();
+      address.toMap().forEach((key, value) {
+        controllers[key] = TextEditingController(text: value as String?);
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    controllers.forEach((key, controller) {
+      controller.dispose();
+    });
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = controllers['state']!;
+    final postcode = controllers['postcode']!;
+    final street = controllers['street']!;
+    final town = controllers['town']!;
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       padding: kPadding,
@@ -88,34 +130,38 @@ class _PropertyAddressState extends State<PropertyAddress> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Strings.propertyAddress,
+            widget.title ?? Strings.propertyAddress,
             style: context.textTheme.headline6?.copyWith(
               color: Colors.black,
             ),
           ),
           Gap(1.5.height),
           AutoSpacing(
-            spacing: Gap(0.5.height),
+            spacing: Gap(1.height),
             children: [
-              if (widget.showStreet)
+              if (address.fieldsToShow?['street'] ?? false)
                 MyTextField(
+                  inputFormatters: [CapitalizeAllInputFormatter()],
                   hintText: Strings.street,
+                  controller: street,
                   onChanged: (s) {
                     address.street = s;
                     widget.onChanged?.call(address);
                   },
                   validator: Validator.text,
                 ),
-              if (widget.showTown)
+              if (address.fieldsToShow?['town'] ?? false)
                 MyTextField(
+                  inputFormatters: [CapitalizeAllInputFormatter()],
                   hintText: Strings.town,
                   validator: Validator.text,
+                  controller: town,
                   onChanged: (s) {
                     address.town = s;
                     widget.onChanged?.call(address);
                   },
                 ),
-              if (widget.showState)
+              if (address.fieldsToShow?['state'] ?? false)
                 MyTextField(
                   onTap: () => BottomSheetService.showSheet(
                     child: States(
@@ -127,17 +173,20 @@ class _PropertyAddressState extends State<PropertyAddress> {
                     ),
                   ),
                   enabled: true,
+                  inputFormatters: [CapitalizeAllInputFormatter()],
                   hintText: Strings.selectState,
                   suffixIcon: Icon(Icons.keyboard_arrow_down),
                   controller: state,
                   focusNode: AlwaysDisabledFocusNode(),
                   readOnly: false,
                 ),
-              if (widget.showPostcode)
+              if (address.fieldsToShow?['postcode'] ?? false)
                 MyTextField(
+                  // inputFormatters: [CapitalizeAllInputFormatter()],
+
                   hintText: Strings.postCode,
                   maxLength: 4,
-                  validator: Validator.text,
+                  validator: Validator.postcode,
                   textInputType: TextInputType.number,
                   onChanged: (s) {
                     // final code = int.tryParse(s);
@@ -146,6 +195,7 @@ class _PropertyAddressState extends State<PropertyAddress> {
                     widget.onChanged?.call(address);
                     // }
                   },
+                  controller: postcode,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],

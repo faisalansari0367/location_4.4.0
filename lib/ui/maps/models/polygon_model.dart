@@ -32,12 +32,12 @@ class PolygonModel {
   }
 
   static LatLng _latLngFromJson(Map<String, dynamic> latLng) {
-    return LatLng(latLng['latitude'], latLng['longitude']);
+    return LatLng(double.parse(latLng['latitude']), double.parse(latLng['longitude']));
   }
 
   factory PolygonModel.fromJson(Map<String, dynamic> json) {
     return PolygonModel(
-      id: json['id'],
+      id: json['id'].toString(),
       color: colorFromHex(json['color']),
       points: List<LatLng>.from(
           (json['points'] as List<dynamic>).map((x) => _latLngFromJson(Map<String, dynamic>.from(x))).toList()),

@@ -2,6 +2,8 @@ import 'dart:async';
 
 // import 'package:location_repo/src/maps/src/storage_service.dart';
 
+import 'package:api_repo/api_result/api_result.dart';
+import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../models/polygon_model.dart';
@@ -21,19 +23,24 @@ class MapsRepoLocal implements MapsRepo {
 
   // MapsRepoLocal();
 
-  @override
-  Future<List<PolygonModel>> getAllPolygon() async {
-    final list = await _storageService.getAllPolygon();
-    _controller.add(list);
-    return list;
-  }
+  // @override
+  // Future<List<PolygonModel>> getAllPolygon() async {
+  //   final list = await _storageService.getAllPolygon();
+  //   _controller.add(list);
+  //   return list;
+  // }
 
   @override
   Future<void> init() async {
     _storageService = StorageService();
     await _storageService.init();
     final result = await getAllPolygon();
-    _controller.add(result);
+    result.when(
+      success: (data) {
+        _controller.add(data);
+      },
+      failure: (f) {},
+    );
     _storageService.polygonStream.listen((list) {
       _controller.add(list);
     });
@@ -48,4 +55,20 @@ class MapsRepoLocal implements MapsRepo {
 
   @override
   Stream<List<PolygonModel>> get polygonStream => _controller.stream;
+
+  @override
+  Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
+    try {
+      final list = await _storageService.getAllPolygon();
+      list.when(
+        success: (data) {
+          _controller.add(data);
+        },
+        failure: (e) {},
+      );
+      return ApiResult.success(data: _controller.value);
+    } on Exception catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
 }

@@ -106,7 +106,7 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<RoleDetailsResponse>> getRoleData() {
+  Future<ApiResult<Map<String, dynamic>>> getRoleData() {
     return _userRepo.getRoleData();
   }
 
@@ -114,4 +114,8 @@ class ApiRepo implements Api {
   String? getToken() {
     return _authRepo.getToken();
   }
+  
+  @override
+  // TODO: implement userStream
+  Stream<User?> get userStream => _authRepo.userStream;
 }

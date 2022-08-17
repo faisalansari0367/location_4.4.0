@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
@@ -8,6 +11,7 @@ import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'map_type_widget.dart';
@@ -33,8 +37,10 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
           buildWhen: (previous, current) => previous.addingGeofence != current.addingGeofence,
           builder: (context, state) {
             return Container(
-              constraints: BoxConstraints(maxHeight: 100),
-              height: 8.height,
+              constraints: BoxConstraints(maxHeight: 110.h),
+              // height: 8.height,
+              // height: 70.h,
+              height: height,
               child: Stack(
                 children: [
                   _positioned(
@@ -52,6 +58,13 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
         ),
       ),
     );
+  }
+
+  double get height {
+    const _kHeight = 60;
+    final padding = MediaQuery.of(context).viewPadding.bottom;
+    final bottomPadding = Platform.isIOS ? min(padding, 20) : padding;
+    return (_kHeight + bottomPadding).toDouble();
   }
 
   AnimatedPositioned _positioned({double? left = 0, required Widget child}) {

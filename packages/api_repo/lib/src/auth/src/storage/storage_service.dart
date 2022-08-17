@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hive_flutter/adapters.dart';
+import 'package:rxdart/subjects.dart';
 
 import '../../../../api_repo.dart';
 
@@ -16,13 +17,21 @@ abstract class UserStorage {
 
   Future<void> setToken(String token);
   String? getToken();
+  Stream<User?> get userStream;
 }
 
 class StorageService implements UserStorage {
   final Box box;
   StorageService({
     required this.box,
-  });
+  }) {
+    // _userStream = BehaviorSubject<User?>.seeded(getUser());
+    getUser();
+    _listenForChanges();
+  }
+
+  // late final BehaviorSubject<User?> _controller;
+  final _controller = BehaviorSubject<User?>.seeded(null);
 
   String get userKey => _Keys.user;
 
@@ -30,7 +39,9 @@ class StorageService implements UserStorage {
   User? getUser() {
     final map = box.get(_Keys.user);
     if (map == null) return null;
-    return User.fromJson(Map<String, dynamic>.from(map));
+    final user = User.fromJson(Map<String, dynamic>.from(map));
+    _controller.add(user);
+    return user;
   }
 
   @override
@@ -57,4 +68,16 @@ class StorageService implements UserStorage {
   Future<void> removeToken() async {
     await box.delete(_Keys.token);
   }
+
+  void _listenForChanges() {
+    box.watch(key: _Keys.user).map((event) {
+      if (event.value == null) return null;
+      return User.fromJson(Map<String, dynamic>.from(event.value));
+    }).listen((event) {
+      _controller.add(event);
+    });
+  }
+
+  @override
+  Stream<User?> get userStream => _controller.stream;
 }

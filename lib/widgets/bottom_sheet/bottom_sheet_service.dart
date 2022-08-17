@@ -9,6 +9,9 @@ class BottomSheetService {
         child: child,
         padding: kPadding,
       ),
+      enterBottomSheetDuration: 100.milliseconds,
+      exitBottomSheetDuration: 100.milliseconds,
+
       backgroundColor: Colors.white,
       barrierColor: Colors.black.withOpacity(0.1),
 

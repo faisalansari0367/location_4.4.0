@@ -56,6 +56,7 @@ class Data {
   String? entryDate;
   String? exitDate;
   String? passport;
+  String? state;
 
   Data(
       {this.id,
@@ -93,6 +94,7 @@ class Data {
       this.countryVisiting,
       this.entryDate,
       this.exitDate,
+      this.state,
       this.passport});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -109,7 +111,7 @@ class Data {
     propertyName = json['propertyName'];
     street = json['street'];
     town = json['town'];
-    postcode = json['postcode'];
+    postcode = json['postcode'] == null ? null : json['postcode'].toString();
     signature = json['signature'];
     logOn = json['logOn'];
     employeeNumber = json['employeeNumber'];
@@ -132,6 +134,7 @@ class Data {
     entryDate = json['entryDate'];
     exitDate = json['exitDate'];
     passport = json['passport'];
+    state = json['state'];
   }
 
   Map<String, dynamic> toJson() {
@@ -157,7 +160,8 @@ class Data {
     data['ddt'] = ddt;
     data['persons'] = persons;
     data['contactDetails'] = contactDetails;
-    data['reasonForVisit'] = reasonForVisit;    
+    data['reasonForVisit'] = reasonForVisit;
+    data['state'] = state;
     data['serviceRole'] = serviceRole;
     data['ohsRequirements'] = ohsRequirements;
     data['questionnaire'] = questionnaire;

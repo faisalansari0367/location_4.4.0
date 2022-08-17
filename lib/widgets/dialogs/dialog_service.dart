@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DialogService {
-  static void showDialog({
+  static Future<void> showDialog({
     required Widget child,
-  }) {
-    Get.dialog(
+  }) async {
+    await Get.dialog(
       child,
       transitionCurve: Curves.elasticOut,
       transitionDuration: Duration(milliseconds: 400),

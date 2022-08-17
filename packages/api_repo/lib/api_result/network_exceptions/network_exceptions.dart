@@ -46,8 +46,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
   static NetworkExceptions getDioException(error) {
     if (error is Exception) {
       try {
-        NetworkExceptions networkExceptions =
-            const NetworkExceptions.unexpectedError();
+        NetworkExceptions networkExceptions = const NetworkExceptions.unexpectedError();
         if (error is DioError) {
           switch (error.type) {
             case DioErrorType.cancel:
@@ -71,6 +70,7 @@ abstract class NetworkExceptions with _$NetworkExceptions {
               networkExceptions = const NetworkExceptions.sendTimeout();
               break;
             case DioErrorType.response:
+              // final Map<String, dynamic> errorModel = jsonDecode(error.response!.toString());
               // networkExceptions = NetworkExceptions.defaultError(error.response!.statusCode.toString());
               switch (error.response!.statusCode) {
                 case 400:
@@ -86,9 +86,9 @@ abstract class NetworkExceptions with _$NetworkExceptions {
                   // if (error.response?.realUri.toString().contains(EndPoints.log_out_user) == false)
                   //   BaseModel().logout();
                   break;
-                  // case 403:
-                  //   networkExceptions = NetworkExceptions.unauthorisedRequest();
-                  // break;
+                // case 403:
+                //   networkExceptions = NetworkExceptions.unauthorisedRequest();
+                // break;
                 case 404:
                   networkExceptions = const NetworkExceptions.notFound();
                   break;
@@ -100,26 +100,25 @@ abstract class NetworkExceptions with _$NetworkExceptions {
                   break;
                 case 417:
                   try {
-                    Map<String, dynamic> errorModel =
-                    jsonDecode(error.response!.toString());
+                    Map<String, dynamic> errorModel = jsonDecode(error.response!.toString());
 
                     if (errorModel["message"] is String) {
                       networkExceptions = NetworkExceptions.defaultError(errorModel["message"]);
-                    }
-                    else if (errorModel["message"] is Map) {
-                      networkExceptions = NetworkExceptions.defaultError(
-                          errorModel["message"]["message"]);
+                    } else if (errorModel["message"] is Map) {
+                      networkExceptions = NetworkExceptions.defaultError(errorModel["message"]["message"]);
                     }
                   } catch (e) {
                     networkExceptions = const NetworkExceptions.defaultError("Unexpected error occurred");
                   }
                   break;
+                case 429:
+                  networkExceptions = NetworkExceptions.defaultError(error.response?.data ?? 'Too many requests');
+                  break;
                 case 444:
                   // EasyLoading.show(status:"Please wait...");
                   // BaseModel().logout();
                   try {
-                    Map<String, dynamic> errorModel =
-                    jsonDecode(error.response!.toString());
+                    Map<String, dynamic> errorModel = jsonDecode(error.response!.toString());
                     networkExceptions = NetworkExceptions.defaultError(errorModel["message"]);
                   } catch (e) {
                     networkExceptions = const NetworkExceptions.defaultError("Unexpected error occurred");
@@ -136,18 +135,15 @@ abstract class NetworkExceptions with _$NetworkExceptions {
                   // var responseCode = error.response!.statusCode;
                   // "JOJO s 1212:- " + error.response["message"]);
                   try {
-                    Map<String, dynamic> errorModel =
-                        jsonDecode(error.response!.toString());
+                    Map<String, dynamic> errorModel = jsonDecode(error.response!.toString());
                     networkExceptions = NetworkExceptions.defaultError(errorModel["message"]);
                   } catch (e) {
-                    networkExceptions = const NetworkExceptions.defaultError(
-                        "Unexpected error occurred");
+                    networkExceptions = const NetworkExceptions.defaultError("Unexpected error occurred");
                   }
               }
               break;
             default:
-              networkExceptions =
-                  const NetworkExceptions.defaultError("Unexpected error occurred");
+              networkExceptions = const NetworkExceptions.defaultError("Unexpected error occurred");
           }
         } else if (error is SocketException) {
           networkExceptions = const NetworkExceptions.noInternetConnection();
@@ -162,9 +158,9 @@ abstract class NetworkExceptions with _$NetworkExceptions {
       }
     } else {
       // if (error is TypeError) {
-        final logger = Logger();
-        logger.wtf(error);
-        logger.e(error.stackTrace);
+      final logger = Logger();
+      logger.wtf(error);
+      logger.e(error.stackTrace);
       // }
       if (error.toString().contains("is not a subtype of")) {
         return const NetworkExceptions.unableToProcess();

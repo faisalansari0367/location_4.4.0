@@ -27,10 +27,6 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
     await CountryCodes
         .init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
 
-    //  _deviceLocale = CountryCodes.getDeviceLocale();
-    // print(deviceLocale?.languageCode); // Displays en
-    // print(deviceLocale?.countryCode); // Displays US
-
     _countryDetails = CountryCodes.detailsForLocale();
     // _countryDetails.
     setState(() {});

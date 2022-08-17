@@ -169,7 +169,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     return StreamBuilder<List<PolygonModel>>(
         stream: context.read<MapsRepo>().polygonStream,
         builder: (context, snapshot) {
-          print(snapshot.data);
+          // print(snapshot.data);
           return BlocListener<MapsCubit, MapsState>(
             listener: _listener,
             listenWhen: (previous, current) => previous.insideFence != current.insideFence,

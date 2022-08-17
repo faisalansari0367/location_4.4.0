@@ -1,3 +1,4 @@
+import 'package:api_repo/api_result/api_result.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/polygon_model.dart';
@@ -11,13 +12,12 @@ class _Keys {
 class StorageService implements MapsRepo {
   late final Box _box;
   @override
-  @override
-  Future<List<PolygonModel>> getAllPolygon() async {
+  Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     final map = _box.get(_Keys._getAllPolygonKey);
     // print('all polygon data: $map');
-    if (map == null) return <PolygonModel>[];
+    if (map == null) return ApiResult.success(data: <PolygonModel>[]);
     final data = (map as List<dynamic>).map((e) => PolygonModel.fromJson(Map<String, dynamic>.from(e))).toList();
-    return data;
+    return ApiResult.success(data: data);
   }
 
   @override
@@ -30,10 +30,15 @@ class StorageService implements MapsRepo {
   @override
   Future<void> savePolygon(PolygonModel model) async {
     final list = await getAllPolygon();
-    list.add(model);
+    list.when(
+      success: (list) async {
+        // list.add(data);
+        final data = list.map((e) => e.toJson()).toList();
+        await _box.put(_Keys._getAllPolygonKey, data);
+      },
+      failure: (failure) {},
+    );
     // await _box.put(model.id, model.toJson());
-    final data = list.map((e) => e.toJson()).toList();
-    await _box.put(_Keys._getAllPolygonKey, data);
   }
 
   @override

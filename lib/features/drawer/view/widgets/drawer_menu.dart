@@ -103,11 +103,18 @@ class DrawerMenu extends StatelessWidget {
           children: [
             _leading(image, color, iconData),
             Gap(3.width),
-            Text(
-              item.text,
+            AnimatedDefaultTextStyle(
               style: TextStyle(
                 color: color,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              ),
+              duration: 100.milliseconds,
+              child: Text(
+                item.text,
+                // style: TextStyle(
+                //   color: color,
+                //   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                // ),
               ),
             )
           ],

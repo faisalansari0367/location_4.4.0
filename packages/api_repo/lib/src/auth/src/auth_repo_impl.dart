@@ -113,4 +113,7 @@ class AuthRepoImpl implements AuthRepo {
   String? getToken() {
     return storage.getToken();
   }
+  
+  @override
+  Stream<User?> get userStream => storage.userStream;
 }

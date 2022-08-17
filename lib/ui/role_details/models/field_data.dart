@@ -7,6 +7,7 @@ import 'package:background_location/widgets/text_fields/phone_text_field.dart';
 import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../widgets/property_address.dart';
@@ -23,6 +24,7 @@ class FieldData {
   });
 
   FieldType get fieldType {
+    // print(name.camelCase);
     switch (name.camelCase) {
       case 'email':
         return FieldType.email;
@@ -35,6 +37,12 @@ class FieldData {
         return FieldType.pic;
       case 'address':
         return FieldType.address;
+      case 'companyAddress':
+        return FieldType.companyAddress;
+      case 'region':
+        return FieldType.region;
+      case "driver'sLicense":
+        return FieldType.driversLicense;
       case 'entryDate':
       case 'exitDate':
         return FieldType.date;
@@ -49,6 +57,11 @@ class FieldData {
 
   Widget get fieldWidget {
     switch (fieldType) {
+      case FieldType.region:
+        return MyTextField(
+          hintText: name,
+          controller: controller,
+        );
       case FieldType.email:
         return EmailField(
           controller: controller,
@@ -74,9 +87,17 @@ class FieldData {
         );
       case FieldType.address:
         return PropertyAddress(
+          address: address,
           onChanged: (value) {
             address = value;
-            print(address?.toMap());
+          },
+        );
+      case FieldType.companyAddress:
+        return PropertyAddress(
+          title: name,
+          address: address,
+          onChanged: (value) {
+            address = value;
           },
         );
       case FieldType.date:
@@ -85,11 +106,14 @@ class FieldData {
           date: controller.text,
           onChanged: (value) => controller.text = value,
         );
-      // case FieldType.exitDate:
-      //   return MyDateField(
-      //     label: name,
-      //     onChanged: (value) => controller.text = value,
-      //   );
+      case FieldType.driversLicense:
+        return MyTextField(
+          hintText: name,
+          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+          validator: Validator.text,
+          controller: controller,
+          onChanged: (value) => controller.text = value,
+        );
 
       case FieldType.countryOfOrigin:
         return CountryField(

@@ -13,6 +13,9 @@ enum FieldType {
   country,
   countryOfOrigin,
   countryVisiting,
+  companyAddress,
+  region,
+  driversLicense,
 }
 
 
@@ -32,5 +35,6 @@ extension FieldTypeExt on FieldType {
   bool get isExitDate => this == FieldType.exitDate;
   bool get isCountryOfOrigin => this == FieldType.countryOfOrigin;
   bool get isCountryVisiting => this == FieldType.countryVisiting;
+  bool get isCompanyAddress => this == FieldType.companyAddress;
 
 }

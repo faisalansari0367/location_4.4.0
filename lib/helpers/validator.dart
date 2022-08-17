@@ -32,6 +32,12 @@ class Validator {
     return result;
   }
 
+  static String? postcode(String? value) {
+    final validate = ValidationBuilder().minLength(4).build();
+    final result = validate(value);
+    return result;
+  }
+
   static String? mobileNo(String? value) {
     final validate = ValidationBuilder().phone('Mobile is not valid').build();
     final result = validate(value);

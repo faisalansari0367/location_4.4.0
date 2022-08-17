@@ -28,11 +28,14 @@ class _SignatureWidgetState extends State<SignatureWidget> {
 
   @override
   void initState() {
-    if (widget.signature != null) {
+    if (![null, ''].contains(widget.signature)) {
+      // if (widget.signature != null) {
       try {
         _image = base64Decode(widget.signature!);
         showImage = true;
-      } on Exception {}
+      } catch (e) {
+        print(e);
+      }
     }
     super.initState();
   }
@@ -125,19 +128,19 @@ class _SignatureWidgetState extends State<SignatureWidget> {
   }
 
   void _goToSignaturePage() {
-    Get.to(() => _Signature(onDone: onDone));
+    Get.to(() => CreateSignature(onDone: onDone));
   }
 }
 
-class _Signature extends StatefulWidget {
+class CreateSignature extends StatefulWidget {
   final Function(Uint8List? signature) onDone;
-  const _Signature({Key? key, required this.onDone}) : super(key: key);
+  const CreateSignature({Key? key, required this.onDone}) : super(key: key);
 
   @override
-  State<_Signature> createState() => __SignatureState();
+  State<CreateSignature> createState() => _CreateSignatureState();
 }
 
-class __SignatureState extends State<_Signature> {
+class _CreateSignatureState extends State<CreateSignature> {
   late SignatureController _controller;
   // Uint8List? image;
   bool showImage = false;

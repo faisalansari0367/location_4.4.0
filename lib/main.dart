@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:api_repo/configs/client.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +16,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:local_notification/local_notification.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 
-import 'features/drawer/cubit/my_drawer_controller.dart';
+import 'ui/maps/location_service/maps_api.dart';
 
 const enableCrashlytics = !kDebugMode;
 
@@ -30,9 +29,9 @@ Future<void> main() async {
     final repo = ApiRepo();
     final notifications = AwesomeNotifications();
     await repo.init(baseUrl: ApiConstants.baseUrl);
-    // final mapsRepo = MapsApi(client: Client(baseUrl: ApiConstants.baseUrl, token: repo.getToken()));
-    final mapsRepo = MapsRepoLocal();
-    await mapsRepo.init();
+    final mapsRepo = MapsApi(client: Client(baseUrl: ApiConstants.baseUrl, token: repo.getToken()));
+    // final mapsRepo = MapsRepoLocal();
+    // await mapsRepo.init();
     await notifications.initialize(
       'resource://drawable/logo',
       [
@@ -71,13 +70,14 @@ Future<void> main() async {
     // runApp(MyApp());
     // if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }, (error, stackTrace) {
+    print(stackTrace);
     // FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
 
 class MyApp extends StatefulWidget {
   final Api api;
-  final MapsRepoLocal mapsRepoLocal;
+  final MapsRepo mapsRepoLocal;
   final NotificationService notificationService;
   const MyApp({
     Key? key,
@@ -109,37 +109,30 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<NotificationService>.value(value: widget.notificationService),
         RepositoryProvider<MapsRepo>.value(value: widget.mapsRepoLocal),
       ],
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => DrawerCubit(context.read<Api>()),
-          )
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: GoogleFonts.poppins().fontFamily,
+          backgroundColor: Colors.white,
+          // primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.white,
+          colorScheme: Theme.of(context).colorScheme.copyWith(
+                primary: kPrimaryColor,
+              ),
+
+          primaryColor: kPrimaryColor,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: null,
+        getPages: [
+          GetPage(name: '/', page: () => SplashScreen()),
         ],
-        child: GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: GoogleFonts.poppins().fontFamily,
-            backgroundColor: Colors.white,
-            // primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: Colors.white,
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: kPrimaryColor,
-                ),
 
-            primaryColor: kPrimaryColor,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          initialRoute: null,
-          getPages: [
-            GetPage(name: '/', page: () => SplashScreen()),
-          ],
-
-          // home: SplashScreen(),
-          home: ScreenUtilInit(
-            child: SplashScreen(),
-            designSize: Get.size,
-            builder: (context, child) => SplashScreen(),
-          ),
+        // home: SplashScreen(),
+        home: ScreenUtilInit(
+          child: SplashScreen(),
+          designSize: Get.size,
+          builder: (context, child) => SplashScreen(),
         ),
       ),
     );
