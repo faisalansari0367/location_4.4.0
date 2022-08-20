@@ -50,6 +50,8 @@ class FieldData {
         return FieldType.countryOfOrigin;
       case 'countryVisiting':
         return FieldType.countryVisiting;
+      case 'propertyName':
+        return FieldType.propertyName;
       default:
         return FieldType.text;
     }
@@ -130,6 +132,15 @@ class FieldData {
           controller: controller,
           countryName: controller.text,
           onCountryChanged: (value) => controller.text = value,
+        );
+      case FieldType.propertyName:
+        return MyTextField(
+          // isOriginCountry: fieldType.isCountryOfOrigin,
+          hintText: name,
+          controller: controller,
+          inputFormatters: [CapitalizeAllInputFormatter()],
+          // countryName: controller.text,
+          // onCountryChanged: (value) => controller.text = value,
         );
 
       default:

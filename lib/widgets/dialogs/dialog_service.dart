@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DialogService {
-  static Future<void> showDialog({
+  static Future<T?> showDialog<T>({
     required Widget child,
   }) async {
-    await Get.dialog(
+    final result = await Get.dialog(
       child,
       transitionCurve: Curves.elasticOut,
       transitionDuration: Duration(milliseconds: 400),
     );
+    return result;
   }
 
   static void failure({

@@ -59,7 +59,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
     data.when(
       success: (data) {
-        final details = data['data'];
+        
         emit(state.copyWith(userRoleDetails: Map<String, dynamic>.from(data['data']), isLoading: false));
         _getFieldsData();
       },
@@ -250,6 +250,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           message = 'Entry date cannot be after exit date';
         } else if (entryDate.compareTo(exitDate) == 0) {
           message = 'Entry date cannot be equal to exit date';
+        } else if (entryDate.isBefore(DateTime.now().subtract(10.days))) {
+          message = "Can't be any more than 10 days from today's date";
         } else if (exitDate.difference(entryDate).inDays > 10) {
           message = 'Entry date cannot be more than 10 days after today';
         }

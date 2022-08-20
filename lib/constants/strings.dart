@@ -54,7 +54,10 @@ class Strings {
       successfully = 'Successfully',
       home = 'Home',
       map = 'Map',
-      settings = 'Settings';
+      settings = 'Settings',
+      yes = 'Yes',
+      no = 'No',
+      ok = 'Ok';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';

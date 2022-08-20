@@ -116,6 +116,8 @@ class ApiRepo implements Api {
   }
   
   @override
-  // TODO: implement userStream
   Stream<User?> get userStream => _authRepo.userStream;
+
+  @override
+  Client get client => _client;
 }

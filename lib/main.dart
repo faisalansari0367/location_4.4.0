@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/configs/client.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +26,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await runZonedGuarded(() async {
-    // await Firebase.initializeApp();
+    await Firebase.initializeApp();
     final repo = ApiRepo();
     final notifications = AwesomeNotifications();
     await repo.init(baseUrl: ApiConstants.baseUrl);
-    final mapsRepo = MapsApi(client: Client(baseUrl: ApiConstants.baseUrl, token: repo.getToken()));
+    final mapsRepo = MapsApi(client: repo.client);
     // final mapsRepo = MapsRepoLocal();
     // await mapsRepo.init();
     await notifications.initialize(
@@ -68,10 +69,10 @@ Future<void> main() async {
 
     // runApp(MyApp(api: repo, notificationService: localNotification));
     // runApp(MyApp());
-    // if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }, (error, stackTrace) {
-    print(stackTrace);
-    // FirebaseCrashlytics.instance.recordError(error, stackTrace);
+    // print(stackTrace);
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
 
@@ -91,13 +92,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Future<void> _initializeFlutterFire() async {
-  //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enableCrashlytics);
-  // }
+  Future<void> _initializeFlutterFire() async {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enableCrashlytics);
+  }
 
   @override
   void initState() {
-    // _initializeFlutterFire();
+    _initializeFlutterFire();
     super.initState();
   }
 

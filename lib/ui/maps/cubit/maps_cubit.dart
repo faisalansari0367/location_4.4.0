@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
+import 'package:background_location/ui/maps/location_service/maps_popups.dart';
 import 'package:background_location/ui/maps/models/enums/filed_assets.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:equatable/equatable.dart';
@@ -129,7 +130,8 @@ class MapsCubit extends Cubit<MapsState> {
   // }
 
   List<LatLng> convertPoints(List<LatLng> list) {
-    return list.map((e) => LatLng(e.latitude, e.longitude)).toList();
+    return list;
+    // return list.map((e) => LatLng(e.latitude, e.longitude)).toList();
   }
 
   void addPolygon(String name) async {
@@ -211,48 +213,42 @@ class MapsCubit extends Cubit<MapsState> {
     this.controller.complete(controller);
   }
 
+  // final _dontVisitProperty = <String>{};
+  // Timer? _timer;
+  // Timer? _userIsInsidePolygonTimer;
   void getLocationUpdates() {
+    // final mapsPopups = MapsPopups(polygonModel);
+    final popups = MapsPopups();
     _positionSubscription = GeolocatorService.instance.getPositionStream().listen((event) {
-      // print(event);
-      // final distance = LocationRepo.getDistance(
-      //   state.currentLocation.latitude,
-      //   state.currentLocation.longitude,
-      //   event.latitude,
-      //   event.longitude,
-      // );
-
-      // _mapController.animateCamera(
-      //   CameraUpdate.newCameraPosition(
-      //     CameraPosition(
-      //       target: LatLng(event.latitude, event.longitude),
-      //       zoom: 20.151926040649414,
-      //     ),
-      //   ),
-      // );
-      // for (var i = 0; i < state.polygons.length; i++) {
-
+      var position = LatLng(event.latitude, event.longitude);
+      final polygonsInCoverage =
+          MapsToolkitService.isInsideAccuracy(latLng: position, polygons: state.polygons, accuracy: event.accuracy);
+      popups.polygonsInCoverage.add(polygonsInCoverage);
+      // state.polygons.forEach((element) async {
+      //   final isInsidePolygon = MapsToolkitService.isInsidePolygon(latLng: latLng2, polygon: element.points);
+      //   popups.setPolygon(element);
+      popups.controller.add(polygonsInCoverage.isNotEmpty);
+      // if (isInsidePolygon) {
+      //   if (_dontVisitProperty.isNotEmpty) {
+      //     if (_dontVisitProperty.contains(element.id)) {
+      //       return;
+      //     }
+      //   }
+      //   // if (_userIsInsidePolygonTimer != null) return;
+      //   _userIsInsidePolygonTimer = Timer.periodic(2.minutes, (_) {
+      //     DialogService.showDialog(child: NotifyManagerDialog());
+      //     _dontVisitProperty.clear();
+      //   });
+      //   if (Get.isDialogOpen ?? false) return;
+      //   _timer = Timer(1.minutes, () {
+      //     Get.back();
+      //   });
+      //   final result = await DialogService.showDialog(child: EnterProperty(polygonModel: element));
+      //   if (!result) _dontVisitProperty.add(element.id!);
       // }
-
-      state.polygons.forEach((element) {
-        // final polygonPoints = _getMtLatLangs(element.points);
-        final isInsidePolygon = MapsToolkitService.isInsidePolygon(
-          latLng: LatLng(event.latitude, event.longitude),
-          polygon: element.points,
-        );
-        // if (state.insideFence == isInsidePolygon) return;
-        // emit(state.copyWith(insideFence: isInsidePolygon, currentPolygon: element));
-      });
-      // if (distance > 40) {
-      //   emit(state.copyWith(insideFence: false));
-      // } else {
-      //   // if(isInside) return;
-      //   emit(state.copyWith(insideFence: true));
-      // }
+      // });
     });
   }
-
-  // List<location_repo.LatLng> _getMtLatLangs(List<PolygonLatLng> polypoints) =>
-  //     polypoints.map((e) => location_repo.LatLng(e.latitude, e.longitude)).toList();
 
   @override
   Future<void> close() {

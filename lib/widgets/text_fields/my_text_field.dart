@@ -26,6 +26,7 @@ class MyTextField extends StatelessWidget {
   final bool autoFocus;
   final bool enabled, readOnly;
   final AutovalidateMode autovalidateMode;
+  final int? maxLines, minLine;
 
   final TextCapitalization textCapitalization;
 
@@ -54,6 +55,8 @@ class MyTextField extends StatelessWidget {
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.sentences,
     this.onTap,
+    this.maxLines,
+    this.minLine,
   }) : super(key: key);
 
   @override
@@ -67,6 +70,8 @@ class MyTextField extends StatelessWidget {
       obscureText: obscureText,
       autovalidateMode: autovalidateMode,
       enabled: enabled,
+      // maxLines: maxLines,
+      // minLines: minLine,
       controller: controller,
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
@@ -74,6 +79,7 @@ class MyTextField extends StatelessWidget {
       validator: validator ?? Validator.text,
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
+
       onTap: onTap,
       autofocus: autoFocus,
       enableSuggestions: true,
@@ -86,6 +92,7 @@ class MyTextField extends StatelessWidget {
 
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
+
         // labelText: hintText,
         // fillColor: fillColor ?? theme.inputDecorationTheme.fillColor,
         // hintText: hintText,

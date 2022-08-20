@@ -35,7 +35,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     final cubit = context.read<MapsCubit>();
-    final stream = context.read<MapsRepo>().polygonStream;
+    // final stream = context.read<MapsRepo>().polygonStream;
     // stream.
     switch (state) {
       case AppLifecycleState.detached:
