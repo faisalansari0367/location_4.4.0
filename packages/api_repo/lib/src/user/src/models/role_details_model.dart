@@ -21,3 +21,4 @@ class RoleDetailsModel {
   factory RoleDetailsModel.fromJson(String source) =>
       RoleDetailsModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
+

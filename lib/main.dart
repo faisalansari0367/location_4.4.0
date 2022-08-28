@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
+import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +21,36 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:local_notification/local_notification.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'services/notifications/push_notifications.dart';
 import 'ui/maps/location_service/maps_api.dart';
 
 const enableCrashlytics = !kDebugMode;
+
+Future<void> showNotification({
+  required String title,
+  required String body,
+  int? id,
+}) async {
+  await AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      notificationLayout: NotificationLayout.BigText,
+      id: id ?? Random().nextInt(2147483647),
+      title: title,
+      category: NotificationCategory.Message,
+      body: body,
+      channelKey: "basic_channel",
+    ),
+  );
+}
+
+Future<void> bgHandler(RemoteMessage message) async {
+  // dev.log(message.toMap().toString());
+  showNotification(
+    title: message.notification?.title ?? '',
+    body: message.notification?.body ?? '',
+    id: message.notification.hashCode,
+  );
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,17 +83,25 @@ Future<void> main() async {
       notifications: notifications,
       appName: Strings.appName,
     );
+    final pushNotification = PushNotificationService(localNotificationService: localNotification);
+    FirebaseMessaging.onBackgroundMessage(bgHandler);
+
+    await pushNotification.initmessaging();
+    // pushNotification.setBgHandler();
 
     final storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory(),
     );
 
     HydratedBlocOverrides.runZoned(
-      () => runApp(MyApp(
-        api: repo,
-        notificationService: localNotification,
-        mapsRepoLocal: mapsRepo,
-      )),
+      () => runApp(
+        MyApp(
+          pushNotificationService: pushNotification,
+          api: repo,
+          notificationService: localNotification,
+          mapsRepoLocal: mapsRepo,
+        ),
+      ),
       storage: storage,
     );
 
@@ -80,11 +118,14 @@ class MyApp extends StatefulWidget {
   final Api api;
   final MapsRepo mapsRepoLocal;
   final NotificationService notificationService;
+  final PushNotificationService pushNotificationService;
+
   const MyApp({
     Key? key,
     required this.api,
     required this.notificationService,
     required this.mapsRepoLocal,
+    required this.pushNotificationService,
   }) : super(key: key);
 
   @override
@@ -108,12 +149,14 @@ class _MyAppState extends State<MyApp> {
       providers: [
         RepositoryProvider<Api>.value(value: widget.api),
         RepositoryProvider<NotificationService>.value(value: widget.notificationService),
+        RepositoryProvider<PushNotificationService>.value(value: widget.pushNotificationService),
         RepositoryProvider<MapsRepo>.value(value: widget.mapsRepoLocal),
+        RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          fontFamily: GoogleFonts.poppins().fontFamily,
+          fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,
           // primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Colors.white,

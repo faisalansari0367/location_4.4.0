@@ -33,16 +33,6 @@ class MapsToolkitService {
   }) {
     final inRadius = <PolygonModel>{};
     polygons.forEach((element) {
-      // LatLng latLng = element.points.first;
-      // num distance = double.infinity;
-      // final isLocationOnPath =
-      //     mt.PolygonUtil.isLocationOnPath(_fromLatLng(latLng), _convertPoints(element.points), false);
-      // element.points.forEach((point) {
-      //   final dFromPosition = _distance(point, latLng);
-      //   if (dFromPosition < distance) {
-      //     distance = dFromPosition;
-      //   }
-      // });
       var result = false;
       final isLocationOnPath = isInsidePolygon(latLng: latLng, polygon: element.points);
       if (!isLocationOnPath) {
@@ -51,9 +41,6 @@ class MapsToolkitService {
       if (result) {
         inRadius.add(element);
       }
-      // if (distance < accuracy) {
-      //   inRadius.add(element);
-      // }
     });
     return inRadius;
   }
@@ -80,7 +67,7 @@ class MapsToolkitService {
     // });
   }
 
-  static _distance(LatLng from, LatLng to) {
+  static distance(LatLng from, LatLng to) {
     final distance = mt.SphericalUtil.computeDistanceBetween(_fromLatLng(from), _fromLatLng(to));
     return distance;
   }

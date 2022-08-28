@@ -1,19 +1,39 @@
 import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../constants/constans.dart';
 import '../../../../constants/strings.dart';
 import '../../models/drawer_item.dart';
 
-class DrawerMenu extends StatelessWidget {
+class DrawerMenu extends StatefulWidget {
   final List<DrawerItem> items;
   final Function(int) onItemSelected;
   final int selectedIndex;
 
   const DrawerMenu({Key? key, required this.items, required this.onItemSelected, required this.selectedIndex})
       : super(key: key);
+
+  @override
+  State<DrawerMenu> createState() => _DrawerMenuState();
+}
+
+class _DrawerMenuState extends State<DrawerMenu> {
+  PackageInfo? packageInfo;
+
+  @override
+  void initState() {
+    _inti();
+    super.initState();
+  }
+
+  _inti() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +43,33 @@ class DrawerMenu extends StatelessWidget {
         padding: kPadding.copyWith(left: 0),
         child: SingleChildScrollView(
           child: Column(
-            children: [...items.map(_customTile).toList()],
+            children: [
+              ...widget.items.map(_customTile).toList(),
+              // Spacer(),
+              if (packageInfo != null)
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.build,
+                        color: Color.fromARGB(255, 211, 211, 211),
+                      ),
+                      Gap(10.w),
+                      Text(
+                        'Version ${packageInfo?.version}+${packageInfo?.buildNumber}',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 211, 211, 211),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
           ),
         ),
       ),
@@ -31,7 +77,7 @@ class DrawerMenu extends StatelessWidget {
   }
 
   Widget _buildTile(DrawerItem item) {
-    final isSelected = selectedIndex == items.indexOf(item);
+    final isSelected = widget.selectedIndex == widget.items.indexOf(item);
     final color = isSelected ? Colors.white : Colors.white70;
     final image = item.image;
     final iconData = item.iconData;
@@ -48,10 +94,10 @@ class DrawerMenu extends StatelessWidget {
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
-      selected: selectedIndex == item.page,
+      selected: widget.selectedIndex == item.page,
       onTap: () {
         if (item.onTap != null) item.onTap!();
-        onItemSelected(items.indexOf(item));
+        widget.onItemSelected(widget.items.indexOf(item));
       },
     );
   }
@@ -70,7 +116,7 @@ class DrawerMenu extends StatelessWidget {
   }
 
   Widget _customTile(DrawerItem item) {
-    final isSelected = selectedIndex == items.indexOf(item);
+    final isSelected = widget.selectedIndex == widget.items.indexOf(item);
     final color = isSelected ? Colors.black : Colors.white70;
     final image = item.image;
     final iconData = item.iconData;
@@ -80,7 +126,7 @@ class DrawerMenu extends StatelessWidget {
         if (item.text == Strings.logout) {
           return;
         }
-        onItemSelected(items.indexOf(item));
+        widget.onItemSelected(widget.items.indexOf(item));
         // await 100.milliseconds.delay();
       },
       child: AnimatedContainer(

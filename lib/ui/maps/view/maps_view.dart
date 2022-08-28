@@ -1,19 +1,23 @@
 import 'dart:math';
 
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
+import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/maps/view/widgets/current_location.dart';
 import 'package:background_location/ui/maps/view/widgets/maps_bottom_nav_bar.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/dialogs/location_permission_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:local_notification/local_notification.dart';
 // import 'package:location_repo/location_repo.dart' as location_repo;
 import 'package:permission_handler/permission_handler.dart';
 
@@ -62,10 +66,13 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   void initState() {
     WidgetsBinding.instance?.addObserver(this);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      Permission.location.request().then((value) {
+      Permission.location.request().then((value) async {
         if (value.isGranted) {
           final cubit = context.read<MapsCubit>();
           cubit.init();
+        } else if (value.isPermanentlyDenied) {
+          await 3.seconds.delay();
+          DialogService.showDialog(child: LocationPermissionDialog());
         }
       });
     });
@@ -74,7 +81,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    // context.read<MapsCubit>().close();
+    context.read<MapsRepo>().cancel();
 
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
@@ -166,47 +173,67 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   // }
 
   Widget _buildMaps(MapsCubit cubit) {
+    final _polygonsService = context.read<PolygonsService>();
     return StreamBuilder<List<PolygonModel>>(
         stream: context.read<MapsRepo>().polygonStream,
         builder: (context, snapshot) {
           // print(snapshot.data);
-          return BlocListener<MapsCubit, MapsState>(
-            listener: _listener,
-            listenWhen: (previous, current) => previous.insideFence != current.insideFence,
-            child: BlocBuilder<MapsCubit, MapsState>(
-              builder: (context, state) {
-                return GoogleMap(
-                  initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
-                  onMapCreated: cubit.onMapCreated,
-                  mapType: state.mapType,
-                  zoomControlsEnabled: true,
-                  myLocationButtonEnabled: false,
-                  myLocationEnabled: true,
-                  polylines: _polylines(state),
-                  markers: _markers(state),
-                  polygons: (snapshot.data ?? []).map((e) => addPolygon(e)).toSet(),
-                  onTap: state.addingGeofence ? cubit.addLatLng : null,
-                  // mapToolbarEnabled: true,
-                  // tiltGesturesEnabled: false,
-                  // circles: _circles(state),
+          return StreamBuilder<List<LatLng>>(
+              stream: context.read<PolygonsService>().stream,
+              initialData: [],
+              builder: (context, polygonsData) {
+                return BlocListener<MapsCubit, MapsState>(
+                  listener: _listener,
+                  listenWhen: (previous, current) => previous.insideFence != current.insideFence,
+                  child: BlocBuilder<MapsCubit, MapsState>(
+                    builder: (context, state) {
+                      return GoogleMap(
+                        initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
+                        onMapCreated: cubit.onMapCreated,
+                        mapType: state.mapType,
+                        zoomControlsEnabled: true,
+                        myLocationButtonEnabled: false,
+                        myLocationEnabled: true,
+                        polylines: _polylines(state, polygonsData.data ?? []),
+                        markers: _markers(polygonsData.data ?? [], state.currentLocation),
+                        polygons: (snapshot.data ?? []).map((e) => addPolygon(e)).toSet(),
+                        onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
+                        // mapToolbarEnabled: true,
+                        // tiltGesturesEnabled: false,
+                        // circles: _circles(state),
+                      );
+                    },
+                  ),
                 );
-              },
-            ),
-          );
+              });
         });
   }
 
-  Set<Marker> _markers(MapsState state) {
-    return state.latLngs.map(
+  void addLatLng(LatLng latLng, LatLng currentLocation) {
+    final distance = MapsToolkitService.distance(currentLocation, latLng);
+    print(distance);
+    if (distance > 50000) {
+      Get.snackbar(
+        'Can not add fence',
+        'Fences can only be added inside 50km from current location. You are currently at ${(distance / 1000).toStringAsFixed(1)}km',
+        backgroundColor: Colors.white.withAlpha(100),
+      );
+      return;
+    }
+    context.read<PolygonsService>().addLatLng(latLng);
+  }
+
+  Set<Marker> _markers(List<LatLng> points, LatLng currentPosition) {
+    return points.map(
       (e) {
-        final isPolygonClosed = isClosedPolygon(state.latLngs);
-        final onTap = isPolygonClosed ? null : () => context.read<MapsCubit>().addLatLng(e);
+        final isPolygonClosed = isClosedPolygon(points);
+        final onTap = isPolygonClosed ? null : () => context.read<PolygonsService>().addLatLng(e);
         return Marker(
           markerId: MarkerId(e.toString()),
           flat: true,
           draggable: true,
           onTap: onTap,
-          onDragEnd: (p) => context.read<MapsCubit>().onMarkerDragEnd(p, state.latLngs.indexOf(e)),
+          onDragEnd: (p) => context.read<PolygonsService>().changePosition(p, points.indexOf(e)),
           position: e,
           consumeTapEvents: isPolygonClosed,
         );
@@ -242,8 +269,9 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
                 Text(
                   'Field Details',
                   style: context.textTheme.headline6?.copyWith(
-                      // fontWeight: FontWeight.w600,
-                      ),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20.sp,
+                  ),
                 ),
                 Gap(2.height),
                 Row(
@@ -253,13 +281,15 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
                     Text(
                       'Field Name',
                       style: context.textTheme.subtitle2?.copyWith(
-                          // fontWeight: FontWeight.w600,
-                          ),
+                        // fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                      ),
                     ),
                     Text(
                       name,
                       style: context.textTheme.subtitle2?.copyWith(
                         fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ],
@@ -272,17 +302,42 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
                     Text(
                       'Field Area',
                       style: context.textTheme.subtitle2?.copyWith(
-                          // fontWeight: FontWeight.w600,
-                          ),
+                        // fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                      ),
                     ),
                     Text(
                       '${getPolygonArea(latLngs).toStringAsFixed(2)} m2',
                       style: context.textTheme.subtitle2?.copyWith(
                         fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ],
                 ),
+                Divider(),
+                if ((data.createdBy?.id == context.read<Api>().getUserData()?.id))
+                  InkWell(
+                    onTap: () {
+                      final cubit = context.read<MapsCubit>();
+                      cubit.setIsAddingGeofence();
+                      context.read<PolygonsService>().addPolygon(data.points);
+                      Get.back();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Edit Field Area',
+                          style: context.textTheme.subtitle2?.copyWith(
+                            // fontWeight: FontWeight.w600,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        Icon(Icons.edit),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -311,7 +366,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     return area;
   }
 
-  Set<Polyline> _polylines(MapsState state) {
+  Set<Polyline> _polylines(MapsState state, List<LatLng> points) {
     return {
       Polyline(
         polylineId: PolylineId((Random().nextInt(100000000)).toString()),
@@ -324,7 +379,8 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         // visible: true,
         // geodesic: ,
         width: 2.width.toInt(),
-        points: state.latLngs,
+        // points: state.latLngs,
+        points: points,
       ),
     };
   }
@@ -343,13 +399,14 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   // }
 
   void _listener(BuildContext context, MapsState state) {
-    final location = state.insideFence ? 'inside' : 'outside';
+    // final location = state.insideFence ? 'inside' : 'outside';
+
     // if (!state.insideFence) return;
-    context.read<NotificationService>().showNotification(
-          id: state.insideFence ? 1 : 2,
-          title: Strings.appName,
-          message: 'You are $location the ${state.currentPolygon?.name} fence',
-        );
+    // context.read<NotificationService>().showNotification(
+    //       id: state.insideFence ? 1 : 2,
+    //       title: Strings.appName,
+    //       message: 'You are $location the ${state.currentPolygon?.name} fence',
+    //     );
   }
 
   // Widget _buildMapTypeButton() {

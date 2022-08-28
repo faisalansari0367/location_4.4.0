@@ -1,5 +1,6 @@
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
+import 'package:background_location/ui/role_details/widgets/species.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:background_location/widgets/text_fields/country_field.dart';
 import 'package:background_location/widgets/text_fields/date_field.dart';
@@ -15,12 +16,14 @@ import '../widgets/property_address.dart';
 class FieldData {
   final String name;
   Address? address;
+  // final Map<String, dynamic> data;
   final TextEditingController controller;
 
   FieldData({
     required this.name,
     required this.controller,
     this.address,
+    // this.data = const {},
   });
 
   FieldType get fieldType {
@@ -52,6 +55,17 @@ class FieldData {
         return FieldType.countryVisiting;
       case 'propertyName':
         return FieldType.propertyName;
+      case 'city':
+        return FieldType.city;
+      case 'town':
+        return FieldType.town;
+      case 'passport':
+        return FieldType.passport;
+      case 'company':
+
+        return FieldType.company;
+      case 'species':
+        return FieldType.species;
       default:
         return FieldType.text;
     }
@@ -59,6 +73,8 @@ class FieldData {
 
   Widget get fieldWidget {
     switch (fieldType) {
+      // case FieldType.species:
+      //   return SpeciesWidget(data: data);
       case FieldType.region:
         return MyTextField(
           hintText: name,
@@ -74,7 +90,6 @@ class FieldData {
         );
       case FieldType.pic:
         return MyTextField(
-          // textCapitalization: TextCapitalization.characters,
           inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,
           hintText: FieldType.pic.name.toUpperCase(),
@@ -114,7 +129,7 @@ class FieldData {
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
           validator: Validator.text,
           controller: controller,
-          onChanged: (value) => controller.text = value,
+          // onChanged: (value) => controller.text = value,
         );
 
       case FieldType.countryOfOrigin:
@@ -143,10 +158,44 @@ class FieldData {
           // onCountryChanged: (value) => controller.text = value,
         );
 
+      case FieldType.company:
+        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        return MyTextField(
+          // isOriginCountry: fieldType.isCountryOfOrigin,
+          hintText: name,
+          controller: controller,
+          validator: Validator.text,
+          inputFormatters: [CapitalizeAllInputFormatter()],
+          // countryName: controller.text,
+          // onCountryChanged: (value) => controller.text = value,
+        );
+      case FieldType.city:
+        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        return MyTextField(
+          // isOriginCountry: fieldType.isCountryOfOrigin,
+          hintText: name,
+          controller: controller,
+          validator: Validator.text,
+          inputFormatters: [CapitalizeAllInputFormatter()],
+          // countryName: controller.text,
+          // onCountryChanged: (value) => controller.text = value,
+        );
+      case FieldType.passport:
+        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        return MyTextField(
+          // isOriginCountry: fieldType.isCountryOfOrigin,
+          hintText: name,
+          controller: controller,
+          validator: Validator.text,
+          inputFormatters: [],
+          // countryName: controller.text,
+          // onCountryChanged: (value) => controller.text = value,
+        );
+
       default:
         if (controller.text.isNotEmpty) controller.text = controller.text.capitalize!;
         return MyTextField(
-          hintText: name,
+          hintText: name.capitalize,
           // textCapitalization: TextCapitalization.characters,
           // inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,

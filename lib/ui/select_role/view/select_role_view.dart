@@ -1,9 +1,9 @@
 import 'package:background_location/constants/constans.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/ui/select_role/view/role_tile.dart';
 import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:background_location/widgets/my_appbar.dart';
+import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -22,6 +22,7 @@ class SelectRoleView extends StatelessWidget {
 
     return Scaffold(
       appBar: MyAppBar(
+        // elevation: 2,
         showBackButton: false,
         title: BlocBuilder<SelectRoleCubit, SelectRoleState>(
           builder: (context, state) {
@@ -62,7 +63,7 @@ class SelectRoleView extends StatelessWidget {
               return MyListview(
                 isLoading: state.isLoading,
                 shrinkWrap: true,
-                itemBuilder: (context, index) => RoleTile(
+                itemBuilder: (context, index) => MyListTile(
                   role: state.roles[index],
                   onTap: () async => cubit.updateRole(
                     state.roles[index],

@@ -3,9 +3,11 @@ import 'package:background_location/constants/countries.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class CountryField extends StatefulWidget {
@@ -13,7 +15,7 @@ class CountryField extends StatefulWidget {
   final ValueChanged<String> onCountryChanged;
   final String? countryName;
   final String? label;
-  final bool isOriginCountry;
+  final bool isOriginCountry, showCity;
   const CountryField({
     Key? key,
     required this.onCountryChanged,
@@ -21,6 +23,7 @@ class CountryField extends StatefulWidget {
     this.label,
     this.controller,
     this.isOriginCountry = false,
+    this.showCity = false,
   }) : super(key: key);
 
   @override
@@ -84,15 +87,30 @@ class _CountryFieldState extends State<CountryField> {
 
   @override
   Widget build(BuildContext context) {
-    return MyTextField(
-      focusNode: AlwaysDisabledFocusNode(),
-      // inputFormatters: [CapitalizeAllInputFormatter()],
-      onTap: showCountrySheet,
-      enabled: true,
-      controller: widget.controller,
-      hintText: widget.label ?? 'Please select a country',
-      suffixIcon: Icon(Icons.arrow_drop_down),
-      prefixIcon: _prefixIcon(),
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: MyTextField(
+            focusNode: AlwaysDisabledFocusNode(),
+            // inputFormatters: [CapitalizeAllInputFormatter()],
+            onTap: showCountrySheet,
+            enabled: true,
+            controller: widget.controller,
+            hintText: widget.label ?? 'Please select a country',
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            prefixIcon: _prefixIcon(),
+          ),
+        ),
+        if (!widget.isOriginCountry) Gap(2.width),
+        if (widget.showCity)
+          Expanded(
+            child: MyTextField(
+              hintText: 'City',
+              inputFormatters: [CapitalizeAllInputFormatter()],
+            ),
+          ),
+      ],
     );
   }
 
@@ -101,10 +119,11 @@ class _CountryFieldState extends State<CountryField> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Gap(5.width),
+        Gap(20.w),
         Image.asset(
           'assets/countries/${country!.isoCode.toLowerCase()}.png',
-          width: 8.width,
+          width: 32.sp,
+          // height: 3.width,
         ),
         Gap(4.width),
       ],

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class User {
   String? firstName;
   String? lastName;
@@ -8,6 +9,7 @@ class User {
   String? createdAt;
   String? updatedAt;
   String? countryCode;
+  String? registerationToken;
 
   User({
     this.firstName,
@@ -19,6 +21,7 @@ class User {
     this.createdAt,
     this.updatedAt,
     this.countryCode,
+    this.registerationToken,
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -31,6 +34,7 @@ class User {
     createdAt = json[UserKeys.createdAt];
     updatedAt = json['updatedAt'];
     countryCode = json['countryCode'];
+    registerationToken = json['registrationToken'];
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +48,7 @@ class User {
     data[UserKeys.createdAt] = createdAt;
     data[UserKeys.updatedAt] = updatedAt;
     data['countryCode'] = countryCode;
+    data['registrationToken'] = registerationToken;
     return data;
   }
 
@@ -54,6 +59,8 @@ class User {
     data[UserKeys.email] = email;
     data[UserKeys.phoneNumber] = phoneNumber;
     data[UserKeys.role] = role;
+    data['registrationToken'] = registerationToken;
+
     return data;
   }
 }

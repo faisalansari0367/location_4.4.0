@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class States extends StatelessWidget {
   final ValueChanged<String> onChanged;
+  
   const States({Key? key, required this.onChanged}) : super(key: key);
 
   @override

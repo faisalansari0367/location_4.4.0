@@ -19,7 +19,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAlias,
+
       padding: EdgeInsets.only(bottom: padding),
       decoration: BoxDecoration(
         color: widget.color,

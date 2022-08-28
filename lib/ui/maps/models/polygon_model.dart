@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:api_repo/api_repo.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PolygonModel {
@@ -7,10 +8,12 @@ class PolygonModel {
   final Color color;
   final String name;
   final List<LatLng> points;
+  final UserData? createdBy;
 
   PolygonModel({
-    required this.name,
     this.id,
+    this.createdBy,
+    required this.name,
     required this.color,
     required this.points,
   });
@@ -21,6 +24,7 @@ class PolygonModel {
       'color': colorToHex(color),
       'points': points.map((x) => _latLngToJson(x)).toList(),
       'name': name,
+      // 'createdAt': createdBy.toJson(),
     };
   }
 
@@ -37,6 +41,7 @@ class PolygonModel {
 
   factory PolygonModel.fromJson(Map<String, dynamic> json) {
     return PolygonModel(
+      createdBy: UserData.fromJson(json['createdBy']),
       id: json['id'].toString(),
       color: colorFromHex(json['color']),
       points: List<LatLng>.from(

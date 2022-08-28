@@ -1,4 +1,4 @@
-import 'package:api_repo/src/user/src/models/role_details_response.dart';
+import 'package:api_repo/src/user/src/models/user_species.dart';
 
 import '../../../api_result/api_result.dart';
 import '../../../api_result/network_exceptions/network_exceptions.dart';
@@ -11,6 +11,10 @@ abstract class UserRepo {
   Future<ApiResult<RoleDetailsModel>> getFields();
   Future<ApiResult<void>> updateRole(Map<String, dynamic> data);
   Future<ApiResult<Map<String, dynamic>>> getRoleData();
+  Future<ApiResult<LogbookEntryModel>> getLogbookRecords();
+  Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams});
+  Future<ApiResult<List<String>>> getFormQuestions();
+  Future<ApiResult<UserSpecies>> getUserSpecies();
 }
 
 class UserRepoImpl extends UserRepo {
@@ -43,8 +47,9 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<void>> updateRole(Map<String, dynamic> data) async {
     try {
-      final result = await client.patch(Endpoints.updateUser, data: data);
-      return ApiResult.success(data: result.data);
+      await client.patch(Endpoints.updateUser, data: data);
+      // ignore: void_checks
+      return const ApiResult.success(data: Null);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
@@ -56,6 +61,52 @@ class UserRepoImpl extends UserRepo {
       final result = await client.get(Endpoints.updateUser);
       final data = (result.data);
       return ApiResult.success(data: data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<LogbookEntryModel>> getLogbookRecords() async {
+    try {
+      final result = await client.get(Endpoints.logRecords);
+      final data = LogbookEntryModel.fromJson(result.data);
+      return ApiResult.success(data: data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) async {
+    try {
+      final result = await client.get(Endpoints.users, queryParameters: queryParams);
+      final data = UsersResponseModel.fromJson(result.data['data']);
+      return ApiResult.success(data: data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<List<String>>> getFormQuestions() async {
+    try {
+      final result = await client.get(Endpoints.formQuestions);
+      final list = (result.data['data']) as List;
+      final data = List<String>.from(list.first);
+      return ApiResult.success(data: data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<UserSpecies>> getUserSpecies() async {
+    try {
+      final result = await client.get(Endpoints.formQuestions);
+      final list = UserSpecies.fromJson(result.data);
+      // final data = List<String>.from(list.first);
+      return ApiResult.success(data: list);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

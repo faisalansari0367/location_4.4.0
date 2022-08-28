@@ -2,13 +2,13 @@
 part of 'maps_cubit.dart';
 // part 'maps_state.g.dart';
 
-
 // @JsonSerializable()
 class MapsState extends Equatable {
   final bool insideFence;
+  final bool isEditingFence;
   final LatLng currentLocation;
   final MapType mapType;
-  final List<LatLng> latLngs;
+  // final List<LatLng> latLngs;
   final Set<PolygonModel> polygons;
   final Set<Circle> circles;
   final bool addingGeofence;
@@ -19,11 +19,12 @@ class MapsState extends Equatable {
 
   const MapsState({
     this.selectedColor = Colors.blue,
-    this.currentPolygon, 
+    this.currentPolygon,
     this.insideFence = false,
+    this.isEditingFence = false,
     required this.currentLocation,
     this.mapType = MapType.hybrid,
-    this.latLngs = const <LatLng>[],
+    // this.latLngs = const <LatLng>[],
     this.polygons = const <PolygonModel>{},
     this.circles = const <Circle>{},
     this.addingGeofence = false,
@@ -39,6 +40,7 @@ class MapsState extends Equatable {
     Set<PolygonModel>? polygons,
     Set<Circle>? circles,
     bool? addingGeofence,
+    bool? isEditingFence,
     FieldAssets? fieldAsset,
     double? zoom,
     PolygonModel? currentPolygon,
@@ -48,7 +50,8 @@ class MapsState extends Equatable {
       insideFence: insideFence ?? this.insideFence,
       currentLocation: currentLocation ?? this.currentLocation,
       mapType: mapType ?? this.mapType,
-      latLngs: latLngs ?? this.latLngs,
+      // latLngs: latLngs ?? this.latLngs,
+      isEditingFence: isEditingFence ?? this.isEditingFence,
       polygons: polygons ?? this.polygons,
       circles: circles ?? this.circles,
       addingGeofence: addingGeofence ?? this.addingGeofence,
@@ -59,14 +62,14 @@ class MapsState extends Equatable {
     );
   }
 
-  
   @override
   List<Object> get props => [
         insideFence,
         currentLocation,
         mapType,
-        latLngs,
+        // latLngs,
         polygons,
+        isEditingFence,
         circles,
         addingGeofence,
         fieldAsset,
@@ -75,13 +78,11 @@ class MapsState extends Equatable {
         selectedColor,
       ];
 
-
   // factory MapsState.fromJson(Map<String, dynamic> json) => _$MapsStateFromJson(json);
 
   // /// Connect the generated [_$MapsStateToJson] function to the `toJson` method.
   // Map<String, dynamic> toJson() => _$MapsStateToJson(this);
 }
-
 
 class ColorSerialiser implements JsonConverter<Color, int> {
   const ColorSerialiser();

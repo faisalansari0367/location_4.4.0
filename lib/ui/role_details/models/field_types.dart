@@ -15,8 +15,13 @@ enum FieldType {
   countryVisiting,
   companyAddress,
   region,
+  passport,
   driversLicense,
   propertyName,
+  city,
+  town,
+  company,
+  species,
 }
 
 extension FieldTypeExt on FieldType {
@@ -39,4 +44,7 @@ extension FieldTypeExt on FieldType {
   bool get isRegion => this == FieldType.region;
   bool get isDriversLicense => this == FieldType.driversLicense;
   bool get isPropertyName => this == FieldType.propertyName;
+  bool get isCompany => this == FieldType.company;
+  bool get isPassport => this == FieldType.passport;
+  bool get isSpecies => this == FieldType.species;
 }

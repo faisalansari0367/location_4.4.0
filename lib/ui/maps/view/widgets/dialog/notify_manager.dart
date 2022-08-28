@@ -1,4 +1,5 @@
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,18 @@ class NotifyManagerDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             AspectRatio(
-              aspectRatio: 16 / 9,
+              aspectRatio: 16.w / 9.h,
               child: Lottie.asset('assets/animations/orange_alert.json'),
             ),
             Gap(20.h),
             Text(
               'We have notified the property manager of your entry into the geofenced area',
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w600, color: Colors.grey.shade600),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 4.4.width,
+                color: Colors.grey.shade600,
+              ),
             ),
             Gap(20.h),
             MyElevatedButton(

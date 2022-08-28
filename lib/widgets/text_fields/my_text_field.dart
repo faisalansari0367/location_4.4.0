@@ -15,7 +15,7 @@ class MyTextField extends StatelessWidget {
   final TextInputType? textInputType;
   final void Function(String)? onSubmitted;
   final String? Function(String?)? validator;
-  final bool obscureText;
+  final bool obscureText, filled;
   final Widget? suffixIcon;
   final FocusNode? focusNode;
   final int? maxLength;
@@ -57,6 +57,7 @@ class MyTextField extends StatelessWidget {
     this.onTap,
     this.maxLines,
     this.minLine,
+    this.filled = false,
   }) : super(key: key);
 
   @override
@@ -94,10 +95,10 @@ class MyTextField extends StatelessWidget {
         suffixIcon: suffixIcon,
 
         // labelText: hintText,
-        // fillColor: fillColor ?? theme.inputDecorationTheme.fillColor,
+        fillColor: fillColor,
         // hintText: hintText,
         hintStyle: hintStyle ?? TextStyle(color: theme.iconTheme.color),
-        // filled: true,
+        filled: filled,
         // focusColor: theme.primaryColor,
         enabledBorder: MyDecoration.inputBorder,
         focusedBorder: MyDecoration.inputBorder.copyWith(

@@ -17,6 +17,10 @@ class GeolocatorService {
     }
   }
 
+  static Future<bool> openLocationSettings() async {
+    return await instance.openLocationSettings();
+  }
+
   static Future<LatLng> getCurrentLatLng() async {
     final position = await getCurrentPosition();
     final latLng = LatLng(position.latitude, position.longitude);

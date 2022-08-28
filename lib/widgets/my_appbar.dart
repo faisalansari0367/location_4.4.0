@@ -53,7 +53,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 2.width),
+        padding: EdgeInsets.symmetric(horizontal: 0.width),
         child: Column(
           children: [
             AppBar(

@@ -4,5 +4,5 @@ library api_repo;
 export 'src/api/api_repo.dart';
 export 'src/api/api_repo_impl.dart';
 export 'src/auth/auth_repo.dart';
-export 'src/user/src/user_repo.dart';
+export 'src/user/user_repo.dart';
 

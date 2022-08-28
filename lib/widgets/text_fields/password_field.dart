@@ -35,6 +35,7 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).iconTheme.color;
     return MyTextField(
+      
       controller: widget.controller,
       validator: widget.validator ?? Validator.password,
       onChanged: widget.onChanged,

@@ -4,6 +4,7 @@ import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../ui/admin/view/admin_page.dart';
 import '../../../ui/login/view/login_page.dart';
 import '../../../ui/maps/view/maps_page.dart';
 import '../../../ui/settings/view/settings_page.dart';
@@ -20,10 +21,16 @@ class DrawerItems {
         page: SelectRolePage(),
       ),
       DrawerItem(
-        text: Strings.map,
-        iconData: Icons.map,
-        page: MapsPage(fromDrawer: true),
+        text: Strings.admin,
+        iconData: Icons.admin_panel_settings_outlined,
+        page: AdminPage(),
       ),
+      if (api.getUserData() != null)
+        DrawerItem(
+          text: Strings.map,
+          iconData: Icons.map,
+          page: MapsPage(fromDrawer: true),
+        ),
       DrawerItem(
         text: Strings.settings,
         iconData: Icons.settings,

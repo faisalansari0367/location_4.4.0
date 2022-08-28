@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:api_repo/api_repo.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
@@ -30,7 +32,10 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: kBorderRadius,
+      ),
       child: BlocProvider.value(
         value: widget.cubit,
         child: BlocBuilder<MapsCubit, MapsState>(
@@ -38,8 +43,6 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
           builder: (context, state) {
             return Container(
               constraints: BoxConstraints(maxHeight: 110.h),
-              // height: 8.height,
-              // height: 70.h,
               height: height,
               child: Stack(
                 children: [
@@ -75,15 +78,15 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
       child: SizedBox(
         child: child,
         width: 100.width,
-        // height: 8.height,
       ),
     );
   }
 
   Widget _bottomNavbar() {
-    // return BlocBuilder<MapsCubit, MapsState>(
-    //   builder: (context, state) {
+    final userData = context.read<Api>().getUserData();
+
     return BottomNavbar(
+      color: Colors.transparent,
       items: [
         BottomNavbarItem(
           icon: icons.map.path,
@@ -92,105 +95,13 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
             child: DialogLayout(child: MapTypeWidget(cubit: widget.cubit)),
           ),
         ),
-        // BottomNavbarItem(
-        //   icon: icons.colorPicker.path,
-        //   title: ('Select color'),
-        //   // isSelected: ,
-        //   color: state.fieldAsset.color,
-        //   onTap: () => DialogService.showDialog(
-        //     child: SelectColor(cubit: widget.cubit),
-        //   ),
-        // ),
-        BottomNavbarItem(
-          icon: icons.square.path,
-          title: ('Add Fencing'),
-          onTap: widget.cubit.setIsAddingGeofence,
-        ),
+        if ([Roles.producer, Roles.agent, Roles.consignee].contains(userData!.role!.camelCase!.getRole))
+          BottomNavbarItem(
+            icon: icons.square.path,
+            title: ('Add Fencing'),
+            onTap: widget.cubit.setIsAddingGeofence,
+          ),
       ],
-    );
-    //   },
-    // );
-  }
-
-  Widget addingFence() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          // Expanded(
-          //   flex: 3,
-          //   child: Center(
-          //     child: Text(
-          //       'Tap on the screen to draw fence',
-          //       style: context.textTheme.subtitle2,
-          //     ),
-          //   ),
-          // ),
-          Expanded(child: _selectColorWidget()),
-          // clear icon button
-          Expanded(
-            child: Material(
-              child: InkWell(
-                onTap: widget.cubit.clearLastMarker,
-                child: Column(
-                  children: [
-                    Icon(Icons.clear),
-                    // clear text
-                    Text(
-                      'Clear',
-                      style: context.textTheme.subtitle2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          // Divider(),
-          // Container(
-          //   width: 0.5.width,
-          //   height: 7.height,
-          //   color: Color.fromARGB(58, 0, 0, 0),
-          // ),
-          Expanded(
-            child: Material(
-              child: InkWell(
-                onTap: widget.cubit.setIsAddingGeofence,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check),
-                    Text(
-                      'done',
-                      style: context.textTheme.subtitle2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _selectColorWidget() {
-    return BlocBuilder<MapsCubit, MapsState>(
-      builder: (context, state) => Material(
-        child: InkWell(
-          onTap: widget.cubit.setIsAddingGeofence,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              icons.colorPicker.image(height: 20),
-              Text(
-                'Select color',
-                style: context.textTheme.subtitle2,
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

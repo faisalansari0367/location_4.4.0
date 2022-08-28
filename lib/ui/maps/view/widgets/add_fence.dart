@@ -1,7 +1,9 @@
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
+import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/maps/view/widgets/select_color.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
+import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,92 +29,38 @@ class AddFence extends StatelessWidget {
     );
   }
 
-  List<Widget> getItems(context) {
+  List<Widget> getItems(BuildContext context) {
     return [
       BlocBuilder<MapsCubit, MapsState>(
         builder: (context, state) => BottomNavbarItem(
           title: 'Select Color',
           color: state.selectedColor,
-          // onTap: () => DialogService.showDialog(
-          //   child: DialogLayout(child: SelectColor(cubit: cubit)),
-          // ),
           onTap: () {
-            showModalBottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                context: context,
-                builder: (context) {
-                  // generate a color picker for me
-                  return SelectColor(cubit: cubit);
-                });
+            BottomSheetService.showSheet(child: SelectColor(cubit: cubit));
           },
           icon: Assets.icons.bottomNavbar.colorPicker.path,
         ),
       ),
-      BottomNavbarItem(
-        title: 'Undo',
-        onTap: cubit.clearLastMarker,
-        iconData: Icons.undo,
+      BlocBuilder<MapsCubit, MapsState>(
+        builder: (context, state) {
+          return state.isEditingFence
+              ? SizedBox.shrink()
+              : BottomNavbarItem(
+                  title: 'Undo',
+                  onTap: () => context.read<PolygonsService>().removeLastLatLng(),
+                  iconData: Icons.undo,
+                );
+        },
       ),
       BottomNavbarItem(
         title: 'Done',
         onTap: () {
-          if (cubit.state.latLngs.length < 3) {
+          if (context.read<PolygonsService>().latLngs.length < 3) {
             cubit.setIsAddingGeofence();
-            // Get.snackbar(
-            //   'Invalid Area Selection',
-            //   'Please select the area correctly',
-            //   // colorText: Colors.white,
-            //   // backgroundColor: Color.fromARGB(31, 255, 255, 255),
-            //   // overlayColor: Color.fromARGB(255, 164, 160, 160),
-            //   barBlur: 10,
-            //   overlayBlur: 10,
-            // );
-            // Future.wait
-            // Get.back();
             return;
           }
           final form = GlobalKey<FormState>();
           final controller = TextEditingController();
-          // showModalBottomSheet(
-          //     context: context,
-          //     builder: (context) {
-          //       return Padding(
-          //         padding: kPadding.copyWith(
-          //           bottom: context.mediaQueryPadding.bottom,
-          //         ),
-          //         child: Form(
-          //           key: form,
-          //           child: Column(
-          //             mainAxisSize: MainAxisSize.min,
-          //             children: [
-          //               // Name
-          //               MyTextField(
-          //                 hintText: 'Please enter the field asset',
-          //                 validator: Validator.text,
-          //                 controller: controller,
-          //               ),
-          //               Gap(2.height),
-          //               MyElevatedButton(
-          //                 onPressed: () async {
-          //                   if (form.currentState?.validate() ?? false) {
-          //                     Get.back();
-          //                     cubit.setIsAddingGeofence();
-          //                     cubit.addPolygon(controller.text);
-          //                   }
-          //                 },
-          //                 text: ('Done'),
-          //               )
-          //             ],
-          //           ),
-          //         ),
-          //       );
-          //     });
-
           DialogService.showDialog(
             child: DialogLayout(
               child: Padding(

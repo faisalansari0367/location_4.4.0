@@ -26,9 +26,7 @@ class _SignUpViewState extends State<SignUpView> {
     final gap = Gap(0.5.height);
 
     return Scaffold(
-      appBar: MyAppBar(
-          // leading: SizedBox(),
-          ),
+      appBar: MyAppBar(),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Form(
@@ -47,12 +45,14 @@ class _SignUpViewState extends State<SignUpView> {
               ),
               SizedBox(height: 3.height),
               MyTextField(
+                inputFormatters: [],
                 hintText: Strings.firstName,
                 validator: Validator.text,
                 onChanged: cubit.onFirstNameChanged,
               ),
               gap,
               MyTextField(
+                inputFormatters: [],
                 hintText: Strings.surname,
                 validator: Validator.text,
                 onChanged: cubit.onSurnameChanged,

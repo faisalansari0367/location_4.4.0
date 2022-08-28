@@ -52,12 +52,16 @@ class Strings {
       went = 'Went',
       wrong = 'Wrong',
       successfully = 'Successfully',
+      /// Drawer items
+      admin = 'Admin',
       home = 'Home',
       map = 'Map',
       settings = 'Settings',
+      //
       yes = 'Yes',
       no = 'No',
-      ok = 'Ok';
+      ok = 'Ok',
+      cancel = 'Cancel';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';
@@ -95,4 +99,7 @@ class Strings {
 
   // privacy policy message
   static String get privacyPolicyMessage => 'By signing up, you agree to our Terms of Service and Privacy Policy.';
+
+  //
+  static String get areYouVisitingBelowPic => 'Are you visiting below PIC?';
 }

@@ -3,6 +3,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:get/get.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import '../../../services/notifications/push_notifications.dart';
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../../role_details/view/role_details_page.dart';
 import 'select_role_state.dart';
@@ -13,7 +14,8 @@ export 'select_role_state.dart';
 
 class SelectRoleCubit extends Cubit<SelectRoleState> {
   final Api api;
-  SelectRoleCubit(this.api)
+  final PushNotificationService pushNotificationService;
+  SelectRoleCubit(this.api, this.pushNotificationService)
       : super(SelectRoleState(
           user: api.getUser()!,
         )) {
@@ -25,6 +27,7 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     // Get.to(() => RoleDetailsPage(role: role));
     final user = state.user;
     user.role = role;
+    user.registerationToken = await pushNotificationService.getFCMtoken();
     final result = await api.updateUser(user: user);
     result.when(
       success: (data) => Get.to(() => RoleDetailsPage(role: role)),

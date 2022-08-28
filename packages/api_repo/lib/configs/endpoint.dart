@@ -7,10 +7,12 @@ class Endpoints {
 
       /// users
       users = '/users',
-      getRoles = '/users/roles',
-      getFields = '/users/fields',
-      updateUser = '/users/me';
+      getRoles = '$users/roles',
+      getFields = '$users/fields',
+      updateUser = '$users/me',
+      formQuestions = '$users/forms',
 
+      logRecords = '$users/log-records';
 
   // static String user(int id) => '/user/$id';
 }

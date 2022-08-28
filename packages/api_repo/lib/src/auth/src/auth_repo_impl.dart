@@ -68,7 +68,10 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final result = await client.patch(Endpoints.updateUser, data: user.updateUser());
       final model = User.fromJson((result.data));
-      storage.setUser(user.toJson());
+      final userData = UserData.fromJson(result.data['data']);
+      await Future.wait([storage.setUserData(userData), storage.setUser(user.toJson())]);
+      // storage.setUserData(userData);
+      // storage.setUser(user.toJson());
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -113,7 +116,10 @@ class AuthRepoImpl implements AuthRepo {
   String? getToken() {
     return storage.getToken();
   }
-  
+
   @override
   Stream<User?> get userStream => storage.userStream;
+
+  @override
+  UserData? getUserData() => storage.getUserData();
 }

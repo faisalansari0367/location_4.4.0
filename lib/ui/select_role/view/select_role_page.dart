@@ -3,6 +3,7 @@ import 'package:background_location/ui/select_role/cubit/select_role_cubit.dart'
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../services/notifications/push_notifications.dart';
 import 'select_role_view.dart';
 
 class SelectRolePage extends StatelessWidget {
@@ -13,7 +14,7 @@ class SelectRolePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SelectRoleCubit(context.read<Api>()),
+      create: (context) => SelectRoleCubit(context.read<Api>(), context.read<PushNotificationService>()),
       child: const SelectRoleView(),
     );
   }

@@ -1,12 +1,11 @@
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/locale/currency_repo.dart';
-import 'package:api_repo/src/user/src/models/role_details_response.dart';
+import 'package:api_repo/src/user/src/models/user_species.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
 import '../../api_result/api_result.dart';
 import '../auth/src/storage/storage_service.dart';
-import '../user/src/models/models.dart';
 
 class ApiRepo implements Api {
   late Client _client;
@@ -114,10 +113,33 @@ class ApiRepo implements Api {
   String? getToken() {
     return _authRepo.getToken();
   }
-  
+
   @override
   Stream<User?> get userStream => _authRepo.userStream;
 
   @override
   Client get client => _client;
+
+  @override
+  UserData? getUserData() => _authRepo.getUserData();
+
+  @override
+  Future<ApiResult<LogbookEntryModel>> getLogbookRecords() {
+    return _userRepo.getLogbookRecords();
+  }
+
+  @override
+  Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) {
+    return _userRepo.getUsers(queryParams: queryParams);
+  }
+
+  @override
+  Future<ApiResult<List<String>>> getFormQuestions() {
+    return _userRepo.getFormQuestions();
+  }
+
+  @override
+  Future<ApiResult<UserSpecies>> getUserSpecies() {
+     return _userRepo.getUserSpecies();
+  }
 }

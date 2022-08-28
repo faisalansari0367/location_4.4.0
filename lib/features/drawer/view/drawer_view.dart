@@ -38,6 +38,9 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
     // borderradius tween
     // _borderRadius = Tween<double>(begin: 0.0, end: 25.0).animate(curvedAnimation);
     drawer.setController(_controller);
+    if (context.read<Api>().getUserData() != null) {
+      // drawer.setSelectedPage(2);
+    }
   }
 
   @override

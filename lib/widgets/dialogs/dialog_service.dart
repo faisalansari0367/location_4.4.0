@@ -1,5 +1,7 @@
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
+import 'package:background_location/widgets/dialogs/status_dialog_new.dart';
+import 'package:background_location/widgets/dialogs/success.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +25,31 @@ class DialogService {
       NetworkErrorDialog(
         message: NetworkExceptions.getErrorMessage(error),
         onCancel: onCancel ?? Get.back,
+      ),
+      transitionCurve: Curves.elasticOut,
+      transitionDuration: Duration(milliseconds: 400),
+    );
+  }
+
+  static void error(String message) {
+    Get.dialog(
+      StatusDialog(
+        message: message,
+        lottieAsset: 'assets/animations/error.json',
+        onContinue: Get.back,
+      ),
+      transitionCurve: Curves.elasticOut,
+      transitionDuration: Duration(milliseconds: 400),
+    );
+  }
+
+  static void success(
+    success, {
+    required void Function() onCancel,
+  }) {
+    Get.dialog(
+      SuccessDialog(
+        onTap: () => onCancel(),
       ),
       transitionCurve: Curves.elasticOut,
       transitionDuration: Duration(milliseconds: 400),

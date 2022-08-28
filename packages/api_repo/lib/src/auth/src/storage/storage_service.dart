@@ -7,6 +7,7 @@ import '../../../../api_repo.dart';
 class _Keys {
   static const String user = 'user';
   static const String token = 'token';
+  static const String userData = 'userData';
 }
 
 abstract class UserStorage {
@@ -14,6 +15,8 @@ abstract class UserStorage {
   Future<void> setUser(Map<String, dynamic> user);
   Future<void> removeUser();
   Future<void> removeToken();
+  Future<void> setUserData(UserData userData);
+  UserData? getUserData();
 
   Future<void> setToken(String token);
   String? getToken();
@@ -80,4 +83,16 @@ class StorageService implements UserStorage {
 
   @override
   Stream<User?> get userStream => _controller.stream;
+
+  @override
+  Future<void> setUserData(UserData userData) async {
+    await box.put(_Keys.userData, userData.toJson());
+  }
+
+  @override
+  UserData? getUserData() {
+    final data = box.get(_Keys.userData);
+    if (data == null) return null;
+    return UserData.fromJson(Map<String, dynamic>.from(box.get(_Keys.userData)));
+  }
 }

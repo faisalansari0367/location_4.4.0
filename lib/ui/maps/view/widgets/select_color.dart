@@ -7,8 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../models/enums/filed_assets.dart';
-
 Color fromHex(String hexString) {
   final buffer = StringBuffer();
   if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
@@ -50,7 +48,7 @@ class SelectColor extends StatelessWidget {
       child: BlocBuilder<MapsCubit, MapsState>(
         builder: (context, state) {
           return SingleChildScrollView(
-            padding: kPadding,
+            // padding: kPadding,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -94,28 +92,5 @@ class SelectColor extends StatelessWidget {
         },
       ),
     );
-  }
-
-  List<ListTile> _options(BuildContext context) {
-    return FieldAssets.values
-        .map(
-          (e) => ListTile(
-            contentPadding: EdgeInsets.zero,
-            onTap: () {
-              // cubit.setAssetColor(e);
-              Navigator.pop(context);
-            },
-            title: Text(e.name.capitalize!),
-            trailing: Container(
-              height: 5.width,
-              width: 5.width,
-              decoration: BoxDecoration(
-                color: e.color,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-        )
-        .toList();
   }
 }

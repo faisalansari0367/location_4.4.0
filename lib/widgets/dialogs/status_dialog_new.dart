@@ -25,9 +25,9 @@ class StatusDialog extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(lottieAsset),
+          Lottie.asset(lottieAsset, height: 20.height),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.width),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               message,
               textAlign: TextAlign.center,
