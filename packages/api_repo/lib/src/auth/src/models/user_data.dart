@@ -9,7 +9,7 @@ extension UserStatusExt on UserStatus {
         return Colors.teal;
 
       case UserStatus.inactive:
-        return Colors.grey;
+        return Colors.orange;
       case UserStatus.delete:
         return Colors.red;
     }

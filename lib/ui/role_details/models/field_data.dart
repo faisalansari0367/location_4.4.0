@@ -16,18 +16,17 @@ import '../widgets/property_address.dart';
 class FieldData {
   final String name;
   Address? address;
-  // final Map<String, dynamic> data;
+  final Map<String, dynamic> data;
   final TextEditingController controller;
 
   FieldData({
     required this.name,
     required this.controller,
     this.address,
-    // this.data = const {},
+    this.data = const {},
   });
 
   FieldType get fieldType {
-    // print(name.camelCase);
     switch (name.camelCase) {
       case 'email':
         return FieldType.email;
@@ -47,7 +46,9 @@ class FieldData {
       case "driver'sLicense":
         return FieldType.driversLicense;
       case 'entryDate':
+      // return
       case 'exitDate':
+      case 'licenseExpiryDate':
         return FieldType.date;
       case 'countryOfOrigin':
         return FieldType.countryOfOrigin;
@@ -62,7 +63,6 @@ class FieldData {
       case 'passport':
         return FieldType.passport;
       case 'company':
-
         return FieldType.company;
       case 'species':
         return FieldType.species;
@@ -75,6 +75,8 @@ class FieldData {
     switch (fieldType) {
       // case FieldType.species:
       //   return SpeciesWidget(data: data);
+      case FieldType.species:
+        return SpeciesWidget(data: data['species']);
       case FieldType.region:
         return MyTextField(
           hintText: name,
@@ -121,7 +123,9 @@ class FieldData {
         return MyDateField(
           label: name,
           date: controller.text,
-          onChanged: (value) => controller.text = value,
+          onChanged: (value) {
+            controller.text = value;
+          },
         );
       case FieldType.driversLicense:
         return MyTextField(
@@ -181,13 +185,15 @@ class FieldData {
           // onCountryChanged: (value) => controller.text = value,
         );
       case FieldType.passport:
-        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        if (controller.text.isNotEmpty) controller.text = controller.text;
         return MyTextField(
           // isOriginCountry: fieldType.isCountryOfOrigin,
+          // key: UniqueKey(),
           hintText: name,
           controller: controller,
           validator: Validator.text,
           inputFormatters: [],
+
           // countryName: controller.text,
           // onCountryChanged: (value) => controller.text = value,
         );

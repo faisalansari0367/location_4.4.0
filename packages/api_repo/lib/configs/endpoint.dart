@@ -11,7 +11,7 @@ class Endpoints {
       getFields = '$users/fields',
       updateUser = '$users/me',
       formQuestions = '$users/forms',
-
+      userSpecies = '$users/species',
       logRecords = '$users/log-records';
 
   // static String user(int id) => '/user/$id';

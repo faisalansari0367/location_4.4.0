@@ -13,7 +13,6 @@ import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'map_type_widget.dart';
@@ -32,6 +31,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: kBorderRadius,
@@ -41,10 +41,11 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
         child: BlocBuilder<MapsCubit, MapsState>(
           buildWhen: (previous, current) => previous.addingGeofence != current.addingGeofence,
           builder: (context, state) {
-            return Container(
-              constraints: BoxConstraints(maxHeight: 110.h),
+            return SizedBox(
+              // constraints: BoxConstraints(maxHeight: 110.h),
               height: height,
               child: Stack(
+                // fit: StackFit.expand,
                 children: [
                   _positioned(
                     left: state.addingGeofence ? -100.width : 0,
@@ -77,6 +78,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
       duration: 175.milliseconds,
       child: SizedBox(
         child: child,
+        // height: 100,
         width: 100.width,
       ),
     );
@@ -95,7 +97,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
             child: DialogLayout(child: MapTypeWidget(cubit: widget.cubit)),
           ),
         ),
-        if ([Roles.producer, Roles.agent, Roles.consignee].contains(userData!.role!.camelCase!.getRole))
+        if ([Roles.producer, Roles.agent, Roles.consignee].contains(userData?.role?.camelCase?.getRole))
           BottomNavbarItem(
             icon: icons.square.path,
             title: ('Add Fencing'),

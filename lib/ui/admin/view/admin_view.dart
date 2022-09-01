@@ -44,31 +44,31 @@ class AdminView extends StatelessWidget {
               //     .toList(),
               children: [
                 MyListTile(
-                  role: 'Users',
+                  text: 'Users',
                   onTap: () async => Get.to(() => UsersPage()),
                 ),
                 MyListTile(
-                  role: 'Visitor Log Books',
+                  text: 'Visitor Log Books',
                   onTap: () async => Get.to(() => LogbookPage()),
                 ),
                 MyListTile(
-                  role: 'Geofences',
+                  text: 'Geofences',
                   onTap: () async {},
                 ),
                 MyListTile(
-                  role: 'Transporters',
+                  text: 'Transporters',
                   onTap: () async {},
                 ),
                 MyListTile(
-                  role: 'Consignee',
+                  text: 'Consignee',
                   onTap: () async {},
                 ),
                 MyListTile(
-                  role: 'eNVD',
+                  text: 'eNVD',
                   onTap: () async {},
                 ),
                 MyListTile(
-                  role: 'Mapping',
+                  text: 'Mapping',
                   onTap: () async {},
                 ),
               ],

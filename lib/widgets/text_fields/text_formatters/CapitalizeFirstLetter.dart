@@ -14,3 +14,10 @@ class CapitalizeAllInputFormatter extends TextInputFormatter {
     return newValue.copyWith(text: newValue.text.toUpperCase());
   }
 }
+
+class DefaultInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: newValue.text);
+  }
+}

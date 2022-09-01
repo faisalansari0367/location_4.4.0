@@ -64,7 +64,7 @@ class Entries {
   }
 
   String formmatedDate() {
-    final dt = DateTime.parse(createdAt!);
+    final dt = DateTime.parse(createdAt!).toLocal();
     final formatted = DateFormat('E, d MMM yyyy h:mm a').format(dt);
     return formatted;
   }

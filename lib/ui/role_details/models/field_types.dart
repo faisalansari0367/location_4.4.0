@@ -32,7 +32,6 @@ extension FieldTypeExt on FieldType {
   bool get isLastName => this == FieldType.lastName;
   bool get isSignature => this == FieldType.signature;
   bool get isPic => this == FieldType.pic;
-  // address
   bool get isAddress => this == FieldType.address;
   bool get isDate => this == FieldType.date;
   bool get isCountry => this == FieldType.country;

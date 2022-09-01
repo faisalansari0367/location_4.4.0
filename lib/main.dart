@@ -64,7 +64,8 @@ Future<void> main() async {
     // final mapsRepo = MapsRepoLocal();
     // await mapsRepo.init();
     await notifications.initialize(
-      'resource://drawable/logo',
+      
+      'resource://drawable/itrak_logo_transparent',
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',

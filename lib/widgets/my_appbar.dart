@@ -14,7 +14,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
   final double elevation;
   final Color? iconColor;
-  final bool showBackButton;
+  final bool showBackButton, showDivider;
 
   const MyAppBar({
     this.actions = const [],
@@ -26,6 +26,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
     this.bottom,
     this.onBackPressed,
     this.leading,
+    this.showDivider = false,
   });
 
   @override
@@ -57,27 +58,18 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
         child: Column(
           children: [
             AppBar(
-                // bottomOpacity: 0.5s,
-                // foregroundColor: Colors.,
-                // primary: true,
-                backgroundColor: backgroundColor,
-                leading: leading ?? (showBackButton ? leadingArrow : DrawerMenuIcon()),
-                leadingWidth: showBackButton ? null : null,
-                actions: actions,
-                title: title,
-                elevation: elevation,
-                bottom: bottom
-                // ??
-                // PreferredSize(
-                //   child: Divider(
-                //     indent: 5.width,
-                //     endIndent: 5.width,
-                //     // height: 1.height,
-                //     thickness: 0.2.height,
-                //   ),
-                //   preferredSize: Size.fromHeight(0.2.height),
-                // ),
-                ),
+              // bottomOpacity: 0.5s,
+              // foregroundColor: Colors.,
+              // primary: true,
+              backgroundColor: backgroundColor,
+              leading: leading ?? (showBackButton ? leadingArrow : DrawerMenuIcon()),
+              leadingWidth: showBackButton ? null : null,
+              actions: actions,
+              title: title,
+              elevation: elevation,
+              bottom: bottom,
+            ),
+            _bottom(),
             // Divider(
             //   height: 2,
             //   endIndent: 5.width,
@@ -91,6 +83,18 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
     );
   }
 
+  Widget _bottom() {
+    final divider = Divider(
+      indent: 5.width,
+      endIndent: 5.width,
+      // height: 1.height,
+      color: Colors.grey.shade300,
+      thickness: 0.2.height,
+    );
+
+    return showDivider ? divider : SizedBox.shrink();
+  }
+
   @override
-  Size get preferredSize => Size.fromHeight(60);
+  Size get preferredSize => Size.fromHeight(72);
 }

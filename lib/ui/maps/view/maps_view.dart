@@ -5,10 +5,16 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
+import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
+import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
 import 'package:background_location/ui/maps/view/widgets/current_location.dart';
-import 'package:background_location/ui/maps/view/widgets/maps_bottom_nav_bar.dart';
+import 'package:background_location/ui/maps/view/widgets/dialog/polygon_details.dart';
+import 'package:background_location/ui/maps/view/widgets/map_type_widget.dart';
+import 'package:background_location/ui/maps/view/widgets/select_color.dart';
+import 'package:background_location/widgets/animations/my_slide_animation.dart';
+import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/location_permission_dialog.dart';
@@ -18,9 +24,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:location_repo/location_repo.dart' as location_repo;
 import 'package:permission_handler/permission_handler.dart';
 
+// import 'package:location_repo/location_repo.dart' as location_repo;
+
+import '../../../gen/assets.gen.dart';
+import '../../../widgets/dialogs/dialog_layout.dart';
 import '../location_service/maps_repo.dart';
 import '../models/polygon_model.dart';
 
@@ -36,11 +45,12 @@ class MapsView extends StatefulWidget {
 }
 
 class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
+  late MapsCubit cubit;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    final cubit = context.read<MapsCubit>();
     // final stream = context.read<MapsRepo>().polygonStream;
-    // stream.
+    // final cubit = context.read<MapsCubit>();
+
     switch (state) {
       case AppLifecycleState.detached:
         print('AppLifecycleState.detached');
@@ -64,24 +74,29 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    cubit = context.read<MapsCubit>();
     WidgetsBinding.instance?.addObserver(this);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      Permission.location.request().then((value) async {
-        if (value.isGranted) {
-          final cubit = context.read<MapsCubit>();
-          cubit.init();
-        } else if (value.isPermanentlyDenied) {
-          await 3.seconds.delay();
-          DialogService.showDialog(child: LocationPermissionDialog());
-        }
-      });
+      await Permission.location.request();
+      final result = await GeolocatorService.locationPermission();
+      if (result) {
+        final cubit = context.read<MapsCubit>();
+        cubit.init();
+      } else {
+        await 3.seconds.delay();
+        DialogService.showDialog(child: LocationPermissionDialog());
+      }
+
+      // Permission.location.request().then((value) async {
+      //   if (value.isGranted) {
+      // });
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    context.read<MapsRepo>().cancel();
+    // context.read<MapsRepo>().cancel();
 
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
@@ -96,15 +111,18 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<MapsCubit>();
+    // cubit.updateCurrentLocation();
     return WillPopScope(
       onWillPop: () async {
         goBack();
         return true;
       },
       child: Scaffold(
-        extendBody: false,
+        // bottomSheet: Container(),
+        extendBody: true,
         backgroundColor: Colors.transparent,
-        bottomNavigationBar: MapsBottomNavbar(cubit: cubit),
+        // bottomNavigationBar: MapsBottomNavbar(cubit: cubit),
+        bottomNavigationBar: _buildNavbar(),
         floatingActionButton: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -112,15 +130,28 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             CurrentLocation(
               onPressed: cubit.updateCurrentLocation,
             ),
-            // FloatingActionButton(
-            //   onPressed: cubit.updateCurrentLocation,
-            //   backgroundColor: Colors.white,
-            //   child: Icon(
-            //     Icons.my_location,
-            //     color: Colors.black,
-            //   ),
-            // ),
-            Gap(10.height),
+            Gap(10.h),
+
+            FloatingActionButton(
+              onPressed: () => cubit.zoom(2),
+              backgroundColor: Colors.white,
+              heroTag: 'zoom_plus',
+              child: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+            ),
+            Gap(10.h),
+            FloatingActionButton(
+              heroTag: 'zoom_minus',
+              onPressed: () => cubit.zoom(-2),
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.remove,
+                color: Colors.black,
+              ),
+            ),
+            // if (Platform.isAndroid) Gap(10.height),
           ],
         ),
         // appBar: MyAppBar(
@@ -131,8 +162,93 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           children: [
             _buildMaps(cubit),
             _buildAppbar(),
+            // Positioned(
+            //   bottom: 0,
+            //   child: _buildNavbar(),
+            // ),
+            // _showEditSheet(),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildNavbar() {
+    return Container(
+      height: 70.h,
+      width: 1.sw,
+      alignment: Alignment.center,
+      decoration: MyDecoration.bottomSheetDecoration(),
+      child: BlocBuilder<MapsCubit, MapsState>(
+        builder: (context, state) {
+          return MySlideAnimation(
+            duration: kDuration,
+            key: ValueKey(state.addingGeofence),
+            // child: state.addingGeofence ? AddFence(cubit: cubit) : _normalNavbar(),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: MyDecoration.bottomSheetDecoration(),
+              child: _getWidget(state),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _getWidget(MapsState state) {
+    Widget result = SizedBox();
+    if (state.addingGeofence) {
+      result = AddFence(cubit: cubit);
+    } else if (state.isEditingFence) {
+      result = _showEditSheet();
+    } else {
+      result = _defaultNavbar();
+    }
+    return result;
+  }
+
+  Row _defaultNavbar() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        BottomNavbarItem(
+          icon: Assets.icons.bottomNavbar.map.path,
+          title: ('Map Type'),
+          onTap: () => DialogService.showDialog(
+            child: DialogLayout(child: MapTypeWidget(cubit: cubit)),
+          ),
+        ),
+        if ([Roles.producer, Roles.agent, Roles.consignee].contains(cubit.userData?.role?.camelCase?.getRole))
+          BottomNavbarItem(
+            icon: Assets.icons.bottomNavbar.square.path,
+            title: ('Add Fencing'),
+            onTap: cubit.setIsAddingGeofence,
+          ),
+        // Spacer(),
+      ],
+    );
+  }
+
+  Widget _showEditSheet() {
+    return Container(
+      color: Color.fromARGB(255, 255, 255, 255),
+      // width: 100.width,
+      // height: 6.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          BottomNavbarItem(
+            title: 'Select Color',
+            iconData: Icons.color_lens,
+            onTap: () => BottomSheetService.showSheet(child: SelectColor(cubit: cubit)),
+          ),
+          BottomNavbarItem(
+            title: 'Done',
+            iconData: Icons.done,
+            onTap: () => cubit.doneEditing(),
+          ),
+        ],
       ),
     );
   }
@@ -145,68 +261,47 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         width: 100.width,
         padding: kPadding,
         child: Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildBackButton(),
-            // Spacer(),
-            // _buildMapTypeButton(),
           ],
         ),
       ),
     );
   }
 
-  // FloatingActionButton _addGeofence(MapsCubit cubit) {
-  //   return FloatingActionButton(
-  //     backgroundColor: Colors.white,
-  //     heroTag: 'addGeofence',
-  //     onPressed: cubit.zoom,
-  //     child: BlocBuilder<MapsCubit, MapsState>(
-  //       builder: (context, state) {
-  //         return Icon(
-  //           state.addingGeofence ? Icons.check : Icons.add,
-  //           color: Colors.black,
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget _buildMaps(MapsCubit cubit) {
-    final _polygonsService = context.read<PolygonsService>();
+    // final _polygonsService = context.read<PolygonsService>();
     return StreamBuilder<List<PolygonModel>>(
-        stream: context.read<MapsRepo>().polygonStream,
-        builder: (context, snapshot) {
-          // print(snapshot.data);
-          return StreamBuilder<List<LatLng>>(
-              stream: context.read<PolygonsService>().stream,
-              initialData: [],
-              builder: (context, polygonsData) {
-                return BlocListener<MapsCubit, MapsState>(
-                  listener: _listener,
-                  listenWhen: (previous, current) => previous.insideFence != current.insideFence,
-                  child: BlocBuilder<MapsCubit, MapsState>(
-                    builder: (context, state) {
-                      return GoogleMap(
-                        initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
-                        onMapCreated: cubit.onMapCreated,
-                        mapType: state.mapType,
-                        zoomControlsEnabled: true,
-                        myLocationButtonEnabled: false,
-                        myLocationEnabled: true,
-                        polylines: _polylines(state, polygonsData.data ?? []),
-                        markers: _markers(polygonsData.data ?? [], state.currentLocation),
-                        polygons: (snapshot.data ?? []).map((e) => addPolygon(e)).toSet(),
-                        onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
-                        // mapToolbarEnabled: true,
-                        // tiltGesturesEnabled: false,
-                        // circles: _circles(state),
-                      );
-                    },
-                  ),
-                );
-              });
-        });
+      stream: context.read<MapsRepo>().polygonStream,
+      builder: (context, snapshot) {
+        return StreamBuilder<List<LatLng>>(
+          stream: context.read<PolygonsService>().stream,
+          initialData: [],
+          builder: (context, polygonsData) {
+            return BlocListener<MapsCubit, MapsState>(
+              listener: _listener,
+              listenWhen: (previous, current) => previous.insideFence != current.insideFence,
+              child: BlocBuilder<MapsCubit, MapsState>(
+                builder: (context, state) {
+                  return GoogleMap(
+                    initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
+                    onMapCreated: cubit.onMapCreated,
+                    mapType: state.mapType,
+                    zoomControlsEnabled: false,
+                    myLocationButtonEnabled: false,
+                    myLocationEnabled: true,
+                    polylines: _polylines(state, polygonsData.data ?? []),
+                    markers: _markers(polygonsData.data ?? [], state.currentLocation),
+                    polygons: (snapshot.data ?? []).map((e) => addPolygon(e)).toSet(),
+                    onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void addLatLng(LatLng latLng, LatLng currentLocation) {
@@ -233,7 +328,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           flat: true,
           draggable: true,
           onTap: onTap,
-          onDragEnd: (p) => context.read<PolygonsService>().changePosition(p, points.indexOf(e)),
+          onDragEnd: (p) => context.read<PolygonsService>().updateMarkers(p, points.indexOf(e)),
           position: e,
           consumeTapEvents: isPolygonClosed,
         );
@@ -245,7 +340,6 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     final polygonId = PolygonId(data.id!);
     final latLngs = data.points;
     final color = data.color;
-    final name = data.name;
     return Polygon(
       polygonId: polygonId,
       points: latLngs,
@@ -255,97 +349,16 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
       consumeTapEvents: true,
       onTap: () {
         BottomSheetService.showSheet(
-          child: Padding(
-            // padding: EdgeInsets.symmetric(horizontal: 5.width),
-            padding: EdgeInsets.only(
-              left: 5.width,
-              right: 5.width,
-              bottom: context.mediaQueryViewPadding.bottom,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Field Details',
-                  style: context.textTheme.headline6?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20.sp,
-                  ),
-                ),
-                Gap(2.height),
-                Row(
-                  // mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Field Name',
-                      style: context.textTheme.subtitle2?.copyWith(
-                        // fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    Text(
-                      name,
-                      style: context.textTheme.subtitle2?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(),
-                Row(
-                  // mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Field Area',
-                      style: context.textTheme.subtitle2?.copyWith(
-                        // fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    Text(
-                      '${getPolygonArea(latLngs).toStringAsFixed(2)} m2',
-                      style: context.textTheme.subtitle2?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(),
-                if ((data.createdBy?.id == context.read<Api>().getUserData()?.id))
-                  InkWell(
-                    onTap: () {
-                      final cubit = context.read<MapsCubit>();
-                      cubit.setIsAddingGeofence();
-                      context.read<PolygonsService>().addPolygon(data.points);
-                      Get.back();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Edit Field Area',
-                          style: context.textTheme.subtitle2?.copyWith(
-                            // fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                        Icon(Icons.edit),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
+          child: PolygonDetails(
+            polygonModel: data,
+            canEdit: cubit.canUserEdit(data.createdBy!.id!),
+            onTap: () {
+              cubit.startEditPolygon(data);
+              Get.back();
+            },
           ),
         );
       },
-      // visible: false,
-
-      // geodesic: true,
     );
   }
 
@@ -354,11 +367,11 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     // return polypoints.map((e) => PolygonLatLng(e.latitude, e.longitude)).toList();
   }
 
-  num getPolygonArea(List<LatLng> polypoints) {
-    // final points = _getMtLatLangs(polypoints);
-    final area = MapsToolkitService.calculatePolygonArea(polypoints);
-    return area;
-  }
+  // num getPolygonArea(List<LatLng> polypoints) {
+  //   // final points = _getMtLatLangs(polypoints);
+  //   final area = MapsToolkitService.calculatePolygonArea(polypoints);
+  //   return area;
+  // }
 
   bool isClosedPolygon(List<LatLng> polypoints) {
     final area = MapsToolkitService.isClosedPolygon(_getMtLatLangs(polypoints));
@@ -370,33 +383,15 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     return {
       Polyline(
         polylineId: PolylineId((Random().nextInt(100000000)).toString()),
-        // color: Color.fromARGB(255, 249, 48, 33),
         color: state.selectedColor,
         jointType: JointType.bevel,
         startCap: Cap.buttCap,
         patterns: [PatternItem.dot],
-
-        // visible: true,
-        // geodesic: ,
         width: 2.width.toInt(),
-        // points: state.latLngs,
         points: points,
       ),
     };
   }
-
-  // Set<Circle> _circles(MapsState state) {
-  //   return {
-  //     Circle(
-  //       circleId: CircleId('kldsj'),
-  //       center: state.currentLocation,
-  //       radius: 40,
-  //       strokeColor: Colors.blue,
-  //       strokeWidth: 2,
-  //       fillColor: Colors.blue.withOpacity(0.1),
-  //     )
-  //   };
-  // }
 
   void _listener(BuildContext context, MapsState state) {
     // final location = state.insideFence ? 'inside' : 'outside';

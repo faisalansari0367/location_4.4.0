@@ -52,12 +52,18 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
   }
 
   @override
-  SelectRoleState? fromJson(Map<String, dynamic> json) {
-    return SelectRoleState.fromJson(json);
+  void emit(SelectRoleState state) {
+    if (isClosed) return;
+    super.emit(state);
   }
 
-  @override
-  Map<String, dynamic>? toJson(SelectRoleState state) {
-    return state.toJson();
-  }
+  // @override
+  // SelectRoleState? fromJson(Map<String, dynamic> json) {
+  //   return SelectRoleState.fromJson(json);
+  // }
+
+  // @override
+  // Map<String, dynamic>? toJson(SelectRoleState state) {
+  //   return state.toJson();
+  // }
 }

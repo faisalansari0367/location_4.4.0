@@ -1,10 +1,10 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/countries.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:background_location/widgets/widgets.dart';
+import 'package:country_list/country_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

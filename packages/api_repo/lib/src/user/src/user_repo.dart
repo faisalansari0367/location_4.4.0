@@ -1,5 +1,3 @@
-import 'package:api_repo/src/user/src/models/user_species.dart';
-
 import '../../../api_result/api_result.dart';
 import '../../../api_result/network_exceptions/network_exceptions.dart';
 import '../../../configs/client.dart';
@@ -103,7 +101,7 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<UserSpecies>> getUserSpecies() async {
     try {
-      final result = await client.get(Endpoints.formQuestions);
+      final result = await client.get(Endpoints.userSpecies);
       final list = UserSpecies.fromJson(result.data);
       // final data = List<String>.from(list.first);
       return ApiResult.success(data: list);

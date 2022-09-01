@@ -61,6 +61,34 @@ class MapsCubit extends Cubit<MapsState> {
     getLocationUpdates();
   }
 
+  bool canUserEdit(int? id) {
+    if (id == null) return false;
+    var id2 = api.getUserData()?.id;
+    return id2 == id;
+  }
+
+  Future<void> doneEditing() async {
+    if (state.currentPolygon == null) return;
+    final result = await _mapsRepo.updatePolygon(state.currentPolygon!);
+    if (state.currentPolygon != null) {
+      result.when(
+        success: (s) {
+          emit(state.copyWith(isEditingFence: false, latLngs: []));
+          _polygonsService.clear();
+        },
+        failure: (failure) => DialogService.failure(error: failure),
+      );
+    }
+  }
+
+  void startEditPolygon(PolygonModel polygon) {
+    emit(state.copyWith(isEditingFence: true, latLngs: polygon.points, currentPolygon: polygon));
+    // state.copyWith(latLngs: )
+    _polygonsService.addPolygon(polygon.points);
+  }
+
+  UserData? get userData => api.getUserData();
+
   Future<void> _getAllPolygon() async {
     var allPolygon = await _mapsRepo.getAllPolygon();
     final polygonSet = <PolygonModel>{};
@@ -157,6 +185,7 @@ class MapsCubit extends Cubit<MapsState> {
       points: _polygonsService.latLngs,
       id: Random().nextInt(10000000).toString(),
     );
+    // final userData = await api.getUserData();
     final result = await _mapsRepo.savePolygon(model);
     result.when(
       success: (data) => _polygonsService.clear(),
@@ -251,15 +280,26 @@ class MapsCubit extends Cubit<MapsState> {
     );
     result.when(
       success: (s) {
-        DialogService.showDialog(child: NotifyManagerDialog(
-          
-        ));
+        DialogService.showDialog(child: NotifyManagerDialog());
       },
       failure: (e) => DialogService.failure(error: e),
     );
     // }
     // result.when();
     // result.w(() => null)
+  }
+
+  Future<void> zoom(double zoom) async {
+    emit(state.copyWith(zoom: min(max(1, state.zoom + zoom), 20)));
+    print(state.zoom);
+    await mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: state.currentLocation,
+          zoom: state.zoom,
+        ),
+      ),
+    );
   }
 
   void getLocationUpdates() {
@@ -272,6 +312,15 @@ class MapsCubit extends Cubit<MapsState> {
         polygons: state.polygons,
         accuracy: event.accuracy,
       );
+
+      // mapController.animateCamera(
+      //   CameraUpdate.newCameraPosition(
+      //     CameraPosition(
+      //       target: position,
+      //       zoom: 20.151926040649414,
+      //     ),
+      //   ),
+      // );
       // final polygon = state.polygons.where(
       //     (element) => MapsToolkitService.isInsidePolygon(latLng: state.currentLocation, polygon: element.points));
 
@@ -283,6 +332,8 @@ class MapsCubit extends Cubit<MapsState> {
   @override
   Future<void> close() {
     _positionSubscription?.cancel();
+    _polygonsService.clear();
+    _mapsRepo.cancel();
     return super.close();
   }
 

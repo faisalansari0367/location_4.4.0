@@ -52,6 +52,7 @@ class Strings {
       went = 'Went',
       wrong = 'Wrong',
       successfully = 'Successfully',
+
       /// Drawer items
       admin = 'Admin',
       home = 'Home',
@@ -61,7 +62,14 @@ class Strings {
       yes = 'Yes',
       no = 'No',
       ok = 'Ok',
-      cancel = 'Cancel';
+      cancel = 'Cancel',
+      dashboard = 'Dashboard',
+      visitor = 'Visitor',
+      log = 'Log',
+      book = 'Book',
+      geofence = 'Geofence',
+      envds = 'Envds',
+      links = 'Links', check = 'Check';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';
@@ -74,6 +82,11 @@ class Strings {
   static String get signUp => '$sign $up';
   static String get forgotPassword => '$forgot $password';
   static String get newToItrack => '$new_ $to $appName';
+  static String get visitorLogBook => '$visitor $log$book';
+  static String get geofences => '${geofence}s';
+  static String get visitorCheckIn => '$visitor $check-${in_}s';
+
+
   // confirm password
   static String get confirmPassword => '$confirm $password';
 

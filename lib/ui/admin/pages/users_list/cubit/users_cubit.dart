@@ -9,15 +9,22 @@ import 'package:get/get.dart';
 class UsersCubit extends Cubit<UsersState> {
   final Api api;
 
-  UsersCubit(this.api) : super(UsersState()) {
+  UsersCubit(this.api) : super(UsersState(controller: TextEditingController())) {
     fetchUsers();
     getRoles();
+    state.controller.addListener(() {
+      if (state.controller.text.isEmpty) return;
+      onSearch(state.controller.text);
+    });
   }
 
-  final controller = TextEditingController();
+  // final controller = TextEditingController();
 
   void setFilter(String filter) {
-    emit(state.copyWith(filter: filter));
+    if (state.filter == filter) {
+      emit(state.copyWith(filter: ''));
+    } else
+      emit(state.copyWith(filter: filter));
     fetchUsers();
   }
 
@@ -29,8 +36,14 @@ class UsersCubit extends Cubit<UsersState> {
   }
 
   void setCurrentRole(String role) {
+    // if (role == state.selectRole) {
+    //   emit(state.copyWith(selectRole: null));
+    // } else {
     emit(state.copyWith(selectRole: role));
-    controller.text = role;
+    // }
+
+    // state.controller.text = role;
+    // fetchUsers(q: state.controller.text);
     fetchUsers();
   }
 
@@ -72,7 +85,7 @@ class UsersCubit extends Cubit<UsersState> {
     final map = {'role': state.selectRole};
     // if (state.filter != null) {
     // }
-    map[(state.filter?.camelCase) ?? 'firstName'] = q;
+    map[(state.filter?.camelCase) ?? 'firstName'] = state.controller.text;
     final result = await api.getUsers(queryParams: map);
     result.when(
       success: (s) => emit(state.copyWith(users: s.users)),

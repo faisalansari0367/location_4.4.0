@@ -12,11 +12,26 @@ import 'package:flutter/widgets.dart';
 class $AssetsAnimationsGen {
   const $AssetsAnimationsGen();
 
+  /// File path: assets/animations/error.json
+  String get error => 'assets/animations/error.json';
+
   /// File path: assets/animations/mail_sent.json
   String get mailSent => 'assets/animations/mail_sent.json';
 
   /// File path: assets/animations/network_error.json
   String get networkError => 'assets/animations/network_error.json';
+
+  /// File path: assets/animations/orange_alert.json
+  String get orangeAlert => 'assets/animations/orange_alert.json';
+
+  /// File path: assets/animations/precise_location.json
+  String get preciseLocation => 'assets/animations/precise_location.json';
+
+  /// File path: assets/animations/signature.json
+  String get signature => 'assets/animations/signature.json';
+
+  /// File path: assets/animations/success.json
+  String get success => 'assets/animations/success.json';
 
   /// File path: assets/animations/welcome.json
   String get welcome => 'assets/animations/welcome.json';
@@ -35,12 +50,20 @@ class $AssetsIconsGen {
   $AssetsIconsBottomNavbarGen get bottomNavbar =>
       const $AssetsIconsBottomNavbarGen();
 
+  /// File path: assets/icons/itrak_logo_transparent.png
+  AssetGenImage get itrakLogoTransparent =>
+      const AssetGenImage('assets/icons/itrak_logo_transparent.png');
+
   /// File path: assets/icons/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/icons/logo.png');
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/QR_code_for_mobile_English_Wikipedia.png
+  AssetGenImage get qRCodeForMobileEnglishWikipedia => const AssetGenImage(
+      'assets/images/QR_code_for_mobile_English_Wikipedia.png');
 
   /// File path: assets/images/forgot_password.jpeg
   AssetGenImage get forgotPassword =>

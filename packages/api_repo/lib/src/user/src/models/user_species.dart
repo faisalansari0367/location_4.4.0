@@ -27,18 +27,21 @@ class UserSpecies {
 class SpeciesData {
   String? species;
   String? image;
+  bool? value;
 
-  SpeciesData({this.species, this.image});
+  SpeciesData({this.value = false, this.species, this.image});
 
   SpeciesData.fromJson(Map<String, dynamic> json) {
     species = json['species'];
     image = json['image'];
+    value = json['value'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['species'] = species;
     data['image'] = image;
+    data['value'] = value;
     return data;
   }
 }

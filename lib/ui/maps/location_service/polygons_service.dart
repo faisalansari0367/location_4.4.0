@@ -21,7 +21,7 @@ class PolygonsService {
     _controller.add(list);
   }
 
-  void changePosition(LatLng latLng, int index) {
+  void updateMarkers(LatLng latLng, int index) {
     final _list = latLngs;
     _list[index] = latLng;
     _controller.add(_list);

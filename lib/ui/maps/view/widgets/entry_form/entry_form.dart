@@ -86,10 +86,11 @@ class _EntryFormState extends State<EntryForm> {
                                 // ),
                                 // Spacer(),
 
+
                                 _radioButton(_value(state, question), true, 'Yes', question),
                                 Gap(30.w),
                                 _radioButton(_value(state, question), false, 'No', question),
-                              ],
+                              ] ,
                             ),
                           ],
                         ),

@@ -64,7 +64,7 @@ class SelectRoleView extends StatelessWidget {
                 isLoading: state.isLoading,
                 shrinkWrap: true,
                 itemBuilder: (context, index) => MyListTile(
-                  role: state.roles[index],
+                  text: state.roles[index],
                   onTap: () async => cubit.updateRole(
                     state.roles[index],
                   ),

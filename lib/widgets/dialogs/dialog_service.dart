@@ -44,12 +44,13 @@ class DialogService {
   }
 
   static void success(
-    success, {
+    String success, {
     required void Function() onCancel,
   }) {
     Get.dialog(
       SuccessDialog(
         onTap: () => onCancel(),
+        message: success,
       ),
       transitionCurve: Curves.elasticOut,
       transitionDuration: Duration(milliseconds: 400),

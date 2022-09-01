@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-
 class BottomNavbarItem extends StatelessWidget {
   final VoidCallback? onTap;
   final String title;
@@ -29,7 +28,6 @@ class BottomNavbarItem extends StatelessWidget {
     return Material(
       child: InkWell(
         onTap: onTap ?? () {},
-      
         child: AnimatedContainer(
           padding: EdgeInsets.only(
             left: 10.sp,
@@ -41,7 +39,7 @@ class BottomNavbarItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 14.h),
+              Spacer(),
               SizedBox(
                 height: 24.sp,
                 child: _image(iconColor),
@@ -54,11 +52,12 @@ class BottomNavbarItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 style: context.textTheme.subtitle2?.copyWith(
-                  fontSize: 11.w,
+                  fontSize: 13.w,
+                  fontWeight: FontWeight.w600,
                   color: iconColor,
                 ),
               ),
-              SizedBox(height: 14.h),
+              Spacer(),
             ],
           ),
         ),

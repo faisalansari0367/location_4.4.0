@@ -4,11 +4,13 @@ import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class SuccessDialog extends StatelessWidget {
   final VoidCallback onTap;
-  const SuccessDialog({Key? key, required this.onTap}) : super(key: key);
+  final String? message;
+  const SuccessDialog({Key? key, required this.onTap, this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,13 @@ class SuccessDialog extends StatelessWidget {
           children: [
             Lottie.asset('assets/animations/success.json'),
             Gap(20.h),
+            Text(
+              message ?? 'Success',
+              style: context.textTheme.headline6?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Gap(15.h),
             MyElevatedButton(
               text: 'Close',
               color: Colors.teal.shade300,

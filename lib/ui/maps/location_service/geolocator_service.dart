@@ -21,6 +21,28 @@ class GeolocatorService {
     return await instance.openLocationSettings();
   }
 
+  static Future<bool> locationPermission() async {
+    final result = await instance.checkPermission();
+    var value = true;
+    switch (result) {
+      case LocationPermission.denied:
+        value = false;
+        break;
+      case LocationPermission.deniedForever:
+        value = false;
+        break;
+      case LocationPermission.whileInUse:
+        value = true;
+        break;
+      case LocationPermission.always:
+        value = true;
+        break;
+      default:
+        value = false;
+    }
+    return value;
+  }
+
   static Future<LatLng> getCurrentLatLng() async {
     final position = await getCurrentPosition();
     final latLng = LatLng(position.latitude, position.longitude);

@@ -31,4 +31,18 @@ class MyDecoration {
       borderRadius: isCircle ? null : kBorderRadius,
     );
   }
+
+  static BoxDecoration bottomSheetDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.3),
+          blurRadius: 10,
+          spreadRadius: 0.1,
+        ),
+      ],
+    );
+  }
 }

@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import '../../../constants/index.dart';
 
 class MyListTile extends StatefulWidget {
-  final String role;
+  final String text;
   final Future<void> Function() onTap;
-  const MyListTile({Key? key, required this.role, required this.onTap}) : super(key: key);
+  const MyListTile({Key? key, required this.text, required this.onTap}) : super(key: key);
 
   @override
   State<MyListTile> createState() => _MyListTileState();
@@ -40,7 +40,7 @@ class _MyListTileState extends State<MyListTile> {
       },
       selectedColor: Colors.black,
       title: Text(
-        widget.role,
+        widget.text,
         style: context.textTheme.subtitle2?.copyWith(
           fontWeight: FontWeight.w600,
           fontSize: 15.w,

@@ -72,7 +72,7 @@ class EntryFormCubit extends Cubit<EntryFormState> {
     final result = await mapsApi.logBookEntry(userData!.pic!, jsonEncode(state.questionAnswers), polygon.id!);
     result.when(
       success: (data) {
-        DialogService.success('', onCancel: () {
+        DialogService.success('Form Submitted', onCancel: () {
           Get.back();
           Get.back();
         });

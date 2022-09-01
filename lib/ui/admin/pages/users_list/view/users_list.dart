@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/services/notifications/intent_service.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/admin/pages/users_list/view/roles_sheet.dart';
 import 'package:background_location/widgets/expanded_tile.dart';
@@ -55,13 +56,17 @@ class UsersView extends StatelessWidget {
                   },
                 ),
                 Gap(10.h),
-                MyTextField(
-                  hintText: 'Search',
-                  filled: true,
-                  fillColor: kPrimaryColor.withOpacity(0.01),
-                  prefixIcon: Icon(Icons.search),
-                  onChanged: cubit.onSearch,
-                  autovalidateMode: AutovalidateMode.disabled,
+                BlocBuilder<UsersCubit, UsersState>(
+                  builder: (context, state) {
+                    return MyTextField(
+                      hintText: 'Search',
+                      filled: true,
+                      fillColor: kPrimaryColor.withOpacity(0.01),
+                      prefixIcon: Icon(Icons.search),
+                      controller: cubit.state.controller,
+                      autovalidateMode: AutovalidateMode.disabled,
+                    );
+                  },
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -83,7 +88,7 @@ class UsersView extends StatelessWidget {
                                 (e) => Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 5.w),
                                   child: InputChip(
-                                    selected: e == state.filter,
+                                    selected: e == (state.filter ?? ''),
                                     backgroundColor: Colors.grey.shade200,
                                     selectedColor: context.theme.primaryColor.withOpacity(0.2),
                                     // elevation: 5,
@@ -166,13 +171,21 @@ class UsersView extends StatelessWidget {
           Divider(),
           Row(
             children: [
-              // Text('Email')
               Icon(
                 Icons.mail_outline,
-                color: Colors.blueGrey,
+                // color: Colors.blueGrey,
+                color: context.theme.primaryColor,
               ),
               Gap(10.w),
-              Text(user.email ?? ''),
+              InkWell(
+                onTap: () => IntentService.emailIntent(user.email),
+                child: Text(
+                  user.email ?? '',
+                  style: TextStyle(
+                    color: context.theme.primaryColor,
+                  ),
+                ),
+              ),
             ],
           ),
           Divider(),
@@ -182,10 +195,19 @@ class UsersView extends StatelessWidget {
               // Text('Email')
               Icon(
                 Icons.phone,
-                color: Colors.blueGrey,
+                // color: Colors.blueGrey,
+                color: context.theme.primaryColor,
               ),
               Gap(10.w),
-              Text('${user.countryCode} ${user.phoneNumber}'),
+              InkWell(
+                onTap: () => IntentService.dialIntent('${user.phoneNumber}'),
+                child: Text(
+                  '${user.countryCode} ${user.phoneNumber}',
+                  style: TextStyle(
+                    color: context.theme.primaryColor,
+                  ),
+                ),
+              ),
             ],
           ),
           Divider(),

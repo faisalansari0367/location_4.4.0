@@ -44,6 +44,8 @@ class LogbookView extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
+      // hideArrow: item.form != null || (item.form?.isNotEmpty ?? false),
+      hideArrow: hasChildrens(item),
       subtitle: Text(
         item.formmatedDate(),
         style: TextStyle(
@@ -59,6 +61,13 @@ class LogbookView extends StatelessWidget {
       //   })l
       // ],
     );
+  }
+
+  bool hasChildrens(Entries item) {
+    if (item.form == null) return true;
+    if (item.form is! Map) return true;
+    if (item is Map) return true;
+    return false;
   }
 
   List<Widget> childrens(dynamic form) {

@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/src/user/src/models/role_details_model.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/property_address.dart';
@@ -39,6 +39,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   void _init() async {
     await _getFields();
     await getRoleDetails();
+    await getSpecies();
     // await Future.wait([
     //   _getFields(),
     //   getRoleDetails(),
@@ -48,6 +49,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   @override
   emit(RoleDetailsState state) {
     if (isClosed) return;
+    entryAndExitDateValidator();
     super.emit(state);
   }
 
@@ -61,6 +63,25 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       success: (data) {
         emit(state.copyWith(userRoleDetails: Map<String, dynamic>.from(data['data']), isLoading: false));
         _getFieldsData();
+      },
+      failure: _failure,
+    );
+  }
+
+  Future<void> getSpecies() async {
+    if (role != 'Producer') return;
+    final result = await api.getUserSpecies();
+    result.when(
+      success: (data) {
+        final fields = [...state.fieldsData];
+        fields.add(
+          FieldData(
+            name: 'Species',
+            controller: TextEditingController(),
+            data: {'species': data},
+          ),
+        );
+        emit(state.copyWith(fieldsData: fields));
       },
       failure: _failure,
     );
@@ -126,8 +147,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       final isCompanyAddress =
           state.fields.indexWhere((element) => element.camelCase! == FieldType.companyAddress.name);
       if (isCompanyAddress != -1) {
-        // final companyAddress = Address.fromMap(userRoleDetails[isCompanyAddress.camelCase]!);
-        // companyAddress.fieldsToShow = addressFields;
         list.add(
           FieldData(
             name: state.fields[isCompanyAddress],
@@ -136,8 +155,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           ),
         );
       } else {
-        // list.add(FieldData(name: 'companyAddress', controller: TextEditingController(text: address.toString()), address: address));
-
         list.add(FieldData(
           controller: TextEditingController(),
           name: FieldType.address.name,
@@ -174,6 +191,34 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     emit(state.copyWith(fields: data.data, isLoading: false));
   }
 
+  void entryAndExitDateValidator() {
+    final entryField = state.fieldsData.where((element) => element.fieldType.isEntryDate);
+    final exitField = state.fieldsData.where((element) => element.fieldType.isExitDate);
+    if (entryField.isNotEmpty && exitField.isNotEmpty) {
+      final entry = DateTime.parse(entryField.first.controller.text);
+      final exit = DateTime.parse(exitField.first.controller.text);
+      var message = '';
+      if (entry.isAfter(exit)) {
+        message = 'Entry date cannot be after exit date';
+      } else if (entry.compareTo(exit) == 0) {
+        message = 'Entry date cannot be equal to exit date';
+      } else if (entry.isBefore(DateTime.now().subtract(10.days))) {
+        message = "Can't be more than 10 days before today's date";
+      } else if (exit.difference(entry).inDays > 10) {
+        message = 'Entry date cannot be more than 10 days after today';
+      }
+      if (message.isNotEmpty) {
+        DialogService.showDialog(
+          child: NetworkErrorDialog(
+            message: message,
+            onCancel: Get.back,
+          ),
+        );
+        return;
+      }
+    }
+  }
+
   Future<void> onSubmit() async {
     if (formKey.currentState?.validate() ?? false) {
       final hasSignature = state.fieldsData.firstWhereOrNull((element) => element.fieldType.isSignature);
@@ -193,29 +238,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       // Get.to(() => const MapsPage());
       final data = <String, dynamic>{};
       state.fieldsData.forEach((field) {
-        // if (field.fieldType.isSignature) {
-        //   final isEmpty = field.controller.text.isEmpty;
-        //   if (isEmpty) {
-        //     DialogService.showDialog(
-        //       child: NoSignatureFound(
-        //         message: 'No signature found',
-        //         subtitle: 'Please tap the below button to add signature',
-        //         buttonText: 'Add signature',
-        //         onCancel: () async {
-        //           await Get.to(
-        //             () => SignatureWidget(
-        //               onChanged: (value) {
-        //                 field.controller.text = value;
-        //               },
-        //             ),
-        //           );
-        //           Get.back();
-        //         },
-        //       ),
-        //     );
-        //     return;
-        //   }
-        // }
         if (field.fieldType.isAddress) {
           final _address = field.address!.toMap();
           // _address['state'] = 'STATE';
@@ -224,6 +246,13 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         } else if (field.fieldType.isCompanyAddress) {
           final _address = field.address!.toMap();
           data.addAll(_address);
+          return;
+        } else if (field.fieldType.isSpecies) {
+          // data.addAll( (field.data['species'] as UserSpecies).tojs);
+          final UserSpecies species = field.data['species'] as UserSpecies;
+          final list = (species.data ?? []).where((element) => element.value == true).map((e) => e.species).toList();
+          if (list.isEmpty) return;
+          data[field.fieldType.name] = jsonEncode(list);
           return;
         }
         data[field.name.camelCase!.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();
@@ -251,7 +280,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         } else if (entryDate.compareTo(exitDate) == 0) {
           message = 'Entry date cannot be equal to exit date';
         } else if (entryDate.isBefore(DateTime.now().subtract(10.days))) {
-          message = "Can't be more than 10 days from today's date";
+          message = "Can't be more than 10 days before today's date";
         } else if (exitDate.difference(entryDate).inDays > 10) {
           message = 'Entry date cannot be more than 10 days after today';
         }
@@ -279,14 +308,4 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       );
     }
   }
-
-  // @override
-  // RoleDetailsState? fromJson(Map<String, dynamic> json) {
-  //   return RoleDetailsState.fromJson(json);
-  // }
-
-  // @override
-  // Map<String, dynamic>? toJson(RoleDetailsState state) {
-  //   return state.toJson();
-  // }
 }

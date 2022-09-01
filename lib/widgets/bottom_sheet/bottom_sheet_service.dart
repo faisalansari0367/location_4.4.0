@@ -5,7 +5,11 @@ import 'package:get/get.dart';
 class BottomSheetService {
   static void showSheet({required Widget child}) {
     Get.bottomSheet(
-      Padding(child: child, padding: kPadding),
+      Container(
+        decoration: MyDecoration.bottomSheetDecoration(),
+        child: child,
+        padding: kPadding,
+      ),
       enterBottomSheetDuration: 175.milliseconds,
       exitBottomSheetDuration: 175.milliseconds,
       backgroundColor: Colors.white,

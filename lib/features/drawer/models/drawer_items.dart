@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/features/bottom_navbar/view/navbar_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,11 @@ class DrawerItems {
           iconData: Icons.map,
           page: MapsPage(fromDrawer: true),
         ),
+      DrawerItem(
+        text: 'Dashboard',
+        iconData: Icons.dashboard,
+        page: NavbarPage(),
+      ),
       DrawerItem(
         text: Strings.settings,
         iconData: Icons.settings,
