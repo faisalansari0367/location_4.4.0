@@ -3,8 +3,8 @@
 part of 'forms_cubit_cubit.dart';
 
 class QuestionData extends Equatable {
-  final String question;
-  final dynamic value;
+  String question;
+  dynamic value;
 
   QuestionData({required this.question, this.value});
   @override
@@ -48,7 +48,7 @@ class FormsState extends Equatable {
   final String? qrData;
   final bool isLoading;
   const FormsState({
-    this.roles = const [], 
+    this.roles = const [],
     required this.questions,
     this.formData = const [],
     required this.pageController,

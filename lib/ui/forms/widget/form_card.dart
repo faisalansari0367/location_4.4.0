@@ -5,12 +5,12 @@ import 'package:gap/gap.dart';
 
 import '../../../constants/index.dart';
 
-class FormCard extends StatelessWidget {
+class QuestionCard extends StatelessWidget {
   final String question;
   final String? selectedValue;
   final ValueChanged<String>? onChanged;
 
-  const FormCard({
+  const QuestionCard({
     Key? key,
     required this.question,
     this.selectedValue,

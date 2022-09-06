@@ -36,11 +36,14 @@ class StorageService implements UserStorage {
   }) {
     // _userStream = BehaviorSubject<User?>.seeded(getUser());
     getUser();
+    _userRoles.add(getRoles());
     _listenForChanges();
+    _listenForUserRoleStream();
   }
 
   // late final BehaviorSubject<User?> _controller;
   final _controller = BehaviorSubject<User?>.seeded(null);
+  final _userRoles = BehaviorSubject<List<String>>.seeded([]);
 
   String get userKey => _Keys.user;
 
@@ -82,8 +85,15 @@ class StorageService implements UserStorage {
     box.watch(key: _Keys.user).map((event) {
       if (event.value == null) return null;
       return User.fromJson(Map<String, dynamic>.from(event.value));
-    }).listen((event) {
-      _controller.add(event);
+    }).listen((event) => _controller.add(event));
+  }
+
+  void _listenForUserRoleStream() {
+    box.watch(key: _Keys.userRoles).map((event) {
+      if (event.value == null) return null;
+      // return List<String>.from(event.value);
+      // return event.value;
+      _userRoles.add(event.value);
     });
   }
 
@@ -115,12 +125,13 @@ class StorageService implements UserStorage {
 
   @override
   Stream<List<String>?> get userRolesStream {
-    getRoles();
-    return box.watch(key: _Keys.userRoles).map((event) {
-      if (event.value == null) return null;
-      // return List<String>.from(event.value);
-      return event.value;
-    });
+    // getRoles();
+    // return box.watch(key: _Keys.userRoles).map((event) {
+    //   if (event.value == null) return null;
+    //   // return List<String>.from(event.value);
+    //   return event.value;
+    // });
+    return _userRoles.stream;
   }
 
   @override

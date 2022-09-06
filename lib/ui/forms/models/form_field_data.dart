@@ -4,14 +4,13 @@ import 'package:background_location/models/field_data.dart';
 import 'package:background_location/ui/forms/cubit/forms_cubit_cubit.dart';
 import 'package:background_location/ui/forms/widget/form_card.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
-import 'package:background_location/widgets/text_fields/date_field.dart';
-import 'package:background_location/widgets/text_fields/my_dropdown_field.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserFormData extends FormFieldData {
   final QuestionData questionData;
+  // final Map<String, dynamic>? data;
   final FormsCubit cubit;
   UserFormData(
     this.cubit, {
@@ -25,7 +24,7 @@ class UserFormData extends FormFieldData {
     switch (name.toCamelCase) {
       case 'serviceRole':
         return MyDropdownField(
-          options: cubit.state.roles,
+          options: data['roles'],
           onChanged: (s) => controller.text = s!,
           hintText: 'Select Role',
           value: controller.text,
@@ -70,7 +69,7 @@ class UserFormData extends FormFieldData {
       case 'signature':
         return super.fieldWidget;
       default:
-        return FormCard(
+        return QuestionCard(
           question: questionData.question,
           selectedValue: questionData.value,
           onChanged: (s) {

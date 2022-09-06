@@ -14,7 +14,8 @@ enum Roles {
 
 extension RolesString on String {
   Roles get getRole {
-    final result = Roles.values.firstWhere((element) => element.name.toLowerCase() == toLowerCase());
+    final result =
+        Roles.values.firstWhere((element) => element.name.toLowerCase() == replaceAll(' ', '').toLowerCase());
     return result;
   }
 }
