@@ -1,6 +1,5 @@
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/locale/currency_repo.dart';
-import 'package:api_repo/src/user/src/models/user_species.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
@@ -25,7 +24,7 @@ class ApiRepo implements Api {
     _client = Client(baseUrl: baseUrl, token: token);
     _userStream(_box, storage.userKey);
     _authRepo = AuthRepoImpl(client: _client, box: _box);
-    _userRepo = UserRepoImpl(client: _client);
+    _userRepo = UserRepoImpl(client: _client, box: _box);
     _localesApi = LocalesRepo();
     // await _localesApi.initLocale();
   }
@@ -140,6 +139,17 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<UserSpecies>> getUserSpecies() {
-     return _userRepo.getUserSpecies();
+    return _userRepo.getUserSpecies();
   }
+
+  @override
+  Stream<UserData?> get userDataStream => _authRepo.userDataStream;
+
+  @override
+  Future<ApiResult<UserFormsData>> getUserForms() {
+    return _userRepo.getUserForms();
+  }
+
+  @override
+  Stream<List<String>?> get userRolesStream => _authRepo.userRolesStream;
 }

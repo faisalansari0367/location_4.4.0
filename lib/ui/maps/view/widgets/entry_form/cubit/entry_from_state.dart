@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class EntryFormState extends Equatable {
   final List<String> questions;
   final bool isLoading;
-  final Map<String, bool> questionAnswers;
+  final Map<String, String> questionAnswers;
   EntryFormState({
     this.questionAnswers = const {},
     this.isLoading = false,
@@ -16,7 +16,7 @@ class EntryFormState extends Equatable {
   EntryFormState copyWith({
     List<String>? questions,
     bool? isLoading,
-    Map<String, bool>? questionAnswers,
+    Map<String, String>? questionAnswers,
   }) {
     return EntryFormState(
       questions: questions ?? this.questions,

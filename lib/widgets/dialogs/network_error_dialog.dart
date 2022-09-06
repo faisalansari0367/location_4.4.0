@@ -1,5 +1,4 @@
 import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +30,7 @@ class NetworkErrorDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Lottie.asset(
-            Assets.animations.networkError,
+            'assets/animations/network_error_light.json',
             frameRate: FrameRate.max,
           ),
           Padding(

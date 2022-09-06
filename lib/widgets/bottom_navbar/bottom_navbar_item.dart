@@ -1,6 +1,8 @@
+import 'package:background_location/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class BottomNavbarItem extends StatelessWidget {
@@ -26,10 +28,14 @@ class BottomNavbarItem extends StatelessWidget {
     final iconColor = color ?? (isSelected ? context.theme.primaryColor : Colors.grey.shade900);
 
     return Material(
+      color: Colors.white,
       child: InkWell(
-        onTap: onTap ?? () {},
+        onTap: onTap,
+        borderRadius: kBorderRadius,
         child: AnimatedContainer(
+          // margin: EdgeInsets.symmetric(vertical: 10.h),
           padding: EdgeInsets.only(
+            // top: 10.sp,
             left: 10.sp,
             right: 10.sp,
           ),
@@ -39,7 +45,7 @@ class BottomNavbarItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Spacer(),
+              Gap(15.h),
               SizedBox(
                 height: 24.sp,
                 child: _image(iconColor),
@@ -57,7 +63,8 @@ class BottomNavbarItem extends StatelessWidget {
                   color: iconColor,
                 ),
               ),
-              Spacer(),
+              // Spacer(),
+              Gap(10.h),
             ],
           ),
         ),

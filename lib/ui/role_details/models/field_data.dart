@@ -1,3 +1,4 @@
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/species.dart';
@@ -13,7 +14,7 @@ import 'package:get/get.dart';
 
 import '../widgets/property_address.dart';
 
-class FieldData {
+ class FieldData {
   final String name;
   Address? address;
   final Map<String, dynamic> data;
@@ -27,7 +28,7 @@ class FieldData {
   });
 
   FieldType get fieldType {
-    switch (name.camelCase) {
+    switch (name.toCamelCase) {
       case 'email':
         return FieldType.email;
       case 'mobile':
@@ -49,6 +50,7 @@ class FieldData {
       // return
       case 'exitDate':
       case 'licenseExpiryDate':
+      case 'day/date/time':
         return FieldType.date;
       case 'countryOfOrigin':
         return FieldType.countryOfOrigin;
@@ -68,6 +70,7 @@ class FieldData {
         return FieldType.species;
       default:
         return FieldType.text;
+      // return SizedBox.shrink();
     }
   }
 
@@ -76,7 +79,9 @@ class FieldData {
       // case FieldType.species:
       //   return SpeciesWidget(data: data);
       case FieldType.species:
-        return SpeciesWidget(data: data['species']);
+        return SpeciesWidget(
+          data: data['species'],
+        );
       case FieldType.region:
         return MyTextField(
           hintText: name,
@@ -187,30 +192,21 @@ class FieldData {
       case FieldType.passport:
         if (controller.text.isNotEmpty) controller.text = controller.text;
         return MyTextField(
-          // isOriginCountry: fieldType.isCountryOfOrigin,
-          // key: UniqueKey(),
           hintText: name,
           controller: controller,
           validator: Validator.text,
           inputFormatters: [],
-
-          // countryName: controller.text,
-          // onCountryChanged: (value) => controller.text = value,
         );
 
       default:
         if (controller.text.isNotEmpty) controller.text = controller.text.capitalize!;
         return MyTextField(
           hintText: name.capitalize,
-          // textCapitalization: TextCapitalization.characters,
-          // inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,
           validator: getValidator(),
         );
     }
   }
-
-  // Map<String, dynamic>
 
   String? Function(String?)? getValidator() {
     switch (fieldType) {

@@ -22,7 +22,8 @@ class ShimmerAnimation extends StatelessWidget {
     );
     final placeHolder = Shimmer.fromColors(
       highlightColor: imageBgColor,
-      baseColor: theme.colorScheme.secondary,
+      // baseColor: theme.colorScheme.secondary,
+      baseColor: Colors.grey.shade300,
       // baseColor: theme.cardColor,
       // baseColor: Colors.grey[100]!,
       direction: ShimmerDirection.ltr,

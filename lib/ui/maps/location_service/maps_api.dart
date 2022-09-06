@@ -7,8 +7,8 @@ import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:rxdart/subjects.dart';
 
 class _Endpoints {
-  static const String geofences = '/locations';
-  static String geofence(String? id) => '/location/$id';
+  static const String geofences = '/geofences';
+  static String geofence(String? id) => '/geofences/$id';
 
   // static const String notifyManager = '/notifyManager';
   static const String notifyProperyManager = '/users/notify-property-manager';
@@ -63,7 +63,7 @@ class MapsApi implements MapsRepo {
   @override
   Future<ApiResult<void>> updatePolygon(PolygonModel model) async {
     try {
-      final data = model.toJson();
+      final data = model.toJson()..remove('id');
       final result = await client.patch(_Endpoints.geofence(model.id), data: data);
       // print(result);
       final list = _controller.value;
@@ -85,7 +85,7 @@ class MapsApi implements MapsRepo {
         'pic': pic,
         'latitude': lat,
         'longitude': lng,
-        'locationID': locationId,
+        'geofenceID': locationId,
       });
       // print(result);
       // _controller.add([..._controller.value, model]);
@@ -103,7 +103,7 @@ class MapsApi implements MapsRepo {
       final result = await client.post(_Endpoints.registerEntryToLogbook, data: {
         'pic': pic,
         'form': form ?? '[]',
-        'locationID': locationId,
+        'geofenceID': locationId,
       });
       return ApiResult.success(data: result.data);
     } catch (e) {
@@ -114,7 +114,7 @@ class MapsApi implements MapsRepo {
   @override
   void cancel() {
     // _controller.value.a);
-    _controller.close();
+    _controller.add(<PolygonModel>[]);
   }
 
   // @override

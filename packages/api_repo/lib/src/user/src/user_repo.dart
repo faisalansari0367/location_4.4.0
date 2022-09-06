@@ -1,3 +1,6 @@
+import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:hive/hive.dart';
+
 import '../../../api_result/api_result.dart';
 import '../../../api_result/network_exceptions/network_exceptions.dart';
 import '../../../configs/client.dart';
@@ -13,18 +16,21 @@ abstract class UserRepo {
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams});
   Future<ApiResult<List<String>>> getFormQuestions();
   Future<ApiResult<UserSpecies>> getUserSpecies();
+  Future<ApiResult<UserFormsData>> getUserForms();
 }
 
 class UserRepoImpl extends UserRepo {
   final Client client;
+  final StorageService storage;
 
-  UserRepoImpl({required this.client});
+  UserRepoImpl({required this.client, required Box box}) : storage = StorageService(box: box);
 
   @override
   Future<ApiResult<UserRoles>> getUserRoles() async {
     try {
       final result = await client.get(Endpoints.getRoles);
       final model = UserRoles.fromMap(result.data);
+      storage.setRoles(model.roles);
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -90,8 +96,9 @@ class UserRepoImpl extends UserRepo {
   Future<ApiResult<List<String>>> getFormQuestions() async {
     try {
       final result = await client.get(Endpoints.formQuestions);
-      final list = (result.data['data']) as List;
-      final data = List<String>.from(list.first);
+      final forms = result.data['data']['forms'].first.first;
+      final list = (forms['questions']);
+      final data = List<String>.from(list);
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -103,7 +110,17 @@ class UserRepoImpl extends UserRepo {
     try {
       final result = await client.get(Endpoints.userSpecies);
       final list = UserSpecies.fromJson(result.data);
-      // final data = List<String>.from(list.first);
+      return ApiResult.success(data: list);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<UserFormsData>> getUserForms() async {
+    try {
+      final result = await client.get(Endpoints.usersForms);
+      final list = UserFormsData.fromJson(result.data);
       return ApiResult.success(data: list);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

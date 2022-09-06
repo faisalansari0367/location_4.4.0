@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
@@ -17,6 +16,7 @@ import 'package:background_location/widgets/animations/my_slide_animation.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/dialogs/error.dart';
 import 'package:background_location/widgets/dialogs/location_permission_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +77,20 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     cubit = context.read<MapsCubit>();
     WidgetsBinding.instance?.addObserver(this);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      final api = context.read<Api>();
+      final userData = api.getUserData();
+      if (userData == null) {
+        await DialogService.showDialog(
+          child: ErrorDialog(
+            message: 'Please select a role and come back again',
+            buttonText: 'Go back',
+            onTap: () {
+              Get.back();
+              Get.back();
+            },
+          ),
+        );
+      }
       await Permission.location.request();
       final result = await GeolocatorService.locationPermission();
       if (result) {
@@ -175,10 +189,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   Widget _buildNavbar() {
     return Container(
-      height: 70.h,
-      width: 1.sw,
-      alignment: Alignment.center,
-      decoration: MyDecoration.bottomSheetDecoration(),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+      ),
       child: BlocBuilder<MapsCubit, MapsState>(
         builder: (context, state) {
           return MySlideAnimation(
@@ -187,6 +201,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             // child: state.addingGeofence ? AddFence(cubit: cubit) : _normalNavbar(),
             child: Container(
               clipBehavior: Clip.antiAlias,
+              padding: EdgeInsets.only(bottom: context.mediaQueryViewPadding.bottom),
               decoration: MyDecoration.bottomSheetDecoration(),
               child: _getWidget(state),
             ),

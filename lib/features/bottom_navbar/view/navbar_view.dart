@@ -103,9 +103,9 @@ class NavbarView extends StatelessWidget {
     // ];
 
     return const [
-      GButton(icon: Icons.dashboard, text: 'Dashboard'),
-      GButton(icon: LineIcons.userAstronaut, text: 'Admin'),
-      GButton(icon: LineIcons.userAlt, text: 'Select Role'),
+      GButton(icon: Icons.dashboard, text: Strings.dashboard),
+      GButton(icon: LineIcons.qrcode, text: 'Scan Code'),
+      GButton(icon: LineIcons.userAlt, text: Strings.select + Strings.role),
       // GButton(icon: LineIcons.map, text: 'Maps'),
       GButton(icon: LineIcons.userCog, text: 'Settings'),
     ];

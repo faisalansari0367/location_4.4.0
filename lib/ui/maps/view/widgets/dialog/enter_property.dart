@@ -39,7 +39,7 @@ class _EnterPropertyState extends State<EnterProperty> {
             StreamBuilder<Set<PolygonModel>>(
               stream: widget.stream,
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.isEmpty) return CircularProgressIndicator();
+                if (!snapshot.hasData || snapshot.data!.isEmpty) return Center(child: CircularProgressIndicator());
                 return AnimatedSize(
                   duration: 300.milliseconds,
                   child: AutoSpacing(
@@ -89,6 +89,7 @@ class _EnterPropertyState extends State<EnterProperty> {
     return ListTile(
       selected: true,
       selectedTileColor: polygon.color.withOpacity(0.2),
+      trailing: Icon(Icons.chevron_right),
       title: Text(
         polygon.name,
         style: TextStyle(

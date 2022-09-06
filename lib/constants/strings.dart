@@ -69,7 +69,9 @@ class Strings {
       book = 'Book',
       geofence = 'Geofence',
       envds = 'Envds',
-      links = 'Links', check = 'Check';
+      links = 'Links',
+      check = 'Check',
+      commodities = 'Commodities';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';
@@ -85,7 +87,7 @@ class Strings {
   static String get visitorLogBook => '$visitor $log$book';
   static String get geofences => '${geofence}s';
   static String get visitorCheckIn => '$visitor $check-${in_}s';
-
+  static String get selectCommodities => '$select $commodities';
 
   // confirm password
   static String get confirmPassword => '$confirm $password';

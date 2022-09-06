@@ -1,11 +1,12 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:country_codes/country_codes.dart';
-import 'package:country_list/country_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
+
+import '../../constants/countries.dart';
 
 class PhoneTextField extends StatefulWidget {
   final void Function(String, String)? onChanged;
@@ -38,7 +39,9 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
     final api = context.read<Api>();
     final user = api.getUser();
     if (user == null) return;
-    final country = countryList.where((element) => '+${element.phoneCode}' == user.countryCode);
+    if (user.countryCode == null) return;
+
+    final country = countryList.where((element) => '+${element.phoneCode}'.compareTo(user.countryCode!) == 0);
     if (country.isEmpty) return;
     countryCode = country.first.isoCode;
   }

@@ -71,8 +71,8 @@ class MyTextField extends StatelessWidget {
       obscureText: obscureText,
       autovalidateMode: autovalidateMode,
       enabled: enabled,
-      // maxLines: maxLines,
-      // minLines: minLine,
+      maxLines: maxLines,
+      minLines: minLine,
       controller: controller,
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
@@ -80,7 +80,6 @@ class MyTextField extends StatelessWidget {
       validator: validator ?? Validator.text,
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
-
       onTap: onTap,
       autofocus: autoFocus,
       enableSuggestions: true,

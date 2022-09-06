@@ -35,7 +35,6 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).iconTheme.color;
     return MyTextField(
-      
       controller: widget.controller,
       validator: widget.validator ?? Validator.password,
       onChanged: widget.onChanged,
@@ -54,9 +53,7 @@ class _PasswordFieldState extends State<PasswordField> {
       textInputAction: widget.textInputAction,
       textInputType: TextInputType.visiblePassword,
       inputFormatters: [],
-      prefixIcon: Icon(
-        Icons.lock_outlined,
-      ),
+      prefixIcon: Icon(Icons.lock_outlined),
     );
   }
 }

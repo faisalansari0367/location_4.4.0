@@ -1,4 +1,5 @@
 import 'package:background_location/constants/constans.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class MyListview<T> extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Data not found',
+              Strings.somethingWentWrong,
               style: TextStyle(
                 fontSize: 20.sp,
                 color: Color.fromARGB(255, 241, 62, 62),

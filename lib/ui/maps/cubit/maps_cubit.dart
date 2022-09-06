@@ -81,6 +81,12 @@ class MapsCubit extends Cubit<MapsState> {
     }
   }
 
+  @override
+  void emit(MapsState state) {
+    if (isClosed) return;
+    super.emit(state);
+  }
+
   void startEditPolygon(PolygonModel polygon) {
     emit(state.copyWith(isEditingFence: true, latLngs: polygon.points, currentPolygon: polygon));
     // state.copyWith(latLngs: )
@@ -189,7 +195,10 @@ class MapsCubit extends Cubit<MapsState> {
     final result = await _mapsRepo.savePolygon(model);
     result.when(
       success: (data) => _polygonsService.clear(),
-      failure: (e) => DialogService.failure(error: e),
+      failure: (e) {
+        DialogService.failure(error: e);
+        _polygonsService.clear();
+      },
     );
 
     // _getAllPolygon();

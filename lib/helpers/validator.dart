@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:form_validator/form_validator.dart';
+import 'package:get/get.dart';
 
 class Validator {
   static String? email(String? value) {
@@ -42,6 +43,15 @@ class Validator {
     final validate = ValidationBuilder().phone('Mobile is not valid').build();
     final result = validate(value);
     return result;
+  }
+
+  static String? date(DateTime? date) {
+    if (date == null) return 'This field is required';
+    var message;
+    if (date.isBefore(DateTime.now().subtract(10.days))) {
+      message = "Can't be more than 10 days before today's date";
+    }
+    return message;
   }
 
   //  static String? dob(String? value) {

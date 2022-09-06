@@ -73,8 +73,8 @@ dependencies:
     path: packages/api_repo
   local_auth_repo:
     path: packages/local_auth
-  country_list:
-    path: packages/country_list
+  # country_list:
+  #   path: packages/country_list
   # location_repo:
   #   path: packages/location_repo
   local_notification:
@@ -95,6 +95,9 @@ dependencies:
   line_icons: ^2.0.1
   google_nav_bar: ^5.0.6
   webview_flutter: ^3.0.4
+  qr_flutter: ^4.0.0
+  mobile_scanner: ^1.1.2
+  qr_code_scanner: ^0.7.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.3
@@ -144,7 +147,9 @@ flutter:
     - assets/images/
     - assets/icons/bottom_navbar/
     - assets/icons/
-    # - assets/countries/
+    - assets/icons/dashboard/
+
+    - assets/countries/
 
   # fonts:
   #   - family: Schyler

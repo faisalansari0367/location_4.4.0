@@ -15,7 +15,16 @@ class DrawerItems {
   final Api api;
   late List<DrawerItem> items;
   DrawerItems(this.api) {
-    items = [
+    items = _getItems;
+  }
+
+  List<DrawerItem> get _getItems {
+    return [
+      DrawerItem(
+        text: 'Dashboard',
+        iconData: Icons.dashboard,
+        page: NavbarPage(),
+      ),
       DrawerItem(
         text: Strings.home,
         iconData: Icons.home,
@@ -33,11 +42,6 @@ class DrawerItems {
           page: MapsPage(fromDrawer: true),
         ),
       DrawerItem(
-        text: 'Dashboard',
-        iconData: Icons.dashboard,
-        page: NavbarPage(),
-      ),
-      DrawerItem(
         text: Strings.settings,
         iconData: Icons.settings,
         page: SettingsPage(),
@@ -53,51 +57,4 @@ class DrawerItems {
       ),
     ];
   }
-  // items = [ DrawerItem(
-  //   text: Strings.home,
-  //   iconData: Icons.home,
-  //   page: SelectRolePage(),
-  // ),
-  // DrawerItem(
-  //   text: Strings.map,
-  //   iconData: Icons.map,
-  //   page: MapsPage(),
-  // ),
-  // DrawerItem(
-  //   text: Strings.settings,
-  //   iconData: Icons.settings,
-  //   page: SettingsPage(),
-  // ),
-  // DrawerItem(
-  //   onTap: () => api
-  //   text: Strings.logout,
-  //   iconData: Icons.logout,
-  //   page: LoginPage(),
-  // ),
-  // ];
-  // }
-
-  // final items = [
-  //   DrawerItem(
-  //     text: Strings.home,
-  //     iconData: Icons.home,
-  //     page: SelectRolePage(),
-  //   ),
-  //   DrawerItem(
-  //     text: Strings.map,
-  //     iconData: Icons.map,
-  //     page: MapsPage(),
-  //   ),
-  //   DrawerItem(
-  //     text: Strings.settings,
-  //     iconData: Icons.settings,
-  //     page: SettingsPage(),
-  //   ),
-  //   DrawerItem(
-  //     onTap: () => api.logout();
-  //     text: Strings.logout,
-  //     iconData: Icons.logout,
-  //     page: LoginPage(),
-  //   ),
-  // ];
 }

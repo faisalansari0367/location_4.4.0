@@ -1,3 +1,5 @@
+import 'package:background_location/helpers/validator.dart';
+import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +16,7 @@ class MyDateField extends StatefulWidget {
 
 class _MyDateFieldState extends State<MyDateField> {
   final controller = TextEditingController();
+  DateTime? pickedDateTime;
 
   @override
   void initState() {
@@ -26,18 +29,16 @@ class _MyDateFieldState extends State<MyDateField> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return MyTextField(
+      focusNode: AlwaysDisabledFocusNode(),
       onTap: _showDatePicker,
-      child: AbsorbPointer(
-        child: MyTextField(
-          // enabled: false,
-          suffixIcon: Icon(Icons.date_range_outlined),
-          hintText: widget.label,
-          textInputType: TextInputType.datetime,
-          controller: controller,
-          // validator: (value) => Validator.validateDate(value),
-        ),
-      ),
+      // enabled: false,
+      suffixIcon: Icon(Icons.date_range_outlined),
+      hintText: widget.label,
+      textInputType: TextInputType.datetime,
+      controller: controller,
+      validator: (s) => Validator.date(pickedDateTime),
+      // validator: (value) => Validator.validateDate(value),
     );
   }
 
@@ -50,6 +51,7 @@ class _MyDateFieldState extends State<MyDateField> {
     );
     if (pickedDate != null) {
       setState(() {
+        pickedDateTime = pickedDate;
         controller.text = formatDate(pickedDate);
         widget.onChanged?.call(pickedDate.toIso8601String());
       });

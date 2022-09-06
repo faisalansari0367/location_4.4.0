@@ -6,11 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../../constants/constans.dart';
-
 class SpeciesWidget extends StatefulWidget {
   final UserSpecies data;
-  const SpeciesWidget({Key? key, required this.data}) : super(key: key);
+  final List<String> selectedSpecies;
+
+  const SpeciesWidget({
+    Key? key,
+    required this.data,
+    this.selectedSpecies = const [],
+  }) : super(key: key);
 
   @override
   State<SpeciesWidget> createState() => _SpeciesWidgetState();
@@ -33,10 +37,10 @@ class _SpeciesWidgetState extends State<SpeciesWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Select Species',
+            Strings.selectCommodities,
             style: context.textTheme.headline6?.copyWith(
               fontWeight: FontWeight.w600,
-              // fontSize: 30.h,
+              // fontSize: 25.w,
             ),
           ),
           Gap(20.h),
@@ -62,7 +66,7 @@ class _SpeciesWidgetState extends State<SpeciesWidget> {
             style: TextStyle(
               color: Colors.grey.shade900,
               fontWeight: FontWeight.w600,
-              fontSize: 20.h,
+              // fontSize: 20.h,
             ),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/api_result.dart';
 
 import 'models/models.dart';
@@ -15,4 +16,7 @@ abstract class AuthRepo {
   Future<void> logout();
   String? getToken();
   Stream<User?> get userStream;
+  Stream<UserData?> get userDataStream;
+  Stream<List<String>?> get userRolesStream;
+
 }

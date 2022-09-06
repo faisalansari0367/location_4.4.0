@@ -96,7 +96,7 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
                 child: Selector<DrawerCubit, int>(
                   selector: (p0, p1) => p1.selectedIndex,
                   builder: (context, value, child) => DrawerMenu(
-                    items: drawerItems.items,
+                    // items: drawerItems.items,
                     selectedIndex: drawer.selectedIndex,
                     onItemSelected: (page) {
                       drawer.closeDrawer();

@@ -1,5 +1,5 @@
-import 'package:background_location/ui/admin/view/admin_page.dart';
 import 'package:background_location/ui/dashboard/dashboard_view.dart';
+import 'package:background_location/ui/scan_qr/scan_qr.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/settings/view/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,8 @@ class NavbarCubit extends Cubit<NavbarState> {
 
   static const _items = [
     DashboardView(),
-    AdminPage(),
+    ScanQrPage(),
+    // AdminPage(),
     SelectRolePage(),
     // MapsPage(),
 

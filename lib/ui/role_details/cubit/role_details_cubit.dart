@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
@@ -74,6 +73,15 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     result.when(
       success: (data) {
         final fields = [...state.fieldsData];
+        final speciesData = userRoleDetails.containsKey(FieldType.species.name)
+            ? List<String>.from(userRoleDetails[FieldType.species.name])
+            : <String>[];
+        if (speciesData.isNotEmpty) {
+          data.data!.forEach((element) {
+            final hasElement = speciesData.contains(element.species);
+            if (hasElement) element.value = true;
+          });
+        }
         fields.add(
           FieldData(
             name: 'Species',
@@ -252,7 +260,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           final UserSpecies species = field.data['species'] as UserSpecies;
           final list = (species.data ?? []).where((element) => element.value == true).map((e) => e.species).toList();
           if (list.isEmpty) return;
-          data[field.fieldType.name] = jsonEncode(list);
+          data[field.fieldType.name] = (list);
           return;
         }
         data[field.name.camelCase!.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();

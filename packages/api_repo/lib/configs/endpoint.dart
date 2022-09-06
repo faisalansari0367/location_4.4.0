@@ -12,7 +12,9 @@ class Endpoints {
       updateUser = '$users/me',
       formQuestions = '$users/forms',
       userSpecies = '$users/species',
-      logRecords = '$users/log-records';
+      logRecords = '$users/log-records',
+      usersForms = '$users/forms',
+      exportLogRecords = '$users/export-log-records';
 
   // static String user(int id) => '/user/$id';
 }

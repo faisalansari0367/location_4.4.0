@@ -4,11 +4,12 @@ import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.da
 import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
 import 'package:background_location/widgets/widgets.dart';
-import 'package:country_list/country_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+
+import '../../constants/countries.dart';
 
 class CountryField extends StatefulWidget {
   final TextEditingController? controller;
@@ -121,9 +122,8 @@ class _CountryFieldState extends State<CountryField> {
       children: [
         Gap(20.w),
         Image.asset(
-          'assets/countries/${country!.isoCode.toLowerCase()}.png',
+          country!.flag,
           width: 32.sp,
-          // height: 3.width,
         ),
         Gap(4.width),
       ],
@@ -191,7 +191,7 @@ class _CountrySelectionState extends State<CountrySelection> {
                   return ListTile(
                     title: Text(country.name),
                     leading: Image.asset(
-                      'assets/countries/${country.isoCode.toLowerCase()}.png',
+                      country.flag,
                       width: 30,
                     ),
                     onTap: () {

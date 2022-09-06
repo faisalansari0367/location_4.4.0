@@ -87,6 +87,7 @@ class AuthRepoImpl implements AuthRepo {
     await Future.wait([
       storage.removeToken(),
       storage.removeUser(),
+      storage.removeUserData(),
     ]);
   }
 
@@ -122,4 +123,11 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   UserData? getUserData() => storage.getUserData();
+
+  @override
+  Stream<UserData?> get userDataStream => storage.userDataStrem;
+
+  @override
+  
+  Stream<List<String>?> get userRolesStream => storage.userRolesStream;
 }

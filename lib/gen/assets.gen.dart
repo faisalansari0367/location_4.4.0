@@ -15,6 +15,11 @@ class $AssetsAnimationsGen {
   /// File path: assets/animations/error.json
   String get error => 'assets/animations/error.json';
 
+  String get network_error_light => 'assets/animations/network_error_light.json';
+
+  String get dashboardLogo => 'assets/icons/dashboard/dashboard_logo.png';
+
+
   /// File path: assets/animations/mail_sent.json
   String get mailSent => 'assets/animations/mail_sent.json';
 

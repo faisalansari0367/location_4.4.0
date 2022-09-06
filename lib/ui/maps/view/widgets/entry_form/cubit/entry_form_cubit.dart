@@ -21,11 +21,19 @@ class EntryFormCubit extends Cubit<EntryFormState> {
 
   Future<void> getFormQuestions() async {
     emit(state.copyWith(isLoading: true));
-    final result = await api.getFormQuestions();
+    final result = await api.getUserForms();
     result.when(
       success: (s) {
+        final userData = api.getUserData();
+        final role = userData!.role!.getRole;
+        if (role.isInternationalTraveller || role.isVisitor) {
+          emit(state.copyWith(questions: s.data?.forms?.first.questions));
+        } else {
+          emit(state.copyWith(questions: s.data?.forms?[1].questions));
+        }
         // final fieldData = s.map((e) => FieldData(name: e, controller: TextEditingController()));
-        emit(state.copyWith(questions: s));
+
+        // emit(state.copyWith(questions: s));
       },
       failure: (e) => DialogService.failure(error: e),
     );
@@ -36,8 +44,8 @@ class EntryFormCubit extends Cubit<EntryFormState> {
   //   emit(state.copyWith())
   // }
 
-  void setQuestionValue(String question, bool answer) {
-    final map = <String, bool>{}..addAll(state.questionAnswers);
+  void setQuestionValue(String question, String answer) {
+    final map = <String, String>{}..addAll(state.questionAnswers);
     map[question] = answer;
     print(map);
     // if (map.containsKey(question)) {
@@ -57,6 +65,10 @@ class EntryFormCubit extends Cubit<EntryFormState> {
       }
     }
     return result;
+  }
+
+  void getFormData(Map<String, String> data) {
+    emit(state.copyWith(questionAnswers: data));
   }
 
   void onPressed() async {

@@ -6,7 +6,7 @@ class MyDecoration {
   static const inputRadius = 50.0;
   static final inputBorderRadius = BorderRadius.circular(inputRadius);
   static const inputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(50)),
+    borderRadius: BorderRadius.all(Radius.circular(inputRadius)),
     borderSide: BorderSide(color: Color.fromARGB(158, 152, 152, 152)),
   );
 

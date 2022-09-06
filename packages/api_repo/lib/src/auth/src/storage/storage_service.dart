@@ -8,6 +8,7 @@ class _Keys {
   static const String user = 'user';
   static const String token = 'token';
   static const String userData = 'userData';
+  static const String userRoles = 'userRoles';
 }
 
 abstract class UserStorage {
@@ -16,11 +17,16 @@ abstract class UserStorage {
   Future<void> removeUser();
   Future<void> removeToken();
   Future<void> setUserData(UserData userData);
-  UserData? getUserData();
+  Future<void> setRoles(List<String> userData);
+  List<String> getRoles();
 
+  UserData? getUserData();
+  Future<void> removeUserData();
   Future<void> setToken(String token);
   String? getToken();
   Stream<User?> get userStream;
+  Stream<UserData?> get userDataStrem;
+  Stream<List<String>?> get userRolesStream;
 }
 
 class StorageService implements UserStorage {
@@ -94,5 +100,38 @@ class StorageService implements UserStorage {
     final data = box.get(_Keys.userData);
     if (data == null) return null;
     return UserData.fromJson(Map<String, dynamic>.from(box.get(_Keys.userData)));
+  }
+
+  @override
+  Future<void> removeUserData() async {
+    await box.delete(_Keys.userData);
+  }
+
+  @override
+  Stream<UserData?> get userDataStrem => box.watch(key: _Keys.userData).map((event) {
+        if (event.value == null) return null;
+        return UserData.fromJson(Map<String, dynamic>.from(event.value));
+      });
+
+  @override
+  Stream<List<String>?> get userRolesStream {
+    getRoles();
+    return box.watch(key: _Keys.userRoles).map((event) {
+      if (event.value == null) return null;
+      // return List<String>.from(event.value);
+      return event.value;
+    });
+  }
+
+  @override
+  List<String> getRoles() {
+    final data = box.get(_Keys.userData);
+    if (data == null) return [];
+    return List<String>.from(box.get(_Keys.userRoles));
+  }
+
+  @override
+  Future<void> setRoles(List<String> userRoles) async {
+    await box.put(_Keys.userRoles, userRoles);
   }
 }
