@@ -28,24 +28,22 @@ class PolygonModel {
     };
   }
 
-  Map<String, dynamic> _latLngToJson(LatLng latLng) {
-    return <String, dynamic>{
-      'latitude': latLng.latitude,
-      'longitude': latLng.longitude,
-    };
+  List<double> _latLngToJson(LatLng latLng) {
+    return [latLng.latitude, latLng.longitude];
   }
 
-  static LatLng _latLngFromJson(Map<String, dynamic> latLng) {
-    return LatLng(double.parse(latLng['latitude']), double.parse(latLng['longitude']));
+  static LatLng _latLngFromJson(List<dynamic> latLng) {
+    return LatLng((latLng.first), (latLng.last));
   }
 
   factory PolygonModel.fromJson(Map<String, dynamic> json) {
+    final points = json['points']['coordinates'][0];
     return PolygonModel(
       createdBy: UserData.fromJson(json['createdBy']),
       id: json['id'].toString(),
       color: colorFromHex(json['color']),
       points: List<LatLng>.from(
-          (json['points'] as List<dynamic>).map((x) => _latLngFromJson(Map<String, dynamic>.from(x))).toList()),
+          (json['points']['coordinates'][0] as List<dynamic>).map((x) => _latLngFromJson((x))).toList()),
       name: json['name'],
     );
   }

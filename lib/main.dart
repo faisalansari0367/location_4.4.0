@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:api_repo/api_repo.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
+import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:local_notification/local_notification.dart';
 import 'package:path_provider/path_provider.dart';
@@ -57,14 +60,18 @@ Future<void> main() async {
 
   await runZonedGuarded(() async {
     await Firebase.initializeApp();
-    final repo = ApiRepo();
+    await Hive.initFlutter();
+    final _box = await Hive.openBox('storage');
     final notifications = AwesomeNotifications();
-    await repo.init(baseUrl: ApiConstants.baseUrl);
+    final repo = ApiRepo();
+    final localApi = LocalApi();
+    await localApi.init(baseUrl: ApiConstants.baseUrl, box: _box);
+    await repo.init(baseUrl: ApiConstants.baseUrl, box: _box);
+
     final mapsRepo = MapsApi(client: repo.client);
     // final mapsRepo = MapsRepoLocal();
-    // await mapsRepo.init();
+    await mapsRepo.init();
     await notifications.initialize(
-      
       'resource://drawable/itrak_logo_transparent',
       [
         NotificationChannel(
@@ -97,10 +104,11 @@ Future<void> main() async {
     HydratedBlocOverrides.runZoned(
       () => runApp(
         MyApp(
+          localApi: localApi,
           pushNotificationService: pushNotification,
           api: repo,
           notificationService: localNotification,
-          mapsRepoLocal: mapsRepo,
+          mapsRepo: mapsRepo,
         ),
       ),
       storage: storage,
@@ -117,16 +125,18 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   final Api api;
-  final MapsRepo mapsRepoLocal;
+  final MapsRepo mapsRepo;
   final NotificationService notificationService;
   final PushNotificationService pushNotificationService;
+  final LocalApi localApi;
 
   const MyApp({
     Key? key,
     required this.api,
     required this.notificationService,
-    required this.mapsRepoLocal,
+    required this.mapsRepo,
     required this.pushNotificationService,
+    required this.localApi,
   }) : super(key: key);
 
   @override
@@ -138,8 +148,12 @@ class _MyAppState extends State<MyApp> {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enableCrashlytics);
   }
 
+  // late MapsRepoLocal mapsRepoLocal;
   @override
   void initState() {
+    MyConnectivity();
+    // mapsRepoLocal = MapsRepoLocal();
+    // mapsRepoLocal.init();
     _initializeFlutterFire();
     super.initState();
   }
@@ -151,8 +165,10 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<Api>.value(value: widget.api),
         RepositoryProvider<NotificationService>.value(value: widget.notificationService),
         RepositoryProvider<PushNotificationService>.value(value: widget.pushNotificationService),
-        RepositoryProvider<MapsRepo>.value(value: widget.mapsRepoLocal),
+        RepositoryProvider<MapsRepo>.value(value: widget.mapsRepo),
+        RepositoryProvider<LocalApi>.value(value: widget.localApi),
         RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
+        // RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,

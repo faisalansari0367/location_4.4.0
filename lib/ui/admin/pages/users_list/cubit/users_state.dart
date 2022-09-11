@@ -8,7 +8,7 @@ class UsersState extends Equatable {
   final String? filter;
   final Map<int, UserStatus> status;
   final TextEditingController controller;
-  final List<String> roles;
+  final List<UserRoles> roles;
   final String? selectRole;
   final bool isLoading;
   UsersState({
@@ -28,7 +28,7 @@ class UsersState extends Equatable {
     List<UserData>? users,
     String? filter,
     Map<int, UserStatus>? status,
-    List<String>? roles,
+    List<UserRoles>? roles,
     bool? isLoading,
     String? selectRole,
     TextEditingController? controller,

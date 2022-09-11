@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../bottom_sheet/bottom_sheet_service.dart';
 import 'focus_nodes/always_disabled_focus_node.dart';
 import 'my_text_field.dart';
-import 'text_formatters/CapitalizeFirstLetter.dart';
+import 'text_formatters/input_formatters.dart';
 
 class MyDropdownField extends StatefulWidget {
   final String hintText;

@@ -3,6 +3,7 @@ import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
+import 'package:background_location/ui/maps/location_service/storage_service.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -17,6 +18,7 @@ class _Endpoints {
 
 class MapsApi implements MapsRepo {
   final Client client;
+  late MapsStorageService storage;
   MapsApi({required this.client}) {
     // getAllPolygon();
   }
@@ -29,6 +31,9 @@ class MapsApi implements MapsRepo {
       final result = await client.get(_Endpoints.geofences);
       final data = (result.data['data'] as List<dynamic>).map((e) => PolygonModel.fromJson(e)).toList();
       _controller.add(data);
+      // for (var item in data) {
+      //   // await storage.savePolygon(item);
+      // }
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -38,7 +43,14 @@ class MapsApi implements MapsRepo {
 
   @override
   Future<void> init() async {
+    // storage = MapsStorageService();
+    // await storage.init();
     getAllPolygon();
+    // polygonStream.listen((event) async {
+    //   for (var item in event) {
+    //     await storage.savePolygon(item);
+    //   }
+    // });
   }
 
   @override

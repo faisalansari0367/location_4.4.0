@@ -12,3 +12,6 @@ const kDuration = Duration(milliseconds: 500);
 const kBorderSide = BorderSide(color: Colors.transparent);
 const kPadding = EdgeInsets.all(20);
 const kInputPadding = const EdgeInsets.fromLTRB(20, 15, 12, 15);
+
+
+

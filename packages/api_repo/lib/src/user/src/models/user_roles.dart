@@ -2,22 +2,29 @@
 import 'dart:convert';
 
 class UserRoles {
-  final List<String> roles;
+  final List<String> fields;
+  final String role;
 
-  UserRoles({this.roles = const []});
+  UserRoles({
+    required this.fields,
+    required this.role,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'data': roles,
+      'fields': fields,
+      'role': role,
     };
   }
 
   factory UserRoles.fromMap(Map<String, dynamic> map) {
-    return UserRoles(roles: List<String>.from((map['data'])));
+    return UserRoles(
+      fields: List<String>.from(map['fields']),
+      role: map['role'],
+    );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserRoles.fromJson(String source) =>
-      UserRoles.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserRoles.fromJson(String source) => UserRoles.fromMap(json.decode(source) as Map<String, dynamic>);
 }

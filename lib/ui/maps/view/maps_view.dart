@@ -201,7 +201,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             // child: state.addingGeofence ? AddFence(cubit: cubit) : _normalNavbar(),
             child: Container(
               clipBehavior: Clip.antiAlias,
-              padding: EdgeInsets.only(bottom: context.mediaQueryViewPadding.bottom),
+              padding: EdgeInsets.only(bottom: min(context.mediaQueryViewPadding.bottom, 15.h)),
               decoration: MyDecoration.bottomSheetDecoration(),
               child: _getWidget(state),
             ),

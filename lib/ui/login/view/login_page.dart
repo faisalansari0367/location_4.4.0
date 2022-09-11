@@ -12,7 +12,11 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(repository: context.read<Api>(), email: email),
+      create: (context) => LoginCubit(
+        localApi: context.read<LocalApi>(),
+        repository: context.read<Api>(),
+        email: email,
+      ),
       child: const LoginView(),
     );
   }

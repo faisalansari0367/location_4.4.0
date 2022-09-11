@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/property_address.dart';
@@ -24,21 +25,34 @@ export 'role_details_state.dart';
 class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   final String role;
   final Api api;
+  final LocalApi localApi;
+  final List<String> fields;
 
   late Map<String, dynamic> user;
   final formKey = GlobalKey<FormState>();
+  late Api apiService;
 
-  RoleDetailsCubit(this.role, this.api) : super(RoleDetailsState()) {
-    user = api.getUser()!.toJson();
+  RoleDetailsCubit(this.role, this.localApi, this.api, {this.fields = const []}) : super(RoleDetailsState()) {
+    apiService = api;
+    MyConnectivity().connectionStream.listen((event) {
+      apiService = event ? api : localApi;
+      // emit(state.copyWith())
+    });
+    emit(state.copyWith(fields: fields));
+    user = apiService.getUser()!.toJson();
     _init();
   }
 
   // final fieldsData = <FieldData>[];
 
   void _init() async {
+    await 200.milliseconds.delay();
     await _getFields();
     await getRoleDetails();
     await getSpecies();
+
+    // api.getLicenceCategories();
+    getLicenceCategories();
     // await Future.wait([
     //   _getFields(),
     //   getRoleDetails(),
@@ -52,15 +66,39 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     super.emit(state);
   }
 
+  Future<void> getLicenceCategories() async {
+    final result = await api.getLicenceCategories();
+    result.when(
+        success: (s) {
+          final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
+          if (field.isEmpty) return;
+          // field.first.data['licenseCategories'] = s;
+          final index = state.fieldsData.indexOf(field.first);
+          final fieldsData = state.fieldsData;
+          fieldsData[index] = FieldData(
+            name: field.first.name,
+            controller: field.first.controller,
+            data: {'licenseCategories': s},
+          );
+          emit(state.copyWith(fieldsData: fieldsData));
+        },
+        failure: (failure) {});
+  }
+
   Map<String, dynamic> get userRoleDetails => state.userRoleDetails;
 
   Future<void> getRoleDetails() async {
     emit(state.copyWith(isLoading: true));
-    final data = await api.getRoleData();
+    final data = await apiService.getRoleData(role);
 
     data.when(
       success: (data) {
-        emit(state.copyWith(userRoleDetails: Map<String, dynamic>.from(data['data']), isLoading: false));
+        emit(
+          state.copyWith(
+            userRoleDetails: Map<String, dynamic>.from(data['data']),
+            isLoading: false,
+          ),
+        );
         _getFieldsData();
       },
       failure: _failure,
@@ -69,7 +107,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
   Future<void> getSpecies() async {
     if (role != 'Producer') return;
-    final result = await api.getUserSpecies();
+    final result = await apiService.getUserSpecies();
     result.when(
       success: (data) {
         final fields = [...state.fieldsData];
@@ -184,9 +222,14 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     if (state.fields.isNotEmpty) {
       _getFieldsData();
     }
-    emit(state.copyWith(isLoading: state.fields.isEmpty));
-    final fields = await api.getFields();
-    fields.when(success: _success, failure: _failure);
+    // emit(state.copyWith(isLoading: state.fields.isEmpty));
+
+    // apiService.userRolesStream.listen((event) {
+    //   // _success(event);
+    //   // emit(state.copyWith(fields: event))
+    // });
+    // final fields = await apiService.(role);
+    // fields.when(success: _success, failure: _failure);
     // emit(state.copyWith(isLoading: false));
   }
 
@@ -304,8 +347,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       }
 
       // if()
-
-      final result = await api.updateRole(data);
+      // final role = apiService.getUser()!.role!;
+      final result = await apiService.updateRole(role, data);
       result.when(
         success: (data) => Get.to(() => MapsPage()),
         failure: (error) => DialogService.failure(

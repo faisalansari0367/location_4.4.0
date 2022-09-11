@@ -6,13 +6,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/role_details_cubit.dart';
 
 class RoleDetailsPage extends StatelessWidget {
-  final String role;
-  const RoleDetailsPage({Key? key, required this.role}) : super(key: key);
+  // final String role;
+  final UserRoles userRole;
+
+  const RoleDetailsPage({Key? key, required this.userRole}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RoleDetailsCubit(role, context.read<Api>()),
+      create: (context) => RoleDetailsCubit(
+        userRole.role,
+        context.read<LocalApi>(),
+        context.read<Api>(),
+        fields: userRole.fields,
+      ),
       child: const RoleDetailsView(),
     );
   }

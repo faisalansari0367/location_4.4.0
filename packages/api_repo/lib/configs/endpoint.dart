@@ -1,17 +1,25 @@
 class Endpoints {
-  static const String signUp = '/auth/signup',
-      verifyOtp = '/auth/verify',
-      forgotPassword = '/auth/forgot-password',
-      resetPassword = '/auth/reset-password',
-      signIn = '/auth/signin',
+  static const records = '/records';
+  static const users = '/users';
+  static const auth = '/auth';
 
-      /// users
-      users = '/users',
-      getRoles = '$users/roles',
+  static const String signUp = '$auth/signup',
+      verifyOtp = '$auth/verify',
+      forgotPassword = '$auth/forgot-password',
+      resetPassword = '$auth/reset-password',
+      signIn = '$auth/signin',
+
+      /// records
+      getRoles = '$records/roles',
+      userSpecies = '$records/species',
+      licenceCategories = '$records/licenceCategories',
+      fieldsRecords = '$records/fieldsRecord',
+      forms = '$records/forms',
+
+
+      // users
       getFields = '$users/fields',
       updateUser = '$users/me',
-      formQuestions = '$users/forms',
-      userSpecies = '$users/species',
       logRecords = '$users/log-records',
       usersForms = '$users/forms',
       exportLogRecords = '$users/export-log-records';

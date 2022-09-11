@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/maps/models/polygon_model.dart';
-import 'package:background_location/ui/maps/view/widgets/entry_form/entry_form.dart';
 import 'package:background_location/ui/visitor_check_in/cubit/visitor_check_in_cubit.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
@@ -65,23 +63,23 @@ class VisitorCheckInView extends StatelessWidget {
                         ),
                       ),
                       Gap(10.h),
-                      TextButton(
-                        child: Text('Open form'),
-                        onPressed: () {
-                          final questions = state.formData?.data?.forms?[1].questions ?? [];
-                          final map = List<String>.from(questions)
-                              .map((e) => <String, dynamic>{'question': e, 'value': null})
-                              .toList();
-                          // MobileScanner
-                          Get.to(
-                            () => EntryForm(
-                              polygonModel: PolygonModel(name: 'f', color: Colors.red, points: []),
+                      // TextButton(
+                      //   child: Text('Open form'),
+                      //   onPressed: () {
+                      //     final questions = state.formData?.data?.forms?[1].questions ?? [];
+                      //     final map = List<String>.from(questions)
+                      //         .map((e) => <String, dynamic>{'question': e, 'value': null})
+                      //         .toList();
+                      //     // MobileScanner
+                      //     Get.to(
+                      //       () => EntryForm(
+                      //         polygonModel: PolygonModel(name: 'f', color: Colors.red, points: []),
 
-                              // questions: questions,
-                            ),
-                          );
-                        },
-                      ),
+                      //         // questions: questions,
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                       Text(
                         'Scan me',
                         style: context.textTheme.headline6?.copyWith(

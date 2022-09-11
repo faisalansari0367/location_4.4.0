@@ -4,35 +4,37 @@ import 'package:api_repo/api_repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'select_role_state.g.dart';
+// part 'select_role_state.g.dart';
 
 @JsonSerializable()
 class SelectRoleState extends Equatable {
-  final List<String> roles;
+  final List<UserRoles> roles;
 
   final bool isLoading;
+  final bool isConnected;
+
   final User user;
 
-  const SelectRoleState({this.isLoading = true, this.roles = const [],required this.user});
-
+  const SelectRoleState({this.isConnected = true, this.isLoading = true, this.roles = const [], required this.user});
 
   @override
-  List<Object> get props => [roles, isLoading, user];
+  List<Object> get props => [roles, isLoading, user, isConnected];
 
   SelectRoleState copyWith({
-    List<String>? roles,
+    List<UserRoles>? roles,
     bool? isLoading,
+    bool? isConnected,
     User? user,
   }) {
     return SelectRoleState(
       roles: roles ?? this.roles,
       isLoading: isLoading ?? this.isLoading,
+      isConnected: isConnected ?? this.isConnected,
       user: user ?? this.user,
     );
   }
 
-  factory SelectRoleState.fromJson(Map<String, dynamic> json) => _$SelectRoleStateFromJson(json);
+  // factory SelectRoleState.fromJson(Map<String, dynamic> json) => _$SelectRoleStateFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SelectRoleStateToJson(this);
+  // Map<String, dynamic> toJson() => _$SelectRoleStateToJson(this);
 }
-

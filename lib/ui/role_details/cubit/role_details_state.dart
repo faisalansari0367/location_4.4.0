@@ -14,28 +14,32 @@ class RoleDetailsState extends Equatable {
   final List<String> fields;
   final Map<String, dynamic> userRoleDetails;
   final bool isLoading;
+  final bool isConnected;
 
   const RoleDetailsState({
     this.fieldsData = const [],
     this.fields = const [],
     this.userRoleDetails = const <String, dynamic>{},
     this.isLoading = false,
+    this.isConnected = true,
   });
 
   @override
-  List<Object> get props => [isLoading, fields, userRoleDetails, fieldsData];
+  List<Object> get props => [isLoading, fields, userRoleDetails, fieldsData, isConnected];
 
   RoleDetailsState copyWith({
     List<FieldData>? fieldsData,
     List<String>? fields,
     Map<String, dynamic>? userRoleDetails,
     bool? isLoading,
+    bool? isConnected,
   }) {
     return RoleDetailsState(
       fieldsData: fieldsData ?? this.fieldsData,
       fields: fields ?? this.fields,
       userRoleDetails: userRoleDetails ?? this.userRoleDetails,
       isLoading: isLoading ?? this.isLoading,
+      isConnected: isConnected ?? this.isConnected,
     );
   }
 

@@ -7,7 +7,7 @@ import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/widgets/states.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

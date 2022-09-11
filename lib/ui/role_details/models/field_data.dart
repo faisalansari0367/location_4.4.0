@@ -3,10 +3,7 @@ import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/species.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
-import 'package:background_location/widgets/text_fields/country_field.dart';
-import 'package:background_location/widgets/text_fields/date_field.dart';
-import 'package:background_location/widgets/text_fields/phone_text_field.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +11,7 @@ import 'package:get/get.dart';
 
 import '../widgets/property_address.dart';
 
- class FieldData {
+class FieldData {
   final String name;
   Address? address;
   final Map<String, dynamic> data;
@@ -68,6 +65,8 @@ import '../widgets/property_address.dart';
         return FieldType.company;
       case 'species':
         return FieldType.species;
+      case 'licenseCategory':
+        return FieldType.licenseCategory;
       default:
         return FieldType.text;
       // return SizedBox.shrink();
@@ -81,6 +80,22 @@ import '../widgets/property_address.dart';
       case FieldType.species:
         return SpeciesWidget(
           data: data['species'],
+        );
+
+      case FieldType.licenseCategory:
+        return MyDropdownField(
+          onChanged: (p0) => controller.text = p0!,
+          value: controller.text,
+          hintText: name,
+          options: [
+            "Car (C) Licence",
+            "Light Rigid (LR) Licence",
+            "Medium Rigid (MR) Licence",
+            "Heavy Rigid (HR) Licence",
+            "Heavy Combination (HC) Licence",
+            "Multi Combination (MC) Licence",
+            "Rider (R) Licence",
+          ],
         );
       case FieldType.region:
         return MyTextField(

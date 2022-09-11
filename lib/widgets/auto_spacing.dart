@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AutoSpacing extends StatelessWidget {
   final List<Widget> children;
   final Widget? spacing, startSpacing;
+  final bool removeLast;
 
-  const AutoSpacing({Key? key, required this.children, this.spacing, this.startSpacing}) : super(key: key);
+  const AutoSpacing({Key? key, required this.children, this.spacing, this.startSpacing, this.removeLast = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +24,12 @@ class AutoSpacing extends StatelessWidget {
     //   list.add(children[i]);
     //   list.add(spacing ?? SizedBox(height: 24.h));
     // }
-    if(startSpacing != null) startSpacing;
+    if (startSpacing != null) startSpacing;
     for (var item in children) {
       list.add(item);
       list.add(spacing ?? SizedBox(height: 24.h));
     }
-    // list.remove(list.last);
+    if (removeLast) list.remove(list.last);
     return list;
   }
 }

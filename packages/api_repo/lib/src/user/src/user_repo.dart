@@ -8,15 +8,16 @@ import '../../../configs/endpoint.dart';
 import 'models/models.dart';
 
 abstract class UserRepo {
-  Future<ApiResult<UserRoles>> getUserRoles();
-  Future<ApiResult<RoleDetailsModel>> getFields();
-  Future<ApiResult<void>> updateRole(Map<String, dynamic> data);
-  Future<ApiResult<Map<String, dynamic>>> getRoleData();
+  Future<ApiResult<List<UserRoles>>> getUserRoles();
+  Future<ApiResult<RoleDetailsModel>> getFields(String role);
+  Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data);
+  Future<ApiResult<Map<String, dynamic>>> getRoleData(String role);
   Future<ApiResult<LogbookEntryModel>> getLogbookRecords();
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams});
   Future<ApiResult<List<String>>> getFormQuestions();
   Future<ApiResult<UserSpecies>> getUserSpecies();
   Future<ApiResult<UserFormsData>> getUserForms();
+  Future<ApiResult<List<String>>> getLicenceCategories();
 }
 
 class UserRepoImpl extends UserRepo {
@@ -26,11 +27,16 @@ class UserRepoImpl extends UserRepo {
   UserRepoImpl({required this.client, required Box box}) : storage = StorageService(box: box);
 
   @override
-  Future<ApiResult<UserRoles>> getUserRoles() async {
+  Future<ApiResult<List<UserRoles>>> getUserRoles() async {
     try {
-      final result = await client.get(Endpoints.getRoles);
-      final model = UserRoles.fromMap(result.data);
-      storage.setRoles(model.roles);
+      final result = await client.get(Endpoints.fieldsRecords);
+      final List data = result.data['data'];
+      final List<UserRoles> model = data
+          .map(
+            (e) => UserRoles.fromMap(Map<String, dynamic>.from(e)),
+          )
+          .toList();
+      storage.setRoles(model);
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -38,10 +44,11 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<RoleDetailsModel>> getFields() async {
+  Future<ApiResult<RoleDetailsModel>> getFields(String role) async {
     try {
       final result = await client.get(Endpoints.getFields);
       final model = RoleDetailsModel.fromMap(result.data);
+      storage.setRoleFields(role, model.toMap());
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -49,10 +56,12 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<void>> updateRole(Map<String, dynamic> data) async {
+  Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data) async {
     try {
       await client.patch(Endpoints.updateUser, data: data);
+      // storage.setRoleData(role, data);
       // ignore: void_checks
+
       return const ApiResult.success(data: Null);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -60,10 +69,11 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<Map<String, dynamic>>> getRoleData() async {
+  Future<ApiResult<Map<String, dynamic>>> getRoleData(String role) async {
     try {
       final result = await client.get(Endpoints.updateUser);
       final data = (result.data);
+      storage.setRoleData(role, data);
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -95,7 +105,7 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<List<String>>> getFormQuestions() async {
     try {
-      final result = await client.get(Endpoints.formQuestions);
+      final result = await client.get(Endpoints.forms);
       final forms = result.data['data']['forms'].first.first;
       final list = (forms['questions']);
       final data = List<String>.from(list);
@@ -110,6 +120,7 @@ class UserRepoImpl extends UserRepo {
     try {
       final result = await client.get(Endpoints.userSpecies);
       final list = UserSpecies.fromJson(result.data);
+      storage.setUserSpecies(list);
       return ApiResult.success(data: list);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -122,6 +133,16 @@ class UserRepoImpl extends UserRepo {
       final result = await client.get(Endpoints.usersForms);
       final list = UserFormsData.fromJson(result.data);
       return ApiResult.success(data: list);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<List<String>>> getLicenceCategories() async {
+    try {
+      final result = await client.get(Endpoints.licenceCategories);
+      return ApiResult.success(data: List<String>.from(result.data['data']));
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

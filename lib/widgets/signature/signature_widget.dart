@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
-
-import '../my_appbar.dart';
 
 class SignatureWidget extends StatefulWidget {
   final ValueChanged<String>? onChanged;
@@ -190,8 +187,33 @@ class _CreateSignatureState extends State<CreateSignature> {
           Get.back();
         },
       ),
-      appBar: MyAppBar(
-        title: Text('Signature'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            appBarTheme: AppBarTheme(
+              color: context.theme.backgroundColor,
+              elevation: 0,
+              iconTheme: IconThemeData(
+                color: Colors.black,
+              ),
+              // titleTextStyle: TextStyle(
+              //   color: Colors.black,
+              //   // fontSize: 20.w,
+              // ),
+            ),
+          ),
+          child: AppBar(
+            title: Text(
+              'Signature',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: context.theme.backgroundColor,
+          ),
+        ),
       ),
       body: Signature(
         controller: _controller,

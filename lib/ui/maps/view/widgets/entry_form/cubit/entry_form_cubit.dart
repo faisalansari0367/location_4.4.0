@@ -31,7 +31,7 @@ class EntryFormData extends FieldData {
     switch (name.toCamelCase) {
       case 'serviceRole':
         return MyDropdownField(
-          options: cubit.state.roles,
+          options: cubit.state.roles!.map((e) => e.role).toList(),
           onChanged: (s) => controller.text = s!,
           hintText: 'Select Role',
           value: controller.text,

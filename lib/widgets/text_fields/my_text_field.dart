@@ -1,6 +1,6 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/helpers/validator.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,6 +27,7 @@ class MyTextField extends StatelessWidget {
   final bool enabled, readOnly;
   final AutovalidateMode autovalidateMode;
   final int? maxLines, minLine;
+  final InputDecoration? decoration;
 
   final TextCapitalization textCapitalization;
 
@@ -55,9 +56,9 @@ class MyTextField extends StatelessWidget {
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.sentences,
     this.onTap,
-    this.maxLines,
+    this.maxLines = 1,
     this.minLine,
-    this.filled = false,
+    this.filled = false, this.decoration,
   }) : super(key: key);
 
   @override
@@ -84,7 +85,7 @@ class MyTextField extends StatelessWidget {
       autofocus: autoFocus,
       enableSuggestions: true,
       readOnly: readOnly,
-      decoration: InputDecoration(
+      decoration: decoration ?? InputDecoration(
         labelText: hintText,
         // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
         contentPadding: contentPadding ?? kInputPadding,

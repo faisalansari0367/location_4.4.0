@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
@@ -29,12 +27,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    final user = context.read<Api>().getUser();
+    final isLoggedIn = context.read<Api>().isLoggedIn;
     // context.read<Api>().userStream.listen((event) {
     //   log(event?.toJson().toString() ?? '');
     // });
     Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
-      if (user == null) return;
+      if (!isLoggedIn) return;
+      final user = context.read<Api>().getUser()!;
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
       if (!result) {
@@ -50,9 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //   ),
       // );
     });
-    Future.delayed((kSplashDuration.inSeconds - 1).seconds, () {
-      if (user != null) return;
-
+    Future.delayed((kSplashDuration.inSeconds - 0.5).seconds, () {
       if (!mounted) return;
       setState(() {
         showSplash = false;

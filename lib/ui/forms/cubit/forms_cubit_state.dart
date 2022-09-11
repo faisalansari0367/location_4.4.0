@@ -42,7 +42,7 @@ class QuestionData extends Equatable {
 class FormsState extends Equatable {
   final List<QuestionData> questions;
   final List<UserFormData> formData;
-  final List<String> roles;
+  final List<UserRoles> roles;
 
   final PageController pageController;
   final String? qrData;
@@ -62,7 +62,7 @@ class FormsState extends Equatable {
   FormsState copyWith({
     List<QuestionData>? questions,
     List<UserFormData>? formData,
-    List<String>? roles,
+    List<UserRoles>? roles,
     PageController? pageController,
     String? qrData,
     bool? isLoading,

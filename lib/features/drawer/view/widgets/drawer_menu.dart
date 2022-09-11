@@ -32,9 +32,9 @@ class _DrawerMenuState extends State<DrawerMenu> {
     _init();
     final api = context.read<Api>();
     _drawerItems = DrawerItems(api);
-    api.userDataStream.listen((event) {
-      _drawerItems = DrawerItems(api);
-    });
+    // api.userDataStream.listen((event) {
+    //   _drawerItems = DrawerItems(api);
+    // });
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                       ),
                       Gap(10.w),
                       Text(
-                        'Version ${packageInfo?.version}+${packageInfo?.buildNumber}',
+                        'Version ${packageInfo?.version}',
                         style: TextStyle(
                           color: Color.fromARGB(255, 211, 211, 211),
                           fontWeight: FontWeight.w600,

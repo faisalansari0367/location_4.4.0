@@ -16,7 +16,7 @@ import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 import '../../../../../widgets/bottom_sheet/bottom_sheet_service.dart';
 import '../../../../../widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
-import '../../../../../widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
+import '../../../../../widgets/text_fields/text_formatters/input_formatters.dart';
 import '../cubit/users_cubit.dart';
 import '../cubit/users_state.dart';
 
@@ -41,7 +41,7 @@ class UsersView extends StatelessWidget {
                       onTap: () => BottomSheetService.showSheet(
                         child: RolesSheet(
                           title: 'Please select a role',
-                          options: state.roles,
+                          options: state.roles.map((e) => e.role).toList(),
                           onChanged: cubit.setCurrentRole,
                         ),
                       ),

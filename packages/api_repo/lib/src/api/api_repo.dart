@@ -1,10 +1,10 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/src/locale/currency_repo.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../configs/client.dart';
 
-abstract class Api with AuthRepo, UserRepo, LocalesApi {
-  @override
-  Future<void> init({required String baseUrl});
+abstract class Api with AuthRepo, UserRepo {
+  // @override
+  Future<void> init({required String baseUrl, required Box box});
   Client get client;
 }

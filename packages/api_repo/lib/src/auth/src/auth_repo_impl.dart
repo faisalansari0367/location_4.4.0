@@ -9,6 +9,7 @@ import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../../../api_repo.dart';
 import 'auth_repo.dart';
 import 'models/models.dart';
 
@@ -42,8 +43,12 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final result = await client.post(Endpoints.signIn, data: data.toMap());
       final model = UserResponse.fromJson((result.data));
-      storage.setToken(model.token!);
-      storage.setUser(model.data!.user!.toJson());
+      Future.wait([
+        storage.setToken(model.token!),
+        storage.setUser(model.data!.user!.toJson()),
+        storage.setIsLoggedIn(true),
+        storage.setSignInData(data.toMap()),
+      ]);
       return ApiResult.success(data: model.data!.user!);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -69,7 +74,10 @@ class AuthRepoImpl implements AuthRepo {
       final result = await client.patch(Endpoints.updateUser, data: user.updateUser());
       final model = User.fromJson((result.data));
       final userData = UserData.fromJson(result.data['data']);
-      await Future.wait([storage.setUserData(userData), storage.setUser(user.toJson())]);
+      await Future.wait([
+        storage.setUserData(userData),
+        storage.setUser(user.toJson()),
+      ]);
       // storage.setUserData(userData);
       // storage.setUser(user.toJson());
       return ApiResult.success(data: model);
@@ -84,11 +92,12 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<void> logout() async {
     print('user logged out');
-    await Future.wait([
-      storage.removeToken(),
-      storage.removeUser(),
-      storage.removeUserData(),
-    ]);
+    await storage.setIsLoggedIn(false);
+    // await Future.wait([
+    // storage.removeToken(),
+    // storage.removeUser(),
+    // storage.removeUserData(),
+    // ]);
   }
 
   @override
@@ -128,6 +137,8 @@ class AuthRepoImpl implements AuthRepo {
   Stream<UserData?> get userDataStream => storage.userDataStrem;
 
   @override
-  
-  Stream<List<String>?> get userRolesStream => storage.userRolesStream;
+  Stream<List<UserRoles>?> get userRolesStream => storage.userRolesStream;
+
+  @override
+  bool get isLoggedIn => storage.isLoggedIn;
 }

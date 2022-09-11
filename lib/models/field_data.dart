@@ -3,10 +3,7 @@ import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/species.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
-import 'package:background_location/widgets/text_fields/country_field.dart';
-import 'package:background_location/widgets/text_fields/date_field.dart';
-import 'package:background_location/widgets/text_fields/phone_text_field.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/CapitalizeFirstLetter.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +11,7 @@ import 'package:get/get.dart';
 
 import '../ui/role_details/widgets/property_address.dart';
 
- abstract class FormFieldData {
+abstract class FormFieldData {
   final String name;
   Address? address;
   final Map<String, dynamic> data;
@@ -47,7 +44,6 @@ import '../ui/role_details/widgets/property_address.dart';
       case "driver'sLicense":
         return FieldType.driversLicense;
       case 'entryDate':
-      // return
       case 'exitDate':
       case 'licenseExpiryDate':
       case 'day/date/time':

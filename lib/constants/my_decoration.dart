@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'constans.dart';
 
@@ -32,6 +35,28 @@ class MyDecoration {
     );
   }
 
+  static InputDecoration recangularInputDecoration(BuildContext context) {
+    return InputDecoration(
+      filled: true,
+      isDense: true,
+      fillColor: Color.fromARGB(0, 250, 250, 250),
+      enabledBorder: MyDecoration.inputBorder.copyWith(
+        borderRadius: BorderRadius.circular(4.r),
+      ),
+      focusedBorder: MyDecoration.inputBorder.copyWith(
+        borderRadius: BorderRadius.circular(4.r),
+        borderSide: BorderSide(
+          color: context.theme.primaryColor,
+          width: 2.w,
+        ),
+      ),
+      disabledBorder: MyDecoration.inputBorder,
+      border: MyDecoration.inputBorder.copyWith(
+        borderRadius: BorderRadius.circular(4.r),
+      ),
+    );
+  }
+
   static BoxDecoration bottomSheetDecoration() {
     return BoxDecoration(
       color: Colors.white,
@@ -45,4 +70,6 @@ class MyDecoration {
       ],
     );
   }
+
+  static String formatDate(DateTime date) => DateFormat('dd-MM-yyyy').format(date);
 }

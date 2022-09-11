@@ -14,7 +14,12 @@ class SelectRolePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SelectRoleCubit(context.read<Api>(), context.read<PushNotificationService>()),
+      create: (context) => SelectRoleCubit(
+        context.read<Api>(),
+        context.read<LocalApi>(),
+
+        context.read<PushNotificationService>(),
+      ),
       child: const SelectRoleView(),
     );
   }

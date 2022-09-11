@@ -1,5 +1,4 @@
 import 'package:api_repo/configs/client.dart';
-import 'package:api_repo/src/locale/currency_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
@@ -11,12 +10,12 @@ class ApiRepo implements Api {
   late AuthRepo _authRepo;
   late UserRepo _userRepo;
   late Box _box;
-  late LocalesApi _localesApi;
+  // late LocalesApi _localesApi;
 
   ApiRepo();
 
   @override
-  Future<void> init({required String baseUrl}) async {
+  Future<void> init({required String baseUrl, required Box box}) async {
     await Hive.initFlutter();
     _box = await Hive.openBox('storage');
     final storage = StorageService(box: _box);
@@ -25,7 +24,7 @@ class ApiRepo implements Api {
     _userStream(_box, storage.userKey);
     _authRepo = AuthRepoImpl(client: _client, box: _box);
     _userRepo = UserRepoImpl(client: _client, box: _box);
-    _localesApi = LocalesRepo();
+    // _localesApi = LocalesRepo();
     // await _localesApi.initLocale();
   }
 
@@ -58,35 +57,34 @@ class ApiRepo implements Api {
   Future<void> logout() => _authRepo.logout();
 
   @override
-  Future<ApiResult<UserRoles>> getUserRoles() async => await _userRepo.getUserRoles();
+  Future<ApiResult<List<UserRoles>>> getUserRoles() async => await _userRepo.getUserRoles();
 
   @override
-  Future<ApiResult<RoleDetailsModel>> getFields() => _userRepo.getFields();
+  Future<ApiResult<RoleDetailsModel>> getFields(String role) => _userRepo.getFields(role);
 
   @override
   Future<ApiResult<User>> updateUser({required User user}) async {
     return await _authRepo.updateUser(user: user);
   }
 
-  @override
-  void changeCountry({required String code, required String dial, required String name}) {
-    return _localesApi.changeCountry(code: code, dial: dial, name: name);
-  }
+  // @override
+  // void changeCountry({required String code, required String dial, required String name}) {
+  //   return _localesApi.changeCountry(code: code, dial: dial, name: name);
+  // }
 
-  @override
-  String? get countryCode => _localesApi.countryCode;
+  // @override
+  // String? get countryCode => _localesApi.countryCode;
 
-  @override
-  String? get countryName => _localesApi.countryName;
+  // @override
+  // String? get countryName => _localesApi.countryName;
 
-  @override
-  String? get dialCode => _localesApi.dialCode;
+  // @override
+  // String? get dialCode => _localesApi.dialCode;
 
-  @override
-  Future<void> initLocale() {
-    // TODO: implement initLocale
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<void> initLocale() {
+  //   throw UnimplementedError();
+  // }
 
   @override
   Future<ApiResult<ResponseModel>> forgotPassword({required String email}) {
@@ -99,13 +97,13 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<void>> updateRole(Map<String, dynamic> data) {
-    return _userRepo.updateRole(data);
+  Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data) {
+    return _userRepo.updateRole(role, data);
   }
 
   @override
-  Future<ApiResult<Map<String, dynamic>>> getRoleData() {
-    return _userRepo.getRoleData();
+  Future<ApiResult<Map<String, dynamic>>> getRoleData(String role) {
+    return _userRepo.getRoleData(role);
   }
 
   @override
@@ -151,5 +149,13 @@ class ApiRepo implements Api {
   }
 
   @override
-  Stream<List<String>?> get userRolesStream => _authRepo.userRolesStream;
+  Stream<List<UserRoles>?> get userRolesStream => _authRepo.userRolesStream;
+
+  @override
+  bool get isLoggedIn => _authRepo.isLoggedIn;
+
+  @override
+  Future<ApiResult<List<String>>> getLicenceCategories() {
+    return _userRepo.getLicenceCategories();
+  }
 }

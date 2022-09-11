@@ -9,16 +9,27 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../services/notifications/connectivity/connectivity_service.dart';
+
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final String? email;
   final AuthRepo auth;
-  LoginCubit({required AuthRepo repository, this.email})
-      : auth = repository,
+  final LocalApi localApi;
+  LoginCubit({
+    required this.localApi,
+    required AuthRepo repository,
+    this.email,
+  })  : auth = repository,
         super(const LoginState()) {
     emailController = TextEditingController(text: email);
     state.copyWith(email: email);
+    final connectivity = MyConnectivity();
+    connectivity.connectionStream.listen((event) {
+      if (isClosed) return;
+      emit(state.copyWith(isConnected: event));
+    });
   }
 
   late TextEditingController emailController;
@@ -35,7 +46,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       emit(state.copyWith(isLoading: true));
       final model = SignInModel(email: emailController.text, password: state.password);
-      final result = await auth.signIn(data: model);
+      final result = await (state.isConnected ? auth.signIn(data: model) : localApi.signIn(data: model));
 
       result.when(success: (data) {
         Get.offAll(() => DrawerPage());

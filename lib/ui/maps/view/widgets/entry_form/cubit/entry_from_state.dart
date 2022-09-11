@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:background_location/ui/forms/models/form_field_data.dart';
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/maps/view/widgets/entry_form/cubit/entry_form_cubit.dart';
 import 'package:equatable/equatable.dart';
 
@@ -12,10 +12,10 @@ class EntryFormState extends Equatable {
   // final List<UserFormData> formData;xs
   final List<QuestionData> questions;
   final List<EntryFormData> formData;
-  final List<String> roles;
+  final List<UserRoles>? roles;
   EntryFormState({
     this.questions = const [],
-    this.roles = const [],
+    this.roles,
     this.isLoading = false,
     this.formData = const [],
   });
@@ -26,7 +26,7 @@ class EntryFormState extends Equatable {
     bool? isLoading,
     List<QuestionData>? questions,
     List<EntryFormData>? formData,
-    List<String>? roles,
+    List<UserRoles>? roles,
   }) {
     return EntryFormState(
       isLoading: isLoading ?? this.isLoading,

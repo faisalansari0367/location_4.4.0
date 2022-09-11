@@ -26,4 +26,16 @@ class SignInModel {
   String toJson() => json.encode(toMap());
 
   factory SignInModel.fromJson(String source) => SignInModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool operator ==(covariant SignInModel other) {
+    if (identical(this, other)) return true;
+  
+    return 
+      other.email == email &&
+      other.password == password;
+  }
+
+  @override
+  int get hashCode => email.hashCode ^ password.hashCode;
 }

@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,8 @@ class MapsPage extends StatelessWidget {
         context.read<PolygonsService>(),
         context.read<PushNotificationService>(),
         context.read<Api>(),
+        // context.read<MapsRepoLocal>(),
+
       ),
       child: MapsView(fromDrawer: fromDrawer),
     );

@@ -22,6 +22,7 @@ class _MyDateFieldState extends State<MyDateField> {
   void initState() {
     if (![null, ''].contains(widget.date)) {
       final dt = DateTime.parse(widget.date!);
+      pickedDateTime = dt;
       controller.text = formatDate(dt);
     }
     super.initState();

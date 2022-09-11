@@ -1,5 +1,6 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
+import 'package:background_location/ui/cvd_form/view/cvd_from_page.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/settings/view/settings_page.dart';
@@ -7,6 +8,7 @@ import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_pa
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:line_icons/line_icon.dart';
 
 import '../links_page/links_page.dart';
 
@@ -80,9 +82,14 @@ class DashboardView extends StatelessWidget {
                   onTap: () => Get.to(() => VisitorCheckInPage()),
                 ),
                 DashboardCard(
-                  text: 'CVD',
-                  iconData: Icons.commit_outlined,
+                  text: 'eDec Forms',
+                  iconData: Icons.format_list_bulleted_sharp,
                   // onTap: () => Get.to(() => VisitorCheckInPage()),
+                ),
+                DashboardCard(
+                  text: 'CVD',
+                  iconData: LineIcon.conciergeBell().icon,
+                  onTap: () => Get.to(() => CvdFormPage()),
                 ),
               ],
             ),

@@ -25,22 +25,22 @@ class DrawerItems {
         iconData: Icons.dashboard,
         page: NavbarPage(),
       ),
-      DrawerItem(
-        text: Strings.home,
-        iconData: Icons.home,
-        page: SelectRolePage(),
-      ),
+      // DrawerItem(
+      //   text: Strings.home,
+      //   iconData: Icons.home,
+      //   page: SelectRolePage(),
+      // ),
       DrawerItem(
         text: Strings.admin,
         iconData: Icons.admin_panel_settings_outlined,
         page: AdminPage(),
       ),
-      if (api.getUserData() != null)
-        DrawerItem(
-          text: Strings.map,
-          iconData: Icons.map,
-          page: MapsPage(fromDrawer: true),
-        ),
+      // if (api.getUserData() != null)
+      //   DrawerItem(
+      //     text: Strings.map,
+      //     iconData: Icons.map,
+      //     page: MapsPage(fromDrawer: true),
+      //   ),
       DrawerItem(
         text: Strings.settings,
         iconData: Icons.settings,

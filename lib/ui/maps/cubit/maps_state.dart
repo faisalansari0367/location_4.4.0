@@ -16,6 +16,7 @@ class MapsState extends Equatable {
   final double zoom;
   final PolygonModel? currentPolygon;
   final Color selectedColor;
+  
 
   const MapsState({
     this.selectedColor = Colors.blue,

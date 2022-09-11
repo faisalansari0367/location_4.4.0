@@ -22,6 +22,7 @@ enum FieldType {
   town,
   company,
   species,
+  licenseCategory,
 }
 
 extension FieldTypeExt on FieldType {
@@ -46,4 +47,6 @@ extension FieldTypeExt on FieldType {
   bool get isCompany => this == FieldType.company;
   bool get isPassport => this == FieldType.passport;
   bool get isSpecies => this == FieldType.species;
+  bool get isLicenceCategory => this == FieldType.licenseCategory;
+
 }

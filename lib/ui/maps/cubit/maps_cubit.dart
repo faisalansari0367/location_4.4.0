@@ -11,6 +11,7 @@ import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -35,6 +36,8 @@ class MapsCubit extends Cubit<MapsState> {
   final MapsRepo _mapsRepo;
   final PolygonsService _polygonsService;
   final Api api;
+  // final MapsRepoLocal mapsRepoLocal;
+  late MapsRepo mapsRepo;
 
   MapsCubit(
     this._notificationService,
@@ -42,6 +45,7 @@ class MapsCubit extends Cubit<MapsState> {
     this._polygonsService,
     this._pushNotificationService,
     this.api,
+    // this.mapsRepoLocal,
   ) : super(
           MapsState(
             currentLocation: LatLng(
@@ -49,13 +53,19 @@ class MapsCubit extends Cubit<MapsState> {
               134.68900724218238,
             ),
           ),
-        );
+        ) {
+    mapsRepo = _mapsRepo;
+    // MyConnectivity().connectionStream.listen((event) {
+    //   mapsRepo = event ? _mapsRepo : mapsRepoLocal;
+    // });
+  }
 
   final Completer<GoogleMapController> controller = Completer();
   late GoogleMapController mapController;
   StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
+    await 200.milliseconds.delay();
     _getAllPolygon();
     updateCurrentLocation();
     getLocationUpdates();
@@ -69,7 +79,7 @@ class MapsCubit extends Cubit<MapsState> {
 
   Future<void> doneEditing() async {
     if (state.currentPolygon == null) return;
-    final result = await _mapsRepo.updatePolygon(state.currentPolygon!);
+    final result = await mapsRepo.updatePolygon(state.currentPolygon!);
     if (state.currentPolygon != null) {
       result.when(
         success: (s) {
@@ -96,7 +106,7 @@ class MapsCubit extends Cubit<MapsState> {
   UserData? get userData => api.getUserData();
 
   Future<void> _getAllPolygon() async {
-    var allPolygon = await _mapsRepo.getAllPolygon();
+    var allPolygon = await mapsRepo.getAllPolygon();
     final polygonSet = <PolygonModel>{};
     // allPolygon.then((polygons) {
     allPolygon.when(
@@ -192,7 +202,7 @@ class MapsCubit extends Cubit<MapsState> {
       id: Random().nextInt(10000000).toString(),
     );
     // final userData = await api.getUserData();
-    final result = await _mapsRepo.savePolygon(model);
+    final result = await mapsRepo.savePolygon(model);
     result.when(
       success: (data) => _polygonsService.clear(),
       failure: (e) {
@@ -281,7 +291,7 @@ class MapsCubit extends Cubit<MapsState> {
     if (polygon.isEmpty) return;
     // if (polygon.length == 1) {
     // print(polygon);
-    final result = await _mapsRepo.notifyManager(
+    final result = await mapsRepo.notifyManager(
       userData!.pic!,
       state.currentLocation.latitude.toString(),
       state.currentLocation.longitude.toString(),
@@ -311,9 +321,10 @@ class MapsCubit extends Cubit<MapsState> {
     );
   }
 
-  void getLocationUpdates() {
-    final popups = MapsPopups(notifyManager, _mapsRepo, this);
-    _positionSubscription = GeolocatorService.instance.getPositionStream().listen((event) {
+  void getLocationUpdates() async {
+    final popups = MapsPopups(notifyManager, mapsRepo, this);
+    final locationupdates = await GeolocatorService.getLocationUpdates();
+    _positionSubscription = locationupdates.listen((event) {
       var position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
       final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
@@ -322,6 +333,7 @@ class MapsCubit extends Cubit<MapsState> {
         accuracy: event.accuracy,
       );
 
+      // print('location updates');
       // mapController.animateCamera(
       //   CameraUpdate.newCameraPosition(
       //     CameraPosition(
@@ -342,7 +354,7 @@ class MapsCubit extends Cubit<MapsState> {
   Future<void> close() {
     _positionSubscription?.cancel();
     _polygonsService.clear();
-    _mapsRepo.cancel();
+    mapsRepo.cancel();
     return super.close();
   }
 
