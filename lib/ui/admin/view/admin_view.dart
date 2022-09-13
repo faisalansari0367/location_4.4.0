@@ -1,8 +1,8 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/admin/cubit/admin_cubit.dart';
 import 'package:background_location/ui/admin/pages/users_list/view/users_page.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_listTile.dart';
@@ -53,7 +53,20 @@ class AdminView extends StatelessWidget {
                 ),
                 MyListTile(
                   text: 'Geofences',
-                  onTap: () async {},
+                  onTap: () async {
+                    Get.to(() => MapsPage());
+                    // Get.to(() => Scaffold(
+                    //       appBar: MyAppBar(),
+                    //       body: Padding(
+                    //         padding: kPadding,
+                    //         child: GeofencesList(onSelected: (s) {
+                    //           Get.to(() => MapsPage(
+                    //                 polygonId: s,
+                    //               ));
+                    //         }),
+                    //       ),
+                    //     ));
+                  },
                 ),
                 MyListTile(
                   text: 'Transporters',

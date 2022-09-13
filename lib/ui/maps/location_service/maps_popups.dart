@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
@@ -62,12 +61,9 @@ class MapsPopups {
   // add data to the log book
 
   void init() {
-    print('initiliasing popups');
     _timer();
     final userData = cubit.api.getUserData();
     controller.listen((isInside) async {
-      log('isInside $isInside');
-      print('notify manager timer is active ${_notifyManagerTimer?.isActive}');
       if (_isInside != isInside) {
         _isInside = isInside;
         final polygon = cubit.getPolygon();

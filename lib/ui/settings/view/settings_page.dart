@@ -1,13 +1,17 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/gen/assets.gen.dart';
+import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import '../../login/view/login_page.dart';
 
 class SettingsPage extends StatefulWidget {
   final bool showBackbutton;
@@ -37,8 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: MyAppBar(showBackButton: widget.showBackbutton),
       body: SingleChildScrollView(
         padding: kPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: AutoSpacing(
           children: [
             Text(
               'Settings',
@@ -46,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 fontSize: 40.h,
               ),
             ),
-            Gap(50.h),
+            // Gap(50.h),
             MyListTile(
               text: 'About',
               onTap: () => DialogService.showDialog(
@@ -57,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       height: 50,
                       width: 50,
                       child: Image.asset(
-                        Assets.icons.logo.path,
+                        Assets.icons.appIcon.path,
                       ),
                     ),
                   ),
@@ -65,6 +68,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   applicationVersion: packageInfo?.version,
                 ),
               ),
+            ),
+            MyListTile(
+              onTap: () async {
+                context.read<Api>().logout();
+                Get.offAll(() => LoginPage());
+              },
+              text: Strings.logout,
+              trailing: Icon(Icons.logout),
+              // iconData: Icons.logout,
+              // page: LoginPage(),
             ),
           ],
         ),

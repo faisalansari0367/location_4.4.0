@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 class Strings {
 // AppName
-  static const String appName = 'iTRAK';
+  static const String appName = 'BIOSECURE';
 
   static const name = 'Name',
       email = 'Email',
@@ -68,7 +68,7 @@ class Strings {
       log = 'Log',
       book = 'Book',
       geofence = 'Geofence',
-      envds = 'Envds',
+      envds = 'eNVD',
       links = 'Links',
       check = 'Check',
       commodities = 'Commodities';

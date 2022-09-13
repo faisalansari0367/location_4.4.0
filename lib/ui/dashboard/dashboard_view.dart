@@ -3,12 +3,14 @@ import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook
 import 'package:background_location/ui/cvd_form/view/cvd_from_page.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
-import 'package:background_location/ui/settings/view/settings_page.dart';
+import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
+import 'package:background_location/widgets/dialogs/coming_soon.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icon.dart';
 
 import '../links_page/links_page.dart';
 
@@ -21,23 +23,18 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
         showBackButton: false,
-        centreTitle: true,
-        title: Image.asset(
-          'assets/icons/dashboard/dashboard_logo.png',
-          height: 6.height,
-        ),
+        centreTitle: false,
+        title: _logo(),
       ),
       body: Column(
+        // alignment: Alignment.center,
         children: [
-          // Row(
-          //   children: [
-          //     // Gap(20.w),
-          //     Image.asset(
-          //       'assets/icons/dashboard/dashboard_logo.png',
-          //       height: 6.height,
-          //     ),
-          //     // Spacer(),
-          //   ],
+          // _logo(),
+          // Positioned(
+          //   child: Image.asset(
+          //     'assets/icons/BIO_shield1 (1).png',
+          //     height: 26.height,
+          //   ),
           // ),
           Expanded(
             child: GridView(
@@ -46,56 +43,103 @@ class DashboardView extends StatelessWidget {
               padding: kPadding,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: kPadding.left,
-                crossAxisSpacing: kPadding.left,
+                mainAxisSpacing: kPadding.left.h,
+                crossAxisSpacing: kPadding.left.w,
               ),
               children: [
                 DashboardCard(
-                  text: Strings.visitorLogBook,
+                  text: Strings.visitorLogBook.toUpperCase(),
                   iconData: Icons.book,
                   onTap: () => Get.to(() => LogbookPage()),
                 ),
                 DashboardCard(
-                  text: Strings.geofences,
+                  text: Strings.geofences.toUpperCase(),
                   iconData: Icons.fence,
                   onTap: () => Get.to(() => MapsPage()),
                 ),
                 DashboardCard(
-                  text: Strings.settings,
+                  text: Strings.settings.toUpperCase(),
                   iconData: Icons.settings,
-                  onTap: () => Get.to(() => SettingsPage(
-                        showBackbutton: true,
-                      )),
+                  onTap: () => Get.to(
+                    // () => SettingsPage(
+                    //   showBackbutton: true,
+                    // ),
+                    SelectRolePage(
+                      showBackArrow: true,
+                    ),
+                  ),
                 ),
                 DashboardCard(
                   text: Strings.envds,
                   iconData: Icons.person,
+                  onTap: () => DialogService.showDialog(child: ComingSoonDialog()),
                 ),
                 DashboardCard(
-                  text: Strings.links,
+                  text: Strings.links.toUpperCase(),
                   iconData: Icons.link,
                   onTap: () => Get.to(() => LinksPage()),
                 ),
                 DashboardCard(
-                  text: Strings.visitorCheckIn,
+                  text: Strings.visitorCheckIn.toUpperCase(),
                   iconData: Icons.token_rounded,
                   onTap: () => Get.to(() => VisitorCheckInPage()),
                 ),
                 DashboardCard(
-                  text: 'eDec Forms',
+                  text: 'eDEC Forms',
                   iconData: Icons.format_list_bulleted_sharp,
+                  onTap: () {
+                    DialogService.showDialog(child: ComingSoonDialog());
+                  },
                   // onTap: () => Get.to(() => VisitorCheckInPage()),
                 ),
                 DashboardCard(
-                  text: 'CVD',
-                  iconData: LineIcon.conciergeBell().icon,
+                  text: 'CVD FORM',
+                  iconData: Icons.format_align_justify_rounded,
                   onTap: () => Get.to(() => CvdFormPage()),
+                ),
+                DashboardCard(
+                  text: 'WORK SAFETY',
+                  iconData: Icons.work_outline,
+                  onTap: () {
+                    DialogService.showDialog(child: ComingSoonDialog());
+                  },
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Row _logo() {
+    return Row(
+      // crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        // Gap(20.h),
+        Image.asset(
+          'assets/icons/BIO_shield1 (1).png',
+          height: 5.height,
+        ),
+        Text(
+          'BIO',
+          style: TextStyle(
+            color: Color(0xff3B4798),
+            fontWeight: FontWeight.bold,
+            fontSize: 20.w,
+          ),
+        ),
+        Text(
+          'SECURE',
+          style: TextStyle(
+            color: Color(0xff75B950),
+            fontWeight: FontWeight.bold,
+            fontSize: 20.w,
+          ),
+        ),
+      ],
     );
   }
 }

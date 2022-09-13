@@ -7,8 +7,10 @@ import '../../../services/notifications/push_notifications.dart';
 import 'select_role_view.dart';
 
 class SelectRolePage extends StatelessWidget {
+  final bool showBackArrow;
   const SelectRolePage({
     Key? key,
+    this.showBackArrow = false,
   }) : super(key: key);
 
   @override
@@ -17,10 +19,11 @@ class SelectRolePage extends StatelessWidget {
       create: (context) => SelectRoleCubit(
         context.read<Api>(),
         context.read<LocalApi>(),
-
         context.read<PushNotificationService>(),
       ),
-      child: const SelectRoleView(),
+      child: SelectRoleView(
+        showBackArrow: showBackArrow,
+      ),
     );
   }
 }

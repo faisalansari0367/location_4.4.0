@@ -12,6 +12,7 @@ import 'package:background_location/ui/maps/view/widgets/current_location.dart';
 import 'package:background_location/ui/maps/view/widgets/dialog/polygon_details.dart';
 import 'package:background_location/ui/maps/view/widgets/map_type_widget.dart';
 import 'package:background_location/ui/maps/view/widgets/select_color.dart';
+import 'package:background_location/ui/maps/widgets/geofences_list/geofences_view.dart';
 import 'package:background_location/widgets/animations/my_slide_animation.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // import 'package:location_repo/location_repo.dart' as location_repo;
@@ -240,6 +242,31 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             title: ('Add Fencing'),
             onTap: cubit.setIsAddingGeofence,
           ),
+
+        // if ([Roles.producer, Roles.agent, Roles.consignee].contains(cubit.userData?.role?.camelCase?.getRole))
+        BottomNavbarItem(
+          // icon: Assets.icons.bottomNavbar.square.path,
+          iconData: LineIcons.drawPolygon,
+
+          title: ('Geofence List'),
+          onTap: () => BottomSheetService.showSheet(
+            child: DraggableScrollableSheet(
+              maxChildSize: 0.9,
+              expand: false,
+              minChildSize: 0.2,
+              initialChildSize: 0.4,
+              builder: (context, scrollController) {
+                return GeofencesList(
+                  onSelected: (value) {
+                    cubit.moveToSelectedPolygon(value);
+                    Get.back();
+                  },
+                  controller: scrollController,
+                );
+              },
+            ),
+          ),
+        ),
         // Spacer(),
       ],
     );

@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
@@ -58,10 +61,9 @@ class MapsApi implements MapsRepo {
 
   @override
   Future<ApiResult<void>> savePolygon(PolygonModel model) async {
-    final data = model.toJson()..remove('id');
     try {
+      final data = model.toJson()..remove('id');
       final result = await client.post(_Endpoints.geofences, data: data);
-      print(result);
       _controller.add([..._controller.value, model]);
       getAllPolygon();
 

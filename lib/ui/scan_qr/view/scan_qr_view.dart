@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:background_location/ui/scan_qr/widgets/show_scanned_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -111,13 +111,16 @@ class _ScanQrViewState extends State<ScanQrView> {
             child: ErrorDialog(message: 'Barcode not found', onTap: Get.back),
           );
         } else {
-          final data = jsonDecode(scanData.code!);
-          print(data is List<Map>);
-
-          // Get.to(() => FormsPage(questions: List<Map>.from(data)));
-          if (data is List<Map>) {
-            print(data);
+          if (scanData.code is String) {
+            Get.to(() => ShowScannedData(data: scanData.code!));
           }
+          // final data = jsonDecode(scanData.code!);
+          // print(data is List<Map>);
+
+          // // Get.to(() => FormsPage(questions: List<Map>.from(data)));
+          // if (data is List<Map>) {
+          //   print(data);
+          // }
           // debugPrint('Barcode found! $code');
 
         }

@@ -35,7 +35,7 @@ class _CvdFormViewState extends State<CvdFormView> {
     // cubit.getCvdForm();
     return Scaffold(
       appBar: MyAppBar(
-        title: Text('Cvd Form'),
+        title: Text('Cvd Form'.toUpperCase()),
       ),
       body: BlocBuilder<CvdCubit, CvdState>(
         builder: (context, state) {
@@ -52,7 +52,6 @@ class _CvdFormViewState extends State<CvdFormView> {
                 child: PageView(
                   physics: NeverScrollableScrollPhysics(),
                   controller: cubit.pageController,
-                  // itemCount: state.formStepper.length,
                   children: [
                     CommonPage(data: state.formStepper[0].formDataList),
                     CommonPage(data: state.formStepper[1].formDataList),

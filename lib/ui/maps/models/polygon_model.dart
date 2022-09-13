@@ -29,11 +29,11 @@ class PolygonModel {
   }
 
   List<double> _latLngToJson(LatLng latLng) {
-    return [latLng.latitude, latLng.longitude];
+    return [latLng.longitude, latLng.latitude];
   }
 
   static LatLng _latLngFromJson(List<dynamic> latLng) {
-    return LatLng((latLng.first), (latLng.last));
+    return LatLng(latLng.last, latLng.first);
   }
 
   factory PolygonModel.fromJson(Map<String, dynamic> json) {
@@ -41,20 +41,21 @@ class PolygonModel {
     return PolygonModel(
       createdBy: UserData.fromJson(json['createdBy']),
       id: json['id'].toString(),
-      color: colorFromHex(json['color']),
-      points: List<LatLng>.from(
-          (json['points']['coordinates'][0] as List<dynamic>).map((x) => _latLngFromJson((x))).toList()),
+      color: _colorFromHex(json['color']),
+      points: List<LatLng>.from((points as List<dynamic>).map((x) => _latLngFromJson((x))).toList()),
       name: json['name'],
     );
   }
 
   // color to hex
-  static String colorToHex(Color color) {
+  String colorToHex(Color color) {
     return color.value.toRadixString(16).padLeft(6, '0');
   }
 
+  static Color _colorFromHex(String hex) => Color(int.parse(hex, radix: 16));
+
   // color from hex
-  static Color colorFromHex(String hex) {
+  Color colorFromHex(String hex) {
     return Color(int.parse(hex, radix: 16));
   }
 }

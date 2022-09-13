@@ -2,7 +2,6 @@ import 'package:animations/animations.dart';
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/features/drawer/models/drawer_items.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../cubit/my_drawer_controller.dart';
@@ -73,14 +72,17 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
           children: [
             Container(
               // color: Color.fromARGB(255, 72, 124, 255),
+              height: double.infinity,
+              width: double.infinity,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
                     // Color.fromARGB(255, 122, 90, 239),
-                    context.theme.primaryColor.withOpacity(0.5),
-                    context.theme.primaryColor,
+                    Colors.black,
+                    Colors.black.withOpacity(0.9),
+                    // context.theme.primaryColor,
                     // Color.fromARGB(255, 146, 154, 244),
                   ],
                 ),

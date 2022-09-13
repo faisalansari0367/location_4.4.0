@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/models/drawer_items.dart';
+import 'package:background_location/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,41 +46,51 @@ class _DrawerMenuState extends State<DrawerMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: kPadding.copyWith(left: 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ..._drawerItems.items.map(_customTile).toList(),
-              // Spacer(),
-              if (packageInfo != null)
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.build,
-                        color: Color.fromARGB(255, 211, 211, 211),
-                      ),
-                      Gap(10.w),
-                      Text(
-                        'Version ${packageInfo?.version}',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 211, 211, 211),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
+    return SingleChildScrollView(
+      padding: kPadding.copyWith(left: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisSize: MainAxisSize.max,
+        children: [
+          Gap(15.height),
+          Padding(
+            padding: EdgeInsets.only(
+              left: 40.w,
+            ),
+            child: Image.asset(
+              Assets.icons.appIcon.path,
+              height: 14.height,
+            ),
           ),
-        ),
+
+          Gap(5.height),
+
+          ..._drawerItems.items.map(_customTile).toList(),
+          // Spacer(),
+          if (packageInfo != null)
+            Padding(
+              padding: EdgeInsets.only(top: 20, left: 20.w),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.build,
+                    color: Color.fromARGB(255, 211, 211, 211),
+                  ),
+                  Gap(10.w),
+                  Text(
+                    'Version ${packageInfo?.version}',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 211, 211, 211),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }

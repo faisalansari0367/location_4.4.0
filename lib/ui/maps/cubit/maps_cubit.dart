@@ -33,20 +33,18 @@ part 'maps_state.dart';
 class MapsCubit extends Cubit<MapsState> {
   final NotificationService _notificationService;
   final PushNotificationService _pushNotificationService;
+  final PolygonModel? polygonId;
   final MapsRepo _mapsRepo;
   final PolygonsService _polygonsService;
   final Api api;
   // final MapsRepoLocal mapsRepoLocal;
   late MapsRepo mapsRepo;
 
-  MapsCubit(
-    this._notificationService,
-    this._mapsRepo,
-    this._polygonsService,
-    this._pushNotificationService,
-    this.api,
-    // this.mapsRepoLocal,
-  ) : super(
+  MapsCubit(this._notificationService, this._mapsRepo, this._polygonsService, this._pushNotificationService, this.api,
+      {this.polygonId}
+      // this.mapsRepoLocal,
+      )
+      : super(
           MapsState(
             currentLocation: LatLng(
               -25.185575842417077,
@@ -65,10 +63,18 @@ class MapsCubit extends Cubit<MapsState> {
   StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
+    // so that device can determin the connectivity status
     await 200.milliseconds.delay();
-    _getAllPolygon();
+    await _getAllPolygon();
+    if (polygonId != null) moveToSelectedPolygon(polygonId!);
     updateCurrentLocation();
     getLocationUpdates();
+  }
+
+  void moveToSelectedPolygon(PolygonModel model) {
+    mapController.animateCamera(
+      MapsToolkitService.boundsFromLatLngList(model.points),
+    );
   }
 
   bool canUserEdit(int? id) {

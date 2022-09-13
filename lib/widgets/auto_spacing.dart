@@ -4,14 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AutoSpacing extends StatelessWidget {
   final List<Widget> children;
   final Widget? spacing, startSpacing;
+  final CrossAxisAlignment crossAxisAlignment;
   final bool removeLast;
 
-  const AutoSpacing({Key? key, required this.children, this.spacing, this.startSpacing, this.removeLast = false})
-      : super(key: key);
+  const AutoSpacing({
+    Key? key,
+    required this.children,
+    this.spacing,
+    this.startSpacing,
+    this.removeLast = false,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: crossAxisAlignment,
       children: addSizedBox(),
     );
   }

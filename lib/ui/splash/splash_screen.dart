@@ -5,13 +5,13 @@ import 'package:background_location/features/drawer/view/drawer_page.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
+import 'package:background_location/widgets/animations/my_slide_animation.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:local_auth_repo/local_auth.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../constants/constans.dart';
 
@@ -68,11 +68,14 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Gap(10.height),
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Lottie.asset(
-                Assets.animations.welcome,
-                repeat: false,
+            MySlideAnimation(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                // child: Lottie.asset(
+                //   Assets.animations.welcome,
+                //   repeat: false,
+                // ),
+                child: Image.asset(Assets.icons.appIcon.path),
               ),
             ),
             Gap(10.height),

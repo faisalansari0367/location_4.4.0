@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 
 class MyListview<T> extends StatelessWidget {
   final bool isLoading, shrinkWrap, isPrimary;
+  final ScrollController? controller;
   final Widget? emptyWidget;
   final Future<void> Function()? onRetry;
 
@@ -26,7 +27,7 @@ class MyListview<T> extends StatelessWidget {
     this.shrinkWrap = false,
     this.isPrimary = false,
     this.onRetry,
-    this.padding,
+    this.padding, this.controller,
   }) : super(key: key);
 
   @override
@@ -83,6 +84,7 @@ class MyListview<T> extends StatelessWidget {
     if (isLoading) return _loader();
     if (data.isEmpty) return _empty();
     return ListView.separated(
+      controller: controller,
       padding: padding,
       primary: isPrimary,
       itemCount: data.length,

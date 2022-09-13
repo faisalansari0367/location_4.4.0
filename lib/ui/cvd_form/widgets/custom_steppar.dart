@@ -32,8 +32,8 @@ class CustomSteppar extends StatelessWidget {
           BoxShadow(
             // spreadRadius: 10,
             blurRadius: 10,
-            color: Colors.grey.shade200,
-            offset: Offset(0, 10),
+            color: Colors.grey.shade100,
+            offset: Offset(0, 5),
           ),
         ],
       ),

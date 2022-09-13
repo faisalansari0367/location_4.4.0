@@ -14,7 +14,8 @@ import 'package:get/get.dart';
 import '../cubit/select_role_cubit.dart';
 
 class SelectRoleView extends StatelessWidget {
-  const SelectRoleView({Key? key}) : super(key: key);
+  final bool showBackArrow;
+  const SelectRoleView({Key? key, this.showBackArrow = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class SelectRoleView extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
         // elevation: 2,
-        showBackButton: false,
+        showBackButton: showBackArrow,
         title: BlocBuilder<SelectRoleCubit, SelectRoleState>(
           builder: (context, state) {
             return Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}');

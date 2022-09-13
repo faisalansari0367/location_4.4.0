@@ -41,7 +41,7 @@ class _LoginViewState extends State<LoginView> {
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Image.asset(
-                    Assets.images.login.path,
+                    Assets.icons.appIcon.path,
                   ),
                 ),
                 Text(

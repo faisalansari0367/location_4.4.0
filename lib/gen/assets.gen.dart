@@ -46,7 +46,7 @@ class $AssetsIconsGen {
   const $AssetsIconsGen();
 
   /// File path: assets/icons/App icon.png
-  AssetGenImage get appIcon => const AssetGenImage('assets/icons/App icon.png');
+  AssetGenImage get appIcon => const AssetGenImage('assets/icons/BIO_shield1 (1).png');
 
   /// File path: assets/icons/background.png
   AssetGenImage get background =>

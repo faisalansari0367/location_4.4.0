@@ -155,7 +155,7 @@ class CvdCubit extends Cubit<CvdState> {
         ],
       },
       {
-        'field': 'Part B – Chemical Us',
+        'field': 'Part B – Chemical Use',
         'data': [
           // "Vendors contract/ reference No",
           "Commodity",

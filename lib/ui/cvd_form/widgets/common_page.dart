@@ -4,6 +4,7 @@ import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/ui/cvd_form/models/cvd_form_data.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:background_location/ui/cvd_form/widgets/cvd_textfield.dart';
+import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,10 +104,13 @@ class _CommonPageState extends State<CommonPage> {
         );
       case 'tel':
         _onChanged(item.name, userData?.phoneNumber ?? '');
-        return CvdTextField(
-          name: item.name,
-          value: userData?.phoneNumber,
-          onChanged: (s) => _onChanged(item.name, s),
+        return PhoneTextField(
+          controller: TextEditingController(text: userData?.phoneNumber),
+
+          // name: item.name,
+
+          // value: userData?.phoneNumber,
+          onChanged: (p, c) => _onChanged(item.name, p),
         );
 
       case 'town':
@@ -120,11 +124,12 @@ class _CommonPageState extends State<CommonPage> {
 
       case 'email':
         _onChanged(item.name, userData?.email ?? '');
-        return CvdTextField(
-          name: item.name,
-          inputFormatters: [LowerCaseTextFormatter()],
-          validator: Validator.email,
-          value: userData?.email,
+        return EmailField(
+          // name: item.name,
+          // inputFormatters: [LowerCaseTextFormatter()],
+          // validator: Validator.email,
+          // value: userData?.email,
+          controller: TextEditingController(text: userData?.email),
           onChanged: (s) => _onChanged(item.name, s),
         );
 

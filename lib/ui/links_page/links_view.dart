@@ -19,11 +19,11 @@ class LinksView extends StatelessWidget {
         child: Column(
           children: [
             MyListTile(
-              text: 'Animal Health Safety',
+              text: 'Farm Biosecurity',
               onTap: () async => Get.to(
                 () => Webview(
-                  url: 'https://animalhealthaustralia.com.au/better-on-farm-biosecurity/',
-                  title: 'Animal Health Safety',
+                  url: 'https://www.farmbiosecurity.com.au/',
+                  title: 'Farm Biosecurity',
                 ),
               ),
             ),

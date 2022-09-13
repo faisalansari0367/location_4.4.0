@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../widgets/animations/animated_button.dart';
 
@@ -13,7 +14,7 @@ class DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _color = Colors.white;
+    final _color = Color.fromARGB(255, 255, 255, 255);
     final size = MediaQuery.of(context).size;
     final imageSize = size.height * 0.05;
     return AnimatedButton(
@@ -21,7 +22,7 @@ class DashboardCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           // boxShadow: kBoxShadow,
-          border: Border.all(color: Colors.grey.shade400),
+          border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(20),
           color: _color,
         ),
@@ -45,14 +46,14 @@ class DashboardCard extends StatelessWidget {
                   ),
             SizedBox(height: 20),
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.25,
+              width: 120.w,
               child: Text(
-                text.toUpperCase(),
+                text,
                 textAlign: TextAlign.center,
                 style: ThemeData.light().textTheme.bodyText2?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: Colors.grey.shade900,
-                      fontSize: size.width * 0.037,
+                      fontSize: 16.w,
                     ),
               ),
             ),

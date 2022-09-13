@@ -1,4 +1,3 @@
-import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,7 +7,13 @@ import '../../../constants/index.dart';
 class MyListTile extends StatefulWidget {
   final String text;
   final Future<void> Function() onTap;
-  const MyListTile({Key? key, required this.text, required this.onTap}) : super(key: key);
+  final Widget? trailing;
+  const MyListTile({
+    Key? key,
+    required this.text,
+    required this.onTap,
+    this.trailing,
+  }) : super(key: key);
 
   @override
   State<MyListTile> createState() => _MyListTileState();
@@ -53,10 +58,11 @@ class _MyListTileState extends State<MyListTile> {
                 strokeWidth: 2,
               ),
             )
-          : Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.grey.shade800,
-            ),
+          : widget.trailing ??
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey.shade800,
+              ),
     );
   }
 }

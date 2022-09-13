@@ -52,9 +52,12 @@ class UserData {
   String? exitDate;
   String? passport;
   String? registrationToken;
+  DateTime? createdAt, updatedAt;
   UserStatus? status;
 
   UserData({
+    this.createdAt,
+    this.updatedAt,
     this.status,
     this.firstName,
     this.lastName,
@@ -136,6 +139,8 @@ class UserData {
     exitDate = json['exitDate'];
     passport = json['passport'];
     registrationToken = json['registrationToken'];
+    createdAt = json['createdAt'] == null ? null : DateTime.tryParse(json['createdAt'])?.toLocal();
+    updatedAt = json['updatedAt'] == null ? null : DateTime.tryParse(json['updatedAt'])?.toLocal();
   }
 
   Map<String, dynamic> toJson() {
@@ -177,6 +182,8 @@ class UserData {
     data['exitDate'] = exitDate;
     data['passport'] = passport;
     data['registrationToken'] = registrationToken;
+    data['createdAt'] = createdAt?.toIso8601String();
+    data['updatedAt'] = updatedAt?.toIso8601String();
     return data;
   }
 }
