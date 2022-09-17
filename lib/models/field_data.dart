@@ -148,7 +148,7 @@ abstract class FormFieldData {
       case FieldType.countryVisiting:
         return CountryField(
           // isOriginCountry: fieldType.isCountryOfOrigin,
-          
+
           label: name,
           controller: controller,
           countryName: controller.text,
@@ -197,8 +197,10 @@ abstract class FormFieldData {
 
       default:
         if (controller.text.isNotEmpty) controller.text = controller.text.capitalize!;
+        print(name.capitalize);
         return MyTextField(
           hintText: name.capitalize,
+          textCapitalization: TextCapitalization.sentences,
           controller: controller,
           validator: getValidator(),
         );

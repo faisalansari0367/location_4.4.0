@@ -22,4 +22,9 @@ class VisitorCheckInCubit extends Cubit<VisitorCheckInState> {
     );
     emit(state.copyWith(isLoading: false));
   }
+
+  String getPhoneNumber() {
+    final userData = api.getUserData();
+    return '${userData?.countryCode ?? ''} ${userData?.phoneNumber ?? ''}';
+  }
 }

@@ -9,6 +9,8 @@ import 'package:background_location/widgets/animations/my_slide_animation.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:local_auth_repo/local_auth.dart';
@@ -69,27 +71,48 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Gap(10.height),
             MySlideAnimation(
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                // child: Lottie.asset(
-                //   Assets.animations.welcome,
-                //   repeat: false,
-                // ),
-                child: Image.asset(Assets.icons.appIcon.path),
+              // key: UniqueKey(),
+              duration: kDuration,
+              child: FadeInAnimation(
+                duration: kDuration,
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset(Assets.icons.appIcon.path),
+                ),
               ),
             ),
-            Gap(10.height),
+            // Gap(10.height),
             Gap(2.height),
             AnimatedOpacity(
               opacity: showSplash ? 0 : 1,
               duration: 375.milliseconds,
               child: Column(
                 children: [
-                  Text(
-                    '${Strings.welcomeTo} ${Strings.appName}',
-                    style: context.textTheme.headline5,
+                  RichText(
+                    text: TextSpan(
+                      // text: Strings.welcomeTo,
+                      children: [
+                        TextSpan(
+                          text: ' BIO',
+                          style: TextStyle(
+                            color: Color(0xff3B4798),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 60.w,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'SECURE',
+                          style: TextStyle(
+                            color: Color(0xff75B950),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 60.w,
+                          ),
+                        ),
+                      ],
+                      style: context.textTheme.headline5,
+                    ),
                   ),
-                  Gap(5.height),
+                  Gap(15.height),
                   MyElevatedButton(
                     text: (Strings.login),
                     onPressed: () async => Get.off(() => LoginPage()),

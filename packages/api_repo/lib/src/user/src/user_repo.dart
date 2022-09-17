@@ -1,4 +1,5 @@
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 
 import '../../../api_result/api_result.dart';
@@ -18,6 +19,7 @@ abstract class UserRepo {
   Future<ApiResult<UserSpecies>> getUserSpecies();
   Future<ApiResult<UserFormsData>> getUserForms();
   Future<ApiResult<List<String>>> getLicenceCategories();
+  Future<void> getCvdPDf(Map<String, dynamic> data);
 }
 
 class UserRepoImpl extends UserRepo {
@@ -130,7 +132,7 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<UserFormsData>> getUserForms() async {
     try {
-      final result = await client.get(Endpoints.usersForms);
+      final result = await client.get(Endpoints.forms);
       final list = UserFormsData.fromJson(result.data);
       return ApiResult.success(data: list);
     } catch (e) {
@@ -146,5 +148,13 @@ class UserRepoImpl extends UserRepo {
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
+  }
+
+  @override
+  Future<void> getCvdPDf(Map<String, dynamic> data) async {
+    final result = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration', data: data);
+    // TODO: implement getCvdPDf
+    print(result);
+    // throw UnimplementedError();
   }
 }

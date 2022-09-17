@@ -33,12 +33,13 @@ class BottomNavbarItem extends StatelessWidget {
         onTap: onTap,
         borderRadius: kBorderRadius,
         child: AnimatedContainer(
+          width: 110.w,
           // margin: EdgeInsets.symmetric(vertical: 10.h),
           padding: EdgeInsets.only(
-            // top: 10.sp,
-            left: 10.sp,
-            right: 10.sp,
-          ),
+              // top: 10.sp,
+              // left: 10.sp,
+              // right: 10.sp,
+              ),
           duration: 300.milliseconds,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

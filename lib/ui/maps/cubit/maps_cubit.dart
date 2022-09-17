@@ -92,7 +92,11 @@ class MapsCubit extends Cubit<MapsState> {
           emit(state.copyWith(isEditingFence: false, latLngs: []));
           _polygonsService.clear();
         },
-        failure: (failure) => DialogService.failure(error: failure),
+        failure: (failure) {
+          emit(state.copyWith(isEditingFence: false, latLngs: []));
+          _polygonsService.clear();
+          DialogService.failure(error: failure);
+        },
       );
     }
   }

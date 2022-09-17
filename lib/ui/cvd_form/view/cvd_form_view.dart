@@ -1,6 +1,7 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/ui/cvd_form/widgets/chemical_use.dart';
+import 'package:background_location/ui/cvd_form/widgets/commodity_details.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_page.dart';
 import 'package:background_location/ui/cvd_form/widgets/custom_steppar.dart';
 import 'package:background_location/widgets/my_appbar.dart';
@@ -45,7 +46,7 @@ class _CvdFormViewState extends State<CvdFormView> {
               CustomSteppar(
                 onChanged: (value) => cubit.changeCurrent(value),
                 currentStep: state.currentStep,
-                stepper: state.formStepper,
+                stepper: cubit.stepNames,
                 // isCompleted: cubit.isStepCompleted(),
               ),
               Expanded(
@@ -55,7 +56,8 @@ class _CvdFormViewState extends State<CvdFormView> {
                   children: [
                     CommonPage(data: state.formStepper[0].formDataList),
                     CommonPage(data: state.formStepper[1].formDataList),
-                    CommonPage(data: state.formStepper[2].formDataList),
+                    // CommonPage(data: state.formStepper[2].formDataList),
+                    CommodityDetails(),
                     ProductIntegrity(),
                     ChemicalUse(),
                     SelfDeclaration(),

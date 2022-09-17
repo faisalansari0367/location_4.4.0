@@ -22,6 +22,10 @@ class LogbookView extends StatelessWidget {
       body: BlocBuilder<LogBookCubit, LogBookState>(
         builder: (context, state) {
           return MyListview<Entries>(
+            // emptyWidget: Center(
+            //   child: Text('No data found'),
+            // ),
+            onRetry: context.read<LogBookCubit>().getRecords,
             isLoading: state.isLoading,
             spacing: Container(color: Colors.grey.shade200, height: 2.h),
             data: state.entries,

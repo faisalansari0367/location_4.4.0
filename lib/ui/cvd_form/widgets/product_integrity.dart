@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,12 +46,17 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
           qna(form!.data!.question3!, 2),
           CommonButtons(
             onContinue: () {
+              if (formData.length < 3) {
+                DialogService.error('Please answer all the questions');
+                return;
+              }
+
               final newMap = {};
               formData.forEach((key, value) {
                 newMap[key] = value.toList();
               });
               // print(formData);
-              final cubit = context.read<CvdCubit>();
+              final cubit = context.read<CvdCubit> ();
               cubit.addFormData(newMap);
               cubit.changeCurrent(cubit.state.currentStep + 1);
             },

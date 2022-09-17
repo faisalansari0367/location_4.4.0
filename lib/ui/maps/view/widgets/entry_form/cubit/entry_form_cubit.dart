@@ -143,6 +143,20 @@ class EntryFormCubit extends ChangeNotifier {
   }
 
   List<QuestionData> _mapQuestions(List<String>? questions) {
+    // final questions = [
+    //   "Do you have any of the following symptoms: feeling unwell or displaying flu-like symptoms, sudden loss of smell or taste, fever, cough, sore throat, fatigue or shortness of breath?",
+    //   "Have you been overseas in the past 7 days?",
+    //   "Have you been inducted to this site?",
+    //   "Does the work being undertaken involve exposure to Confined Spaces, Native Vegetation Clearing, Work at Heights or Firearm use? Are you working on any plant that needs to be isolated?",
+    //   "Risk Rating",
+    //   "Expected departure time",
+    //   "Full Name:",
+    //   "Company:",
+    //   "Mobile:",
+    //   "Name of Warakirri farm visiting:",
+    //   "Day/Date/Time",
+    //   "Signature:"
+    // ];
     return (questions ?? []).map((e) => QuestionData(question: e)).toList();
   }
 
@@ -221,8 +235,6 @@ class EntryFormCubit extends ChangeNotifier {
   }
 
   void _listenForServiceRoles() {
-    // api.getUserRoles();
-
     api.userRolesStream.listen((event) {
       state = state.copyWith(roles: event);
       notifyListeners();

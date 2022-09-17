@@ -1,7 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/models/drawer_items.dart';
-import 'package:background_location/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -52,16 +51,16 @@ class _DrawerMenuState extends State<DrawerMenu> {
         crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisSize: MainAxisSize.max,
         children: [
-          Gap(15.height),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 40.w,
-            ),
-            child: Image.asset(
-              Assets.icons.appIcon.path,
-              height: 14.height,
-            ),
-          ),
+          Gap(25.height),
+          // Padding(
+          //   padding: EdgeInsets.only(
+          //     left: 40.w,
+          //   ),
+          //   child: Image.asset(
+          //     Assets.icons.appIcon.path,
+          //     height: 14.height,
+          //   ),
+          // ),
 
           Gap(5.height),
 

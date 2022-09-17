@@ -23,23 +23,24 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
         showBackButton: false,
-        centreTitle: false,
-        title: _logo(),
+        centreTitle: true,
+        // title: _logo(),
       ),
-      body: Column(
-        // alignment: Alignment.center,
-        children: [
-          // _logo(),
-          // Positioned(
-          //   child: Image.asset(
-          //     'assets/icons/BIO_shield1 (1).png',
-          //     height: 26.height,
-          //   ),
-          // ),
-          Expanded(
-            child: GridView(
+      body: SingleChildScrollView(
+        child: Column(
+          // alignment: Alignment.center,
+          children: [
+            _logo(),
+            // Positioned(
+            //   child: Image.asset(
+            //     'assets/icons/BIO_shield1 (1).png',
+            //     height: 26.height,
+            //   ),
+            // ),
+            GridView(
               shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
+              primary: false,
+              physics: NeverScrollableScrollPhysics(),
               padding: kPadding,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -106,8 +107,8 @@ class DashboardView extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -115,13 +116,13 @@ class DashboardView extends StatelessWidget {
   Row _logo() {
     return Row(
       // crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
         // Gap(20.h),
         Image.asset(
           'assets/icons/BIO_shield1 (1).png',
-          height: 5.height,
+          height: 7.height,
         ),
         Text(
           'BIO',

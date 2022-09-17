@@ -95,7 +95,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
       }
       await Permission.location.request();
       final result = await GeolocatorService.locationPermission();
+      // await GeolocatorService.locationPermission();
+      // print(status.isGranted);
       if (result) {
+        await Permission.locationAlways.request();
         final cubit = context.read<MapsCubit>();
         cubit.init();
       } else {
@@ -245,9 +248,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
         // if ([Roles.producer, Roles.agent, Roles.consignee].contains(cubit.userData?.role?.camelCase?.getRole))
         BottomNavbarItem(
-          // icon: Assets.icons.bottomNavbar.square.path,
           iconData: LineIcons.drawPolygon,
-
           title: ('Geofence List'),
           onTap: () => BottomSheetService.showSheet(
             child: DraggableScrollableSheet(

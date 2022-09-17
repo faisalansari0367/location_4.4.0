@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/api/api_repo.dart';
 import 'package:api_repo/src/local_api/src/local_api.dart';
 import 'package:api_repo/src/user/src/models/user_forms_data.dart';
 import 'package:background_location/ui/cvd_form/models/cvd_form_data.dart';
 import 'package:background_location/ui/cvd_form/widgets/form_stepper.dart';
+import 'package:background_location/widgets/my_appbar.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,8 +29,8 @@ class CvdCubit extends Cubit<CvdState> {
     'Vendor Details',
     'Buyer Details',
     'Commodity Details',
-    'Part A - Product Integrity',
-    'Part B - Chemical Use',
+    'Product Integrity',
+    'Chemical Use',
     'Self Declaration',
   ];
 
@@ -41,6 +46,131 @@ class CvdCubit extends Cubit<CvdState> {
       _step,
       curve: Curves.fastOutSlowIn,
       duration: 500.milliseconds,
+    );
+  }
+
+  void getApiData() async {
+    // final formData = state.data;
+    // final vendor = state.data[stepNames.first];
+    // final buyer = state.data[stepNames[1]];
+    // final commodity = state.data[stepNames[2]];
+    final selfDeclaration = state.data[stepNames.last];
+    // final productIntegrity = state.data[stepNames[3]];
+
+    // final data = {
+    //   "vendorName": vendor["Name"],
+    //   "vendorAddress": vendor["Address"],
+    //   "vendorTown": vendor["Town"],
+    //   "vendorContact": vendor['Tel'],
+    //   "vendorFax": vendor["Fax"],
+    //   "vendorEmail": vendor["Email"],
+    //   "vendorNGR": vendor["ngr"],
+    //   "vendorPIC": vendor["Property Identification Code (PIC)"],
+    //   "vendorRefrence": vendor["Vendors contract/ reference No"],
+    //   "buyerName": buyer["Name"],
+    //   "buyerAddress": vendor["Address"],
+    //   "buyerTown": vendor["Town"],
+    //   "buyerContact": buyer["Tel"],
+    //   "buyerFax": buyer["Fax"],
+    //   "buyerEmail": buyer["Email"],
+    //   "buyerNGR": buyer["ngr"],
+    //   "buyerPIC": buyer["Property Identification Code (PIC)"],
+    //   "buyerRefrence": buyer["Buyers contract No"],
+    //   "commodity": commodity["commodity"],
+    //   "period": commodity["DeliveryPeriod"],
+    //   "variety1": commodity["variety1"],
+    //   "variety2": commodity["variety2"],
+    //   "quantity1": commodity["Quantity1"],
+    //   "quantity2": commodity["Quantity2"],
+    //   "sourceCheck": productIntegrity["commoditry source (tick one)"][0],
+    //   "materialCheck":
+    //       productIntegrity["Does this commodity contain restricted animal materials (eg meat and bone meal)?"][0],
+    //   "gmoCheck": productIntegrity["With respect to Genetically Modified Organisms, this commodity: (tick one)"][0],
+    //   "chemicalCheck": "1",
+    //   "chemicals": [
+    //     {"chemicalName": "chemical1", "rate": "200", "applicationDate": "2022-08-25", "WHP": "456"},
+    //     {"chemicalName": "chemical2", "rate": "2000", "applicationDate": "2022-08-27", "WHP": "753"},
+    //     {"chemicalName": "chemical3", "rate": "2650", "applicationDate": "2022-08-21", "WHP": "1369"},
+    //     {"chemicalName": "chemical4", "rate": "800", "applicationDate": "2022-04-25", "WHP": "789"}
+    //   ],
+    //   "qaCheck": "1",
+    //   "qaProgram": "QA Program",
+    //   "certificateNumber": "123654",
+    //   "cvdCheck": "0",
+    //   "cropList": [
+    //     {"cropName": "crop1"},
+    //     {"cropName": "crop2"},
+    //     {"cropName": "crop3"},
+    //     {"cropName": "crop4"}
+    //   ],
+    //   "riskCheck": "1",
+    //   "nataCheck": "1",
+    //   "signature": selfDeclaration['signature'],
+    // };
+    //  final result = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration', data: data);
+    final uri = Uri.parse('https://uniquetowinggoa.com/safemeat/public/api/declaration');
+    // final result = post(uri, body: data);
+    final reuslt = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration',
+        data: ({
+          "vendorName": "vendor Name",
+          "vendorAddress": "vendor Address",
+          "vendorTown": "vendor Town",
+          "vendorContact": "7896541236",
+          "vendorFax": "789654",
+          "vendorEmail": "jh@gmail.com",
+          "vendorNGR": "456",
+          "vendorPIC": "423",
+          "vendorRefrence": "1234567896",
+          "buyerName": "buyer Name",
+          "buyerAddress": "buyer Address",
+          "buyerTown": "buyer Town",
+          "buyerContact": "7896541236",
+          "buyerFax": "123",
+          "buyerEmail": "jh@gmail.com",
+          "buyerNGR": "789",
+          "buyerPIC": "159",
+          "buyerRefrence": "1234567896",
+          "commodity": "commodity",
+          "period": "30",
+          "variety1": "variety 1",
+          "variety2": "variety 2",
+          "quantity1": 25,
+          "quantity2": 25,
+          "sourceCheck": "2",
+          "materialCheck": "0",
+          "gmoCheck": "1",
+          "chemicalCheck": "1",
+          "chemicals": [
+            {"chemicalName": "chemical1", "rate": "200", "applicationDate": "2022-08-25", "WHP": "456"},
+            {"chemicalName": "chemical2", "rate": "2000", "applicationDate": "2022-08-27", "WHP": "753"},
+            {"chemicalName": "chemical3", "rate": "2650", "applicationDate": "2022-08-21", "WHP": "1369"},
+            {"chemicalName": "chemical4", "rate": "800", "applicationDate": "2022-04-25", "WHP": "789"}
+          ],
+          "qaCheck": "1",
+          "qaProgram": "QA Program",
+          "certificateNumber": "123654",
+          "cvdCheck": "0",
+          "cropList": [
+            {"cropName": "crop1"},
+            {"cropName": "crop2"},
+            {"cropName": "crop3"},
+            {"cropName": "crop4"}
+          ],
+          "riskCheck": "1",
+          "nataCheck": "1",
+          "signature": selfDeclaration['signature'],
+        }));
+
+    log(reuslt.data['data']);
+    final data = base64Decode(reuslt.data['data']);
+
+    Get.to(
+      () => Scaffold(
+        appBar: MyAppBar(
+          title: Text('CVD FORM PDF'),
+        ),
+        body: Image.memory(data),
+      ),
     );
   }
 
@@ -129,12 +259,12 @@ class CvdCubit extends Cubit<CvdState> {
         'data': [
           // "Vendors contract/ reference No",
           "Commodity",
-          'Variety',
-          'Variety',
+          'Variety 1',
+          'Variety 2',
 
           'Delivery Period',
-          'Quantity',
-          'Quantity',
+          'Quantity 1',
+          'Quantity 2',
 
           "Total Quantity",
         ],

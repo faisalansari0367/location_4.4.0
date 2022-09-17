@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/services/notifications/intent_service.dart';
 import 'package:background_location/ui/visitor_check_in/cubit/visitor_check_in_cubit.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class VisitorCheckInView extends StatelessWidget {
   const VisitorCheckInView({Key? key}) : super(key: key);
@@ -48,38 +48,18 @@ class VisitorCheckInView extends StatelessWidget {
                         width: 60.width,
                         height: 60.width,
                         child: Container(
-                          // color: Colors.white,
-                          decoration: MyDecoration.decoration(),
-                          child:
-                              // if (state.formData?.data.qrCode == null) return SizedBox.shrink();
-                              AnimatedSwitcher(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 7.w,
+                            ),
+                          ),
+                          child: AnimatedSwitcher(
                             duration: kDuration,
-                            child: state.isLoading
-                                ? Center(child: CircularProgressIndicator.adaptive())
-                                : state.formData == null
-                                    ? _errorWidget(context)
-                                    : _qrCode(state),
+                            child: _qrCode(state),
                           ),
                         ),
                       ),
                       Gap(10.h),
-                      // TextButton(
-                      //   child: Text('Open form'),
-                      //   onPressed: () {
-                      //     final questions = state.formData?.data?.forms?[1].questions ?? [];
-                      //     final map = List<String>.from(questions)
-                      //         .map((e) => <String, dynamic>{'question': e, 'value': null})
-                      //         .toList();
-                      //     // MobileScanner
-                      //     Get.to(
-                      //       () => EntryForm(
-                      //         polygonModel: PolygonModel(name: 'f', color: Colors.red, points: []),
-
-                      //         // questions: questions,
-                      //       ),
-                      //     );
-                      //   },
-                      // ),
                       Text(
                         'Scan me',
                         style: context.textTheme.headline6?.copyWith(
@@ -100,11 +80,9 @@ class VisitorCheckInView extends StatelessWidget {
     );
   }
 
-  Image _qrCode(VisitorCheckInState state) {
-    return Image.memory(
-      base64Decode(
-        state.formData!.data!.qrCode!.split('data:image/png;base64,')[1],
-      ),
+  Widget _qrCode(VisitorCheckInState state) {
+    return QrImage(
+      data: 'App store link and playstore link is coming soon...',
     );
   }
 
@@ -180,18 +158,34 @@ class VisitorCheckInView extends StatelessWidget {
             ),
           ),
           Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.phone),
-              Gap(5.w),
-              Text(
-                '+61 234234234',
-                style: context.textTheme.subtitle2?.copyWith(
-                  fontWeight: FontWeight.w600,
+          BlocBuilder<VisitorCheckInCubit, VisitorCheckInState>(
+            builder: (context, state) {
+              final phoneNumber = context.read<VisitorCheckInCubit>().getPhoneNumber();
+              return GestureDetector(
+                onTap: () => IntentService.dialIntent(phoneNumber),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      color: Color.fromARGB(255, 80, 106, 255),
+                    ),
+                    // Gap(5.w),
+                    Text(
+                      phoneNumber,
+                      style: context.textTheme.subtitle2?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                        // color: Color.fromARGB(255, 33, 65, 243),
+                        color: Color.fromARGB(255, 80, 106, 255),
+
+                        fontSize: 17.w,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+              );
+            },
           ),
           Divider(),
           Row(

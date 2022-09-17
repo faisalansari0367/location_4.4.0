@@ -38,10 +38,7 @@ class GeofenceCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        // MyDecoration.formatDate(item.!createdBy.createdAt),
-                        item.createdBy?.createdAt == null
-                            ? ''
-                            : 'On ' + MyDecoration.formatDate(item.createdBy!.createdAt!),
+                        item.createdAt == null ? '' : 'On ' + MyDecoration.formatDate(item.createdAt!),
                         style: context.textTheme.subtitle2?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -72,14 +69,14 @@ class GeofenceCard extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Text(
-                    // MyDecoration.formatDate(item.!createdBy.createdAt),
-                    item.createdBy?.createdAt == null
-                        ? ''
-                        : 'Last Updated on ' + MyDecoration.formatDate(item.createdBy!.createdAt!),
-                    style: context.textTheme.subtitle2?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade700,
+                  Expanded(
+                    child: Text(
+                      // MyDecoration.formatDate(item.!createdBy.createdAt),
+                      item.updatedAt == null ? '' : 'Last Update ' + MyDecoration.formatDate(item.updatedAt!),
+                      style: context.textTheme.subtitle2?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
                     ),
                   ),
                 ],

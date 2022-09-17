@@ -158,4 +158,9 @@ class ApiRepo implements Api {
   Future<ApiResult<List<String>>> getLicenceCategories() {
     return _userRepo.getLicenceCategories();
   }
+
+  @override
+  Future<void> getCvdPDf(Map<String, dynamic> data) {
+    return _userRepo.getCvdPDf(data);
+  }
 }

@@ -51,6 +51,8 @@ class UserData {
   String? entryDate;
   String? exitDate;
   String? passport;
+  String? ngr;
+
   String? registrationToken;
   DateTime? createdAt, updatedAt;
   UserStatus? status;
@@ -94,6 +96,7 @@ class UserData {
     this.exitDate,
     this.passport,
     this.registrationToken,
+    this.ngr,
   });
 
   static UserStatus getStatus(String? status) {
@@ -104,6 +107,8 @@ class UserData {
 
   UserData.fromJson(Map<String, dynamic> json) {
     status = getStatus(json['status']);
+    ngr = json['ngr'];
+
     id = json['id'];
     firstName = json['firstName'];
     lastName = json['lastName'];
@@ -184,6 +189,7 @@ class UserData {
     data['registrationToken'] = registrationToken;
     data['createdAt'] = createdAt?.toIso8601String();
     data['updatedAt'] = updatedAt?.toIso8601String();
+    data['ngr'] = ngr;
     return data;
   }
 }

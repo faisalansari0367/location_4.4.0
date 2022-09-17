@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:api_repo/api_repo.dart';
+import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -17,13 +20,14 @@ class SelfDeclaration extends StatefulWidget {
 class _SelfDeclarationState extends State<SelfDeclaration> {
   List<String> data = [];
   String? signature;
-  // TextEditingController nameController = TextEditingController();
-  // TextEditingController orgController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController orgController = TextEditingController();
 
   String name = '', org = '';
 
   @override
   void initState() {
+    nameController = TextEditingController(text: getName());
     _init();
     super.initState();
   }
@@ -45,6 +49,10 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
           // Gap(20.h),
           MyTextField(
             hintText: 'Name',
+            controller: nameController,
+
+            // value: getName(),
+
             textCapitalization: TextCapitalization.characters,
             onChanged: (s) => setState(() {
               name = s;
@@ -85,9 +93,9 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                 style: style,
                 text: 'I ',
                 children: [
-                  TextSpan(text: name),
+                  TextSpan(text: nameController.text.isEmpty ? '____' : nameController.text),
                   TextSpan(text: ' of '),
-                  TextSpan(text: org),
+                  TextSpan(text: org.isEmpty ? '____' : org),
                   TextSpan(text: ' declare that:'),
                 ],
               ),
@@ -157,11 +165,31 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
           Gap(20.h),
           MyElevatedButton(
             text: 'Submit',
+            onPressed: () async {
+              final cubit = context.read<CvdCubit>();
+              final data = {
+                'signature': signature,
+                'date': DateTime.now().toIso8601String(),
+              };
+              cubit.addFormData(data);
+              cubit.getApiData();
+              print(cubit.state.data);
+            },
           ),
           Gap(50.h),
         ],
       );
     });
+  }
+
+  String getName() {
+    final userData = context.read<Api>().getUserData();
+    String data = '';
+    if (userData?.firstName == null && userData?.lastName == null) {
+    } else {
+      data = userData!.firstName! + ' ' + userData.lastName!;
+    }
+    return data;
   }
 
   void _init() async {

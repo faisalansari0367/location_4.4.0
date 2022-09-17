@@ -163,4 +163,10 @@ class LocalApi extends Api {
     // TODO: implement getLicenceCategories
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> getCvdPDf(Map<String, dynamic> data) {
+    // TODO: implement getCvdPDf
+    throw UnimplementedError();
+  }
 }

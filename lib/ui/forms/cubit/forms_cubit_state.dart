@@ -22,14 +22,14 @@ class QuestionData extends Equatable {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'question': question,
+      'field': question,
       'value': value,
     };
   }
 
   factory QuestionData.fromJson(Map<String, dynamic> map) {
     return QuestionData(
-      question: map['question'] as String,
+      question: map['field'] as String,
       value: map['value'] as dynamic,
     );
   }

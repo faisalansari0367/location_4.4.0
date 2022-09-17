@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/ui/cvd_form/models/chemical_use_model.dart';
 import 'package:background_location/ui/cvd_form/widgets/add_fields.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:background_location/ui/cvd_form/widgets/editable_table.dart';
 import 'package:background_location/ui/cvd_form/widgets/question_with_checkbox.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubit/cvd_cubit.dart';
 
 class ChemicalUse extends StatefulWidget {
   const ChemicalUse({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class ChemicalUse extends StatefulWidget {
 class _ChemicalUseState extends State<ChemicalUse> {
   ChemicalUseModel? form;
   final formData = {};
+  List<Map> tableData = [];
   bool showTable = false;
 
   Future<void> _init() async {
@@ -78,7 +81,14 @@ class _ChemicalUseState extends State<ChemicalUse> {
             onChanged: _onChanged,
           ),
           CommonButtons(onContinue: () {
-            context.read<CvdCubit>().changeCurrent(0, isNext: true);
+            if (formData.length < 5) {
+              DialogService.error('Please answer all the questions');
+            } else {
+              var cubit = context.read<CvdCubit>();
+              formData['tableData'] = tableData;
+              cubit.addFormData(formData);
+              cubit.changeCurrent(0, isNext: true);
+            }
           }),
         ],
       ),
@@ -89,7 +99,6 @@ class _ChemicalUseState extends State<ChemicalUse> {
     formData.addAll(map);
     if (formData.containsKey(form?.question4?.field)) {
       final value = formData[form?.question4?.field];
-
       if (value is Set) {
         if ((value.first as String).contains('Yes')) {
           showTable = true;
@@ -107,6 +116,9 @@ class _ChemicalUseState extends State<ChemicalUse> {
       ),
       height: 30.height,
       child: EditableTable(
+        onRowAdd: (value) {
+          tableData = value;
+        },
         headers: form?.question4!.tableHeader,
       ),
     );

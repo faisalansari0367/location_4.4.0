@@ -1,6 +1,4 @@
-import 'package:background_location/constants/constans.dart';
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +25,8 @@ class MyListview<T> extends StatelessWidget {
     this.shrinkWrap = false,
     this.isPrimary = false,
     this.onRetry,
-    this.padding, this.controller,
+    this.padding,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -44,39 +43,43 @@ class MyListview<T> extends StatelessWidget {
     return spacing ?? Gap(2.height);
   }
 
-  Widget _loader() => SizedBox.square(
-        dimension: 50.height,
-        child: Center(
-          child: CircularProgressIndicator(),
+  Widget _loader() => Center(
+        child: SizedBox.square(
+          // dimension: 50.height,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+          // dimension: 40.height,
         ),
-        // dimension: 40.height,
       );
 
   Widget _empty() {
-    return SizedBox.square(
-      dimension: 50.height,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              Strings.somethingWentWrong,
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Color.fromARGB(255, 241, 62, 62),
+    return Center(
+      child: SizedBox.square(
+        // dimension: 50.height,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'No data found',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Color.fromARGB(255, 241, 62, 62),
+                ),
               ),
-            ),
-            Gap(2.height),
-            MyElevatedButton(
-              text: 'Retry',
-              padding: EdgeInsets.zero,
-              width: 20.width,
-              onPressed: onRetry,
-            ),
-          ],
+              Gap(2.height),
+              MyElevatedButton(
+                text: 'Retry',
+                padding: EdgeInsets.zero,
+                width: 20.width,
+                onPressed: onRetry,
+              ),
+            ],
+          ),
         ),
+        // dimension: 40.height,
       ),
-      // dimension: 40.height,
     );
   }
 

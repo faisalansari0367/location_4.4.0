@@ -1,6 +1,5 @@
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:background_location/ui/cvd_form/widgets/form_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,7 @@ final todoColor = Colors.grey;
 
 class CustomSteppar extends StatelessWidget {
   final ValueChanged<int> onChanged;
-  final List<FormStepper> stepper;
+  final List<String> stepper;
   final bool isCompleted;
   final int currentStep;
   const CustomSteppar({
@@ -27,42 +26,30 @@ class CustomSteppar extends StatelessWidget {
   Widget build(BuildContext context) {
     print(isCompleted);
     return Container(
+      width: double.infinity,
+      height: 100.h,
       decoration: BoxDecoration(
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
-            // spreadRadius: 10,
             blurRadius: 10,
             color: Colors.grey.shade100,
             offset: Offset(0, 5),
           ),
         ],
       ),
-      child: SingleChildScrollView(
+      child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.only(bottom: 10),
-        child: Container(
-          // decoration: BoxDecoration(
-          //   boxShadow: [
-          //     BoxShadow(
-          //       // spreadRadius: 10,
-          //       blurRadius: 10,
-          //       color: Colors.grey.shade300,
-          //       offset: Offset(0, 10),
-          //     ),
-          //   ],
-          // ),
-          child: Row(
-            children: stepper
-                .map(
-                  (v) => step(
-                    stepper.indexOf(v),
-                    v.heading,
-                    isCompleted: context.read<CvdCubit>().isStepCompleted(stepper.indexOf(v)),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
+        padding: EdgeInsets.only(bottom: 10.h),
+        children: stepper
+            .map(
+              (v) => step(
+                stepper.indexOf(v),
+                v,
+                isCompleted: context.read<CvdCubit>().isStepCompleted(stepper.indexOf(v)),
+              ),
+            )
+            .toList(),
       ),
     );
   }
@@ -75,13 +62,6 @@ class CustomSteppar extends StatelessWidget {
     } else {
       return Colors.white;
     }
-    // if (index == _processIndex) {
-    //   return inProgressColor;
-    // } else if (index < _processIndex) {
-    //   return Colors.green;
-    // } else {
-    //   return todoColor;
-    // }
   }
 
   // getColors() {
@@ -129,12 +109,10 @@ class CustomSteppar extends StatelessWidget {
                     : Text(
                         (index + 1).toString(),
                         textAlign: TextAlign.center,
-                        // style: TextStyle(color: Colors.black),
                       ),
               ),
             ),
             Gap(8.h),
-            // if (currentStep == index)
             AnimatedDefaultTextStyle(
               duration: duration,
               style: TextStyle(
@@ -143,14 +121,10 @@ class CustomSteppar extends StatelessWidget {
                 color: isActive ? kPrimaryColor : Color.fromARGB(255, 25, 25, 25),
               ),
               child: SizedBox(
-                // constraints: BoxConstraints(
-                // maxWidth: 100.w,
-                // minWidth: 50.w,
-                // ),
                 width: 80.w,
                 child: Text(
-                  // name.replaceAll(' ', '\n'),
                   name,
+                  maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
               ),

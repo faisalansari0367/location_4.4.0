@@ -4,24 +4,18 @@ import 'package:get/get.dart';
 
 class EditableTable extends StatefulWidget {
   final List? headers;
-  const EditableTable({Key? key, required this.headers}) : super(key: key);
+  final ValueChanged<List<Map>> onRowAdd;
+  const EditableTable({Key? key, required this.headers, required this.onRowAdd}) : super(key: key);
 
   @override
   State<EditableTable> createState() => _EditableTableState();
 }
 
 class _EditableTableState extends State<EditableTable> {
-  final rows = [];
+  final rows = Set<Map>();
 
   @override
   void initState() {
-    // for (var i = 0; i < widget.headers!.length; i++) {
-    //   final newMap = {};
-    //   newMap['row'] = i;
-    //   final item = widget.headers!;
-
-    //   // rows.add(newMap);
-    // }
     super.initState();
   }
 
@@ -29,9 +23,10 @@ class _EditableTableState extends State<EditableTable> {
   Widget build(BuildContext context) {
     return Editable(
       columns: widget.headers,
-      rows: rows,
+      rows: rows.toList(),
       rowCount: rows.length,
       showCreateButton: true,
+
       tdStyle: TextStyle(fontSize: 20),
       columnRatio: 0.4,
       showSaveIcon: true, //set true
@@ -41,6 +36,7 @@ class _EditableTableState extends State<EditableTable> {
       onRowSaved: (value) {
         rows.add(value);
         print(rows);
+        widget.onRowAdd.call(rows.map((e) => e..remove('row')).toList());
       },
     );
   }

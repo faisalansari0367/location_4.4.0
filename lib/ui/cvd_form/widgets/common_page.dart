@@ -43,7 +43,7 @@ class _CommonPageState extends State<CommonPage> {
         Form(
           key: formKey,
           child: ListView.separated(
-            separatorBuilder: (context, index) => Gap(10.h),
+            separatorBuilder: (context, index) => Gap(15.h),
             itemBuilder: _itemBuilder,
             itemCount: widget.data.length,
             primary: false,
@@ -106,6 +106,7 @@ class _CommonPageState extends State<CommonPage> {
         _onChanged(item.name, userData?.phoneNumber ?? '');
         return PhoneTextField(
           controller: TextEditingController(text: userData?.phoneNumber),
+          
 
           // name: item.name,
 
@@ -145,7 +146,31 @@ class _CommonPageState extends State<CommonPage> {
           value: data,
           onChanged: (s) => _onChanged(item.name, s),
         );
+      case 'nationalGrowerRegistration(ngr)No':
+        _onChanged('ngr', userData?.ngr ?? '');
+        return CvdTextField(
+          name: item.name,
+          value: userData?.ngr,
+          onChanged: (s) => _onChanged(item.name, s),
+        );
+      case 'address':
+        _onChanged(item.name, getAddress());
+        return CvdTextField(
+          name: item.name,
+          value: getAddress(),
+          onChanged: (s) => _onChanged(item.name, s),
+        );
+
+      case 'fax':
+        _onChanged(item.name, '');
+        return CvdTextField(
+          name: item.name,
+          validator: (s) => null,
+          onChanged: (s) => _onChanged(item.name, s),
+        );
+
       default:
+        print(item.name.toCamelCase);
         return CvdTextField(
           name: item.name,
           value: formData[item.name] ?? '',
@@ -153,6 +178,20 @@ class _CommonPageState extends State<CommonPage> {
           onChanged: (s) => _onChanged(item.name, s),
         );
     }
+  }
+
+  String getAddress() {
+    String address = '';
+    address += userData?.street ?? '';
+    address += ' ';
+    address += userData?.town ?? '';
+    address += ' ';
+    address += userData?.state ?? '';
+    address += ' ';
+
+    if (userData?.postcode != null) address += userData!.postcode!.toString();
+
+    return address.trim();
   }
 
   void _onChanged(String key, String value) {

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
@@ -52,7 +53,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     await getSpecies();
 
     // api.getLicenceCategories();
-    getLicenceCategories();
+    // getLicenceCategories();
     // await Future.wait([
     //   _getFields(),
     //   getRoleDetails(),
@@ -112,7 +113,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       success: (data) {
         final fields = [...state.fieldsData];
         final speciesData = userRoleDetails.containsKey(FieldType.species.name)
-            ? List<String>.from(userRoleDetails[FieldType.species.name])
+            ? List<String>.from(userRoleDetails[FieldType.species.name] ?? [])
             : <String>[];
         if (speciesData.isNotEmpty) {
           data.data!.forEach((element) {
@@ -148,8 +149,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     // emit(state.copyWith(fields: [...state.fields, 'cit]));
     state.fields.forEach((e) {
       var hasField = false;
-      final isMobile = e.camelCase == 'mobile';
-      final key = e.camelCase!.replaceAll(String.fromCharCode(0x27), '');
+      final isMobile = e.toCamelCase == 'mobile';
+      final key = e.toCamelCase.replaceAll(String.fromCharCode(0x27), '');
       if (isMobile) {
         hasField = userRoleDetails.containsKey('phoneNumber');
       } else {
@@ -169,11 +170,17 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           log(e.toString());
         }
       } else {
-        if (e.camelCase == FieldType.companyAddress.name) return;
+        if (e.toCamelCase == FieldType.companyAddress.name) return;
         final controller = TextEditingController();
         final fieldData = FieldData(name: e, controller: controller);
         list.add(fieldData);
       }
+
+      // if (e == 'National Grower Registration (NGR) No:') {
+      //   final controller = TextEditingController(text: userRoleDetails['ngr']);
+      //   final fieldData = FieldData(name: e, controller: controller);
+      //   list.add(fieldData);
+      // }
     });
 
     final map = <String, dynamic>{};
@@ -191,7 +198,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       address.fieldsToShow = addressFields;
 
       final isCompanyAddress =
-          state.fields.indexWhere((element) => element.camelCase! == FieldType.companyAddress.name);
+          state.fields.indexWhere((element) => element.toCamelCase == FieldType.companyAddress.name);
       if (isCompanyAddress != -1) {
         list.add(
           FieldData(
@@ -306,7 +313,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           data[field.fieldType.name] = (list);
           return;
         }
-        data[field.name.camelCase!.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();
+        data[field.name.toCamelCase.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();
       });
 
       if (data.containsKey(FieldType.countryOfOrigin.name) && data.containsKey(FieldType.countryVisiting.name)) {
@@ -345,8 +352,12 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           return;
         }
       }
-
-      // if()
+      final ngrKey = 'nationalGrowerRegistration(ngr)No:';
+      if (data.containsKey(ngrKey)) {
+        final ngrValue = data[ngrKey];
+        data.remove(ngrKey);
+        data['ngr'] = ngrValue;
+      }
       // final role = apiService.getUser()!.role!;
       final result = await apiService.updateRole(role, data);
       result.when(

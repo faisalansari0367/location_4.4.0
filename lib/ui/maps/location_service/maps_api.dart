@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
@@ -17,6 +15,7 @@ class _Endpoints {
   // static const String notifyManager = '/notifyManager';
   static const String notifyProperyManager = '/users/notify-property-manager';
   static const String registerEntryToLogbook = '/users/register-entry-to-logbook';
+  static const String logRecords = '/log-records/';
 }
 
 class MapsApi implements MapsRepo {
@@ -114,9 +113,9 @@ class MapsApi implements MapsRepo {
   @override
   Future<ApiResult<dynamic>> logBookEntry(String pic, String? form, String locationId) async {
     try {
-      final result = await client.post(_Endpoints.registerEntryToLogbook, data: {
-        'pic': pic,
-        'form': form ?? '[]',
+      final result = await client.post(_Endpoints.logRecords, data: {
+        // 'pic': pic,
+        'form': form,
         'geofenceID': locationId,
       });
       return ApiResult.success(data: result.data);
