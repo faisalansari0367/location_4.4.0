@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -5,11 +7,7 @@ class GeolocatorService {
   static final GeolocatorPlatform instance = GeolocatorPlatform.instance;
   static Future<Position> getCurrentPosition() async {
     try {
-      const settings = LocationSettings(
-        accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
-      );
-      final position = await instance.getCurrentPosition(locationSettings: settings);
+      final position = await instance.getCurrentPosition(locationSettings: _getLocationSettings);
       return position;
     } catch (e) {
       print('error from get current position $e');
@@ -23,6 +21,7 @@ class GeolocatorService {
 
   static Future<bool> locationPermission() async {
     final result = await instance.checkPermission();
+
     var value = true;
     switch (result) {
       case LocationPermission.denied:
@@ -50,10 +49,33 @@ class GeolocatorService {
   }
 
   static Future<Stream<Position>> getLocationUpdates() async {
-    const settings = LocationSettings(
-      accuracy: LocationAccuracy.bestForNavigation,
-      distanceFilter: 10,
-    );
-    return instance.getPositionStream(locationSettings: settings);
+    return instance.getPositionStream(locationSettings: _getLocationSettings);
+  }
+
+  static LocationSettings get _getLocationSettings {
+    late LocationSettings locationSettings;
+
+    if (Platform.isAndroid) {
+      locationSettings = AndroidSettings(
+        accuracy: LocationAccuracy.best,
+        // distanceFilter: 10,
+        forceLocationManager: true,
+        // intervalDuration: const Duration(seconds: 10),
+      );
+    } else if (Platform.isIOS) {
+      locationSettings = AppleSettings(
+        accuracy: LocationAccuracy.best,
+        activityType: ActivityType.other,
+        // distanceFilter: 10,
+        pauseLocationUpdatesAutomatically: true,
+        showBackgroundLocationIndicator: true,
+      );
+    } else {
+      locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        // distanceFilter: 10,
+      );
+    }
+    return locationSettings;
   }
 }

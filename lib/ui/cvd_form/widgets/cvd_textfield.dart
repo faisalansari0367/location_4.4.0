@@ -55,6 +55,7 @@ class _CvdTextFieldState extends State<CvdTextField> {
         // ),
         // Gap(5.h),
         MyTextField(
+          textCapitalization: widget.textCapitalization,
           hintText: widget.name,
           maxLength: widget.maxLength,
           inputFormatters: widget.inputFormatters,

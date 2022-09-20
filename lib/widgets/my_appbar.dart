@@ -44,9 +44,11 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
       data: Theme.of(context).copyWith(
         appBarTheme: AppBarTheme(
           color: backgroundColor,
+          // color: context.theme.primaryColor,
           elevation: elevation,
           iconTheme: IconThemeData(
             color: iconColor,
+            // color: Colors.white,
           ),
           titleTextStyle: TextStyle(
             color: Colors.black,

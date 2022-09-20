@@ -111,13 +111,16 @@ class EntryFormCubit extends ChangeNotifier {
         if (role.isInternationalTraveller || role.isVisitor) {
           emit(
             state.copyWith(
+              forms: s.data?.forms,
               questions: _mapQuestions(s.data?.forms?.first.questions),
               formData: _getFormData(s.data?.forms?.first.questions),
+              isFirstForm: true,
             ),
           );
         } else {
           emit(
             state.copyWith(
+              forms: s.data?.forms,
               questions: _mapQuestions(s.data?.forms?[1].questions),
               formData: _getFormData(s.data?.forms?[1].questions),
             ),
@@ -220,15 +223,33 @@ class EntryFormCubit extends ChangeNotifier {
         ),
       );
     final userData = api.getUserData();
-    // getJsonData();
     final result = await mapsApi.logBookEntry(userData!.pic!, jsonEncode(getJsonData()), polygon.id!);
     result.when(
       success: (data) {
-        DialogService.success('Form Submitted', onCancel: () {
-          Get.back();
-          Get.back();
-        });
-        // Get.back();
+        DialogService.success(
+          'Form Submitted',
+          onCancel: () {
+            Get.back();
+            Get.back();
+          },
+        );
+      },
+      failure: (e) => DialogService.failure(error: e),
+    );
+  }
+
+  Future<void> submitFormData(String json) async {
+    final userData = api.getUserData();
+    final result = await mapsApi.logBookEntry(userData!.pic!, json, polygon.id!);
+    result.when(
+      success: (data) {
+        DialogService.success(
+          'Form Submitted',
+          onCancel: () {
+            Get.back();
+            Get.back();
+          },
+        );
       },
       failure: (e) => DialogService.failure(error: e),
     );

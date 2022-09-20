@@ -16,13 +16,14 @@ class Endpoints {
       fieldsRecords = '$records/fieldsRecord',
       forms = '$records/forms',
 
-
       // users
       getFields = '$users/fields',
       updateUser = '$users/me',
-      logRecords = '$users/log-records',
       usersForms = '$users/forms',
       exportLogRecords = '$users/export-log-records';
+
+  // log records
+  static const logRecords = '/log-records';
 
   // static String user(int id) => '/user/$id';
 }

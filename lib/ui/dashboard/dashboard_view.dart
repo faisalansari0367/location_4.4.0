@@ -2,6 +2,7 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:background_location/ui/cvd_form/view/cvd_from_page.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
+import 'package:background_location/ui/forms/view/forms_page.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
@@ -105,6 +106,13 @@ class DashboardView extends StatelessWidget {
                     DialogService.showDialog(child: ComingSoonDialog());
                   },
                 ),
+                // DashboardCard(
+                //   text: 'FORMS',
+                //   iconData: Icons.work_outline,
+                //   onTap: () {
+                //     Get.to(() => FormsPage());
+                //   },
+                // ),
               ],
             ),
           ],

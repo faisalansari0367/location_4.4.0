@@ -1,5 +1,6 @@
+import 'package:background_location/ui/cvd_form/widgets/cvd_textfield.dart';
 import 'package:background_location/ui/forms/cubit/forms_cubit_cubit.dart';
-import 'package:background_location/ui/forms/widget/qr_scan_page.dart';
+import 'package:background_location/ui/forms/view/entry_zone_form.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/index.dart';
-import '../models/form_field_data.dart';
 
 class FormsView extends StatelessWidget {
   // final Map<String, dynamic> formData;
@@ -21,23 +21,26 @@ class FormsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<FormsCubit>();
+    // final cubit = context.read<FormsCubit>();
     // print(string);
     return Scaffold(
       appBar: MyAppBar(
         title: Text(title ?? 'Scanned form'),
         showDivider: true,
       ),
-      body: PageView(
-        controller: cubit.state.pageController,
-        physics: NeverScrollableScrollPhysics(),
-        children: [
-          _firstPage(cubit),
-          Consumer<FormsCubit>(
-            builder: (context, value, child) => QrScanPage(qrData: value.state.qrData),
-          ),
-        ],
-      ),
+      body: Consumer<FormsCubit>(builder: (context, cubit, child) {
+        if (cubit.state.isLoading) return CircularProgressIndicator();
+        return PageView(
+          controller: cubit.state.pageController,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            Form1(form1: cubit.forms.first),
+            // Consumer<FormsCubit>(
+            //   builder: (context, value, child) => QrScanPage(qrData: value.state.qrData),
+            // ),
+          ],
+        );
+      }),
     );
   }
 
@@ -82,7 +85,7 @@ class FormsView extends StatelessWidget {
                 primary: false,
                 shrinkWrap: true,
                 separatorBuilder: (context, index) => Gap(15.h),
-                itemCount: state.state.questions.length,
+                itemCount: state.forms.isEmpty ? 0 : state.forms.first.questions?.length ?? 0,
                 itemBuilder: itemBuilder,
                 // padding: kPadding,
               );
@@ -100,25 +103,16 @@ class FormsView extends StatelessWidget {
 
   Widget itemBuilder(BuildContext context, int index) {
     final cubit = context.read<FormsCubit>();
-    final item = cubit.state.questions[index];
-    // final field = item.fieldWidget;
-    // final fieldInCamelCase = field.camelCase;
-    final fieldData = UserFormData(
-      cubit,
-      name: (item.question.replaceFirst(':', '')),
-      controller: TextEditingController(),
-      questionData: item,
-    );
-    return fieldData.fieldWidget;
-    // return fieldData.fieldWidget;
+    final item = cubit.forms[0].questions![index];
 
-    // if (FieldType.values.contains(fieldData.fieldType)) {
-    //   if (!fieldData.fieldType.isText) return fieldData.fieldWidget;
-    // // }
-    // return FormCard(
-    //   question: item.question,
-    //   selectedValue: item.value,
-    //   onChanged: (s) => cubit.onChanged(s, index),
-    // );
+    switch (item) {
+      // case :
+
+      //   break;
+      default:
+        return CvdTextField(
+          name: item,
+        );
+    }
   }
 }

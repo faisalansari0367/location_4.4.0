@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/intent_service.dart';
 import 'package:background_location/ui/visitor_check_in/cubit/visitor_check_in_cubit.dart';
@@ -49,9 +50,7 @@ class VisitorCheckInView extends StatelessWidget {
                         height: 60.width,
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 7.w,
-                            ),
+                            border: Border.all(width: 7.w),
                           ),
                           child: AnimatedSwitcher(
                             duration: kDuration,
@@ -112,6 +111,7 @@ class VisitorCheckInView extends StatelessWidget {
   Container _infoCard(BuildContext context) {
     return Container(
       padding: kPadding,
+      // width: double.infinity,
       decoration: MyDecoration.decoration().copyWith(
         border: Border.all(color: Colors.red, width: 1.width),
       ),
@@ -140,53 +140,33 @@ class VisitorCheckInView extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          Text(
-            'Farm Biosecurity'.toUpperCase(),
-            style: context.textTheme.headline6?.copyWith(
-              color: Color.fromARGB(255, 255, 0, 0),
-              fontWeight: FontWeight.w600,
+          SizedBox(
+            child: AutoSizeText(
+              'Farm Biosecurity'.toUpperCase(),
+              maxLines: 1,
+              style: context.textTheme.headline6?.copyWith(
+                color: Color.fromARGB(255, 255, 0, 0),
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           Divider(
             color: Color.fromARGB(255, 0, 0, 0),
           ),
-          Text(
-            'Please phone or visit the office before entering',
-            style: context.textTheme.subtitle1?.copyWith(
-              // color: Colors.white,
-              fontWeight: FontWeight.w600,
+          SizedBox(
+            width: double.infinity,
+            child: AutoSizeText(
+              'Please phone or visit the office before entering',
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              style: context.textTheme.subtitle1?.copyWith(
+                // color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           Divider(),
-          BlocBuilder<VisitorCheckInCubit, VisitorCheckInState>(
-            builder: (context, state) {
-              final phoneNumber = context.read<VisitorCheckInCubit>().getPhoneNumber();
-              return GestureDetector(
-                onTap: () => IntentService.dialIntent(phoneNumber),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.phone,
-                      color: Color.fromARGB(255, 80, 106, 255),
-                    ),
-                    // Gap(5.w),
-                    Text(
-                      phoneNumber,
-                      style: context.textTheme.subtitle2?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline,
-                        // color: Color.fromARGB(255, 33, 65, 243),
-                        color: Color.fromARGB(255, 80, 106, 255),
-
-                        fontSize: 17.w,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+          _phoneNumber(),
           Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -194,8 +174,9 @@ class VisitorCheckInView extends StatelessWidget {
               Icon(Icons.info, color: Colors.red),
               Gap(5.w),
               Expanded(
-                child: Text(
-                  "Don't enter property without prior approval",
+                child: AutoSizeText(
+                  "Do not enter property without prior approval",
+                  maxLines: 1,
                   style: context.textTheme.bodyText2?.copyWith(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -216,6 +197,39 @@ class VisitorCheckInView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  BlocBuilder<VisitorCheckInCubit, VisitorCheckInState> _phoneNumber() {
+    return BlocBuilder<VisitorCheckInCubit, VisitorCheckInState>(
+      builder: (context, state) {
+        final phoneNumber = context.read<VisitorCheckInCubit>().getPhoneNumber();
+        if (phoneNumber.trim().isEmpty) return SizedBox.shrink();
+        return GestureDetector(
+          onTap: () => IntentService.dialIntent(phoneNumber),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.phone,
+                color: Color.fromARGB(255, 80, 106, 255),
+              ),
+              // Gap(5.w),
+              Text(
+                phoneNumber,
+                style: context.textTheme.subtitle2?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                  // color: Color.fromARGB(255, 33, 65, 243),
+                  color: Color.fromARGB(255, 80, 106, 255),
+
+                  fontSize: 17.w,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

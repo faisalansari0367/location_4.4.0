@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/ui/forms/view/entry_zone_form.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/widgets/listview/my_listview.dart';
@@ -10,6 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../widgets/my_appbar.dart';
+import '../../../../forms/view/form2.dart';
 import 'cubit/entry_form_cubit.dart';
 
 class EntryForm extends StatefulWidget {
@@ -39,9 +41,26 @@ class _EntryFormState extends State<EntryForm> {
           title: Text('Zone Entry Form'),
         ),
         body: SingleChildScrollView(
-          padding: kPadding,
+          // padding: kPadding,
           child: Consumer<EntryFormCubit>(
             builder: (context, state, child) {
+              if (state.state.isLoading) {
+                return SizedBox(
+                  height: 45.height,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (state.state.isFirstForm) {
+                return Form1(
+                  form1: state.state.forms.first,
+                  onSubmit: (s) => cubit.submitFormData(s),
+                );
+              } else {
+                return Form2(
+                  form2: state.state.forms[1],
+                  onSubmit: (s) => cubit.submitFormData(s),
+                );
+              }
               return Form(
                 key: formKey,
                 child: Column(
@@ -68,104 +87,10 @@ class _EntryFormState extends State<EntryForm> {
                   ],
                 ),
               );
-              // return FormsPage(
-              //   title: 'Entry zone form',
-              //   questions: state.questions,
-              //   onSubmit: (s) {
-              //     cubit.getFormData(s);
-              //     cubit.onPressed();
-              //   },
-              // );
-              // return SingleChildScrollView(
-              //   child: Column(
-              //     children: [
-              //       MyListview(
-              //         isLoading: state.isLoading,
-              //         onRetry: cubit.getFormQuestions,
-              //         shrinkWrap: true,
-              //         padding: kPadding,
-              //         data: state.questions,
-              //         itemBuilder: (context, index) {
-              //           final question = state.questions.elementAt(index);
-              //           return Container(
-              //             padding: kPadding.copyWith(bottom: 0),
-              //             decoration: BoxDecoration(
-              //               borderRadius: kBorderRadius,
-              //               border: Border.all(
-              //                 color: Colors.grey.shade300,
-              //               ),
-              //             ),
-              //             child: Column(
-              //               crossAxisAlignment: CrossAxisAlignment.start,
-              //               mainAxisSize: MainAxisSize.min,
-              //               children: [
-              //                 Text(
-              //                   question.trim(),
-              //                   style: TextStyle(
-              //                     color: Colors.grey.shade800,
-              //                     fontWeight: FontWeight.w600,
-              //                     fontSize: 16.h,
-              //                   ),
-              //                 ),
-              //                 Gap(10.h),
-              //                 Row(
-              //                   children: [
-              //                     _radioButton(_value(state, question), true, 'Yes', question),
-              //                     Gap(30.w),
-              //                     _radioButton(_value(state, question), false, 'No', question),
-              //                   ],
-              //                 ),
-              //               ],
-              //             ),
-              //           );
-              //         },
-              //       ),
-              //       Padding(
-              //         padding: kPadding,
-              //         child: MyElevatedButton(
-              //           text: 'Submit',
-              //           onPressed: () async => cubit.onPressed(),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // );
             },
           ),
         ),
       ),
     );
   }
-
-  // bool? _value(EntryFormState state, String question) {
-  //   final hasKey = state.questionAnswers.containsKey(question);
-  //   return hasKey ? _getBoolValue(state.questionAnswers[question]!) : null;
-  // }
-
-  // Container _radioButton(bool? selectedValue, bool value, String text, String question) {
-  //   return Container(
-  //     child: Row(
-  //       children: [
-  //         Text(
-  //           text,
-  //           style: TextStyle(
-  //             fontWeight: FontWeight.w700,
-  //             fontSize: 16.h,
-  //             color: Colors.grey.shade600,
-  //           ),
-  //         ),
-  //         Radio<bool>(
-  //           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  //           value: value,
-  //           groupValue: selectedValue,
-  //           fillColor: MaterialStateProperty.all(kPrimaryColor),
-  //           onChanged: (s) => cubit.setQuestionValue(question, s! ? 'yes' : 'no'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // bool _getBoolValue(String s) => s == 'yes' ? true : false;
-
 }

@@ -335,26 +335,14 @@ class MapsCubit extends Cubit<MapsState> {
     final popups = MapsPopups(notifyManager, mapsRepo, this);
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
-      var position = LatLng(event.latitude, event.longitude);
+      final position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
       final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
         latLng: position,
         polygons: state.polygons,
         accuracy: event.accuracy,
       );
-
-      // print('location updates');
-      // mapController.animateCamera(
-      //   CameraUpdate.newCameraPosition(
-      //     CameraPosition(
-      //       target: position,
-      //       zoom: 20.151926040649414,
-      //     ),
-      //   ),
-      // );
-      // final polygon = state.polygons.where(
-      //     (element) => MapsToolkitService.isInsidePolygon(latLng: state.currentLocation, polygon: element.points));
-
+      print('polygons in coverage $polygonsInCoverage');
       popups.polygonsInCoverage.add(polygonsInCoverage);
       popups.controller.add(polygonsInCoverage.isNotEmpty);
     });

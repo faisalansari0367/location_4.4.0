@@ -76,7 +76,10 @@ class MapsApi implements MapsRepo {
   @override
   Future<ApiResult<void>> updatePolygon(PolygonModel model) async {
     try {
-      final data = model.toJson()..remove('id');
+      final data = model.toJson()
+        ..remove('id')
+        ..remove('createdAt')
+        ..remove('updatedAt');
       final result = await client.patch(_Endpoints.geofence(model.id), data: data);
       // print(result);
       final list = _controller.value;
@@ -95,7 +98,7 @@ class MapsApi implements MapsRepo {
   Future<ApiResult<dynamic>> notifyManager(String pic, String lat, String lng, String locationId) async {
     try {
       final result = await client.post(_Endpoints.notifyProperyManager, data: {
-        'pic': pic,
+        // 'pic': pic,
         'latitude': lat,
         'longitude': lng,
         'geofenceID': locationId,

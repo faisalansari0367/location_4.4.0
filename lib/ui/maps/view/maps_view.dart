@@ -4,7 +4,6 @@ import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
-import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
@@ -32,6 +31,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../../gen/assets.gen.dart';
 import '../../../widgets/dialogs/dialog_layout.dart';
+import '../location_service/geolocator_service.dart';
 import '../location_service/maps_repo.dart';
 import '../models/polygon_model.dart';
 
@@ -93,12 +93,18 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           ),
         );
       }
+      // _handlePermission();
       await Permission.location.request();
       final result = await GeolocatorService.locationPermission();
+      print('result $result');
+
       // await GeolocatorService.locationPermission();
       // print(status.isGranted);
       if (result) {
-        await Permission.locationAlways.request();
+        // final status = await Permission.location.status;
+        // if(status == PermissionStatus.)
+        final result = await Permission.locationAlways.request();
+        print(PermissionStatus.values[result.index].name);
         final cubit = context.read<MapsCubit>();
         cubit.init();
       } else {
@@ -112,6 +118,53 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     });
     super.initState();
   }
+
+  // void _handlePermission() async {
+  //   var status = await Permission.locationWhenInUse.status;
+  //   if (!status.isGranted) {
+  //     var status = await Permission.locationWhenInUse.request();
+  //     if (status.isGranted) {
+  //       var status = await Permission.locationAlways.request();
+  //       if (status.isGranted) {
+  //         final cubit = context.read<MapsCubit>();
+  //         cubit.init();
+  //         //Do some stuff
+  //       } else {
+  //         await 3.seconds.delay();
+  //         DialogService.showDialog(child: LocationPermissionDialog());
+  //         //Do another stuff
+  //       }
+  //     } else {
+  //       await 3.seconds.delay();
+  //       DialogService.showDialog(child: LocationPermissionDialog());
+  //       //The user deny the permission
+  //     }
+  //     if (status.isPermanentlyDenied) {
+  //       //When the user previously rejected the permission and select never ask again
+  //       //Open the screen of settings
+  //       await 3.seconds.delay();
+  //       await DialogService.showDialog(child: LocationPermissionDialog());
+  //       // bool res = await openAppSettings();
+  //     }
+  //   } else {
+  //     //In use is available, check the always in use
+  //     var status = await Permission.locationAlways.status;
+  //     if (!status.isGranted) {
+  //       var status = await Permission.locationAlways.request();
+  //       if (status.isGranted) {
+  //         final cubit = context.read<MapsCubit>();
+  //         cubit.init();
+  //         //Do some stuff
+  //       } else {
+  //         await 3.seconds.delay();
+  //         DialogService.showDialog(child: LocationPermissionDialog());
+  //         //Do another stuff
+  //       }
+  //     } else {
+  //       //previously available, do some stuff or nothing
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {

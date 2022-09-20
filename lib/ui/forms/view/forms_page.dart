@@ -8,12 +8,12 @@ import '../cubit/forms_cubit_cubit.dart';
 
 class FormsPage extends StatelessWidget {
   final List<String>? questions;
-  final ValueChanged<Map<String, String>> onSubmit;
+  // final ValueChanged<Map<String, String>> onSubmit;
   final String? title;
   const FormsPage({
     Key? key,
     this.questions,
-    required this.onSubmit,
+    // required this.onSubmit,
     this.title,
   }) : super(key: key);
 
@@ -22,8 +22,8 @@ class FormsPage extends StatelessWidget {
     return ChangeNotifierProvider(
       key: UniqueKey(),
       create: (context) => FormsCubit(
-        onSubmit: onSubmit,
-        questions: questions,
+        // onSubmit: onSubmit,/
+        // questions: questions,
         api: context.read<Api>(),
       ),
       child: FormsView(),

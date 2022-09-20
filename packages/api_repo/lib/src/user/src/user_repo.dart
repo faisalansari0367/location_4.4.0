@@ -13,7 +13,7 @@ abstract class UserRepo {
   Future<ApiResult<RoleDetailsModel>> getFields(String role);
   Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data);
   Future<ApiResult<Map<String, dynamic>>> getRoleData(String role);
-  Future<ApiResult<LogbookEntryModel>> getLogbookRecords();
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams});
   Future<ApiResult<List<String>>> getFormQuestions();
   Future<ApiResult<UserSpecies>> getUserSpecies();
@@ -83,10 +83,10 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntryModel>> getLogbookRecords() async {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
     try {
       final result = await client.get(Endpoints.logRecords);
-      final data = LogbookEntryModel.fromJson(result.data);
+      final data = LogbookResponseModel.fromJson(result.data);
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

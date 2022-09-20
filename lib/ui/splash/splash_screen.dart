@@ -75,9 +75,15 @@ class _SplashScreenState extends State<SplashScreen> {
               duration: kDuration,
               child: FadeInAnimation(
                 duration: kDuration,
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.asset(Assets.icons.appIcon.path),
+                child: Center(
+                  child: Image.asset(
+                    Assets.icons.appIcon.path,
+                    fit: BoxFit.fitHeight,
+                    // alignment: Alignment.center,
+                    height: 35.height,
+                    // width: 100.width,
+                    // scale: 0.1,
+                  ),
                 ),
               ),
             ),
@@ -88,6 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
               duration: 375.milliseconds,
               child: Column(
                 children: [
+                  Gap(15.height),
                   RichText(
                     text: TextSpan(
                       // text: Strings.welcomeTo,
@@ -112,7 +119,9 @@ class _SplashScreenState extends State<SplashScreen> {
                       style: context.textTheme.headline5,
                     ),
                   ),
-                  Gap(15.height),
+                  Gap(2.height),
+
+                  // Gap(15.height),
                   MyElevatedButton(
                     text: (Strings.login),
                     onPressed: () async => Get.off(() => LoginPage()),

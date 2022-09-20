@@ -1,8 +1,8 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/helpers/validator.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTextField extends StatelessWidget {
   final void Function(String)? onChanged;
@@ -58,7 +58,8 @@ class MyTextField extends StatelessWidget {
     this.onTap,
     this.maxLines = 1,
     this.minLine,
-    this.filled = false, this.decoration,
+    this.filled = false,
+    this.decoration,
   }) : super(key: key);
 
   @override
@@ -67,7 +68,7 @@ class MyTextField extends StatelessWidget {
     return TextFormField(
       maxLength: maxLength,
       textCapitalization: textCapitalization,
-      inputFormatters: inputFormatters ?? [CapitalizeFirstLetterFormatter()],
+      inputFormatters: inputFormatters,
       focusNode: focusNode,
       obscureText: obscureText,
       autovalidateMode: autovalidateMode,
@@ -81,35 +82,53 @@ class MyTextField extends StatelessWidget {
       validator: validator ?? Validator.text,
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
+      style: TextStyle(
+        // color: theme.iconTheme.color,
+        fontWeight: FontWeight.bold,
+        // color
+      ),
       onTap: onTap,
       autofocus: autoFocus,
       enableSuggestions: true,
       readOnly: readOnly,
-      decoration: decoration ?? InputDecoration(
-        labelText: hintText,
-        // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-        contentPadding: contentPadding ?? kInputPadding,
-        isDense: isDense,
+      decoration: decoration ??
+          InputDecoration(
+            labelText: hintText,
+            // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            contentPadding: contentPadding ?? kInputPadding,
+            isDense: isDense,
 
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            labelStyle: TextStyle(
+              // color: theme.iconTheme.color,
+              fontWeight: FontWeight.bold,
+              // color
+            ),
 
-        // labelText: hintText,
-        fillColor: fillColor,
-        // hintText: hintText,
-        hintStyle: hintStyle ?? TextStyle(color: theme.iconTheme.color),
-        filled: filled,
-        // focusColor: theme.primaryColor,
-        enabledBorder: MyDecoration.inputBorder,
-        focusedBorder: MyDecoration.inputBorder.copyWith(
-          borderSide: BorderSide(color: theme.primaryColor),
-        ),
-        disabledBorder: MyDecoration.inputBorder,
-        border: MyDecoration.inputBorder,
-        // enabled: false,
+            // labelText: hintText,
+            fillColor: fillColor,
+            // hintText: hintText,
+            hintStyle: hintStyle ??
+                TextStyle(
+                  color: theme.iconTheme.color,
+                  // fontWeight: FontWeight.bold,
+                ),
+            filled: filled,
+            // focusColor: theme.primaryColor,
+            enabledBorder: MyDecoration.inputBorder,
+            focusedBorder: MyDecoration.inputBorder.copyWith(
+              borderSide: BorderSide(
+                width: 2.w,
+                color: theme.primaryColor,
+              ),
+            ),
+            disabledBorder: MyDecoration.inputBorder,
+            border: MyDecoration.inputBorder,
+            // enabled: false,
 
-        // contentPadding: EdgeInsets.only(left: .padding),
-      ),
+            // contentPadding: EdgeInsets.only(left: .padding),
+          ),
     );
   }
 

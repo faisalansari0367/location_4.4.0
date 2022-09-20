@@ -121,7 +121,7 @@ class ApiRepo implements Api {
   UserData? getUserData() => _authRepo.getUserData();
 
   @override
-  Future<ApiResult<LogbookEntryModel>> getLogbookRecords() {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords() {
     return _userRepo.getLogbookRecords();
   }
 

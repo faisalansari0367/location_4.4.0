@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class AnimatedButton extends StatefulWidget {
   final Widget child;
-  final void Function() onTap;
+  final VoidCallback? onTap;
   const AnimatedButton({
     Key? key,
     required this.child,
-    required this.onTap,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -39,19 +39,20 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   void _onTapUp(TapUpDetails details) => _controller.reverse();
 
   void _onTap() async {
+    if (widget.onTap != null) ;
     await _controller.forward();
     await _controller.reverse();
-
-    widget.onTap();
+    widget.onTap!();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      key: UniqueKey(),
+      // key: ValueKey(widget.child),
       onTap: _onTap,
       onTapUp: _onTapUp,
       onTapDown: _onTapDown,
+      onTapCancel: _controller.reverse,
       child: AnimatedBuilder(
         animation: _controller,
         child: widget.child,

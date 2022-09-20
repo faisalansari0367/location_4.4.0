@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
@@ -64,6 +65,7 @@ class MapsPopups {
     _timer();
     final userData = cubit.api.getUserData();
     controller.listen((isInside) async {
+      log('user is inside $isInside');
       if (_isInside != isInside) {
         _isInside = isInside;
         final polygon = cubit.getPolygon();

@@ -4,7 +4,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:equatable/equatable.dart';
 
 class LogBookState extends Equatable {
-  final List<Entries> entries;
+  final List<LogbookEntry> entries;
   final bool isLoading;
   LogBookState({
     this.isLoading = false,
@@ -15,7 +15,7 @@ class LogBookState extends Equatable {
   List<Object?> get props => [entries, isLoading];
 
   LogBookState copyWith({
-    List<Entries>? entries,
+    List<LogbookEntry>? entries,
     bool? isLoading,
   }) {
     return LogBookState(

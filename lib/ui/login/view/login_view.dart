@@ -5,6 +5,7 @@ import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -28,22 +29,50 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: MyAppBar(
         showBackButton: false,
-        leading: SizedBox(),
+        // title: Text('Login'),
+        leading: SizedBox.shrink(),
       ),
       body: Padding(
-        padding: kPadding,
+        padding: kPadding.copyWith(top: 0),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AspectRatio(
-                  aspectRatio: 16 / 9,
+                Center(
                   child: Image.asset(
                     Assets.icons.appIcon.path,
+                    fit: BoxFit.cover,
+                    height: 30.height,
                   ),
                 ),
+                RichText(
+                  text: TextSpan(
+                    // text: Strings.welcomeTo,
+                    children: [
+                      TextSpan(
+                        text: ' BIO',
+                        style: TextStyle(
+                          color: Color(0xff3B4798),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 60.w,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'SECURE',
+                        style: TextStyle(
+                          color: Color(0xff75B950),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 60.w,
+                        ),
+                      ),
+                    ],
+                    style: context.textTheme.headline5,
+                  ),
+                ),
+                Gap(4.height),
+
                 Text(
                   Strings.login,
                   style: context.textTheme.headline4?.copyWith(
@@ -51,7 +80,7 @@ class _LoginViewState extends State<LoginView> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 4.height),
+                SizedBox(height: 2.height),
                 EmailField(
                   controller: cubit.emailController,
                   onChanged: cubit.onChangedEmail,
@@ -72,12 +101,18 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 SizedBox(height: 2.height),
-                MyElevatedButton(
-                  onPressed: onLogin,
-                  text: Strings.login,
+                BlocBuilder<LoginCubit, LoginState>(
+                  builder: (context, state) {
+                    return MyElevatedButton(
+                      onPressed: onLogin,
+                      isLoading: state.isLoading,
+                      // isLoading: ,
+                      text: Strings.login,
+                    );
+                  },
                 ),
 
-                Gap(5.height),
+                Gap(3.height),
                 Align(
                   child: TextButton(
                     onPressed: () => Get.to(() => SignUpPage()),

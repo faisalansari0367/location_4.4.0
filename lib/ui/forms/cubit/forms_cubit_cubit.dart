@@ -9,20 +9,22 @@ part 'forms_cubit_state.dart';
 
 class FormsCubit extends ChangeNotifier {
   final Api api;
-  final List<String>? questions;
-  final ValueChanged<Map<String, String>> onSubmit;
+  // final List<String>? questions;
+  // final ValueChanged<Map<String, String>> onSubmit;
   final formKey = GlobalKey<FormState>();
   late FormsState state;
-  FormsCubit({required this.api, this.questions, required this.onSubmit}) : super() {
+  FormsCubit({required this.api}) : super() {
     state = FormsState(
       pageController: PageController(),
       isLoading: false,
-      questions: (questions?.isNotEmpty ?? false) ? _mapFormData(questions!) : [],
+      questions: [],
+      // questions: (questions?.isNotEmpty ?? false) ? _mapFormData(questions!) : [],
       // formData: _mapData(questions ?? [], this),
     );
     // notifyListeners();
     _listenForServiceRoles();
-    _mapData(questions ?? [], this);
+    getUserForms();
+    // _mapData(questions ?? [], this);
   }
 
   static List<QuestionData> _mapFormData(List<String> questions) {
@@ -61,6 +63,21 @@ class FormsCubit extends ChangeNotifier {
     });
   }
 
+  List<Forms> forms = [];
+
+  Future<void> getUserForms() async {
+    state = state.copyWith(isLoading: true);
+    notifyListeners();
+    final userData = await api.getUserForms();
+    userData.when(
+        success: (data) {
+          forms = data.data?.forms ?? [];
+        },
+        failure: (s) {});
+    state = state.copyWith(isLoading: false);
+    notifyListeners();
+  }
+
   void onChanged(String value, int index) {
     final map = state.questions.elementAt(index);
     final newMap = map.copyWith(value: value);
@@ -77,7 +94,7 @@ class FormsCubit extends ChangeNotifier {
     state.questions.forEach((element) {
       data[element.question] = element.value.toString();
     });
-    onSubmit.call(data);
+    // onSubmit.call(data);
     final qrData = jsonEncode(state.questions);
     state = state.copyWith(qrData: qrData);
     notifyListeners();

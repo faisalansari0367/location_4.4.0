@@ -1,27 +1,47 @@
-import 'package:background_location/extensions/size_config.dart';
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_radio_button.dart';
+import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 import '../../../../../constants/index.dart';
 
 class LogbookDetails extends StatelessWidget {
-  final Map form;
+  final List<LogbookFormField> form;
   const LogbookDetails({Key? key, required this.form}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: Text('Log details')),
+      appBar: MyAppBar(
+        title: Text('Log details'),
+        // showDivider: true,
+        // backgroundColor: context.theme.primaryColor,
+      ),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Column(
-          children: cardChildrens(form),
+          // children: [for (var item in form) getWidget(item)],
+          children: cardChildren(form),
         ),
       ),
     );
+  }
+
+  List<Widget> cardChildren(List<LogbookFormField> form) {
+    List<Widget> children = [];
+    for (var item in form) {
+      children.add(getWidget(item));
+      // children.add(Gap(10.h));
+      children.add(Divider(
+        color: Colors.grey.shade300,
+        thickness: 1,
+      ));
+    }
+    return children;
   }
 
   List<Widget> childrens(dynamic form) {
@@ -40,21 +60,21 @@ class LogbookDetails extends StatelessWidget {
     return list;
   }
 
-  List<Widget> cardChildrens(dynamic form) {
-    final list = <Widget>[];
-    if (form == null) return list;
-    if (form is! Map) list;
-    if (form is Map) {
-      // list.add(Divider());
-      // list.add(_headerRow());
-      // list.add(Divider());
-      form.forEach((key, value) {
-        list.add(_qna(key, value));
-        // list.add(Divider());
-      });
-    }
-    return list;
-  }
+  // List<Widget> cardChildrens(List<LogbookFormField> form) {
+  //   final list = <Widget>[];
+  //   // if (form == null) return list;
+  //   // if (form is! Map) list;
+  //   // if (form is Map) {
+  //   // list.add(Divider());
+  //   // list.add(_headerRow());
+  //   // list.add(Divider());
+  //   form.forEach((element) {
+  //     list.add(getWidget(element));
+  //     // list.add(Divider());
+  //   });
+  //   // }
+  //   return list;
+  // }
 
   List<TableRow> _tableChildrens(dynamic form) {
     final textStyle = TextStyle(
@@ -95,6 +115,20 @@ class LogbookDetails extends StatelessWidget {
       });
     }
     return list;
+  }
+
+  Widget getWidget(LogbookFormField field) {
+    switch (field.field!.toLowerCase()) {
+      case 'signature':
+        return SignatureWidget(
+          signature: field.value,
+        );
+      case 'expected departure time':
+      case 'day/date/time':
+        return _qna(field.field!, MyDecoration.formatDateTime(DateTime.tryParse(field.value!)));
+      default:
+        return _qna(field.field!, field.value!);
+    }
   }
 
   Widget _rowLayout({required Widget text, required Widget option1, required Widget option2}) {
@@ -162,56 +196,65 @@ class LogbookDetails extends StatelessWidget {
   Widget _qna(String question, String answer) {
     return Container(
       width: 100.width,
-      padding: kPadding.copyWith(bottom: 0),
-      margin: EdgeInsets.symmetric(vertical: 10.h),
+      // padding: kPadding.copyWith(bottom: 0),
+      // margin: EdgeInsets.symmetric(vertical: 10.h),
       // decoration: MyDecoration.decoration(color: Color.fromARGB(255, 255, 255, 255)),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        // color: Colors.grey.shade100,
         // color: backgroundColor,
         borderRadius: kBorderRadius,
       ),
       // margin: EdgeInsets.symmetric(vertical: 10),
       child: Stack(
         children: [
-          Positioned(
-            top: 20.h,
-            right: 20.w,
-            child: Opacity(
-              opacity: 0.1,
-              child: Image.asset(
-                'assets/images/qa.png',
-                height: 100,
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 20.h,
+          //   right: 20.w,
+          //   child: Opacity(
+          //     opacity: 0.1,
+          //     child: Image.asset(
+          //       'assets/images/qa.png',
+          //       height: 100,
+          //     ),
+          //   ),
+          // ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // headline text style
+              // Text(
+              //   question,
+              //   style: TextStyle(
+              //     color: Colors.grey.shade900,
+              //     fontSize: 19.w,
+              //     fontWeight: FontWeight.w900,
+              //   ),
+              // ),
               Text(
                 question.trim(),
+                style: TextStyle(
+                  // color: Colors.grey.shade700,
+                  // // color: textColor,
+                  // fontWeight: FontWeight.w600,
+                  // fontSize: 16.w,
+                  color: Colors.grey.shade900,
+                  fontSize: 19.w,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              Gap(5.h),
+
+              // answer text style ̏ ̏ ̏ ̏ ̏ ̏
+              Text(
+                answer.trim(),
                 style: TextStyle(
                   color: Colors.grey.shade700,
                   // color: textColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 16.w,
+                  fontSize: 18.w,
                 ),
               ),
-              Gap(10.h),
-              Row(
-                children: [
-                  MyRadioButton(
-                    text: 'Yes',
-                    value: true,
-                    selectedValue: selectedValue(answer),
-                  ),
-                  Gap(20.w),
-                  MyRadioButton(
-                    text: 'No',
-                    value: false,
-                    selectedValue: selectedValue(answer),
-                  ),
-                ],
-              ),
+              // Gap(15.h),
             ],
           ),
         ],

@@ -36,6 +36,14 @@ class _MyDropdownFieldState extends State<MyDropdownField> {
   }
 
   @override
+  void didUpdateWidget(covariant MyDropdownField oldWidget) {
+    if (oldWidget.value != widget.value) {
+      controller.text = widget.value.toString();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -113,9 +121,9 @@ class Options extends StatelessWidget {
         Text(
           hintText ?? 'Please select an option',
           style: context.textTheme.headline6?.copyWith(
-              // fontWeight: FontWeight.w500,
-              // color: Colors.black,
-              ),
+            fontWeight: FontWeight.bold,
+            // color: Colors.black,
+          ),
         ),
         const SizedBox(height: 10),
         ...items
@@ -129,6 +137,7 @@ class Options extends StatelessWidget {
                     e,
                     style: context.textTheme.subtitle1?.copyWith(
                       color: Colors.grey.shade700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ))

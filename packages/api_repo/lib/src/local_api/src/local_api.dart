@@ -31,7 +31,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntryModel>> getLogbookRecords() {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords() {
     throw UnimplementedError();
   }
 

@@ -8,8 +8,12 @@ class MapsToolkitService {
     required List<LatLng> polygon,
     bool geodesic = false,
   }) {
-    final point = mt.LatLng(latLng.latitude, latLng.longitude);
-    return mt.PolygonUtil.containsLocation(point, _convertPoints(polygon), geodesic);
+    // final point = mt.LatLng(latLng.latitude, latLng.longitude);
+    final containsLocation =
+        mt.PolygonUtil.containsLocationAtLatLng(latLng.latitude, latLng.longitude, _convertPoints(polygon), geodesic);
+    print('polygon contains location: $containsLocation');
+    return containsLocation;
+    // return mt.PolygonUtil.containsLocation(point, _convertPoints(polygon), geodesic);
   }
 
   static num calculatePolygonArea(List<LatLng> polygon) {
@@ -33,12 +37,12 @@ class MapsToolkitService {
   }) {
     final inRadius = <PolygonModel>{};
     polygons.forEach((element) {
-      var result = false;
-      final isLocationOnPath = isInsidePolygon(latLng: latLng, polygon: element.points);
-      if (!isLocationOnPath) {
-        result = _mostNearPolyline(element.points, accuracy, latLng);
+      bool isInside = false;
+      isInside = isInsidePolygon(latLng: latLng, polygon: element.points);
+      if (!isInside) {
+        isInside = _mostNearPolyline(element.points, accuracy, latLng);
       }
-      if (result) {
+      if (isInside) {
         inRadius.add(element);
       }
     });
