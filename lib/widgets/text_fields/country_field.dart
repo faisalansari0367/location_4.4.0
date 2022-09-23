@@ -50,8 +50,10 @@ class _CountryFieldState extends State<CountryField> {
     super.initState();
   }
 
-  void _getCountryFromName() =>
-      country = ![null, ''].contains(widget.countryName) ? countryList.firstWhere(sameCountryName) : null;
+  void _getCountryFromName() {
+    country = ![null, ''].contains(widget.countryName) ? countryList.firstWhere(sameCountryName) : null;
+    // if(country != null) widget.controller?.text = country!.name;
+  }
 
   void _getCountryFromCode({String? countryCode}) {
     if (widget.isOriginCountry) {
@@ -61,6 +63,7 @@ class _CountryFieldState extends State<CountryField> {
       if (foundCountry.isNotEmpty) {
         country = foundCountry.first;
         widget.controller?.text = country!.name.toUpperCase();
+        widget.onCountryChanged.call(country!.name.toUpperCase());
       }
     }
   }

@@ -2,10 +2,10 @@ import 'package:background_location/constants/constans.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/forgot_password/view/forgot_password.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
+import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -44,33 +44,10 @@ class _LoginViewState extends State<LoginView> {
                   child: Image.asset(
                     Assets.icons.appIcon.path,
                     fit: BoxFit.cover,
-                    height: 30.height,
+                    height: 60.width,
                   ),
                 ),
-                RichText(
-                  text: TextSpan(
-                    // text: Strings.welcomeTo,
-                    children: [
-                      TextSpan(
-                        text: ' BIO',
-                        style: TextStyle(
-                          color: Color(0xff3B4798),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 60.w,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'SECURE',
-                        style: TextStyle(
-                          color: Color(0xff75B950),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 60.w,
-                        ),
-                      ),
-                    ],
-                    style: context.textTheme.headline5,
-                  ),
-                ),
+                Center(child: AppName()),
                 Gap(4.height),
 
                 Text(

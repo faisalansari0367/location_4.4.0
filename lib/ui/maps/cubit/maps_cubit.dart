@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
@@ -12,6 +13,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -65,9 +67,9 @@ class MapsCubit extends Cubit<MapsState> {
   Future<void> init() async {
     // so that device can determin the connectivity status
     await 200.milliseconds.delay();
+    updateCurrentLocation();
     await _getAllPolygon();
     if (polygonId != null) moveToSelectedPolygon(polygonId!);
-    updateCurrentLocation();
     getLocationUpdates();
   }
 
@@ -85,7 +87,10 @@ class MapsCubit extends Cubit<MapsState> {
 
   Future<void> doneEditing() async {
     if (state.currentPolygon == null) return;
-    final result = await mapsRepo.updatePolygon(state.currentPolygon!);
+    // final polygon = state.currentPolygon?.color = state.selectedColor;
+    final polygon = state.currentPolygon?.copyWith(color: state.selectedColor);
+
+    final result = await mapsRepo.updatePolygon(polygon!);
     if (state.currentPolygon != null) {
       result.when(
         success: (s) {
@@ -202,7 +207,7 @@ class MapsCubit extends Cubit<MapsState> {
   //   // return list.map((e) => LatLng(e.latitude, e.longitude)).toList();
   // }
 
-  void updatePolygon() {}
+  // void updatePolygon() {}
 
   void addPolygon(String name) async {
     final model = PolygonModel(
@@ -250,9 +255,32 @@ class MapsCubit extends Cubit<MapsState> {
   }
 
   Future<void> updateCurrentLocation() async {
-    await controller.future;
+    // print(controller.isCompleted);
+    dev.log('getting current location');
+    final result = await GeolocatorService.getLastKnownPosition();
+    if (result != null) {
+      final _lastPosition = LatLng(result.latitude, result.longitude);
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _lastPosition,
+            zoom: 20.151926040649414,
+          ),
+        ),
+      );
+      emit(
+        state.copyWith(
+          currentLocation: _lastPosition,
+        ),
+      );
+    }
     final currentPosition = await GeolocatorService.getCurrentLatLng();
+    dev.log('found current location ${currentPosition.toString()}');
+
     final taget = LatLng(currentPosition.latitude, currentPosition.longitude);
+    if (!controller.isCompleted) {
+      await controller.future;
+    }
     mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -331,7 +359,11 @@ class MapsCubit extends Cubit<MapsState> {
     );
   }
 
+  final debouncer = Debouncer(delay: 1.seconds);
+  PolygonModel? userIsInsidePolygonId;
   void getLocationUpdates() async {
+    // dev.log('lcoation updates is emitting');
+
     final popups = MapsPopups(notifyManager, mapsRepo, this);
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
@@ -342,7 +374,43 @@ class MapsCubit extends Cubit<MapsState> {
         polygons: state.polygons,
         accuracy: event.accuracy,
       );
-      print('polygons in coverage $polygonsInCoverage');
+      // state.polygons.map((e) => e.points)
+      // state.polygons.forEach((element) {
+      //   // element.points
+      //   final userIsEntering = MapsToolkitService.isInsidePolygon(latLng: position, polygon: element.points);
+
+      // });
+      // print('polygons in coverage $polygonsInCoverage');
+      if (userIsInsidePolygonId != null) {
+        final isInside = MapsToolkitService.isInsidePolygon(latLng: position, polygon: userIsInsidePolygonId!.points);
+        if (!isInside) {
+          debouncer.call(() {
+            mapsRepo.logBookEntry(
+              userData!.pic!,
+              null,
+              userIsInsidePolygonId!.id!,
+              isExiting: true,
+            );
+          });
+        }
+      } else {
+        if (polygonsInCoverage.isNotEmpty) {
+          polygonsInCoverage.forEach((element) {
+            final isInside = MapsToolkitService.isInsidePolygon(latLng: position, polygon: element.points);
+            if (isInside) {
+              debouncer.call(() {
+                mapsRepo.logBookEntry(
+                  userData!.pic!,
+                  null,
+                  element.id!,
+                );
+                userIsInsidePolygonId = element;
+              });
+            }
+          });
+          // popups.showPopup(polygonsInCoverage);
+        }
+      }
       popups.polygonsInCoverage.add(polygonsInCoverage);
       popups.controller.add(polygonsInCoverage.isNotEmpty);
     });

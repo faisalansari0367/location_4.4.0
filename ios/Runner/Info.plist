@@ -63,5 +63,7 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>BIOSECURE needs camera access to scan QR codes</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
 </dict>
 </plist>

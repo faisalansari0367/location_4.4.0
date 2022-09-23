@@ -11,7 +11,6 @@ class MapsToolkitService {
     // final point = mt.LatLng(latLng.latitude, latLng.longitude);
     final containsLocation =
         mt.PolygonUtil.containsLocationAtLatLng(latLng.latitude, latLng.longitude, _convertPoints(polygon), geodesic);
-    print('polygon contains location: $containsLocation');
     return containsLocation;
     // return mt.PolygonUtil.containsLocation(point, _convertPoints(polygon), geodesic);
   }

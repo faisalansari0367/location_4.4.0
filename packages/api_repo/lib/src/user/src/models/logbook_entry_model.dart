@@ -120,20 +120,30 @@ class LogbookEntry {
     }
     createdAt = _getDateTime(json['createdAt']);
     updatedAt = _getDateTime(json['updatedAt']);
-    user = json['user'] != null ? UserData.fromJson(json['user']) : null;
-    geofence = json['geofence'] != null ? Geofence.fromJson(json['geofence']) : null;
+    user = json['user'] != null ? UserData.fromJson(Map<String, dynamic>.from(json['user'])) : null;
+    geofence = json['geofence'] != null ? Geofence.fromJson(Map<String, dynamic>.from(json['geofence'])) : null;
+  }
+
+  LogbookEntry.getId(Map<String, dynamic> json) {
+    id = json['id'];
   }
 
   DateTime? _getDateTime(String? date) => date != null ? DateTime.tryParse(date)?.toLocal() : null;
 
+  Map<String, dynamic> saveId() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    return data;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['enterDate'] = enterDate;
-    data['exitDate'] = exitDate;
+    data['enterDate'] = enterDate?.toIso8601String();
+    data['exitDate'] = exitDate?.toIso8601String();
     data['form'] = form.map((v) => v.toJson()).toList();
-    data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
+    data['createdAt'] = createdAt?.toIso8601String();
+    data['updatedAt'] = updatedAt?.toIso8601String();
     if (user != null) {
       data['user'] = user!.toJson();
     }

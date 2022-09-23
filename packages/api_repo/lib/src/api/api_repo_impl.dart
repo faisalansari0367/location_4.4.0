@@ -163,4 +163,15 @@ class ApiRepo implements Api {
   Future<void> getCvdPDf(Map<String, dynamic> data) {
     return _userRepo.getCvdPDf(data);
   }
+
+  @override
+  Future<void> setUserData(UserData userData) async {
+    _authRepo.setUserData(userData);
+  }
+
+  @override
+  Future getQrCode(String data) {
+    return _userRepo.getQrCode(data);
+   
+  }
 }

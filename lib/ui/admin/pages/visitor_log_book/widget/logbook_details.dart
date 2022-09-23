@@ -5,7 +5,6 @@ import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../../../../constants/index.dart';
 
@@ -119,6 +118,7 @@ class LogbookDetails extends StatelessWidget {
 
   Widget getWidget(LogbookFormField field) {
     switch (field.field!.toLowerCase()) {
+      case 'signature:':
       case 'signature':
         return SignatureWidget(
           signature: field.value,

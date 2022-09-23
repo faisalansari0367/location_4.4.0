@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class AnimatedButton extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
+  final double? scale;
   const AnimatedButton({
     Key? key,
     required this.child,
-    this.onTap,
+    this.onTap, this.scale,
   }) : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   void initState() {
     _controller = AnimationController(vsync: this, duration: duration);
     final animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    final tween = Tween<double>(begin: 1.0, end: 0.97);
+    final tween = Tween<double>(begin: 1.0, end: widget.scale ?? 0.97);
     _scale = tween.animate(animation);
     super.initState();
   }

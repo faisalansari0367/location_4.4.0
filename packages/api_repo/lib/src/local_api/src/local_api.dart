@@ -169,4 +169,16 @@ class LocalApi extends Api {
     // TODO: implement getCvdPDf
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> setUserData(UserData userData) {
+    // TODO: implement setUserData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future getQrCode(String data) {
+    // TODO: implement getQrCode
+    throw UnimplementedError();
+  }
 }

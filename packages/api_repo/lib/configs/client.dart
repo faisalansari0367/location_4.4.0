@@ -182,6 +182,27 @@ class Client {
     );
     return result;
   }
+
+  Future<Response<T>> delete<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    final headers = builder().setProtectedApiHeader();
+    final dio = headers.setUrlEncoded().build();
+    final result = await dio.delete<T>(
+      baseUrl + path,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      data: data,
+    );
+    return result;
+  }
 }
 
 // FirebasePerformanceService _firebasePerformanceService =

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/intent_service.dart';
@@ -8,7 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+// import 'package:qr_flutter/qr_flutter.dart';
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
+// import 'package:qr_flutter/qr_flutter.dart';
 
 class VisitorCheckInView extends StatelessWidget {
   const VisitorCheckInView({Key? key}) : super(key: key);
@@ -50,8 +54,8 @@ class VisitorCheckInView extends StatelessWidget {
                         height: 60.width,
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(width: 7.w),
-                          ),
+                              // border: Border.all(width: 7.w),
+                              ),
                           child: AnimatedSwitcher(
                             duration: kDuration,
                             child: _qrCode(state),
@@ -80,9 +84,24 @@ class VisitorCheckInView extends StatelessWidget {
   }
 
   Widget _qrCode(VisitorCheckInState state) {
-    return QrImage(
-      data: 'App store link and playstore link is coming soon...',
-    );
+    if (state.qrCode == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Image.memory(base64Decode(state.qrCode!));
+    }
+    // return QrImage(data: data);
+    // QRView(key: key, onQRViewCreated: onQRViewCreated)
+    // drawBarcode(image, Barcode.code128(), 'Test', font: arial_24)
+    // data: 'App store link and playstore link is coming soon...',
+
+    // QrImage(qrCode)
+    // return Image.memory(QrCode.fromData(data: data, errorCorrectLevel: 0).dataCache);
+    // return QrImage(
+    //   QrCode.fromData(data: data, errorCorrectLevel: 0).dataCache,
+    // );
+    // return QrImage(QrCode.fromData(data: 'App store link and playstore link is coming soon...', errorCorrectLevel: 1));
   }
 
   Column _errorWidget(BuildContext context) {
@@ -123,8 +142,9 @@ class VisitorCheckInView extends StatelessWidget {
               // shape: StadiumBorder(),
               borderRadius: BorderRadius.circular(50),
             ),
-            child: Text(
+            child: AutoSizeText(
               Strings.visitor + 's',
+              maxLines: 1,
               style: context.textTheme.headline6?.copyWith(
                 color: Color.fromARGB(255, 255, 255, 255),
                 fontSize: 40.w,

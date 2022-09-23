@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
@@ -34,6 +35,15 @@ class PolygonModel {
     };
   }
 
+  Map<String, dynamic> toApiJson() {
+    return <String, dynamic>{
+      'color': colorToHex(color),
+      'points': points.map((x) => _latLngToJson(x)).toList(),
+      'name': name,
+      // 'createdAt': createdBy.toJson(),
+    };
+  }
+
   List<double> _latLngToJson(LatLng latLng) {
     return [latLng.longitude, latLng.latitude];
   }
@@ -64,4 +74,24 @@ class PolygonModel {
 
   // color from hex
   Color colorFromHex(String hex) => Color(int.parse(hex, radix: 16));
+
+  PolygonModel copyWith({
+    String? id,
+    Color? color,
+    String? name,
+    List<LatLng>? points,
+    UserData? createdBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return PolygonModel(
+      id: id ?? this.id,
+      color: color ?? this.color,
+      name: name ?? this.name,
+      points: points ?? this.points,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }

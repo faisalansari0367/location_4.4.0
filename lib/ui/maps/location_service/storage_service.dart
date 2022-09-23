@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -42,6 +43,24 @@ class MapsStorageService implements MapsRepo {
     // await _box.put(model.id, model.toJson());
   }
 
+  LogbookEntry? getLogbookEntry(String locationId) {
+    final map = _box.get(locationId);
+    if (map == null) return null;
+    final entrylogBook = LogbookEntry.getId(Map<String, dynamic>.from(map));
+    return entrylogBook;
+  }
+
+  Future<void> saveLogbookEntry(String locationId, LogbookEntry logbookEntry) async {
+    return await _box.put(
+      locationId,
+      logbookEntry.saveId(),
+    );
+  }
+
+  Future<void> removeLogbookEntry(String locationId) async {
+    await _box.delete(locationId);
+  }
+
   @override
   Stream<List<PolygonModel>> get polygonStream => _box.watch(key: _Keys._getAllPolygonKey).map((map) {
         final data = (map as List<dynamic>).map((e) => PolygonModel.fromJson(Map<String, dynamic>.from(e))).toList();
@@ -59,7 +78,7 @@ class MapsStorageService implements MapsRepo {
   }
 
   @override
-  Future<ApiResult> logBookEntry(String pic, String? form, String locationId) async {
+  Future<ApiResult> logBookEntry(String pic, String? form, String locationId, {bool isExiting = false}) async {
     return ApiResult.success(data: Null);
   }
 
@@ -71,5 +90,11 @@ class MapsStorageService implements MapsRepo {
   @override
   Future<ApiResult<void>> notifyManager(String pic, String lat, String lng, String locationId) async {
     return ApiResult.success(data: Null);
+  }
+
+  @override
+  Future<ApiResult> deletePolygon(PolygonModel model) {
+    // TODO: implement deletePolygon
+    throw UnimplementedError();
   }
 }

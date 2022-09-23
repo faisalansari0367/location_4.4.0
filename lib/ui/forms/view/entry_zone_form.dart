@@ -36,6 +36,10 @@ class _Form1State extends State<Form1> {
   @override
   void initState() {
     userData = context.read<Api>().getUserData();
+    context.read<Api>().userDataStream.listen((event) {
+      if (event == null) return;
+      userData = event;
+    });
     data = (widget.form1.questions ?? []).map((e) => QuestionData(question: e)).toList();
     super.initState();
   }
@@ -94,8 +98,25 @@ class _Form1State extends State<Form1> {
         );
 
       case 'nameOfWarakirriFarmVisiting':
-        return CvdTextField(
-          name: item.question,
+        item.value = 'BOOLAVILLA';
+        return MyDropdownField(
+          hintText: item.question,
+          value: item.value ?? '',
+          options: [
+            'BOOLAVILLA',
+            "COWABBIE - MUKOORA",
+            'ORANGE PARK',
+            ' WILLARO',
+            ' MYOBIE',
+            ' BAINGARRA',
+            'BULLARTO DOWNS',
+            ' CARINUP',
+            ' LOBETHAL',
+            ' MAWARRA',
+            'YOONA SPRINGS',
+          ],
+          // name: item.question,
+
           onChanged: (s) {
             setState(() {
               item.value = s;
@@ -105,6 +126,7 @@ class _Form1State extends State<Form1> {
 
       case 'signature':
         return SignatureWidget(
+          signature: userData?.signature,
           onChanged: (value) => item.value = value,
         );
 

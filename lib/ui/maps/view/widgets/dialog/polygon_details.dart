@@ -1,6 +1,8 @@
 import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -80,12 +82,6 @@ class PolygonDetails extends StatelessWidget {
           if (canEdit)
             InkWell(
               onTap: onTap,
-              // onTap: () {
-              //   final cubit = context.read<MapsCubit>();
-              //   cubit.setIsAddingGeofence();
-              //   context.read<PolygonsService>().addPolygon(data.points);
-              //   Get.back();
-              // },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -98,6 +94,30 @@ class PolygonDetails extends StatelessWidget {
                   Icon(Icons.edit),
                 ],
               ),
+            ),
+          if (canEdit)
+            Column(
+              children: [
+                Divider(),
+                InkWell(
+                  onTap: () async {
+                    await context.read<MapsRepo>().deletePolygon(polygonModel);
+                    Get.back();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Delete Fence',
+                        style: context.textTheme.subtitle2?.copyWith(
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      Icon(Icons.delete_forever),
+                    ],
+                  ),
+                ),
+              ],
             ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
@@ -329,8 +330,6 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   Widget _showEditSheet() {
     return Container(
       color: Color.fromARGB(255, 255, 255, 255),
-      // width: 100.width,
-      // height: 6.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -379,6 +378,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
               listenWhen: (previous, current) => previous.insideFence != current.insideFence,
               child: BlocBuilder<MapsCubit, MapsState>(
                 builder: (context, state) {
+                  dev.log('widget is rebuilding');
                   return GoogleMap(
                     initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
                     onMapCreated: cubit.onMapCreated,

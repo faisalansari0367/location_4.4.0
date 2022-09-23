@@ -43,7 +43,8 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
 
   Future<void> updateRole(UserRoles userRole) async {
     // Get.to(() => RoleDetailsPage(role: role));
-    final user = state.user;
+    // final user = state.user;
+    final user = await apiService.getUser()!;
     user.role = userRole.role;
     user.registerationToken = await pushNotificationService.getFCMtoken();
     final result = await (apiService.updateUser(user: user));

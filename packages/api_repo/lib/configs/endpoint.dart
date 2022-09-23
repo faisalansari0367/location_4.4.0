@@ -2,6 +2,8 @@ class Endpoints {
   static const records = '/records';
   static const users = '/users';
   static const auth = '/auth';
+  static const functions = '/functions';
+
 
   static const String signUp = '$auth/signup',
       verifyOtp = '$auth/verify',
@@ -24,6 +26,9 @@ class Endpoints {
 
   // log records
   static const logRecords = '/log-records';
+
+
+  static const qrCode = '$functions/qrcode';
 
   // static String user(int id) => '/user/$id';
 }

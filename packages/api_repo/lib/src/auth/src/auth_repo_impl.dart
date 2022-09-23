@@ -141,4 +141,9 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   bool get isLoggedIn => storage.isLoggedIn;
+
+  @override
+  Future<void> setUserData(UserData userData) async {
+    await storage.setUserData(userData);
+  }
 }

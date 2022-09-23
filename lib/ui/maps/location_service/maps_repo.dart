@@ -8,7 +8,9 @@ abstract class MapsRepo {
   Future<void> init();
   Stream<List<PolygonModel>> get polygonStream;
   Future<ApiResult<void>> notifyManager(String pic, String lat, String lng, String locationId);
-  Future<ApiResult<dynamic>> logBookEntry(String pic, String? form, String locationId);
+  Future<ApiResult<dynamic>> logBookEntry(String pic, String? form, String locationId, {bool isExiting = false});
   Future<ApiResult<dynamic>> updatePolygon(PolygonModel model);
+  Future<ApiResult<dynamic>> deletePolygon(PolygonModel model);
+
   void cancel();
 }

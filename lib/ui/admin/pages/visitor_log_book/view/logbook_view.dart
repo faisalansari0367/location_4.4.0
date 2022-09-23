@@ -10,87 +10,83 @@ import 'package:get/get.dart';
 import '../cubit/logbook_cubit.dart';
 import '../cubit/logbook_state.dart';
 
-class LogbookView extends StatelessWidget {
+class LogbookView extends StatefulWidget {
   const LogbookView({Key? key}) : super(key: key);
 
   @override
+  State<LogbookView> createState() => _LogbookViewState();
+}
+
+class _LogbookViewState extends State<LogbookView> {
+  static const headers = ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form'];
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        title: Text('Visitor Log book'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.zero,
-        child: BlocBuilder<LogBookCubit, LogBookState>(
-          builder: (context, state) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                // decoration: BoxDecoration(
-                //   border: Border.all(
-                //     color: Colors.grey,
-                //     width: 1,
-                //   ),
-                // ),
-                // dataRowColor: MaterialStateProperty.resolveWith<Color>(
-                //   (Set<MaterialState> states) {
-                //     if (states.contains(MaterialState.selected))
-                //       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
-                //     return Colors.transparent;
-                //   },
-                // ),
+    return BlocBuilder<LogBookCubit, LogBookState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: MyAppBar(
+            title: Text('Visitor Log book'),
+            actions: [
+              if (!state.isLoading)
+                IconButton(
+                  onPressed: () {
+                    context.read<LogBookCubit>().generatePDf();
+                  },
+                  icon: const Icon(Icons.picture_as_pdf),
+                ),
+            ],
+          ),
+          body: Padding(
+            padding: EdgeInsets.zero,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: state.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SingleChildScrollView(
+                        child: DataTable(
+                          columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form']
+                              .map((e) => _dataColumn(e.capitalize!))
+                              .toList(),
+                          rows: state.entries.map((e) => _dataRow(e)).toList(),
 
-                // defaultColumnWidth: FixedColumnWidth(100.0),
-                // border: TableBorder.all(color: Colors.black, style: BorderStyle.solid, width: 2),
-                // border: TableBorder.symmetric(),
-                // defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                          columnSpacing: 31.w,
 
-                columns: ['id', 'Full Name', 'entry date', 'exit date', 'field', 'pic', 'form']
-                    .map((e) => _dataColumn(e.capitalize!))
-                    .toList(),
-                rows: state.entries.map((e) => _dataRow(e)).toList(),
-
-                columnSpacing: 31.w,
-
-                // children: [
-                //   _tableRow(['id', 'entry date', 'exit date', 'field name']),
-                //   for (var item in state.entries)
-                //     _tableRow(
-                //       [
-                //         item.id.toString(),
-                //         MyDecoration.formatDate(item.enterDate),
-                //         MyDecoration.formatDate(item.exitDate),
-                //         item.geofence?.name ?? ''
-                //       ],
-                //     )
-                // ],
-              ),
-            );
-            // return MyListview<LogbookEntry>(
-            //   // emptyWidget: Center(
-            //   //   child: Text('No data found'),
-            //   // ),
-            //   onRetry: context.read<LogBookCubit>().getRecords,
-            //   isLoading: state.isLoading,
-            //   spacing: Container(color: Colors.grey.shade200, height: 2.h),
-            //   data: state.entries,
-            //   itemBuilder: itemBuilder,
-            // );
-          },
-        ),
-      ),
+                          // children: [
+                          //   _tableRow(['id', 'entry date', 'exit date', 'field name']),
+                          //   for (var item in state.entries)
+                          //     _tableRow(
+                          //       [
+                          //         item.id.toString(),
+                          //         MyDecoration.formatDate(item.enterDate),
+                          //         MyDecoration.formatDate(item.exitDate),
+                          //         item.geofence?.name ?? ''
+                          //       ],
+                          //     )
+                          // ],
+                        ),
+                      ),
+                    ),
+              // );
+              // return MyListview<LogbookEntry>(
+              //   // emptyWidget: Center(
+              //   //   child: Text('No data found'),
+              //   // ),
+              //   onRetry: context.read<LogBookCubit>().getRecords,
+              //   isLoading: state.isLoading,
+              //   spacing: Container(color: Colors.grey.shade200, height: 2.h),
+              //   data: state.entries,
+              //   itemBuilder: itemBuilder,
+            ),
+          ),
+        );
+      },
     );
   }
 
   // DataRow _tableRow(data) {
-
-  //  return   DataRow(
-  //       cells: data.map((e) => _dataCell(e)).toList(),
-  //     );
-
-  // }
-
-  // data row
   DataRow _dataRow(LogbookEntry item) {
     return DataRow(
       // color: MaterialStateProperty.all(item.geofence?.color ?? Colors.transparent),
@@ -98,7 +94,7 @@ class LogbookView extends StatelessWidget {
         _dataCell(item.id.toString()),
         _dataCell('${item.user!.firstName!} ${item.user!.lastName}'),
         _dataCell(MyDecoration.formatTime(item.enterDate) + '\n' + MyDecoration.formatDate(item.enterDate)),
-        _dataCell(MyDecoration.formatDate(item.exitDate)),
+        _dataCell(MyDecoration.formatTime(item.exitDate) + '\n' + MyDecoration.formatDate(item.exitDate)),
         _dataCell(item.geofence?.name ?? ''),
         _dataCell(item.geofence?.pic ?? '', color: item.geofence?.color),
 
@@ -121,8 +117,6 @@ class LogbookView extends StatelessWidget {
       Text(
         data,
         textAlign: TextAlign.center,
-        // style: ,
-        // style
         style: TextStyle(
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,

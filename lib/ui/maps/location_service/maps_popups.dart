@@ -65,7 +65,7 @@ class MapsPopups {
     _timer();
     final userData = cubit.api.getUserData();
     controller.listen((isInside) async {
-      log('user is inside $isInside');
+      log('user is in coverage $isInside');
       if (_isInside != isInside) {
         _isInside = isInside;
         final polygon = cubit.getPolygon();

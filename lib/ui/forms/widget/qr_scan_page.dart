@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+// import 'package:qr_flutter/qr_flutter.dart';
 
 class QrScanPage extends StatelessWidget {
   final String? qrData;
@@ -11,15 +11,13 @@ class QrScanPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (qrData != null)
-          QrImage(
-            data: qrData!,
-            version: QrVersions.auto,
-          ),
+        if (qrData != null) Container(),
+        // QrImage(
+        //   data: qrData!,
+        //   version: QrVersions.auto,
+        // ),
         Text('Scan qr forms'),
       ],
     );
   }
 }
-
-

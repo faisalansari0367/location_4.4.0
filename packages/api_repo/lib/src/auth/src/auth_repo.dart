@@ -10,6 +10,8 @@ abstract class AuthRepo {
   Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model});
   User? getUser();
   UserData? getUserData();
+
+  Future<void> setUserData(UserData userData);
   bool get isLoggedIn;
 
   Future<void> logout();

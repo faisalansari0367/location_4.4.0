@@ -52,12 +52,22 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
       key: UniqueKey(),
       showCountryFlag: true,
       controller: widget.controller,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      style: TextStyle(
+        // color: theme.iconTheme.color,
+        fontWeight: FontWeight.bold,
+        // color
+      ),
       decoration: InputDecoration(
         counter: SizedBox.shrink(),
         labelText: Strings.mobile,
         border: MyDecoration.inputBorder,
         contentPadding: kInputPadding,
+        labelStyle: TextStyle(
+          // color: theme.iconTheme.color,
+          fontWeight: FontWeight.bold,
+          // color
+        ),
       ),
       initialCountryCode: countryCode ?? _countryDetails?.alpha2Code,
       // showDropdownIcon: false,

@@ -51,6 +51,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     await _getFields();
     await getRoleDetails();
     await getSpecies();
+    if (role.toLowerCase() == Roles.employee.name) getLicenceCategories();
 
     // api.getLicenceCategories();
     // getLicenceCategories();
@@ -71,6 +72,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     final result = await api.getLicenceCategories();
     result.when(
         success: (s) {
+          emit(state.copyWith(licenseCategories: s));
           final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
           if (field.isEmpty) return;
           // field.first.data['licenseCategories'] = s;
@@ -81,7 +83,12 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
             controller: field.first.controller,
             data: {'licenseCategories': s},
           );
-          emit(state.copyWith(fieldsData: fieldsData));
+          emit(
+            state.copyWith(
+              fieldsData: fieldsData,
+              licenseCategories: s,
+            ),
+          );
         },
         failure: (failure) {});
   }
@@ -94,6 +101,9 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
     data.when(
       success: (data) {
+        final userData = api.getUserData();
+        userData!.signature = data['data']['signature'];
+        api.setUserData(userData);
         emit(
           state.copyWith(
             userRoleDetails: Map<String, dynamic>.from(data['data']),
@@ -128,7 +138,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
             data: {'species': data},
           ),
         );
-        emit(state.copyWith(fieldsData: fields));
+        emit(state.copyWith(fieldsData: fields, userSpecies: data));
       },
       failure: _failure,
     );
@@ -294,6 +304,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         }
       }
       // Get.to(() => const MapsPage());
+
       final data = <String, dynamic>{};
       state.fieldsData.forEach((field) {
         if (field.fieldType.isAddress) {
@@ -352,13 +363,139 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           return;
         }
       }
+      // final ngrKey = 'nationalGrowerRegistration(ngr)No:';
+      // if (data.containsKey(ngrKey)) {
+      //   final ngrValue = data[ngrKey];
+      //   data.remove(ngrKey);
+      //   data['ngr'] = ngrValue;
+      // }
+      // final role = apiService.getUser()!.role!;
+      final result = await apiService.updateRole(role, data);
+      result.when(
+        success: (data) => Get.to(() => MapsPage()),
+        failure: (error) => DialogService.failure(
+          error: error,
+          // onCancel: () => Get.to(() => MapsPage()),
+          onCancel: Get.back,
+        ),
+      );
+    }
+  }
+
+  Future<void> submitFormData(Map<String, dynamic> data) async {
+    if (formKey.currentState?.validate() ?? false) {
+      final hasSignature = data.containsKey(FieldType.signature.name);
+      if (hasSignature) {
+        if (['', null].contains(data[FieldType.signature.name])) {
+          await DialogService.showDialog(
+            child: NoSignatureFound(
+              message: 'No signature found',
+              subtitle: 'Please add signature and try again',
+              buttonText: 'Ok',
+              onCancel: Get.back,
+            ),
+          );
+          return;
+        }
+      }
+      // Get.to(() => const MapsPage());
+
+      // final data = <String, dynamic>{};
+      // state.fieldsData.forEach((field) {
+      //   if (field.fieldType.isAddress) {
+      //     final _address = field.address!.toMap();
+      //     // _address['state'] = 'STATE';
+      //     data.addAll(_address);
+      //     return;
+      //   } else if (field.fieldType.isCompanyAddress) {
+      //     final _address = field.address!.toMap();
+      //     data.addAll(_address);
+      //     return;
+      //   } else if (field.fieldType.isSpecies) {
+      //     // data.addAll( (field.data['species'] as UserSpecies).tojs);
+      //     final UserSpecies species = field.data['species'] as UserSpecies;
+      //     final list = (species.data ?? []).where((element) => element.value == true).map((e) => e.species).toList();
+      //     if (list.isEmpty) return;
+      //     data[field.fieldType.name] = (list);
+      //     return;
+      //   }
+      //   data[field.name.toCamelCase.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();
+      // });
+
+      if (data.containsKey(FieldType.countryOfOrigin.name) && data.containsKey(FieldType.countryVisiting.name)) {
+        if (data[FieldType.countryOfOrigin.name] == data[FieldType.countryVisiting.name]) {
+          DialogService.showDialog(
+            child: NetworkErrorDialog(
+              message: 'Country of origin and country visiting cannot be the same',
+              onCancel: Get.back,
+            ),
+          );
+          return;
+        }
+      }
+
+      if (data.containsKey('entryDate') && data.containsKey('exitDate')) {
+        var message = '';
+        final entryDate = DateTime.parse(data['entryDate']);
+        final exitDate = DateTime.parse(data['exitDate']);
+        print(exitDate.difference(entryDate).inDays);
+        if (entryDate.isAfter(exitDate)) {
+          message = 'Entry date cannot be after exit date';
+        } else if (entryDate.compareTo(exitDate) == 0) {
+          message = 'Entry date cannot be equal to exit date';
+        } else if (entryDate.isBefore(DateTime.now().subtract(10.days))) {
+          message = "Can't be more than 10 days before today's date";
+        } else if (exitDate.difference(entryDate).inDays > 10) {
+          message = 'Entry date cannot be more than 10 days after today';
+        }
+        if (message.isNotEmpty) {
+          DialogService.showDialog(
+            child: NetworkErrorDialog(
+              message: message,
+              onCancel: Get.back,
+            ),
+          );
+          return;
+        }
+      }
+
+      if (state.userSpecies != null) {
+        final list = state.userSpecies!.data!.where((element) => element.value == true).map((e) => e.species).toList();
+        data['species'] = list;
+      }
+
+      // final ngrKey = 'nationalGrowerRegistration(ngr)No:';
+      // if (data.containsKey(ngrKey)) {
+      //   final ngrValue = data[ngrKey];
+      //   data.remove(ngrKey);
+      //   data['ngr'] = ngrValue;
+      // }
+      // final role = apiService.getUser()!.role!;
+
+      // change mobile key
+      final mobileKey = 'mobile';
+
+      if (data.containsKey(mobileKey)) {
+        final mobileValue = data[mobileKey];
+        data.remove(mobileKey);
+        data['phoneNumber'] = mobileValue;
+      }
+
+      // change ngr key
       final ngrKey = 'nationalGrowerRegistration(ngr)No:';
       if (data.containsKey(ngrKey)) {
         final ngrValue = data[ngrKey];
         data.remove(ngrKey);
         data['ngr'] = ngrValue;
       }
-      // final role = apiService.getUser()!.role!;
+
+      final licenseKey = "driver'sLicense";
+      if (data.containsKey(licenseKey)) {
+        final ngrValue = data[licenseKey];
+        data.remove(licenseKey);
+        data['driversLicense'] = ngrValue;
+      }
+
       final result = await apiService.updateRole(role, data);
       result.when(
         success: (data) => Get.to(() => MapsPage()),

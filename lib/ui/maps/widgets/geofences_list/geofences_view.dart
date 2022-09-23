@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/ui/maps/widgets/geofences_list/geofence_card.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
+enum FilterType { created_by_me, all }
 
 class GeofencesList extends StatefulWidget {
   // final List<PolygonModel> polygons;
@@ -20,6 +23,30 @@ class GeofencesList extends StatefulWidget {
 }
 
 class _GeofencesListState extends State<GeofencesList> {
+  FilterType filterType = FilterType.created_by_me;
+  UserData? userData;
+
+  setFilter() {
+    setState(() {
+      filterType = filterType == FilterType.created_by_me ? FilterType.all : FilterType.created_by_me;
+    });
+  }
+
+  Stream<List<PolygonModel>> filterPolygons() {
+    return filterType == FilterType.created_by_me
+        ? context
+            .read<MapsRepo>()
+            .polygonStream
+            .map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
+        : context.read<MapsRepo>().polygonStream;
+  }
+
+  @override
+  void initState() {
+    userData = context.read<Api>().getUserData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // return Scaffold(
@@ -31,19 +58,6 @@ class _GeofencesListState extends State<GeofencesList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Gap(10.h),
-        // Center(
-        //   child: Container(
-        //     height: 5.h,
-        //     width: 40.w,
-        //     alignment: Alignment.center,
-        //     decoration: BoxDecoration(
-        //       color: Colors.grey.shade300,
-        //       borderRadius: kBorderRadius,
-        //     ),
-        //   ),
-        // ),
-        // Gap(20.h),
         Row(
           children: [
             Text(
@@ -54,7 +68,7 @@ class _GeofencesListState extends State<GeofencesList> {
             ),
             Spacer(),
             AnimatedButton(
-              
+              scale: 0.8,
               onTap: Get.back,
               child: Container(
                 padding: EdgeInsets.all(5.r),
@@ -63,17 +77,43 @@ class _GeofencesListState extends State<GeofencesList> {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.clear),
-                // child: IconButton(
-                //   onPressed: Get.back,
-                // ),
               ),
             ),
           ],
         ),
+        // filter
+        Row(
+          children: [
+            Text(
+              'Filter by',
+              style: TextStyle(
+                fontSize: 15.h,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
+            ),
+            ...FilterType.values
+                .map(
+                  (e) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.w),
+                    child: InputChip(
+                      selected: filterType == e,
+                      backgroundColor: Colors.grey.shade200,
+                      selectedColor: context.theme.primaryColor.withOpacity(0.2),
+                      // elevation: 5,
+                      onPressed: () => setFilter(),
+                      label: Text(e.name.replaceAll('_', ' ').capitalize!),
+                    ),
+                  ),
+                )
+                .toList()
+          ],
+        ),
+
         Gap(30.h),
         Expanded(
           child: StreamBuilder<List<PolygonModel>>(
-            stream: context.read<MapsRepo>().polygonStream,
+            stream: filterPolygons(),
             builder: (context, snapshot) {
               return Scrollbar(
                 child: MyListview(

@@ -20,6 +20,7 @@ abstract class UserRepo {
   Future<ApiResult<UserFormsData>> getUserForms();
   Future<ApiResult<List<String>>> getLicenceCategories();
   Future<void> getCvdPDf(Map<String, dynamic> data);
+  Future<dynamic> getQrCode(String data);
 }
 
 class UserRepoImpl extends UserRepo {
@@ -156,5 +157,15 @@ class UserRepoImpl extends UserRepo {
     // TODO: implement getCvdPDf
     print(result);
     // throw UnimplementedError();
+  }
+
+  @override
+  Future getQrCode(String data) async {
+    try {
+      final result = await client.post(Endpoints.qrCode, data: {'text': data});
+      return ApiResult.success(data: result.data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
   }
 }

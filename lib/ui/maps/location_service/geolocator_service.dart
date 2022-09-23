@@ -15,6 +15,10 @@ class GeolocatorService {
     }
   }
 
+  static Future<Position?> getLastKnownPosition() async {
+    return await instance.getLastKnownPosition();
+  }
+
   static Future<bool> openLocationSettings() async {
     return await instance.openLocationSettings();
   }
@@ -58,14 +62,17 @@ class GeolocatorService {
     if (Platform.isAndroid) {
       locationSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
+
         // distanceFilter: 10,
         forceLocationManager: true,
-        // intervalDuration: const Duration(seconds: 10),
+        intervalDuration: const Duration(seconds: 5),
       );
     } else if (Platform.isIOS) {
       locationSettings = AppleSettings(
         accuracy: LocationAccuracy.best,
         activityType: ActivityType.other,
+        timeLimit: const Duration(seconds: 5),
+
         // distanceFilter: 10,
         pauseLocationUpdatesAutomatically: true,
         showBackgroundLocationIndicator: true,

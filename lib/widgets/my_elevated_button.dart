@@ -71,7 +71,7 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
     return AnimatedButton(
       onTap: !isLoading ? onTap : null,
       child: AnimatedContainer(
-        duration: kDuration,
+        duration: 200.milliseconds,
         alignment: Alignment.center,
         width: widget.width ?? double.infinity,
         constraints: BoxConstraints(
