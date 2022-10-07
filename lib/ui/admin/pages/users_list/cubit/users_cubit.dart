@@ -23,8 +23,9 @@ class UsersCubit extends Cubit<UsersState> {
   void setFilter(String filter) {
     if (state.filter == filter) {
       emit(state.copyWith(filter: ''));
-    } else
+    } else {
       emit(state.copyWith(filter: filter));
+    }
     fetchUsers();
   }
 
@@ -49,7 +50,7 @@ class UsersCubit extends Cubit<UsersState> {
 
   void setStatus(String status, int id) {
     final _status = state.status;
-    final result = UserStatus.values.where((element) => element.name == (status).toLowerCase());
+    final result = UserStatus.values.where((element) => element.name == status.toLowerCase());
     if (result.isEmpty) _status[id] = UserStatus.inactive;
     _status[id] = result.first;
     emit(state.copyWith(status: _status));
@@ -65,8 +66,8 @@ class UsersCubit extends Cubit<UsersState> {
 
   String camelCase(String text) {
     // String text = 'camelCase';
-    RegExp exp = RegExp(r'(?<=[a-z])[A-Z]');
-    String result = text.replaceAllMapped(exp, (Match m) => ('_' + m.group(0)!)).toLowerCase();
+    final exp = RegExp('(?<=[a-z])[A-Z]');
+    final result = text.replaceAllMapped(exp, (Match m) => '_${m.group(0)!}').toLowerCase();
     return result;
   }
 

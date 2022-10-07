@@ -1,5 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     return Scaffold(
       appBar: MyAppBar(
         // leading: Icon,
-        onBackPressed: () => Get.offAll(() => LoginPage()),
+        onBackPressed: () => Get.offAll(() => const LoginPage()),
       ),
       body: SingleChildScrollView(
         padding: kPadding,
@@ -122,7 +121,7 @@ class _ResetPasswordState extends State<ResetPassword> {
         message: 'password changed successfully. Press continue to login',
         onContinue: () async {
           Get.back();
-          await Get.offAll(() => LoginPage());
+          await Get.offAll(() => const LoginPage());
         },
       ),
     );

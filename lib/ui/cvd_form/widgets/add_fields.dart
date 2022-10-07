@@ -63,7 +63,7 @@ class _AddFieldsState extends State<AddFields> {
                         fields.remove(e);
                         setState(() {});
                       },
-                      icon: Icon(Icons.remove),
+                      icon: const Icon(Icons.remove),
                     ),
                   ],
                 ),
@@ -94,7 +94,7 @@ class _AddFieldsState extends State<AddFields> {
                         value = '';
                         setState(() {});
                       },
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
               ),
             ],
           ),

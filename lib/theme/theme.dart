@@ -78,7 +78,7 @@ class MyTheme {
           subtitle2: ThemeData.dark()
               .textTheme
               .subtitle2
-              ?.copyWith(color: Colors.grey.shade500)),
+              ?.copyWith(color: Colors.grey.shade500),),
       colorScheme: const ColorScheme.dark().copyWith(
         // secondary: kSecon,
         secondary: kAccentDarkColor,
@@ -96,7 +96,6 @@ class MyTheme {
         border: Border(
           bottom: BorderSide(
             color: kPrimaryColor,
-            style: BorderStyle.solid,
             width: 2,
           ),
         ),

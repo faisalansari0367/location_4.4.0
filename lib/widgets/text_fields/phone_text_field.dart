@@ -50,15 +50,14 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
   Widget build(BuildContext context) {
     return IntlPhoneField(
       key: UniqueKey(),
-      showCountryFlag: true,
       controller: widget.controller,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      style: TextStyle(
+      style: const TextStyle(
         // color: theme.iconTheme.color,
         fontWeight: FontWeight.bold,
         // color
       ),
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         counter: SizedBox.shrink(),
         labelText: Strings.mobile,
         border: MyDecoration.inputBorder,
@@ -71,7 +70,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
       ),
       initialCountryCode: countryCode ?? _countryDetails?.alpha2Code,
       // showDropdownIcon: false,
-      onCountryChanged: (c) => print(c),
+      onCountryChanged: print,
       onChanged: (phone) {
         print(phone.completeNumber);
         if (widget.onChanged != null) widget.onChanged!(phone.number, phone.countryCode);

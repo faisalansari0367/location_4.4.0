@@ -25,6 +25,7 @@ class _ScanQrViewState extends State<ScanQrView> {
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   // @override
+  @override
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
@@ -57,9 +58,9 @@ class _ScanQrViewState extends State<ScanQrView> {
                   future: controller?.getFlashStatus(),
                   initialData: false,
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData) return SizedBox();
+                    if (!snapshot.hasData) return const SizedBox();
                     return IconButton(
-                      icon: snapshot.data ? Icon(Icons.flash_off) : Icon(Icons.flash_on),
+                      icon: snapshot.data ? const Icon(Icons.flash_off) : const Icon(Icons.flash_on),
                       onPressed: () async {
                         await controller?.toggleFlash();
                         setState(() {});
@@ -77,7 +78,7 @@ class _ScanQrViewState extends State<ScanQrView> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    var scanArea =
+    final scanArea =
         (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
@@ -85,7 +86,6 @@ class _ScanQrViewState extends State<ScanQrView> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-        borderColor: Colors.red,
         // overlayColor: Colors.transparent,
         borderRadius: 10,
         borderLength: 30,
@@ -140,7 +140,7 @@ class _ScanQrViewState extends State<ScanQrView> {
     // log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text('no Permission')),
       );
     }
   }

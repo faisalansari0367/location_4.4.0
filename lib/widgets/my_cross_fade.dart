@@ -25,7 +25,7 @@ class MyCrossFade extends StatelessWidget {
 
   Widget _loader() => SizedBox.square(
         dimension: 50.height,
-        child: Center(
+        child: const Center(
           child: CircularProgressIndicator(),
         ),
         // dimension: 40.height,

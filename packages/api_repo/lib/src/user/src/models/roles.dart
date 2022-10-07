@@ -11,6 +11,7 @@ enum Roles {
   processor,
   feedlotter,
   saleYard,
+  admin
 }
 
 extension RolesString on String {
@@ -34,4 +35,5 @@ extension RolesExt on Roles {
   bool get isProcessor => this == Roles.processor;
   bool get isFeedlotter => this == Roles.feedlotter;
   bool get isSaleYard => this == Roles.saleYard;
+  bool get isAdmin => this == Roles.admin;
 }

@@ -53,22 +53,39 @@ class _MyDropdownFieldState extends State<MyDropdownField> {
   Widget build(BuildContext context) {
     return MyTextField(
       onTap: () => BottomSheetService.showSheet(
-        child: Options(
-          items: widget.options,
-          onChanged: (value) => setState(() {
-            controller.text = value;
-            // address.state = value;
-            widget.onChanged.call(value);
-          }),
+        child: DraggableScrollableSheet(
+          maxChildSize: 0.9,
+          expand: false,
+          minChildSize: 0.2,
+          initialChildSize: 0.7,
+          builder: (context, scrollController) {
+            return Options(
+              controller: scrollController,
+              items: widget.options,
+              onChanged: (value) => setState(
+                () {
+                  controller.text = value;
+                  // address.state = value;
+                  widget.onChanged.call(value);
+                },
+              ),
+            );
+          },
         ),
+        // child: Options(
+        //   items: widget.options,
+        //   onChanged: (value) => setState(() {
+        //     controller.text = value;
+        //     // address.state = value;
+        //     widget.onChanged.call(value);
+        //   }),
+        // ),
       ),
-      enabled: true,
       inputFormatters: [CapitalizeAllInputFormatter()],
       hintText: widget.hintText,
-      suffixIcon: Icon(Icons.keyboard_arrow_down),
+      suffixIcon: const Icon(Icons.keyboard_arrow_down),
       controller: controller,
       focusNode: AlwaysDisabledFocusNode(),
-      readOnly: false,
     );
     // return FormField<T>(
     //   builder: (FormFieldState<T> state) {
@@ -103,12 +120,14 @@ class Options extends StatelessWidget {
   final String? hintText;
   final List<String> items;
   final ValueChanged<String> onChanged;
+  final ScrollController controller;
 
   const Options({
     Key? key,
     required this.onChanged,
     this.items = const [],
     this.hintText,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -126,22 +145,31 @@ class Options extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        ...items
-            .map((e) => ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                  onTap: () {
-                    Get.back();
-                    onChanged(e);
-                  },
-                  title: Text(
-                    e,
-                    style: context.textTheme.subtitle1?.copyWith(
-                      color: Colors.grey.shade700,
-                      fontWeight: FontWeight.w600,
+        Expanded(
+          child: SingleChildScrollView(
+            controller: controller,
+            child: Column(
+              children: items
+                  .map(
+                    (e) => ListTile(
+                      contentPadding: const EdgeInsets.symmetric(),
+                      onTap: () {
+                        Get.back();
+                        onChanged(e);
+                      },
+                      title: Text(
+                        e.trim(),
+                        style: context.textTheme.subtitle1?.copyWith(
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
-                ))
-            .toList()
+                  )
+                  .toList(),
+            ),
+          ),
+        ),
       ],
     );
   }

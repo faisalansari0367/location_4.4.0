@@ -3,7 +3,6 @@ import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/ui/maps/widgets/geofences_list/geofence_card.dart';
 import 'package:background_location/widgets/animations/animations.dart';
-import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,7 +65,7 @@ class _GeofencesListState extends State<GeofencesList> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Spacer(),
+            const Spacer(),
             AnimatedButton(
               scale: 0.8,
               onTap: Get.back,
@@ -76,7 +75,7 @@ class _GeofencesListState extends State<GeofencesList> {
                   color: Colors.grey.shade200,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.clear),
+                child: const Icon(Icons.clear),
               ),
             ),
           ],
@@ -101,7 +100,7 @@ class _GeofencesListState extends State<GeofencesList> {
                       backgroundColor: Colors.grey.shade200,
                       selectedColor: context.theme.primaryColor.withOpacity(0.2),
                       // elevation: 5,
-                      onPressed: () => setFilter(),
+                      onPressed: setFilter,
                       label: Text(e.name.replaceAll('_', ' ').capitalize!),
                     ),
                   ),
@@ -116,16 +115,18 @@ class _GeofencesListState extends State<GeofencesList> {
             stream: filterPolygons(),
             builder: (context, snapshot) {
               return Scrollbar(
-                child: MyListview(
-                  // shrinkWrap: true,
+                controller: widget.controller,
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => Gap(10.h),
                   controller: widget.controller,
-                  // padding: kPadding,
-                  isLoading: snapshot.connectionState == ConnectionState.waiting,
-                  data: snapshot.data ?? [],
-                  itemBuilder: (context, index) => GeofenceCard(
-                    onTap: () => widget.onSelected.call(snapshot.data!.elementAt(index)),
-                    item: snapshot.data![index],
-                  ),
+                  itemCount: sort(snapshot.data ?? []).length,
+                  itemBuilder: (context, index) {
+                    final fence = snapshot.data![index];
+                    return GeofenceCard(
+                      onTap: () => widget.onSelected.call(fence),
+                      item: fence,
+                    );
+                  },
                 ),
               );
             },
@@ -134,5 +135,11 @@ class _GeofencesListState extends State<GeofencesList> {
         ),
       ],
     );
+  }
+
+  List<PolygonModel> sort(List<PolygonModel>? list) {
+    if (list == null) return [];
+    if (list.isEmpty) return [];
+    return list..sort((a, b) => a.name.compareTo(b.name));
   }
 }

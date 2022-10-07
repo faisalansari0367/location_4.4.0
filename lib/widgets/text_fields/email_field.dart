@@ -32,7 +32,7 @@ class EmailField extends StatelessWidget {
       validator: Validator.email,
       textInputAction: TextInputAction.next,
       textInputType: TextInputType.emailAddress,
-      prefixIcon: Icon(Icons.email_outlined),
+      prefixIcon: const Icon(Icons.email_outlined),
     );
   }
 }

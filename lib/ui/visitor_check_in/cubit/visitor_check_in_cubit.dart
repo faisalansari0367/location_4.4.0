@@ -7,7 +7,7 @@ part 'visitor_check_in_state.dart';
 
 class VisitorCheckInCubit extends Cubit<VisitorCheckInState> {
   final Api api;
-  VisitorCheckInCubit({required this.api}) : super(VisitorCheckInState()) {
+  VisitorCheckInCubit({required this.api}) : super(const VisitorCheckInState()) {
     getUserForms();
     getQrCode();
   }

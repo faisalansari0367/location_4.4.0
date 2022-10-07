@@ -12,7 +12,7 @@ class CreatePDf {
     pdf.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
-        margin: pw.EdgeInsets.all(32),
+        margin: const pw.EdgeInsets.all(32),
         build: (context) => [
           pw.Header(
             level: 0,
@@ -103,11 +103,8 @@ class CreatePDf {
 
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final file = File("${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf");
-      //
-      // final file = File.fromRawPath(await pdf.save());
+      final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
       await file.writeAsBytes(await pdf.save());
-
       await OpenFile.open(file.path);
     } catch (e) {
       log(e.toString());

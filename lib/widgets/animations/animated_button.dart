@@ -24,7 +24,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   void initState() {
     _controller = AnimationController(vsync: this, duration: duration);
     final animation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    final tween = Tween<double>(begin: 1.0, end: widget.scale ?? 0.97);
+    final tween = Tween<double>(begin: 1, end: widget.scale ?? 0.97);
     _scale = tween.animate(animation);
     super.initState();
   }
@@ -40,7 +40,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   void _onTapUp(TapUpDetails details) => _controller.reverse();
 
   void _onTap() async {
-    if (widget.onTap != null) ;
+    if (widget.onTap != null) {}
     await _controller.forward();
     await _controller.reverse();
     widget.onTap!();

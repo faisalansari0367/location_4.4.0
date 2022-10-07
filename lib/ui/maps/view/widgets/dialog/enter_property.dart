@@ -39,12 +39,12 @@ class _EnterPropertyState extends State<EnterProperty> {
             StreamBuilder<Set<PolygonModel>>(
               stream: widget.stream,
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.isEmpty) return Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData || snapshot.data!.isEmpty) return const Center(child: CircularProgressIndicator());
                 return AnimatedSize(
                   duration: 300.milliseconds,
                   child: AutoSpacing(
                     spacing: Gap(10.h),
-                    children: snapshot.data!.map((polygon) => _tile(polygon)).toList(),
+                    children: snapshot.data!.map(_tile).toList(),
                   ),
                 );
               },
@@ -52,7 +52,7 @@ class _EnterPropertyState extends State<EnterProperty> {
             Gap(20.h),
             Row(
               children: [
-                Spacer(),
+                const Spacer(),
                 // TextButton(
                 //   child: Text(Strings.yes),
                 //   onPressed: () {
@@ -89,7 +89,7 @@ class _EnterPropertyState extends State<EnterProperty> {
     return ListTile(
       selected: true,
       selectedTileColor: polygon.color.withOpacity(0.2),
-      trailing: Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right),
       title: Text(
         polygon.name,
         style: TextStyle(
@@ -99,10 +99,10 @@ class _EnterPropertyState extends State<EnterProperty> {
         ),
       ),
       subtitle: Text(
-        MapsToolkitService.calculatePolygonArea(polygon.points).toStringAsFixed(0) + ' m²',
+        '${MapsToolkitService.calculatePolygonArea(polygon.points).toStringAsFixed(0)} m²',
         style: TextStyle(
           fontSize: 15.sp,
-          color: Color.fromARGB(143, 0, 0, 0),
+          color: const Color.fromARGB(143, 0, 0, 0),
         ),
       ),
       onTap: () {

@@ -8,7 +8,7 @@ class CvdState extends Equatable {
   final Map data;
   final int currentStep;
 
-  CvdState({
+  const CvdState({
     this.data = const {},
     this.forms = const [],
     this.formData = const [],

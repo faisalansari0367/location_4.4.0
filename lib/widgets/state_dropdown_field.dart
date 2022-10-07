@@ -26,6 +26,15 @@ class _StateDropdownFieldState extends State<StateDropdownField> {
   }
 
   @override
+  void didUpdateWidget(covariant StateDropdownField oldWidget) {
+    final hasChanged = oldWidget.value != widget.value;
+    if (hasChanged) {
+      controller = TextEditingController(text: widget.value);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MyTextField(
       onTap: () => BottomSheetService.showSheet(
@@ -36,13 +45,11 @@ class _StateDropdownFieldState extends State<StateDropdownField> {
           }),
         ),
       ),
-      enabled: true,
       inputFormatters: [CapitalizeAllInputFormatter()],
       hintText: Strings.selectState,
-      suffixIcon: Icon(Icons.keyboard_arrow_down),
+      suffixIcon: const Icon(Icons.keyboard_arrow_down),
       controller: controller,
       focusNode: AlwaysDisabledFocusNode(),
-      readOnly: false,
     );
   }
 }

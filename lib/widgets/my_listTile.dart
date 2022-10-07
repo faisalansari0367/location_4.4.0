@@ -22,7 +22,7 @@ class MyListTile extends StatefulWidget {
 class _MyListTileState extends State<MyListTile> {
   bool isLoading = false;
 
-  setLoading(bool value) {
+  void setLoading(bool value) {
     if (!mounted) return;
     setState(() {
       isLoading = value;
@@ -54,7 +54,7 @@ class _MyListTileState extends State<MyListTile> {
       trailing: isLoading
           ? SizedBox.square(
               dimension: 5.width,
-              child: CircularProgressIndicator(
+              child: const CircularProgressIndicator(
                 strokeWidth: 2,
               ),
             )

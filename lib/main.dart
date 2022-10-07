@@ -7,7 +7,6 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,12 +19,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:local_notification/local_notification.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'services/notifications/push_notifications.dart';
 import 'ui/maps/location_service/maps_api.dart';
+import 'ui/maps/location_service/maps_repo_local.dart';
 
 const enableCrashlytics = !kDebugMode;
 
@@ -41,14 +39,14 @@ Future<void> showNotification({
       title: title,
       category: NotificationCategory.Message,
       body: body,
-      channelKey: "basic_channel",
+      channelKey: 'basic_channel',
     ),
   );
 }
 
 Future<void> bgHandler(RemoteMessage message) async {
   // dev.log(message.toMap().toString());
-  showNotification(
+  await showNotification(
     title: message.notification?.title ?? '',
     body: message.notification?.body ?? '',
     id: message.notification.hashCode,
@@ -79,7 +77,7 @@ Future<void> main() async {
           channelKey: 'basic_channel',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
-          defaultColor: Color.fromARGB(255, 0, 0, 0),
+          defaultColor: const Color.fromARGB(255, 0, 0, 0),
           ledColor: Colors.white,
         )
       ],
@@ -97,22 +95,22 @@ Future<void> main() async {
     await pushNotification.initmessaging();
     // pushNotification.setBgHandler();
 
-    final storage = await HydratedStorage.build(
-      storageDirectory: await getApplicationDocumentsDirectory(),
+    // final storage = await HydratedStorage.build(
+    //   storageDirectory: await getApplicationDocumentsDirectory(),
+    // );
+    runApp(
+      MyApp(
+        localApi: localApi,
+        pushNotificationService: pushNotification,
+        api: repo,
+        notificationService: localNotification,
+        mapsRepo: mapsRepo,
+      ),
     );
 
-    HydratedBlocOverrides.runZoned(
-      () => runApp(
-        MyApp(
-          localApi: localApi,
-          pushNotificationService: pushNotification,
-          api: repo,
-          notificationService: localNotification,
-          mapsRepo: mapsRepo,
-        ),
-      ),
-      storage: storage,
-    );
+    // HydratedBlocOverrides.runZoned(
+    //   storage: storage,
+    // );
 
     // runApp(MyApp(api: repo, notificationService: localNotification));
     // runApp(MyApp());
@@ -168,7 +166,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<MapsRepo>.value(value: widget.mapsRepo),
         RepositoryProvider<LocalApi>.value(value: widget.localApi),
         RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
-        // RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()),
+        RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
@@ -184,16 +182,15 @@ class _MyAppState extends State<MyApp> {
           primaryColor: kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: null,
         getPages: [
-          GetPage(name: '/', page: () => SplashScreen()),
+          GetPage(name: '/', page: () => const SplashScreen()),
         ],
 
         // home: SplashScreen(),
         home: ScreenUtilInit(
-          child: SplashScreen(),
           designSize: Get.size,
-          builder: (context, child) => SplashScreen(),
+          builder: (context, child) => const SplashScreen(),
+          child: const SplashScreen(),
         ),
       ),
     );

@@ -29,10 +29,10 @@ class FormsView extends StatelessWidget {
         showDivider: true,
       ),
       body: Consumer<FormsCubit>(builder: (context, cubit, child) {
-        if (cubit.state.isLoading) return CircularProgressIndicator();
+        if (cubit.state.isLoading) return const CircularProgressIndicator();
         return PageView(
           controller: cubit.state.pageController,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             Form1(form1: cubit.forms.first),
             // Consumer<FormsCubit>(
@@ -40,7 +40,7 @@ class FormsView extends StatelessWidget {
             // ),
           ],
         );
-      }),
+      },),
     );
   }
 

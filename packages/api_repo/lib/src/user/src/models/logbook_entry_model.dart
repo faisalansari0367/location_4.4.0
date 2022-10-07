@@ -15,10 +15,12 @@ class LogbookResponseModel {
     if (json['data'] != null) {
       data = <LogbookEntry>[];
       json['data'].forEach((v) {
-        data!.add(LogbookEntry.fromJson(v));
+        data!.add(LogbookEntry.fromJson(_fromMap(v)));
       });
     }
   }
+
+  Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -115,7 +117,7 @@ class LogbookEntry {
     if (json['form'] != null) {
       form = <LogbookFormField>[];
       json['form'].forEach((v) {
-        form.add(LogbookFormField.fromJson(v));
+        form.add(LogbookFormField.fromJson(_fromMap(v)));
       });
     }
     createdAt = _getDateTime(json['createdAt']);
@@ -123,6 +125,8 @@ class LogbookEntry {
     user = json['user'] != null ? UserData.fromJson(Map<String, dynamic>.from(json['user'])) : null;
     geofence = json['geofence'] != null ? Geofence.fromJson(Map<String, dynamic>.from(json['geofence'])) : null;
   }
+  
+  Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
 
   LogbookEntry.getId(Map<String, dynamic> json) {
     id = json['id'];
@@ -190,12 +194,14 @@ class Geofence {
     id = json['id'];
     name = json['name'];
     color = (json['color']) != null ? colorFromHex(json['color']) : null;
-    points = json['points'] != null ? Points.fromJson(json['points']) : null;
-    center = json['center'] != null ? Origin.fromJson(json['center']) : null;
+    points = json['points'] != null ? Points.fromJson(_fromMap(json['points'])) : null;
+    center = json['center'] != null ? Origin.fromJson(_fromMap(json['center'])) : null;
     pic = json['pic'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
+
+  Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

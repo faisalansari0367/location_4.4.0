@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class AppName extends StatelessWidget {
@@ -9,16 +9,14 @@ class AppName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var w2 = fontSize ?? 60.w;
-
+    final w2 = fontSize ?? 13.width;
     return AutoSizeText.rich(
       TextSpan(
-        // text: Strings.welcomeTo,
         children: [
           TextSpan(
             text: 'BIO',
             style: TextStyle(
-              color: Color(0xff3B4798),
+              color: const Color(0xff3B4798),
               fontWeight: FontWeight.bold,
               fontSize: w2,
             ),
@@ -26,7 +24,7 @@ class AppName extends StatelessWidget {
           TextSpan(
             text: 'SECURE',
             style: TextStyle(
-              color: Color(0xff75B950),
+              color: const Color(0xff75B950),
               fontWeight: FontWeight.bold,
               fontSize: w2,
             ),

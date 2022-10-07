@@ -23,11 +23,11 @@ class CommonButtons extends StatelessWidget {
       builder: (context, state) {
         return Row(
           children: [
-            Spacer(),
+            const Spacer(),
             OutlinedButton(
               onPressed: onContinue,
               style: OutlinedButton.styleFrom(
-                shape: StadiumBorder(),
+                shape: const StadiumBorder(),
               ),
               child: Text(
                 'Continue',
@@ -43,7 +43,7 @@ class CommonButtons extends StatelessWidget {
                 context.read<CvdCubit>().changeCurrent(state.currentStep - 1);
               },
               style: OutlinedButton.styleFrom(
-                shape: StadiumBorder(),
+                shape: const StadiumBorder(),
               ),
               child: Text(
                 'Back',

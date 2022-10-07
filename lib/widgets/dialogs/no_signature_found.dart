@@ -1,5 +1,4 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

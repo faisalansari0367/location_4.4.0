@@ -12,7 +12,7 @@ class LogbookPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LogBookCubit(api: context.read<Api>()),
-      child: LogbookView(),
+      child: const LogbookView(),
     );
   }
 }

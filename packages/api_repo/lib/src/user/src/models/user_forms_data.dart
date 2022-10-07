@@ -51,7 +51,7 @@ class UserFormsData {
 
   UserFormsData.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    data = json['data'] != null ? FormsData.fromJson(json['data']) : null;
+    data = json['data'] != null ? FormsData.fromJson(Map<String, dynamic>.from(json['data'])) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -74,7 +74,7 @@ class FormsData {
     if (json['forms'] != null) {
       forms = <Forms>[];
       json['forms'].forEach((v) {
-        forms!.add(Forms.fromJson(v));
+        forms!.add(Forms.fromJson(Map<String, dynamic>.from(v)));
       });
     }
     qrCode = json['qrCode'];

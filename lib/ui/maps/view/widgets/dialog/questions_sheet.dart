@@ -47,7 +47,7 @@ class QuestionsSheet extends StatelessWidget {
                   fontSize: 18.sp,
                 ),
               ),
-              TextField(
+              const TextField(
                 minLines: 5,
                 maxLines: 10,
                 decoration: InputDecoration(
@@ -56,7 +56,7 @@ class QuestionsSheet extends StatelessWidget {
                 ),
               ),
               Gap(20.h),
-              MyElevatedButton(
+              const MyElevatedButton(
                 text: Strings.submit,
               ),
             ],

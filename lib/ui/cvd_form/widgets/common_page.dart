@@ -77,7 +77,7 @@ class _CommonPageState extends State<CommonPage> {
     switch (name.toCamelCase) {
       case 'name':
         if (map.isEmpty) return '';
-        return map['firstName'] ?? '' + ' ' + map['lastName'];
+        return map['firstName'] ?? '' ' ' + map['lastName'];
       case 'propertyIdentificationCode(pic)':
         return data?.pic;
 
@@ -135,10 +135,10 @@ class _CommonPageState extends State<CommonPage> {
         );
 
       case 'name':
-        String data = '';
+        var data = '';
         if (userData?.firstName == null && userData?.lastName == null) {
         } else {
-          data = userData!.firstName! + ' ' + userData!.lastName!;
+          data = '${userData!.firstName!} ${userData!.lastName!}';
         }
         _onChanged(item.name, data);
         return CvdTextField(
@@ -181,7 +181,7 @@ class _CommonPageState extends State<CommonPage> {
   }
 
   String getAddress() {
-    String address = '';
+    var address = '';
     address += userData?.street ?? '';
     address += ' ';
     address += userData?.town ?? '';

@@ -7,6 +7,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class LocalApi extends Api {
   late StorageService storage;
+  // late LogRecordsLocalService _logRecordsLocalService;
+
   @override
   Client get client => throw UnimplementedError();
 
@@ -63,8 +65,13 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<UserFormsData>> getUserForms() {
-    throw UnimplementedError();
+  Future<ApiResult<UserFormsData>> getUserForms() async {
+    final data = storage.getUserForms();
+    if (data != null) {
+      return ApiResult.success(data: data);
+    } else {
+      return const ApiResult.failure(error: NetworkExceptions.defaultError('Not found'));
+    }
   }
 
   @override
@@ -76,15 +83,15 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<UserSpecies>> getUserSpecies() async {
     try {
-      return ApiResult.success(data: storage.getUserSpecies()!);
+      final species = storage.getUserSpecies();
+
+      return ApiResult.success(data: species!);
     } catch (e) {
       return const ApiResult.failure(error: NetworkExceptions.defaultError('Species Data not found'));
     }
   }
 
-  ApiResult _dataNotFound() {
-    return const ApiResult.failure(error: NetworkExceptions.defaultError('Data not found'));
-  }
+  ApiResult _dataNotFound() => const ApiResult.failure(error: NetworkExceptions.defaultError('Data not found'));
 
   @override
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) {
@@ -135,7 +142,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<User>> updateUser({required User user}) async {
+  Future<ApiResult<User>> updateMe({required User user}) async {
     // final userData = storage.getUserData();
     return ApiResult.success(data: user);
   }
@@ -179,6 +186,50 @@ class LocalApi extends Api {
   @override
   Future getQrCode(String data) {
     // TODO: implement getQrCode
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult> openPdf(String url) {
+    // TODO: implement openPdf
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<User>> updateUser({required UserData userData}) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<LogbookEntry>> get logbookRecordsStream => throw UnimplementedError();
+
+  @override
+  Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId) {
+    // TODO: implement updateLogRecord
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form) {
+    // TODO: implement udpateForm
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> logBookEntry(String pic, String geofenceId, {bool isExiting = false, String? form}) {
+    // TODO: implement logBookEntry
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> markExit(String geofenceId) {
+    // TODO: implement markExit
     throw UnimplementedError();
   }
 }

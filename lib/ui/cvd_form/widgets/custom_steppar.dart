@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-final todoColor = Colors.grey;
+const todoColor = Colors.grey;
 // final _processIndex = 0;
 
 class CustomSteppar extends StatelessWidget {
@@ -34,7 +34,7 @@ class CustomSteppar extends StatelessWidget {
           BoxShadow(
             blurRadius: 10,
             color: Colors.grey.shade100,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -75,11 +75,9 @@ class CustomSteppar extends StatelessWidget {
       onTap: () => onChanged.call(index),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 5.w),
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.white),
         height: 100.h,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             AnimatedContainer(
               duration: duration,
@@ -99,10 +97,10 @@ class CustomSteppar extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.w,
-                  color: isActive ? Colors.white : Color.fromARGB(255, 0, 0, 0),
+                  color: isActive ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: isCompleted
-                    ? Icon(
+                    ? const Icon(
                         Icons.check,
                         color: Colors.white,
                       )
@@ -118,7 +116,7 @@ class CustomSteppar extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12.w,
-                color: isActive ? kPrimaryColor : Color.fromARGB(255, 25, 25, 25),
+                color: isActive ? kPrimaryColor : const Color.fromARGB(255, 25, 25, 25),
               ),
               child: SizedBox(
                 width: 80.w,

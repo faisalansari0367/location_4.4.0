@@ -12,7 +12,7 @@ class ShowScannedData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Column(

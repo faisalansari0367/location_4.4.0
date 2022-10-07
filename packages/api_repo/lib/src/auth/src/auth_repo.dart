@@ -5,7 +5,9 @@ abstract class AuthRepo {
   Future<ApiResult<ResponseModel>> signUp({required SignUpModel data});
   Future<ApiResult<User>> signIn({required SignInModel data});
   Future<ApiResult<User>> verifyOtp({required OtpModel otpModel});
-  Future<ApiResult<User>> updateUser({required User user});
+  Future<ApiResult<User>> updateMe({required User user});
+  Future<ApiResult<User>> updateUser({required UserData userData});
+
   Future<ApiResult<ResponseModel>> forgotPassword({required String email});
   Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model});
   User? getUser();

@@ -36,10 +36,10 @@ class OtpCountDown extends StatelessWidget {
           onTimeout: onTimeout,
           child: TextButton(
             onPressed: onRetry,
-            child: Text('Resend otp'),
             style: TextButton.styleFrom(
               primary: context.theme.primaryColor,
             ),
+            child: const Text('Resend otp'),
           ),
         )
       ],

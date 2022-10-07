@@ -51,27 +51,21 @@ class _CvdFormViewState extends State<CvdFormView> {
               ),
               Expanded(
                 child: PageView(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: cubit.pageController,
                   children: [
                     CommonPage(data: state.formStepper[0].formDataList),
                     CommonPage(data: state.formStepper[1].formDataList),
                     // CommonPage(data: state.formStepper[2].formDataList),
-                    CommodityDetails(),
-                    ProductIntegrity(),
-                    ChemicalUse(),
-                    SelfDeclaration(),
+                    const CommodityDetails(),
+                    const ProductIntegrity(),
+                    const ChemicalUse(),
+                    const SelfDeclaration(),
                   ].map((e) {
                     index++;
                     return SingleChildScrollView(
-                      child: e,
-                      // child: Column(
-                      //   children: [
-                      //     e,
-                      //     _actions(state, index),
-                      //   ],
-                      // ),
                       padding: kPadding,
+                      child: e,
                     );
                   }).toList(),
                   // itemBuilder: (context, index) {
@@ -101,14 +95,14 @@ class _CvdFormViewState extends State<CvdFormView> {
 
   Widget vendorDetails(List<String> fields) {
     return Column(
-      children: [],
+      
     );
   }
 
   Row _actions(CvdState state, int index) {
     return Row(
       children: [
-        Spacer(),
+        const Spacer(),
         OutlinedButton(
           onPressed: (state.formStepper.length - 1) == index
               ? null

@@ -24,13 +24,12 @@ class _SpeciesWidgetState extends State<SpeciesWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       padding: kPadding,
       decoration: BoxDecoration(
         borderRadius: kBorderRadius,
         border: Border.all(
           color: Colors.grey.shade400,
-          width: 1,
         ),
       ),
       child: Column(
@@ -53,7 +52,7 @@ class _SpeciesWidgetState extends State<SpeciesWidget> {
   Row _tile(SpeciesData e) {
     return Row(
       children: [
-        Container(
+        SizedBox(
           height: 40.r,
           child: CachedNetworkImage(
             imageUrl: e.image!,
@@ -88,9 +87,9 @@ class _SpeciesWidgetState extends State<SpeciesWidget> {
 
   List<Widget> childrens() {
     final list = <Widget>[];
-    for (var item in widget.data.data ?? []) {
+    for (final item in widget.data.data ?? []) {
       list.add(_tile(item));
-      list.add(Divider());
+      list.add(const Divider());
     }
     list.removeLast();
     return list;

@@ -21,7 +21,7 @@ class AdminView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         showBackButton: false,
         title: Text(
           'Welcome, Admin',
@@ -33,50 +33,28 @@ class AdminView extends StatelessWidget {
             padding: kPadding,
             child: AutoSpacing(
               spacing: Gap(2.5.height),
-              // children: state.options
-              //     .map(
-              //       (e) => MyListTile(
-              //           role: e,
-              //           onTap: () async {
-              //             Get.to(
-              //               () => UsersList(),
-              //             );
-              //           }),
-              //     )
-              //     .toList(),
               children: [
-                BioSecureLogo(),
+                const BioSecureLogo(),
                 MyListTile(
                   text: 'Users',
-                  onTap: () async => Get.to(() => UsersPage()),
+                  onTap: () async => Get.to(() => const UsersPage()),
                 ),
                 MyListTile(
                   text: 'Visitor Log Books',
-                  onTap: () async => Get.to(() => LogbookPage()),
+                  onTap: () async => Get.to(() => const LogbookPage()),
                 ),
                 MyListTile(
                   text: 'Geofences',
                   onTap: () async {
-                    Get.to(() => MapsPage());
-                    // Get.to(() => Scaffold(
-                    //       appBar: MyAppBar(),
-                    //       body: Padding(
-                    //         padding: kPadding,
-                    //         child: GeofencesList(onSelected: (s) {
-                    //           Get.to(() => MapsPage(
-                    //                 polygonId: s,
-                    //               ));
-                    //         }),
-                    //       ),
-                    //     ));
+                    await Get.to(() => const MapsPage());
                   },
                 ),
                 MyListTile(
                   text: 'Settings',
                   onTap: () async {
-                    Get.to(() => SelectRolePage(
+                    await Get.to(() => const SelectRolePage(
                           showBackArrow: true,
-                        ));
+                        ),);
                   },
                 ),
                 MyListTile(

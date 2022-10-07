@@ -7,6 +7,7 @@ import 'package:background_location/ui/forms/cubit/forms_cubit_cubit.dart';
 import 'package:background_location/ui/forms/widget/form_card.dart';
 import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,18 +38,19 @@ class _Form2State extends State<Form2> {
 
   @override
   void initState() {
-    var api = context.read<Api>();
+    final api = context.read<Api>();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       api.getUserRoles().then((value) {
         value.when(
-            success: (s) {
-              roles = s.map((e) => e.role).toList();
-              setState(() {});
-              // }, failure: (f) {
-              //   DialogService.showErrorDialog(f);
-              // });
-            },
-            failure: (s) {});
+          success: (s) {
+            roles = s.map((e) => e.role).toList();
+            setState(() {});
+            // }, failure: (f) {
+            //   DialogService.showErrorDialog(f);
+            // });
+          },
+          failure: (s) {},
+        );
         // roles = value;
         // setState(() {});
       });
@@ -107,8 +109,21 @@ class _Form2State extends State<Form2> {
         );
 
       case 'reasonForVisit':
+        return CvdTextField(
+          // inputFormatters: TextCapitalization.characters,
+          // textCapitalization: TextCapitalization.words,
+          name: item.question,
+          onChanged: (s) {
+            setState(() {
+              item.value = s;
+            });
+          },
+        );
       case 'rego':
         return CvdTextField(
+          // inputFormatters: TextCapitalization.characters,
+          // textCapitalization: TextCapitalization.words,
+          inputFormatters: [CapitalizeAllInputFormatter()],
           name: item.question,
           onChanged: (s) {
             setState(() {
@@ -118,8 +133,9 @@ class _Form2State extends State<Form2> {
         );
 
       case 'signature':
+        item.value = userData?.signature;
         return SignatureWidget(
-          signature: userData?.signature,
+          signature: item.value,
           onChanged: (value) => item.value = value,
         );
 
@@ -142,7 +158,7 @@ class _Form2State extends State<Form2> {
       return;
     }
 
-    if (!_validate())
+    if (!_validate()) {
       return DialogService.showDialog(
         child: ErrorDialog(
           message: 'All fields are required',
@@ -150,6 +166,7 @@ class _Form2State extends State<Form2> {
           buttonText: 'Try Again',
         ),
       );
+    }
     // final userData = api.getUserData();
     // getJsonData();
     final jsonData = data.map((e) => e.toJson()).toList();
@@ -169,8 +186,8 @@ class _Form2State extends State<Form2> {
   }
 
   bool _validate() {
-    bool result = true;
-    for (var item in data) {
+    var result = true;
+    for (final item in data) {
       if ([null, ''].contains(item.value)) {
         result = false;
         break;

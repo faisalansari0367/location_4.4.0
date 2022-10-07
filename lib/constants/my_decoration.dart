@@ -24,7 +24,7 @@ class MyDecoration {
       shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
       boxShadow: shadow
           ? [
-              BoxShadow(
+              const BoxShadow(
                 color: Color.fromARGB(60, 103, 137, 240),
                 blurRadius: 10,
                 offset: Offset(0, 5),
@@ -39,7 +39,7 @@ class MyDecoration {
     return InputDecoration(
       filled: true,
       isDense: true,
-      fillColor: Color.fromARGB(0, 250, 250, 250),
+      fillColor: const Color.fromARGB(0, 250, 250, 250),
       enabledBorder: MyDecoration.inputBorder.copyWith(
         borderRadius: BorderRadius.circular(4.r),
       ),
@@ -60,7 +60,7 @@ class MyDecoration {
   static BoxDecoration bottomSheetDecoration() {
     return BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.3),

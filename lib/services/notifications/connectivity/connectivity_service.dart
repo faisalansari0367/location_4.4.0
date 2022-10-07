@@ -60,7 +60,7 @@ class MyConnectivity {
     }
   }
 
-  static var _debouncer = CallbackDebouncer(200.milliseconds);
+  static final _debouncer = CallbackDebouncer(200.milliseconds);
   void listener(ConnectivityResult event) async {
     log(event.toString());
     if (_first) {
@@ -68,9 +68,7 @@ class MyConnectivity {
       return;
     }
     // await 1.seconds;
-    _debouncer.call(() {
-      _checkConnectivity();
-    });
+    _debouncer.call(_checkConnectivity);
 
     // switch (event) {
     //   case ConnectivityResult.wifi:
@@ -110,7 +108,7 @@ class MyConnectivity {
     if (isConnected == state) return;
     isConnected = state;
 
-    if (Get.isSnackbarOpen) Get.closeCurrentSnackbar();
+    if (Get.isSnackbarOpen) await Get.closeCurrentSnackbar();
     Get.showSnackbar(
       GetSnackBar(
         title: title,
@@ -118,14 +116,11 @@ class MyConnectivity {
           state ? Icons.check : Icons.clear,
           color: Colors.white,
         ),
-        shouldIconPulse: true,
         message: msg,
         backgroundColor: bgColor,
         duration: 3.seconds,
-        isDismissible: true,
         borderRadius: kBorderRadius.bottomLeft.x,
         margin: kPadding,
-        snackStyle: SnackStyle.FLOATING,
         snackPosition: SnackPosition.TOP,
       ),
     );

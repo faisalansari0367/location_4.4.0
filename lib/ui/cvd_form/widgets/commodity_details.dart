@@ -123,7 +123,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
   }
 
   String getTotal() {
-    int quantity = 0;
+    var quantity = 0;
     final quantity2 = map['Quantity2'];
     final quantity1 = map['Quantity1'];
 

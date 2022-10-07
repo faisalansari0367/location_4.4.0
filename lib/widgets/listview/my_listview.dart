@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class MyListview<T> extends StatelessWidget {
-  final bool isLoading, shrinkWrap, isPrimary;
+  final bool isLoading, shrinkWrap, isPrimary, isAnimated;
   final ScrollController? controller;
   final Widget? emptyWidget;
   final Future<void> Function()? onRetry;
@@ -18,6 +18,7 @@ class MyListview<T> extends StatelessWidget {
   const MyListview({
     Key? key,
     this.isLoading = false,
+    this.isAnimated = true,
     this.emptyWidget,
     required this.data,
     required this.itemBuilder,
@@ -33,6 +34,7 @@ class MyListview<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     // if (isLoading) return _loader();
     // if (data.isEmpty) return Text('No data found');
+    if (isAnimated) return _child();
     return AnimatedSwitcher(
       duration: kDuration,
       child: _child(),
@@ -43,7 +45,7 @@ class MyListview<T> extends StatelessWidget {
     return spacing ?? Gap(2.height);
   }
 
-  Widget _loader() => Center(
+  Widget _loader() => const Center(
         child: SizedBox.square(
           // dimension: 50.height,
           child: Center(
@@ -65,7 +67,7 @@ class MyListview<T> extends StatelessWidget {
                 'No data found',
                 style: TextStyle(
                   fontSize: 20.sp,
-                  color: Color.fromARGB(255, 241, 62, 62),
+                  color: const Color.fromARGB(255, 241, 62, 62),
                 ),
               ),
               Gap(2.height),

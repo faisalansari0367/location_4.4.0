@@ -45,8 +45,9 @@ class _CountryFieldState extends State<CountryField> {
       //   // final _countryDetails = CountryCodes.detailsForLocale();
       //   // _countryDetails.dialCode;
       // });
-    } else
+    } else {
       _getCountryFromName();
+    }
     super.initState();
   }
 
@@ -99,10 +100,9 @@ class _CountryFieldState extends State<CountryField> {
             focusNode: AlwaysDisabledFocusNode(),
             // inputFormatters: [CapitalizeAllInputFormatter()],
             onTap: showCountrySheet,
-            enabled: true,
             controller: widget.controller,
             hintText: widget.label ?? 'Please select a country',
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: const Icon(Icons.arrow_drop_down),
             prefixIcon: _prefixIcon(),
           ),
         ),
@@ -172,7 +172,6 @@ class _CountrySelectionState extends State<CountrySelection> {
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: 0.5,
       maxChildSize: 0.8,
       builder: (context, scrollController) {
         return Column(

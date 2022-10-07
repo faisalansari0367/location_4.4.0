@@ -44,7 +44,7 @@ class UserFormData extends FormFieldData {
         return Padding(
           padding: EdgeInsets.only(top: 8.h),
           child: MyDropdownField(
-            options: ['Low', 'Medium', 'High'],
+            options: const ['Low', 'Medium', 'High'],
             onChanged: (s) => controller.text = s!,
             hintText: 'Risk rating',
             value: controller.text,

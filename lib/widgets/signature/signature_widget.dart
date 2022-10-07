@@ -37,6 +37,22 @@ class _SignatureWidgetState extends State<SignatureWidget> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant SignatureWidget oldWidget) {
+    if (oldWidget.signature != widget.signature) {
+      if (![null, ''].contains(widget.signature)) {
+        // if (widget.signature != null) {
+        try {
+          _image = base64Decode(widget.signature!);
+          showImage = true;
+        } catch (e) {
+          print(e);
+        }
+      }
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void onDone(Uint8List? signature) {
     if (signature != null) {
       setState(() {
@@ -104,8 +120,8 @@ class _SignatureWidgetState extends State<SignatureWidget> {
               onTap: _goToSignaturePage,
               child: Container(
                 // padding: kPadding,
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 decoration: MyDecoration.decoration(isCircle: true),
                 child: Icon(
                   Icons.edit,
@@ -150,7 +166,6 @@ class _CreateSignatureState extends State<CreateSignature> {
     ]);
     _controller = SignatureController(
       penStrokeWidth: 5,
-      penColor: Colors.black,
       exportBackgroundColor: Colors.white,
       exportPenColor: Colors.grey.shade900,
     );
@@ -170,7 +185,7 @@ class _CreateSignatureState extends State<CreateSignature> {
     final image = await _controller.toPngBytes();
     widget.onDone(image);
     _controller.clear();
-    SystemChrome.setPreferredOrientations([
+    await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
@@ -180,7 +195,7 @@ class _CreateSignatureState extends State<CreateSignature> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
         onPressed: () {
           onDone();
 
@@ -188,13 +203,13 @@ class _CreateSignatureState extends State<CreateSignature> {
         },
       ),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(56),
         child: Theme(
           data: Theme.of(context).copyWith(
             appBarTheme: AppBarTheme(
               color: context.theme.backgroundColor,
               elevation: 0,
-              iconTheme: IconThemeData(
+              iconTheme: const IconThemeData(
                 color: Colors.black,
               ),
               // titleTextStyle: TextStyle(
@@ -204,7 +219,7 @@ class _CreateSignatureState extends State<CreateSignature> {
             ),
           ),
           child: AppBar(
-            title: Text(
+            title: const Text(
               'Signature',
               style: TextStyle(
                 color: Colors.black,
@@ -221,7 +236,6 @@ class _CreateSignatureState extends State<CreateSignature> {
         // width: 300,
         // height: 300,
         backgroundColor: Colors.white,
-        dynamicPressureSupported: false,
       ),
     );
   }

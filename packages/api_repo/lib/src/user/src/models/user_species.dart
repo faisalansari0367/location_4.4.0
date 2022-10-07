@@ -9,7 +9,7 @@ class UserSpecies {
     if (json['data'] != null) {
       data = <SpeciesData>[];
       json['data'].forEach((v) {
-        data!.add(SpeciesData.fromJson(v));
+        data!.add(SpeciesData.fromJson(Map<String, dynamic>.from(v)));
       });
     }
   }

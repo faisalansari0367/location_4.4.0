@@ -27,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         showBackButton: false,
         // title: Text('Login'),
         leading: SizedBox.shrink(),
@@ -47,7 +47,7 @@ class _LoginViewState extends State<LoginView> {
                     height: 60.width,
                   ),
                 ),
-                Center(child: AppName()),
+                const Center(child: AppName()),
                 Gap(4.height),
 
                 Text(
@@ -66,11 +66,11 @@ class _LoginViewState extends State<LoginView> {
                 PasswordField(onChanged: cubit.onChangedPassword, onSubmitted: (s) => onLogin()),
                 Gap(1.height),
                 GestureDetector(
-                  onTap: () => Get.to(() => ForgotPassword()),
+                  onTap: () => Get.to(() => const ForgotPassword()),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      Strings.forgotPassword + '?',
+                      '${Strings.forgotPassword}?',
                       style: context.textTheme.subtitle2?.copyWith(
                         color: context.theme.primaryColor,
                       ),
@@ -92,15 +92,15 @@ class _LoginViewState extends State<LoginView> {
                 Gap(3.height),
                 Align(
                   child: TextButton(
-                    onPressed: () => Get.to(() => SignUpPage()),
-                    child: Text(
-                      '${Strings.newToItrack} ${Strings.register}',
-                      // style: context.textTheme.bodyText2.copy,
-                    ),
+                    onPressed: () => Get.to(() => const SignUpPage()),
                     style: TextButton.styleFrom(
                       textStyle: context.textTheme.bodyText2?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
+                    ),
+                    child: Text(
+                      '${Strings.newToItrack} ${Strings.register}',
+                      // style: context.textTheme.bodyText2.copy,
                     ),
                   ),
                 ),

@@ -42,7 +42,7 @@ class ErrorDialog extends StatelessWidget {
           MyElevatedButton(
             text: buttonText ?? ('Continue'),
             width: 30.width,
-            color: Color.fromARGB(255, 255, 17, 0),
+            color: const Color.fromARGB(255, 255, 17, 0),
             padding: EdgeInsets.all(10.sp),
             onPressed: () async {
               onTap();

@@ -11,7 +11,7 @@ class VisitorCheckInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => VisitorCheckInCubit(api: context.read<Api>()),
-      child: VisitorCheckInView(),
+      child: const VisitorCheckInView(),
     );
   }
 }

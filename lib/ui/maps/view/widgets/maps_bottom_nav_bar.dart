@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
@@ -32,7 +31,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
   Widget build(BuildContext context) {
     return Container(
       height: height,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: kBorderRadius,
       ),
@@ -77,9 +76,8 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
       curve: Curves.easeInOut,
       duration: 175.milliseconds,
       child: SizedBox(
-        child: child,
-        // height: 100,
         width: 100.width,
+        child: child,
       ),
     );
   }
@@ -92,7 +90,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
       items: [
         BottomNavbarItem(
           icon: icons.map.path,
-          title: ('Map Type'),
+          title: 'Map Type',
           onTap: () => DialogService.showDialog(
             child: DialogLayout(child: MapTypeWidget(cubit: widget.cubit)),
           ),
@@ -100,7 +98,7 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
         if ([Roles.producer, Roles.agent, Roles.consignee].contains(userData?.role?.camelCase?.getRole))
           BottomNavbarItem(
             icon: icons.square.path,
-            title: ('Add Fencing'),
+            title: 'Add Fencing',
             onTap: widget.cubit.setIsAddingGeofence,
           ),
       ],

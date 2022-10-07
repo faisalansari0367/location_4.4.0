@@ -30,11 +30,11 @@ class MapsPopups {
   // bool _onQuestionsPage = false;
   final MapsRepo mapsRepo;
 
-  final _hidePopupTime = 30.seconds;
+  final _hidePopupTime = 1.minutes;
   // final _showAgainTime = 10.seconds;
-  final _notifyManagerTime = 30.seconds;
-  final _dontShowAgainTime = 25.seconds;
-  final _canNotifyManagerAgainTime = 30.seconds;
+  final _notifyManagerTime = 5.minutes;
+  final _dontShowAgainTime = 15.minutes;
+  final _canNotifyManagerAgainTime = 30.minutes;
   // bool isCanceled = false;
 
   final void Function() sendNotificationToManager;
@@ -69,7 +69,7 @@ class MapsPopups {
       if (_isInside != isInside) {
         _isInside = isInside;
         final polygon = cubit.getPolygon();
-        if (polygon != null) mapsRepo.logBookEntry(userData!.pic!, null, polygon.id!);
+        if (polygon != null) await mapsRepo.logBookEntry(userData!.pic!, null, polygon.id!);
       } else {
         return;
       }
@@ -114,13 +114,16 @@ class MapsPopups {
     if (_notifyManagerTimer?.isActive ?? false) return;
     if (_canNotifyManagerAgainTimer?.isActive ?? false) return;
     print('notify manager called');
-    _notifyManagerTimer = Timer(_notifyManagerTime, () {
+    _notifyManagerTimer = Timer(_notifyManagerTime, () async {
       // if (_onQuestionsPage) return;
-
+      await 5.minutes.delay();
       if (!isInside) return;
       sendNotificationToManager();
       _notifyManagerTimer?.cancel();
-      _canNotifyManagerAgainTimer = Timer(_canNotifyManagerAgainTime, () => _canNotifyManagerAgainTimer?.cancel());
+      _canNotifyManagerAgainTimer = Timer(
+        _canNotifyManagerAgainTime,
+        () => _canNotifyManagerAgainTimer?.cancel(),
+      );
       _notifyManagerTimer = null;
     });
     // });
@@ -128,6 +131,7 @@ class MapsPopups {
 
   Future<bool> _enterPropertyDialog(bool isInside) async {
     var result = false;
+    if (Get.currentRoute != '/MapsPage') return false;
     _hidePopUpTimer = Timer(_hidePopupTime, () {
       if (Get.isDialogOpen ?? false) Get.back();
     });
@@ -136,49 +140,39 @@ class MapsPopups {
         stream: polygonsInCoverage.stream,
         onTap: (s) {
           result = true;
-          // polygonModel = s;
-
-          // _onQuestionsPage = true;
-
-          // BottomSheetService.showSheet(child: QuestionsSheet(polygonModel: s));
           _notifyManagerTimer?.cancel();
           _notifyManagerTimer = null;
-          Get.to(() => EntryForm(polygonModel: s));
+          cubit.stopLocationUpdates();
+
+          Get.to(
+            () => EntryForm(polygonModel: s),
+          );
           // Get.back();
         },
         onNO: () {
           result = false;
-
           disabledPolygons.addAll(currentPolygons);
           _notifyManagerTimer?.cancel();
           _notifyManagerTimer = null;
-          // _timer();
-          // _dontShowAgainTimer = Timer(
-          //   _dontShowAgainTime,
-          //   () {
-          //     disabledPolygons.clear();
-          //     _dontShowAgainTimer?.cancel();
-          //   },
-          // );
-          // Get.back();
         },
       ),
     );
     return result;
   }
 
-  void _timer() {
-    // int counter = 0;
-    // final _timer = Timer.periodic(1.seconds, (timer) {
-    //   print(counter++);
-    //   // print(polygonsInCoverage.value);
-    // });
-    // Future.delayed(_dontShowAgainTime, () => _timer.cancel());
-  }
+  void _timer() {}
 
   void polygonCoverageAreas() {
-    polygonsInCoverage.listen((value) {
-      currentPolygons.addAll(value);
-    });
+    polygonsInCoverage.listen(currentPolygons.addAll);
   }
+
+  // newInit
+
 }
+
+// final cd =CallbackDebouncer();
+
+
+
+// callback debouncer
+// final db = CallbackDebouncer();

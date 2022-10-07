@@ -7,7 +7,7 @@ class LogBookState extends Equatable {
   final List<LogbookEntry> entries;
   final List<String> headers;
   final bool isLoading;
-  LogBookState({
+  const LogBookState({
     this.entries = const [],
     this.headers = const [],
     this.isLoading = false,

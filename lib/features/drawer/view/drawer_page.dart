@@ -13,7 +13,7 @@ class DrawerPage extends StatelessWidget {
     // return DrawerView();
     return ChangeNotifierProvider(
       create: (context) => DrawerCubit(context.read<Api>()),
-      child: DrawerView(),
+      child: const DrawerView(),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 CameraUpdate boundsFromLatLngList(List<LatLng> list) {
     assert(list.isNotEmpty);
     double x0 = 0, x1 = 0, y0 = 0, y1 = 0;
-    for (var latLng in list) {
+    for (final latLng in list) {
       if (x0 == 0) {
         x0 = x1 = latLng.latitude;
         y0 = y1 = latLng.longitude;

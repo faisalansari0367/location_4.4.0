@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../constants/constans.dart';
 import '../../../../constants/strings.dart';
+import '../../cubit/my_drawer_controller.dart';
 import '../../models/drawer_item.dart';
 
 class DrawerMenu extends StatefulWidget {
@@ -31,14 +32,15 @@ class _DrawerMenuState extends State<DrawerMenu> {
   void initState() {
     _init();
     final api = context.read<Api>();
-    _drawerItems = DrawerItems(api);
+    final drawer = context.read<DrawerCubit>();
+    _drawerItems = DrawerItems(api, drawer: drawer);
     // api.userDataStream.listen((event) {
     //   _drawerItems = DrawerItems(api);
     // });
     super.initState();
   }
 
-  _init() async {
+  Future<void> _init() async {
     packageInfo = await PackageInfo.fromPlatform();
     setState(() {});
   }
@@ -49,9 +51,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
       padding: kPadding.copyWith(left: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        // mainAxisSize: MainAxisSize.max,
         children: [
-          Gap(25.height),
+          Gap(30.height),
           // Padding(
           //   padding: EdgeInsets.only(
           //     left: 40.w,
@@ -62,8 +63,6 @@ class _DrawerMenuState extends State<DrawerMenu> {
           //   ),
           // ),
 
-          Gap(5.height),
-
           ..._drawerItems.items.map(_customTile).toList(),
           // Spacer(),
           if (packageInfo != null)
@@ -71,17 +70,15 @@ class _DrawerMenuState extends State<DrawerMenu> {
               padding: EdgeInsets.only(top: 20, left: 20.w),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.build,
                     color: Color.fromARGB(255, 211, 211, 211),
                   ),
                   Gap(10.w),
                   Text(
                     'Version ${packageInfo?.version}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color.fromARGB(255, 211, 211, 211),
                       fontWeight: FontWeight.w600,
                     ),
@@ -125,10 +122,9 @@ class _DrawerMenuState extends State<DrawerMenu> {
         duration: 200.milliseconds,
         width: 50.width,
         curve: Curves.easeIn,
-        // padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
         padding: kPadding.copyWith(bottom: 15.h, top: 15.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topRight: Radius.circular(25),
             bottomRight: Radius.circular(25),
           ),
@@ -139,11 +135,11 @@ class _DrawerMenuState extends State<DrawerMenu> {
             _leading(image, color, iconData),
             Gap(3.width),
             AnimatedDefaultTextStyle(
+              duration: 100.milliseconds,
               style: TextStyle(
                 color: color,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
-              duration: 100.milliseconds,
               child: Text(item.text),
             )
           ],

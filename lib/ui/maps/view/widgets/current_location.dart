@@ -30,7 +30,7 @@ class _CurrentLocationState extends State<CurrentLocation> {
             color: Colors.grey[900],
           ),
           if (isLoading)
-            SizedBox.square(
+            const SizedBox.square(
               dimension: 53,
               child: CircularProgressIndicator(),
             ),

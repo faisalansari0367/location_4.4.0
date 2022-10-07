@@ -10,8 +10,6 @@ import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../../api_repo.dart';
-import 'auth_repo.dart';
-import 'models/models.dart';
 
 class AuthRepoImpl implements AuthRepo {
   final Client client;
@@ -43,6 +41,13 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final result = await client.post(Endpoints.signIn, data: data.toMap());
       final model = UserResponse.fromJson((result.data));
+      final userData = UserData.fromJson(result.data['data']['user']);
+      await setUserData(userData);
+      // if (model.data!.user!.role!.getRole.isAdmin) {
+      //   await updateUser(userData: UserData(role: model.data!.user!.role!, id: model.data!.user!.id));
+      // } else {
+      //   await updateMe(user: model.data!.user!);
+      // }
       Future.wait([
         storage.setToken(model.token!),
         storage.setUser(model.data!.user!.toJson()),
@@ -69,9 +74,9 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<User>> updateUser({required User user}) async {
+  Future<ApiResult<User>> updateMe({required User user}) async {
     try {
-      final result = await client.patch(Endpoints.updateUser, data: user.updateUser());
+      final result = await client.patch(Endpoints.updateMe, data: user.updateUser());
       final model = User.fromJson((result.data));
       final userData = UserData.fromJson(result.data['data']);
       await Future.wait([
@@ -90,15 +95,7 @@ class AuthRepoImpl implements AuthRepo {
   User? getUser() => storage.getUser();
 
   @override
-  Future<void> logout() async {
-    print('user logged out');
-    await storage.setIsLoggedIn(false);
-    // await Future.wait([
-    // storage.removeToken(),
-    // storage.removeUser(),
-    // storage.removeUserData(),
-    // ]);
-  }
+  Future<void> logout() async => await storage.setIsLoggedIn(false);
 
   @override
   Future<ApiResult<ResponseModel>> forgotPassword({required String email}) async {
@@ -123,9 +120,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  String? getToken() {
-    return storage.getToken();
-  }
+  String? getToken() => storage.getToken();
 
   @override
   Stream<User?> get userStream => storage.userStream;
@@ -143,7 +138,18 @@ class AuthRepoImpl implements AuthRepo {
   bool get isLoggedIn => storage.isLoggedIn;
 
   @override
-  Future<void> setUserData(UserData userData) async {
-    await storage.setUserData(userData);
+  Future<void> setUserData(UserData userData) async => await storage.setUserData(userData);
+
+  @override
+  Future<ApiResult<User>> updateUser({required UserData userData}) async {
+    try {
+      final result = await client.patch('${Endpoints.users}/${userData.id}', data: userData.updateStatus());
+      final model = User.fromJson((result.data));
+      final _userData = UserData.fromJson(result.data['data']);
+      await storage.setUserData(_userData);
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
   }
 }

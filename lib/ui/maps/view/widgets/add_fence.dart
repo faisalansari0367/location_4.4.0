@@ -44,7 +44,7 @@ class AddFence extends StatelessWidget {
       BlocBuilder<MapsCubit, MapsState>(
         builder: (context, state) {
           return state.isEditingFence
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : BottomNavbarItem(
                   title: 'Undo',
                   onTap: () => context.read<PolygonsService>().removeLastLatLng(),
@@ -85,7 +85,7 @@ class AddFence extends StatelessWidget {
                             cubit.addPolygon(controller.text);
                           }
                         },
-                        text: ('Done'),
+                        text: 'Done',
                       )
                     ],
                   ),

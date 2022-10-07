@@ -8,7 +8,6 @@ class QrScanPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (qrData != null) Container(),
@@ -16,7 +15,7 @@ class QrScanPage extends StatelessWidget {
         //   data: qrData!,
         //   version: QrVersions.auto,
         // ),
-        Text('Scan qr forms'),
+        const Text('Scan qr forms'),
       ],
     );
   }

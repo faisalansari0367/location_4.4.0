@@ -12,6 +12,7 @@ class _MyScaleTransitionState extends State<MyScaleTransition> with SingleTicker
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  @override
   void initState() {
     super.initState();
     _controller = AnimationController(
@@ -37,7 +38,6 @@ class _MyScaleTransitionState extends State<MyScaleTransition> with SingleTicker
   Widget build(BuildContext context) {
     return ScaleTransition(
       scale: _animation,
-      alignment: Alignment.center,
       child: widget.child,
     );
   }

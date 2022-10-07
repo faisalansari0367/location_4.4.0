@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:animations/animations.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -23,7 +22,7 @@ class NavbarView extends StatelessWidget {
     final backgroundColor = context.theme.backgroundColor;
     final tabBackgroundColor = context.theme.brightness != Brightness.light
         ? context.theme.backgroundColor
-        : Color.fromARGB(255, 255, 255, 255);
+        : const Color.fromARGB(255, 255, 255, 255);
 
     return BlocBuilder<NavbarCubit, NavbarState>(
       builder: (context, state) {
@@ -48,8 +47,8 @@ class NavbarView extends StatelessWidget {
               ],
             ),
             margin: EdgeInsets.only(
-              left: 12.0,
-              right: 12.0,
+              left: 12,
+              right: 12,
               bottom: Platform.isAndroid ? 12 : min(MediaQuery.of(context).viewPadding.bottom, 2.5.height),
             ),
             // margin: kMargin,
@@ -58,7 +57,7 @@ class NavbarView extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               backgroundColor: context.theme.backgroundColor,
               onTabChange: context.read<NavbarCubit>().updateIndex,
-              tabActiveBorder: Border.all(color: Colors.black),
+              tabActiveBorder: Border.all(),
               gap: 2.width,
               tabBackgroundColor: tabBackgroundColor,
               color: const Color.fromARGB(255, 120, 120, 120),
@@ -69,9 +68,7 @@ class NavbarView extends StatelessWidget {
               iconSize: 6.width,
               padding: kMargin,
               textStyle: context.textTheme.bodyText2
-                  ?.copyWith(color: Color.fromARGB(255, 36, 36, 36), fontWeight: FontWeight.w600),
-              // duration: const Duration(milliseconds: 800),
-              duration: kDuration,
+                  ?.copyWith(color: const Color.fromARGB(255, 36, 36, 36), fontWeight: FontWeight.w600),
               tabs: tabs(),
             ),
           ),

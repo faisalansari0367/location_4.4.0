@@ -24,8 +24,8 @@ class PushNotificationService {
   // }
 
   Future<void> initmessaging() async {
-    FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging.instance.getInitialMessage().then((message) {});
+    await FirebaseMessaging.instance.requestPermission();
+    await FirebaseMessaging.instance.getInitialMessage().then((message) {});
     // instance.onBackgroundMessage((RemoteMessage message) async {
     //   await localNotificationService.showNotification(
     //     title: message.data['title'],
@@ -46,8 +46,8 @@ class PushNotificationService {
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) {
         localNotificationService.showNotification(
-          title: (message.data['title']) ?? '',
-          message: (message.data['body']) ?? '',
+          title: ((message.data['title']) ?? '').toString(),
+          message: ((message.data['body']) ?? '').toString(),
           // image: message.data['image'],
         );
       },

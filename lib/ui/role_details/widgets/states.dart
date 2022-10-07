@@ -23,7 +23,7 @@ class States extends StatelessWidget {
         ...states
             .map(
               (e) => ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                contentPadding: const EdgeInsets.symmetric(),
                 onTap: () {
                   Get.back();
                   onChanged(e);

@@ -1,5 +1,4 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/widgets/animations/animations.dart';
 import 'package:flutter/material.dart';

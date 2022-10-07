@@ -8,12 +8,14 @@ class PolygonModel {
   final String? id;
   final Color color;
   final String name;
+  final String? pic;
   final List<LatLng> points;
   final UserData? createdBy;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   PolygonModel({
+    this.pic,
     this.id,
     this.createdBy,
     this.createdAt,
@@ -27,10 +29,13 @@ class PolygonModel {
     return <String, dynamic>{
       'id': id,
       'color': colorToHex(color),
-      'points': points.map((x) => _latLngToJson(x)).toList(),
+      'points': points.map(_latLngToJson).toList(),
       'name': name,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
+      'createdBy': createdBy?.toJson(),
+      'pic': pic,
+
       // 'createdAt': createdBy.toJson(),
     };
   }
@@ -38,7 +43,7 @@ class PolygonModel {
   Map<String, dynamic> toApiJson() {
     return <String, dynamic>{
       'color': colorToHex(color),
-      'points': points.map((x) => _latLngToJson(x)).toList(),
+      'points': points.map(_latLngToJson).toList(),
       'name': name,
       // 'createdAt': createdBy.toJson(),
     };
@@ -52,13 +57,39 @@ class PolygonModel {
     return LatLng(latLng.last, latLng.first);
   }
 
+  factory PolygonModel.fromLocalJson(Map<String, dynamic> json) {
+    // List<dynamic> polygons = [];
+    final polygons = json['points'];
+    // final coordinates = points['coordinates'];
+    // if (coordinates is List && coordinates.isNotEmpty) {
+    //   polygons = coordinates[0];
+    // }
+
+    return PolygonModel(
+      createdBy: UserData.fromJson(Map<String, dynamic>.from(json['createdBy'])),
+      pic: json['pic'],
+      id: json['id'].toString(),
+      color: _colorFromHex(json['color']),
+      points: List<LatLng>.from(polygons.map(_latLngFromJson).toList()),
+      name: json['name'],
+      updatedAt: parseDateTime(json['updatedAt']),
+      createdAt: parseDateTime(json['createdAt']),
+    );
+  }
+
   factory PolygonModel.fromJson(Map<String, dynamic> json) {
-    final points = json['points']['coordinates'][0];
+    var polygons = <dynamic>[];
+    final points = json['points'];
+    final coordinates = points['coordinates'];
+    if (coordinates is List && coordinates.isNotEmpty) {
+      polygons = coordinates[0];
+    }
+
     return PolygonModel(
       createdBy: UserData.fromJson(json['createdBy']),
       id: json['id'].toString(),
       color: _colorFromHex(json['color']),
-      points: List<LatLng>.from((points as List<dynamic>).map((x) => _latLngFromJson((x))).toList()),
+      points: List<LatLng>.from(polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),
       name: json['name'],
       updatedAt: parseDateTime(json['updatedAt']),
       createdAt: parseDateTime(json['createdAt']),

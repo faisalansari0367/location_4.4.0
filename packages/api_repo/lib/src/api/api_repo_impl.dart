@@ -4,11 +4,14 @@ import 'package:hive_flutter/adapters.dart';
 import '../../api_repo.dart';
 import '../../api_result/api_result.dart';
 import '../auth/src/storage/storage_service.dart';
+import '../log/log_records.dart';
 
 class ApiRepo implements Api {
   late Client _client;
   late AuthRepo _authRepo;
   late UserRepo _userRepo;
+  late LogRecordsRepo _logRecordsRepo;
+
   late Box _box;
   // late LocalesApi _localesApi;
 
@@ -22,6 +25,7 @@ class ApiRepo implements Api {
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token);
     _userStream(_box, storage.userKey);
+    _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box);
     _userRepo = UserRepoImpl(client: _client, box: _box);
     // _localesApi = LocalesRepo();
@@ -63,8 +67,8 @@ class ApiRepo implements Api {
   Future<ApiResult<RoleDetailsModel>> getFields(String role) => _userRepo.getFields(role);
 
   @override
-  Future<ApiResult<User>> updateUser({required User user}) async {
-    return await _authRepo.updateUser(user: user);
+  Future<ApiResult<User>> updateMe({required User user}) async {
+    return await _authRepo.updateMe(user: user);
   }
 
   // @override
@@ -122,7 +126,7 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords() {
-    return _userRepo.getLogbookRecords();
+    return _logRecordsRepo.getLogbookRecords();
   }
 
   @override
@@ -172,6 +176,43 @@ class ApiRepo implements Api {
   @override
   Future getQrCode(String data) {
     return _userRepo.getQrCode(data);
-   
+  }
+
+  @override
+  Future<ApiResult> openPdf(String url) {
+    return _userRepo.openPdf(url);
+  }
+
+  @override
+  Future<ApiResult<User>> updateUser({required UserData userData}) {
+    return _authRepo.updateUser(userData: userData);
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) {
+    return _logRecordsRepo.createLogRecord(geofenceId);
+  }
+
+  @override
+  Stream<List<LogbookEntry>> get logbookRecordsStream => _logRecordsRepo.logbookRecordsStream;
+
+  @override
+  Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId) {
+    return _logRecordsRepo.updateLogRecord(logId, geofenceId);
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form) {
+    return _logRecordsRepo.udpateForm(geofenceId, form);
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> logBookEntry(String pic, String geofenceId, {bool isExiting = false, String? form}) {
+    return _logRecordsRepo.logBookEntry(pic, geofenceId, isExiting: isExiting, form: form);
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> markExit(String geofenceId) {
+    return _logRecordsRepo.markExit(geofenceId);
   }
 }

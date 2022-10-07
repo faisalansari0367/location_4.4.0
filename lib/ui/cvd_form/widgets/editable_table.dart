@@ -12,7 +12,7 @@ class EditableTable extends StatefulWidget {
 }
 
 class _EditableTableState extends State<EditableTable> {
-  final rows = Set<Map>();
+  final rows = <Map>{};
 
   @override
   void initState() {
@@ -27,12 +27,12 @@ class _EditableTableState extends State<EditableTable> {
       rowCount: rows.length,
       showCreateButton: true,
 
-      tdStyle: TextStyle(fontSize: 20),
+      tdStyle: const TextStyle(fontSize: 20),
       columnRatio: 0.4,
       showSaveIcon: true, //set true
       borderColor: Colors.grey.shade300,
       saveIconColor: context.theme.primaryColor.withOpacity(0.8),
-      onSubmitted: (value) => print(value),
+      onSubmitted: print,
       onRowSaved: (value) {
         rows.add(value);
         print(rows);

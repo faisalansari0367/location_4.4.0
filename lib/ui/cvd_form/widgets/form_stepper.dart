@@ -6,6 +6,7 @@ class FormStepper extends Step {
 
   final String heading;
   final Widget? actions;
+  @override
   final bool isActive;
   FormStepper({
     this.actions,

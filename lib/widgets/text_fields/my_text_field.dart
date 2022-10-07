@@ -82,14 +82,13 @@ class MyTextField extends StatelessWidget {
       validator: validator ?? Validator.text,
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
-      style: TextStyle(
+      style: const TextStyle(
         // color: theme.iconTheme.color,
         fontWeight: FontWeight.bold,
         // color
       ),
       onTap: onTap,
       autofocus: autoFocus,
-      enableSuggestions: true,
       readOnly: readOnly,
       decoration: decoration ??
           InputDecoration(
@@ -100,7 +99,7 @@ class MyTextField extends StatelessWidget {
 
             prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               // color: theme.iconTheme.color,
               fontWeight: FontWeight.bold,
               // color
@@ -134,6 +133,6 @@ class MyTextField extends StatelessWidget {
 
   Widget? _buildCounter(BuildContext context,
       {required int currentLength, required bool isFocused, required int? maxLength}) {
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 }

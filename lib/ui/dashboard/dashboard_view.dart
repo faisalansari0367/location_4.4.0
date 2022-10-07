@@ -23,7 +23,16 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     context.read<MapsRepo>().logBookEntry(
+      //           context.read<Api>( ).getUserData()!.pic!,
+      //           null,
+      //           '35',
+      //         );
+      //   },
+      // ),
+      appBar: const MyAppBar(
         showBackButton: false,
         centreTitle: true,
         // title: _logo(),
@@ -42,7 +51,7 @@ class DashboardView extends StatelessWidget {
             GridView(
               shrinkWrap: true,
               primary: false,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               padding: kPadding,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -53,12 +62,12 @@ class DashboardView extends StatelessWidget {
                 DashboardCard(
                   text: Strings.visitorLogBook.toUpperCase(),
                   iconData: Icons.book,
-                  onTap: () => Get.to(() => LogbookPage()),
+                  onTap: () => Get.to(() => const LogbookPage()),
                 ),
                 DashboardCard(
                   text: Strings.geofences.toUpperCase(),
                   iconData: Icons.fence,
-                  onTap: () => Get.to(() => MapsPage()),
+                  onTap: () => Get.to(() => const MapsPage()),
                 ),
                 DashboardCard(
                   text: Strings.settings.toUpperCase(),
@@ -67,7 +76,7 @@ class DashboardView extends StatelessWidget {
                     // () => SettingsPage(
                     //   showBackbutton: true,
                     // ),
-                    SelectRolePage(
+                    const SelectRolePage(
                       showBackArrow: true,
                     ),
                   ),
@@ -75,36 +84,36 @@ class DashboardView extends StatelessWidget {
                 DashboardCard(
                   text: Strings.envds,
                   iconData: Icons.person,
-                  onTap: () => DialogService.showDialog(child: ComingSoonDialog()),
+                  onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
                 ),
                 DashboardCard(
                   text: Strings.links.toUpperCase(),
                   iconData: Icons.link,
-                  onTap: () => Get.to(() => LinksPage()),
+                  onTap: () => Get.to(() => const LinksPage()),
                 ),
                 DashboardCard(
                   text: Strings.visitorCheckIn.toUpperCase(),
                   iconData: Icons.token_rounded,
-                  onTap: () => Get.to(() => VisitorCheckInPage()),
+                  onTap: () => Get.to(() => const VisitorCheckInPage()),
                 ),
                 DashboardCard(
                   text: 'eDEC Forms',
                   iconData: Icons.format_list_bulleted_sharp,
                   onTap: () {
-                    DialogService.showDialog(child: ComingSoonDialog());
+                    DialogService.showDialog(child: const ComingSoonDialog());
                   },
                   // onTap: () => Get.to(() => VisitorCheckInPage()),
                 ),
                 DashboardCard(
                   text: 'CVD FORM',
                   iconData: Icons.format_align_justify_rounded,
-                  onTap: () => Get.to(() => CvdFormPage()),
+                  onTap: () => Get.to(() => const CvdFormPage()),
                 ),
                 DashboardCard(
                   text: 'WORK SAFETY',
                   iconData: Icons.work_outline,
                   onTap: () {
-                    DialogService.showDialog(child: ComingSoonDialog());
+                    DialogService.showDialog(child: const ComingSoonDialog());
                   },
                 ),
                 DashboardCard(
@@ -150,9 +159,9 @@ class DashboardView extends StatelessWidget {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         Get.back();
-                                        DialogService.showDialog(child: ComingSoonDialog());
+                                        await DialogService.showDialog(child: const ComingSoonDialog());
                                       },
-                                      child: Text('Yes'),
+                                      child: const Text('Yes'),
                                     ),
                                   ),
                                   Gap(10.w),
@@ -161,7 +170,7 @@ class DashboardView extends StatelessWidget {
                                   Expanded(
                                     child: ElevatedButton(
                                       onPressed: () async => Get.back(),
-                                      child: Text('No'),
+                                      child: const Text('No'),
                                     ),
                                   ),
                                   Gap(20.w),
@@ -199,7 +208,6 @@ class DashboardView extends StatelessWidget {
     return Row(
       // crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: [
         // Gap(20.h),
         Image.asset(
@@ -209,7 +217,7 @@ class DashboardView extends StatelessWidget {
         Text(
           'BIO',
           style: TextStyle(
-            color: Color(0xff3B4798),
+            color: const Color(0xff3B4798),
             fontWeight: FontWeight.bold,
             fontSize: 20.w,
           ),
@@ -217,7 +225,7 @@ class DashboardView extends StatelessWidget {
         Text(
           'SECURE',
           style: TextStyle(
-            color: Color(0xff75B950),
+            color: const Color(0xff75B950),
             fontWeight: FontWeight.bold,
             fontSize: 20.w,
           ),

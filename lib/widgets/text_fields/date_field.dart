@@ -33,14 +33,30 @@ class _MyDateFieldState extends State<MyDateField> {
     return MyTextField(
       focusNode: AlwaysDisabledFocusNode(),
       onTap: _showDatePicker,
-      // enabled: false,
-      suffixIcon: Icon(Icons.date_range_outlined),
+      suffixIcon: const Icon(Icons.date_range_outlined),
       hintText: widget.label,
       textInputType: TextInputType.datetime,
       controller: controller,
       validator: (s) => Validator.date(pickedDateTime),
-      // validator: (value) => Validator.validateDate(value),
     );
+  }
+
+  void _timePicker() async {
+    final pickedDate = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (pickedDate != null) {
+      pickedDateTime = DateTime(
+        pickedDateTime!.year,
+        pickedDateTime!.month,
+        pickedDateTime!.day,
+        pickedDate.hour,
+        pickedDate.minute,
+      );
+      controller.text = formatDate(pickedDateTime!);
+      widget.onChanged!(pickedDateTime.toString());
+    }
   }
 
   _showDatePicker() async {

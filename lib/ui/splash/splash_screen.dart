@@ -30,26 +30,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     final isLoggedIn = context.read<Api>().isLoggedIn;
-    // context.read<Api>().userStream.listen((event) {
-    //   log(event?.toJson().toString() ?? '');
-    // });
+
     Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
       if (!isLoggedIn) return;
       final user = context.read<Api>().getUser()!;
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
       if (!result) {
-        Get.off(() => LoginPage(email: user.email));
+        await Get.off(() => LoginPage(email: user.email));
       } else {
-        Get.off(() => DrawerPage());
+        await Get.off(() => const DrawerPage());
       }
-      // Get.off(() => SelectRolePage());
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => SelectRolePage(),
-      //   ),
-      // );
     });
     Future.delayed((kSplashDuration.inSeconds - 0.5).seconds, () {
       if (!mounted) return;
@@ -71,8 +62,6 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Gap(10.height),
             MySlideAnimation(
-              // key: UniqueKey(),
-              duration: kDuration,
               child: FadeInAnimation(
                 duration: kDuration,
                 child: Center(
@@ -120,19 +109,19 @@ class _SplashScreenState extends State<SplashScreen> {
                   //   ),
                   // ),
                   // BioSecureLogo(),
-                  AppName(),
+                  const AppName(),
                   Gap(2.height),
 
                   // Gap(15.height),
                   MyElevatedButton(
-                    text: (Strings.login),
-                    onPressed: () async => Get.off(() => LoginPage()),
+                    text: Strings.login,
+                    onPressed: () async => Get.off(() => const LoginPage()),
                   ),
                   // Gap(2.height),
                   _orSeperator(context),
                   MyElevatedButton(
-                    text: (Strings.signUp),
-                    onPressed: () async => Get.to(() => SignUpPage()),
+                    text: Strings.signUp,
+                    onPressed: () async => Get.to(() => const SignUpPage()),
                   ),
                 ],
               ),
@@ -143,9 +132,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _orSeperator(
-    BuildContext context,
-  ) {
+  Widget _orSeperator(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 1.height),
       child: Row(

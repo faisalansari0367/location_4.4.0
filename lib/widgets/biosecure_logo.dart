@@ -10,7 +10,6 @@ class BioSecureLogo extends StatelessWidget {
     return Row(
       // crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: [
         // Gap(20.h),
         Image.asset(
@@ -20,7 +19,7 @@ class BioSecureLogo extends StatelessWidget {
         Text(
           'BIO',
           style: TextStyle(
-            color: Color(0xff3B4798),
+            color: const Color(0xff3B4798),
             fontWeight: FontWeight.bold,
             fontSize: 20.w,
           ),
@@ -28,7 +27,7 @@ class BioSecureLogo extends StatelessWidget {
         Text(
           'SECURE',
           style: TextStyle(
-            color: Color(0xff75B950),
+            color: const Color(0xff75B950),
             fontWeight: FontWeight.bold,
             fontSize: 20.w,
           ),

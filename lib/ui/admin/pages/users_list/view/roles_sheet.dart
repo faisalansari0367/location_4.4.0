@@ -25,7 +25,7 @@ class RolesSheet extends StatelessWidget {
         const SizedBox(height: 10),
         ...options
             .map((e) => ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                  contentPadding: const EdgeInsets.symmetric(),
                   onTap: () {
                     Get.back();
                     onChanged(e);
@@ -36,7 +36,7 @@ class RolesSheet extends StatelessWidget {
                       color: Colors.grey.shade700,
                     ),
                   ),
-                ))
+                ),)
             .toList()
       ],
     );

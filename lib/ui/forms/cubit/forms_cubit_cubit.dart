@@ -17,7 +17,7 @@ class FormsCubit extends ChangeNotifier {
     state = FormsState(
       pageController: PageController(),
       isLoading: false,
-      questions: [],
+      questions: const [],
       // questions: (questions?.isNotEmpty ?? false) ? _mapFormData(questions!) : [],
       // formData: _mapData(questions ?? [], this),
     );
@@ -73,7 +73,7 @@ class FormsCubit extends ChangeNotifier {
         success: (data) {
           forms = data.data?.forms ?? [];
         },
-        failure: (s) {});
+        failure: (s) {},);
     state = state.copyWith(isLoading: false);
     notifyListeners();
   }
@@ -91,9 +91,9 @@ class FormsCubit extends ChangeNotifier {
   void onPressed() {
     if (!formKey.currentState!.validate()) return;
     final data = <String, String>{};
-    state.questions.forEach((element) {
+    for (final element in state.questions) {
       data[element.question] = element.value.toString();
-    });
+    }
     // onSubmit.call(data);
     final qrData = jsonEncode(state.questions);
     state = state.copyWith(qrData: qrData);

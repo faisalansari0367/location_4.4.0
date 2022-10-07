@@ -9,7 +9,7 @@ import '../../../../../constants/index.dart';
 
 class LogBookCubit extends Cubit<LogBookState> {
   final Api api;
-  LogBookCubit({required this.api}) : super(LogBookState()) {
+  LogBookCubit({required this.api}) : super(const LogBookState()) {
     getRecords();
   }
 
@@ -18,26 +18,28 @@ class LogBookCubit extends Cubit<LogBookState> {
     // Permission.manageExternalStorage.request();
     print(result);
     final rows = state.entries
-        .map((item) => [
-              (item.id.toString()),
-              ('${item.user!.firstName!} ${item.user!.lastName}'),
-              (MyDecoration.formatTime(item.enterDate) + '\n' + MyDecoration.formatDate(item.enterDate)),
-              (MyDecoration.formatTime(item.exitDate) + '\n' + MyDecoration.formatDate(item.exitDate)),
-              (item.geofence?.name ?? ''),
-              (item.geofence?.pic ?? ''),
-            ])
+        .map(
+          (item) => [
+            (item.id.toString()),
+            ('${item.user!.firstName!} ${item.user!.lastName}'),
+            ('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
+            ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
+            (item.geofence?.name ?? ''),
+            (item.geofence?.pic ?? ''),
+          ],
+        )
         .toList();
     final headers = ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic'];
     CreatePDf.createLogbookPDf(headers, rows);
   }
 
   Future<void> getRecords() async {
-    emit(state.copyWith(isLoading: true));
+    // emit(state.copyWith(isLoading: true));
     final result = await api.getLogbookRecords();
     result.when(
       success: (s) => {emit(state.copyWith(entries: s.data))},
       failure: (failure) => DialogService.failure(error: failure),
     );
-    emit(state.copyWith(isLoading: false));
+    // emit(state.copyWith(isLoading: false));
   }
 }

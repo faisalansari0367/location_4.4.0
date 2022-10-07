@@ -148,6 +148,14 @@ class UserData {
     updatedAt = json['updatedAt'] == null ? null : DateTime.tryParse(json['updatedAt'])?.toLocal();
   }
 
+  Map<String, dynamic> updateStatus() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['status'] =
+        status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
+    return data;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] =

@@ -108,6 +108,8 @@ class Strings {
   static String get forgotPasswordMessage =>
       "Don't worry! it happens. Please enter the address associated with your account.";
 
+  static const String deleteGeofenceMsg = 'Are you sure you want to delete this Geofence?';
+
   // Errors
   // something went wrong
   static String somethingWentWrong = '$something $went $wrong'.capitalizeFirst!;

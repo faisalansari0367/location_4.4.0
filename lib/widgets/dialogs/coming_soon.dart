@@ -39,9 +39,9 @@ class ComingSoonDialog extends StatelessWidget {
             Gap(20.h),
             ElevatedButton(
               onPressed: Get.back,
-              child: Text('Go back'),
               style:
-                  OutlinedButton.styleFrom(shape: StadiumBorder(), textStyle: TextStyle(fontWeight: FontWeight.bold)),
+                  OutlinedButton.styleFrom(shape: const StadiumBorder(), textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+              child: const Text('Go back'),
             ),
           ],
         ),

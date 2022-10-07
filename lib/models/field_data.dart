@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
@@ -21,7 +22,7 @@ abstract class FormFieldData {
     required this.name,
     required this.controller,
     this.address,
-    this.data = const {},
+    this.data = const <String, dynamic>{},
   });
 
   FieldType get fieldType {
@@ -76,7 +77,7 @@ abstract class FormFieldData {
       //   return SpeciesWidget(data: data);
       case FieldType.species:
         return SpeciesWidget(
-          data: data['species'],
+          data: data['species'] as UserSpecies,
         );
       case FieldType.region:
         return MyTextField(
@@ -131,7 +132,7 @@ abstract class FormFieldData {
       case FieldType.driversLicense:
         return MyTextField(
           hintText: name,
-          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+          inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
           validator: Validator.text,
           controller: controller,
           // onChanged: (value) => controller.text = value,
@@ -192,7 +193,7 @@ abstract class FormFieldData {
           hintText: name,
           controller: controller,
           validator: Validator.text,
-          inputFormatters: [],
+          inputFormatters: const [],
         );
 
       default:
@@ -200,7 +201,6 @@ abstract class FormFieldData {
         print(name.capitalize);
         return MyTextField(
           hintText: name.capitalize,
-          textCapitalization: TextCapitalization.sentences,
           controller: controller,
           validator: getValidator(),
         );

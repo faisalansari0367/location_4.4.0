@@ -11,7 +11,7 @@ import '../../../widgets/dialogs/mail_sent_dialog.dart';
 class OtpCubit extends Cubit<OtpState> {
   final AuthRepo authRepo;
   final SignUpModel signUpModel;
-  OtpCubit(this.authRepo, this.signUpModel) : super(OtpState());
+  OtpCubit(this.authRepo, this.signUpModel) : super(const OtpState());
 
   void onTimeout() {
     emit(state.copyWith(isLoading: false, showCountdown: false));
@@ -42,7 +42,7 @@ class OtpCubit extends Cubit<OtpState> {
         message: 'Otp verified successfully',
         onContinue: () async {
           Get.back();
-          await Get.offAll(() => DrawerPage());
+          await Get.offAll(() => const DrawerPage());
         },
       ),
     );

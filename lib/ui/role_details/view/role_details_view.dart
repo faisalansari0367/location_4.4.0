@@ -52,7 +52,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                   MyCrossFade(
                     isLoading: state.isLoading,
                     child: AutoSpacing(
-                      spacing: SizedBox.shrink(),
+                      spacing: const SizedBox.shrink(),
                       children: [
                         ...sortedFields(state.fields)
                             .map(
@@ -92,7 +92,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
 
                         await cubit.submitFormData(map);
                       },
-                      text: ('Submit'),
+                      text: 'Submit',
                     )
                 ],
               ),
@@ -106,6 +106,11 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
   List<String> sortedFields(List<String> fields) {
     final _fields = [...fields];
     final hasSignature = fields.contains('Signature');
+    final hasCompanyAddress = fields.contains('Company Address');
+    if (hasCompanyAddress) {
+      _fields.remove('Company Address');
+    }
+
     if (hasSignature) {
       _fields.remove('Signature');
       _fields.add('Signature');
@@ -180,6 +185,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           maxLength: 8,
         );
       case 'signature':
+        // controller.text = userData['signature'] ?? '';
         return SignatureWidget(
           signature: controller.text,
           onChanged: (value) => controller.text = value,
@@ -206,6 +212,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         controller.text = userData['ngr'] ?? '';
         return MyTextField(
           controller: controller,
+          // textCapitalization: TextCapitalization.characters,
+          inputFormatters: [CapitalizeAllInputFormatter()],
+
           hintText: name,
           onChanged: (s) {
             map['ngr'] = s;
@@ -229,8 +238,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           },
         );
       // case FieldType.driversLicense:
-      case 'driver\'sLicense':
-        controller.text = map['driver\'sLicense'] ?? userData['driversLicense'] ?? '';
+      case "driver'sLicense":
+        controller.text = map["driver'sLicense"] ?? userData['driversLicense'] ?? '';
         return MyTextField(
           hintText: name,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -311,6 +320,21 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           // countryName: controller.text,
           // onCountryChanged: (value) => controller.text = value,
         );
+      case 'postcode':
+        // final controller = TextEditingController();
+        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        return MyTextField(
+          // isOriginCountry: fieldType.isCountryOfOrigin,
+          maxLength: 4,
+          hintText: name,
+          controller: controller,
+          validator: Validator.postcode,
+
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          // textCapitalization: TextCapitalization.characters,
+          // countryName: controller.text,
+          // onCountryChanged: (value) => controller.text = value,
+        );
       // case FieldType.passport:
       case 'passport':
         controller.text = map['passport'] ?? '';
@@ -320,7 +344,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           hintText: name,
           controller: controller,
           validator: Validator.text,
-          inputFormatters: [],
+          inputFormatters: const [],
         );
       case 'state':
         // final controller = TextEditingController();
@@ -366,7 +390,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         // print(name.capitalize);
         return MyTextField(
           hintText: name.capitalize,
-          textCapitalization: TextCapitalization.sentences,
           controller: controller,
           validator: Validator.text,
         );

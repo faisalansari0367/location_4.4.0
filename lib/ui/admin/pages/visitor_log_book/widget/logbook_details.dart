@@ -15,7 +15,7 @@ class LogbookDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         title: Text('Log details'),
         // showDivider: true,
         // backgroundColor: context.theme.primaryColor,
@@ -31,14 +31,14 @@ class LogbookDetails extends StatelessWidget {
   }
 
   List<Widget> cardChildren(List<LogbookFormField> form) {
-    List<Widget> children = [];
-    for (var item in form) {
+    final children = <Widget>[];
+    for (final item in form) {
       children.add(getWidget(item));
       // children.add(Gap(10.h));
       children.add(Divider(
         color: Colors.grey.shade300,
         thickness: 1,
-      ));
+      ),);
     }
     return children;
   }
@@ -48,12 +48,12 @@ class LogbookDetails extends StatelessWidget {
     if (form == null) return list;
     if (form is! Map) list;
     if (form is Map) {
-      list.add(Divider());
+      list.add(const Divider());
       list.add(_headerRow());
-      list.add(Divider());
+      list.add(const Divider());
       form.forEach((key, value) {
         list.add(_radioButton(key, value));
-        list.add(Divider());
+        list.add(const Divider());
       });
     }
     return list;
@@ -126,6 +126,10 @@ class LogbookDetails extends StatelessWidget {
       case 'expected departure time':
       case 'day/date/time':
         return _qna(field.field!, MyDecoration.formatDateTime(DateTime.tryParse(field.value!)));
+      case 'time':
+        return _qna(field.field!, MyDecoration.formatTime(DateTime.tryParse(field.value!)));
+      case 'date':
+        return _qna(field.field!, MyDecoration.formatDate(DateTime.tryParse(field.value!)));
       default:
         return _qna(field.field!, field.value!);
     }
@@ -139,11 +143,9 @@ class LogbookDetails extends StatelessWidget {
           child: text,
         ),
         Expanded(
-          flex: 1,
           child: option1,
         ),
         Expanded(
-          flex: 1,
           child: option2,
         ),
       ],
@@ -175,8 +177,8 @@ class LogbookDetails extends StatelessWidget {
     );
   }
 
-  Container _radioButton(String question, bool answer) {
-    return Container(
+  Widget _radioButton(String question, bool answer) {
+    return SizedBox(
       width: 100.width,
       child: _rowLayout(
         text: Text(
@@ -199,7 +201,7 @@ class LogbookDetails extends StatelessWidget {
       // padding: kPadding.copyWith(bottom: 0),
       // margin: EdgeInsets.symmetric(vertical: 10.h),
       // decoration: MyDecoration.decoration(color: Color.fromARGB(255, 255, 255, 255)),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         // color: Colors.grey.shade100,
         // color: backgroundColor,
         borderRadius: kBorderRadius,

@@ -45,7 +45,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
           // title: const Text('OTP'),
           ),
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
@@ -89,7 +89,6 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         ),
         Gap(2.height),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.info, color: context.theme.errorColor.withOpacity(0.7)),
@@ -153,7 +152,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                             strokeWidth: 3.w,
                           )
                         : null,
-                  )),
+                  ),),
                 ),
               )
             ],
@@ -168,7 +167,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                   onRetry: cubit.onRetry,
                   onTimeout: cubit.onTimeout,
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ),
       ],
     );

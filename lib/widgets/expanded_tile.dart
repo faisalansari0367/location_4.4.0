@@ -96,7 +96,7 @@ class _ExpandedTileState extends State<ExpandedTile> {
       duration: 500.milliseconds,
       curve: Curves.easeInOutBack,
       tween: Tween<double>(begin: !isExpanded ? 180 : 0, end: !isExpanded ? 0 : 180),
-      child: Icon(Icons.keyboard_arrow_down),
+      child: const Icon(Icons.keyboard_arrow_down),
       builder: (context, value, child) {
         return Transform.rotate(
           angle: value * pi / 180,

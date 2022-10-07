@@ -13,7 +13,7 @@ abstract class UserRepo {
   Future<ApiResult<RoleDetailsModel>> getFields(String role);
   Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data);
   Future<ApiResult<Map<String, dynamic>>> getRoleData(String role);
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
+  // Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams});
   Future<ApiResult<List<String>>> getFormQuestions();
   Future<ApiResult<UserSpecies>> getUserSpecies();
@@ -21,6 +21,7 @@ abstract class UserRepo {
   Future<ApiResult<List<String>>> getLicenceCategories();
   Future<void> getCvdPDf(Map<String, dynamic> data);
   Future<dynamic> getQrCode(String data);
+  Future<ApiResult> openPdf(String url);
 }
 
 class UserRepoImpl extends UserRepo {
@@ -61,7 +62,7 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data) async {
     try {
-      await client.patch(Endpoints.updateUser, data: data);
+      await client.patch(Endpoints.updateMe, data: data);
       // storage.setRoleData(role, data);
       // ignore: void_checks
 
@@ -74,7 +75,7 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<Map<String, dynamic>>> getRoleData(String role) async {
     try {
-      final result = await client.get(Endpoints.updateUser);
+      final result = await client.get(Endpoints.updateMe);
       final data = (result.data);
       storage.setRoleData(role, data);
       return ApiResult.success(data: data);
@@ -83,16 +84,16 @@ class UserRepoImpl extends UserRepo {
     }
   }
 
-  @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
-    try {
-      final result = await client.get(Endpoints.logRecords);
-      final data = LogbookResponseModel.fromJson(result.data);
-      return ApiResult.success(data: data);
-    } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-    }
-  }
+  // @override
+  // Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
+  //   try {
+  //     final result = await client.get(Endpoints.logRecords);
+  //     final data = LogbookResponseModel.fromJson(result.data);
+  //     return ApiResult.success(data: data);
+  //   } catch (e) {
+  //     return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+  //   }
+  // }
 
   @override
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) async {
@@ -135,6 +136,7 @@ class UserRepoImpl extends UserRepo {
     try {
       final result = await client.get(Endpoints.forms);
       final list = UserFormsData.fromJson(result.data);
+      storage.setUserForms(list);
       return ApiResult.success(data: list);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -163,6 +165,21 @@ class UserRepoImpl extends UserRepo {
   Future getQrCode(String data) async {
     try {
       final result = await client.post(Endpoints.qrCode, data: {'text': data});
+      return ApiResult.success(data: result.data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult> openPdf(String url) async {
+    try {
+      final result = await client.build().get(
+            url,
+            options: Options(
+              responseType: ResponseType.bytes,
+            ),
+          );
       return ApiResult.success(data: result.data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

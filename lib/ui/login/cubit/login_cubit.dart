@@ -49,18 +49,16 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await (state.isConnected ? auth.signIn(data: model) : localApi.signIn(data: model));
 
       result.when(success: (data) {
-        Get.offAll(() => DrawerPage());
+        Get.offAll(() => const DrawerPage());
       }, failure: (error) {
         DialogService.showDialog(
           child: NetworkErrorDialog(
             message: NetworkExceptions.getErrorMessage(error),
             buttonText: Strings.retry,
-            onCancel: () {
-              Get.back();
-            },
+            onCancel: Get.back,
           ),
         );
-      });
+      },);
       emit(state.copyWith(isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));

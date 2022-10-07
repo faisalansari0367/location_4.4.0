@@ -26,17 +26,18 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
     final cubit = context.read<CvdCubit>();
     final _map = cubit.map[cubit.stepNames[cubit.state.currentStep]];
     final data = _map ?? {};
-    if (data.isNotEmpty)
+    if (data.isNotEmpty) {
       data.forEach((key, value) {
         formData[key] = value.toSet();
       });
+    }
     _init();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (form == null) return SizedBox();
+    if (form == null) return const SizedBox();
     return Container(
       child: Column(
         children: [
@@ -132,7 +133,7 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
                         ),
                       ),
                     ),
-                  ))
+                  ),)
               .toList(),
         ],
       ),
@@ -148,7 +149,7 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
 
   void setValue(String? field, int? id, {bool canSelectOne = false}) {
     final dataSet = <int>{};
-    final Set<int>? data = formData[field!];
+    final data = formData[field!];
     if (data == null) {
       dataSet.add(id!);
       formData[field] = dataSet;
@@ -161,7 +162,7 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
   }
 
   Future<void> _init() async {
-    String data = await DefaultAssetBundle.of(context).loadString("assets/json/part_integrity_form.json");
+    final data = await DefaultAssetBundle.of(context).loadString('assets/json/part_integrity_form.json');
     final map = jsonDecode(data);
     form = ProductIntegrityModel.fromJson(map);
     setState(() {});

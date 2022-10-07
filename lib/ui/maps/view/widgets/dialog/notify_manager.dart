@@ -1,5 +1,4 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,8 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class NotifyManagerDialog extends StatelessWidget {
-  const NotifyManagerDialog({Key? key}) : super(key: key);
+  final String? message;
+  const NotifyManagerDialog({Key? key, this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,6 @@ class NotifyManagerDialog extends StatelessWidget {
         padding: kPadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             AspectRatio(
               aspectRatio: 16.w / 9.h,
@@ -26,7 +25,7 @@ class NotifyManagerDialog extends StatelessWidget {
             ),
             Gap(20.h),
             Text(
-              'We have notified the property manager of your entry into the geofenced area',
+              message ?? 'We have notified the property manager of your entry into the geofenced area',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -40,7 +39,7 @@ class NotifyManagerDialog extends StatelessWidget {
               // width: 100.w,
               width: 100.w,
               color: Colors.orange.withOpacity(0.8),
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               onPressed: () async => Get.back(),
             ),
             // Gap(20.h),

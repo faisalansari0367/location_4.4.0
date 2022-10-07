@@ -42,8 +42,8 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        title: const Text('OTP'),
+      appBar: const MyAppBar(
+        title: Text('OTP'),
       ),
       body: BlocConsumer<OtpCubit, OtpState>(
         bloc: cubit,
@@ -86,7 +86,6 @@ class _OtpScreenState extends State<OtpScreen> {
         ),
         Gap(2.height),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.info, color: context.theme.errorColor.withOpacity(0.7)),
@@ -153,7 +152,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             strokeWidth: 3.w,
                           )
                         : null,
-                  )),
+                  ),),
                 ),
               )
             ],
@@ -168,7 +167,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   onRetry: () => cubit.onRetry(widget.authRepo, widget.data),
                   onTimeout: cubit.onTimeout,
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ),
       ],
     );

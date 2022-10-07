@@ -22,11 +22,13 @@ class _LogbookViewState extends State<LogbookView> {
 
   @override
   Widget build(BuildContext context) {
+    final api = context.read<Api>();
+    final cubit = context.read<LogBookCubit>();
     return BlocBuilder<LogBookCubit, LogBookState>(
       builder: (context, state) {
         return Scaffold(
           appBar: MyAppBar(
-            title: Text('Visitor Log book'),
+            title: const Text('Visitor Log book'),
             actions: [
               if (!state.isLoading)
                 IconButton(
@@ -41,34 +43,34 @@ class _LogbookViewState extends State<LogbookView> {
             padding: EdgeInsets.zero,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              child: state.isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SingleChildScrollView(
-                        child: DataTable(
-                          columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form']
-                              .map((e) => _dataColumn(e.capitalize!))
-                              .toList(),
-                          rows: state.entries.map((e) => _dataRow(e)).toList(),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                  // child: DataTable(
+                  //   columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form']
+                  //       .map((e) => _dataColumn(e.capitalize!))
+                  //       .toList(),
+                  //   rows: state.entries.map(_dataRow).toList(),
+                  // ),
+                  child: StreamBuilder<List<LogbookEntry>>(
+                    stream: cubit.api.logbookRecordsStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                          columnSpacing: 31.w,
-
-                          // children: [
-                          //   _tableRow(['id', 'entry date', 'exit date', 'field name']),
-                          //   for (var item in state.entries)
-                          //     _tableRow(
-                          //       [
-                          //         item.id.toString(),
-                          //         MyDecoration.formatDate(item.enterDate),
-                          //         MyDecoration.formatDate(item.exitDate),
-                          //         item.geofence?.name ?? ''
-                          //       ],
-                          //     )
-                          // ],
-                        ),
-                      ),
-                    ),
+                      return DataTable(
+                        dataRowHeight: 60.h,
+                        columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form']
+                            .map((e) => _dataColumn(e.capitalize!))
+                            .toList(),
+                        rows: (snapshot.data ?? []).map(_dataRow).toList(),
+                        columnSpacing: 31.w,
+                      );
+                    },
+                  ),
+                ),
+              ),
               // );
               // return MyListview<LogbookEntry>(
               //   // emptyWidget: Center(
@@ -93,34 +95,59 @@ class _LogbookViewState extends State<LogbookView> {
       cells: [
         _dataCell(item.id.toString()),
         _dataCell('${item.user!.firstName!} ${item.user!.lastName}'),
-        _dataCell(MyDecoration.formatTime(item.enterDate) + '\n' + MyDecoration.formatDate(item.enterDate)),
-        _dataCell(MyDecoration.formatTime(item.exitDate) + '\n' + MyDecoration.formatDate(item.exitDate)),
+        _dataCell('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
+        _dataCell('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
         _dataCell(item.geofence?.name ?? ''),
-        _dataCell(item.geofence?.pic ?? '', color: item.geofence?.color),
+        _dataCell(item.geofence?.pic ?? '', color: item.geofence?.color, isPic: true),
 
         // item.geofence.
         DataCell(
           (item.form.isNotEmpty)
               ? TextButton(
                   onPressed: () => Get.to(() => LogbookDetails(form: item.form)),
-                  child: Text('View'),
+                  style: TextButton.styleFrom(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: const Text('View'),
                 )
-              : Text(''),
+              : Text(
+                  'trespasser'.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
         ),
       ],
     );
   }
 
   // _datacell
-  DataCell _dataCell(String data, {Color? color = Colors.black}) {
+  DataCell _dataCell(String data, {Color? color = Colors.black, bool isPic = false}) {
     return DataCell(
-      Text(
-        data,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w600,
-          color: color?.withOpacity(0.7),
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+        decoration: isPic
+            ? BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(5),
+              )
+            : null,
+        child: Text(
+          data,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: !isPic
+                ? null
+                : color!.computeLuminance() <= 0.5
+                    ? Colors.white
+                    : Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );

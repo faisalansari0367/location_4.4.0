@@ -8,6 +8,8 @@ import 'package:dio/dio.dart';
 // import '../repositories/auth/auth_repository.dart';
 import 'api_logger.dart';
 
+export 'package:dio/dio.dart' show DioError, Response;
+
 class Client {
   // String baseUrl = '';
   // String apiKey = '';
@@ -41,9 +43,8 @@ class Client {
     }
     header!.putIfAbsent('Content-Type', () => 'application/json');
     _dio = Dio(options);
-    _dio!.interceptors
-        .add(PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true));
-    // .add(ApiInterceptors());
+    _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true));
+    // _dio!.interceptors.add(ApiInterceptors());
 
     _dio!.options.baseUrl = baseUrl;
     _dio!.options.headers = header;
@@ -73,8 +74,7 @@ class Client {
     header!.putIfAbsent('Content-Type', () => 'application/json');
     _dio = Dio(options);
     _dio!.interceptors.add(dioInterceptor);
-    _dio!.interceptors
-        .add(PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true));
+    _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: false, responseHeader: true));
 
     _dio!.options.baseUrl = "";
     _dio!.options.headers = header;

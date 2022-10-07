@@ -11,7 +11,7 @@ class UsersState extends Equatable {
   final List<UserRoles> roles;
   final String? selectRole;
   final bool isLoading;
-  UsersState({
+  const UsersState({
     required this.controller,
     this.selectRole,
     this.roles = const [],

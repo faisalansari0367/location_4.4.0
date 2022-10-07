@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../../services/notifications/push_notifications.dart';
 import '../../../widgets/dialogs/dialog_service.dart';
@@ -21,7 +21,7 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
   SelectRoleCubit(this.api, this.localApi, this.pushNotificationService)
       : super(SelectRoleState(
           user: api.getUser()!,
-        )) {
+        ),) {
     // api.userRolesStream.listen((event) {
     //   emit(state.copyWith(isLoading: false, roles: event));
     // });
@@ -44,10 +44,10 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
   Future<void> updateRole(UserRoles userRole) async {
     // Get.to(() => RoleDetailsPage(role: role));
     // final user = state.user;
-    final user = await apiService.getUser()!;
+    final user = apiService.getUser()!;
     user.role = userRole.role;
     user.registerationToken = await pushNotificationService.getFCMtoken();
-    final result = await (apiService.updateUser(user: user));
+    final result = await apiService.updateMe(user: user);
     result.when(
       success: (data) => Get.to(() => RoleDetailsPage(userRole: userRole)),
       failure: (error) => DialogService.failure(error: error),

@@ -4,7 +4,6 @@ class Endpoints {
   static const auth = '/auth';
   static const functions = '/functions';
 
-
   static const String signUp = '$auth/signup',
       verifyOtp = '$auth/verify',
       forgotPassword = '$auth/forgot-password',
@@ -20,13 +19,14 @@ class Endpoints {
 
       // users
       getFields = '$users/fields',
-      updateUser = '$users/me',
+      updateMe = '$users/me',
+      // updateUser = '$users/users',
       usersForms = '$users/forms',
       exportLogRecords = '$users/export-log-records';
 
   // log records
   static const logRecords = '/log-records';
-
+  static const markExit = '$logRecords/mark-exit';
 
   static const qrCode = '$functions/qrcode';
 

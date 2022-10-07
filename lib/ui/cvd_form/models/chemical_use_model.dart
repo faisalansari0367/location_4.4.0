@@ -19,34 +19,34 @@ class ChemicalUseModel {
 
   ChemicalUseModel.fromJson(Map<String, dynamic> json) {
     field = json['field'];
-    question4 = json['question4'] != null ? new Question4.fromJson(json['question4']) : null;
-    question5 = json['question5'] != null ? new Question5.fromJson(json['question5']) : null;
-    question6 = json['question6'] != null ? new Question6.fromJson(json['question6']) : null;
-    question7 = json['question7'] != null ? new Question7.fromJson(json['question7']) : null;
-    question8 = json['question8'] != null ? new Question6.fromJson(json['question8']) : null;
-    question9 = json['question9'] != null ? new Question6.fromJson(json['question9']) : null;
+    question4 = json['question4'] != null ? Question4.fromJson(json['question4']) : null;
+    question5 = json['question5'] != null ? Question5.fromJson(json['question5']) : null;
+    question6 = json['question6'] != null ? Question6.fromJson(json['question6']) : null;
+    question7 = json['question7'] != null ? Question7.fromJson(json['question7']) : null;
+    question8 = json['question8'] != null ? Question6.fromJson(json['question8']) : null;
+    question9 = json['question9'] != null ? Question6.fromJson(json['question9']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['field'] = this.field;
-    if (this.question4 != null) {
-      data['question4'] = this.question4!.toJson();
+    final data = <String, dynamic>{};
+    data['field'] = field;
+    if (question4 != null) {
+      data['question4'] = question4!.toJson();
     }
-    if (this.question5 != null) {
-      data['question5'] = this.question5!.toJson();
+    if (question5 != null) {
+      data['question5'] = question5!.toJson();
     }
-    if (this.question6 != null) {
-      data['question6'] = this.question6!.toJson();
+    if (question6 != null) {
+      data['question6'] = question6!.toJson();
     }
-    if (this.question7 != null) {
-      data['question7'] = this.question7!.toJson();
+    if (question7 != null) {
+      data['question7'] = question7!.toJson();
     }
-    if (this.question8 != null) {
-      data['question8'] = this.question8!.toJson();
+    if (question8 != null) {
+      data['question8'] = question8!.toJson();
     }
-    if (this.question9 != null) {
-      data['question9'] = this.question9!.toJson();
+    if (question9 != null) {
+      data['question9'] = question9!.toJson();
     }
     return data;
   }
@@ -62,14 +62,14 @@ class Question4 {
   Question4.fromJson(Map<String, dynamic> json) {
     field = json['field'];
     options = json['options'].cast<String>();
-    tableHeader = (json['tableHeader']);
+    tableHeader = json['tableHeader'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['field'] = this.field;
-    data['options'] = this.options;
-    data['tableHeader'] = this.tableHeader;
+    final data = <String, dynamic>{};
+    data['field'] = field;
+    data['options'] = options;
+    data['tableHeader'] = tableHeader;
     return data;
   }
 }
@@ -92,12 +92,12 @@ class Question5 {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['field'] = this.field;
-    data['options'] = this.options;
-    data['QA program'] = this.qAProgram;
-    data['Accreditation/ Certification Number'] = this.accreditationCertificationNumber;
-    data['note'] = this.note;
+    final data = <String, dynamic>{};
+    data['field'] = field;
+    data['options'] = options;
+    data['QA program'] = qAProgram;
+    data['Accreditation/ Certification Number'] = accreditationCertificationNumber;
+    data['note'] = note;
     return data;
   }
 }
@@ -114,9 +114,9 @@ class Question6 {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['field'] = this.field;
-    data['options'] = this.options;
+    final data = <String, dynamic>{};
+    data['field'] = field;
+    data['options'] = options;
     return data;
   }
 }
@@ -133,9 +133,9 @@ class Question7 {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['field'] = this.field;
-    data['options'] = this.options;
+    final data = <String, dynamic>{};
+    data['field'] = field;
+    data['options'] = options;
     return data;
   }
 }

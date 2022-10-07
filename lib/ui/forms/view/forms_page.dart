@@ -26,7 +26,7 @@ class FormsPage extends StatelessWidget {
         // questions: questions,
         api: context.read<Api>(),
       ),
-      child: FormsView(),
+      child: const FormsView(),
     );
   }
 }

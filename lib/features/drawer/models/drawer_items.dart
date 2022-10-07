@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/features/bottom_navbar/view/navbar_page.dart';
+import 'package:background_location/features/drawer/cubit/my_drawer_controller.dart';
 import 'package:flutter/material.dart';
 
 import '../../../ui/admin/view/admin_page.dart';
@@ -10,47 +11,33 @@ import 'drawer_item.dart';
 class DrawerItems {
   final Api api;
   late List<DrawerItem> items;
-  DrawerItems(this.api) {
+  final DrawerCubit drawer;
+  DrawerItems(this.api, {required this.drawer}) {
     items = _getItems;
   }
 
   List<DrawerItem> get _getItems {
+    final userData = api.getUser();
+    final isAdmin = userData?.role?.toLowerCase() == 'admin';
+    // final isAdmin = true;
     return [
-      DrawerItem(
+      // if (!isAdmin)
+      const DrawerItem(
         text: 'Dashboard',
         iconData: Icons.dashboard,
         page: NavbarPage(),
       ),
-      // DrawerItem(
-      //   text: Strings.home,
-      //   iconData: Icons.home,
-      //   page: SelectRolePage(),
-      // ),
-      DrawerItem(
-        text: Strings.admin,
-        iconData: Icons.admin_panel_settings_outlined,
-        page: AdminPage(),
-      ),
-      // if (api.getUserData() != null)
-      //   DrawerItem(
-      //     text: Strings.map,
-      //     iconData: Icons.map,
-      //     page: MapsPage(fromDrawer: true),
-      //   ),
-      DrawerItem(
+      if (isAdmin)
+        const DrawerItem(
+          text: Strings.admin,
+          iconData: Icons.admin_panel_settings_outlined,
+          page: AdminPage(),
+        ),
+      const DrawerItem(
         text: Strings.settings,
         iconData: Icons.settings,
         page: SettingsPage(),
       ),
-      // DrawerItem(
-      //   onTap: () {
-      //     api.logout();
-      //     Get.offAll(() => LoginPage());
-      //   },
-      //   text: Strings.logout,
-      //   iconData: Icons.logout,
-      //   page: LoginPage(),
-      // ),
     ];
   }
 }

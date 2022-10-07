@@ -19,7 +19,7 @@ part 'cvd_state.dart';
 class CvdCubit extends Cubit<CvdState> {
   final Api api;
   final LocalApi localApi;
-  CvdCubit({required this.api, required this.localApi}) : super(CvdState()) {
+  CvdCubit({required this.api, required this.localApi}) : super(const CvdState()) {
     getCvdForm();
   }
 
@@ -35,7 +35,7 @@ class CvdCubit extends Cubit<CvdState> {
   ];
 
   void changeCurrent(int step, {bool isNext = false, bool isPrevious = false}) {
-    late int _step = step;
+    late var _step = step;
     if (isNext) {
       step = state.currentStep + 1;
     } else if (isPrevious) {
@@ -110,63 +110,65 @@ class CvdCubit extends Cubit<CvdState> {
     //  final result = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration', data: data);
     final uri = Uri.parse('https://uniquetowinggoa.com/safemeat/public/api/declaration');
     // final result = post(uri, body: data);
-    final reuslt = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration',
-        data: ({
-          "vendorName": "vendor Name",
-          "vendorAddress": "vendor Address",
-          "vendorTown": "vendor Town",
-          "vendorContact": "7896541236",
-          "vendorFax": "789654",
-          "vendorEmail": "jh@gmail.com",
-          "vendorNGR": "456",
-          "vendorPIC": "423",
-          "vendorRefrence": "1234567896",
-          "buyerName": "buyer Name",
-          "buyerAddress": "buyer Address",
-          "buyerTown": "buyer Town",
-          "buyerContact": "7896541236",
-          "buyerFax": "123",
-          "buyerEmail": "jh@gmail.com",
-          "buyerNGR": "789",
-          "buyerPIC": "159",
-          "buyerRefrence": "1234567896",
-          "commodity": "commodity",
-          "period": "30",
-          "variety1": "variety 1",
-          "variety2": "variety 2",
-          "quantity1": 25,
-          "quantity2": 25,
-          "sourceCheck": "2",
-          "materialCheck": "0",
-          "gmoCheck": "1",
-          "chemicalCheck": "1",
-          "chemicals": [
-            {"chemicalName": "chemical1", "rate": "200", "applicationDate": "2022-08-25", "WHP": "456"},
-            {"chemicalName": "chemical2", "rate": "2000", "applicationDate": "2022-08-27", "WHP": "753"},
-            {"chemicalName": "chemical3", "rate": "2650", "applicationDate": "2022-08-21", "WHP": "1369"},
-            {"chemicalName": "chemical4", "rate": "800", "applicationDate": "2022-04-25", "WHP": "789"}
-          ],
-          "qaCheck": "1",
-          "qaProgram": "QA Program",
-          "certificateNumber": "123654",
-          "cvdCheck": "0",
-          "cropList": [
-            {"cropName": "crop1"},
-            {"cropName": "crop2"},
-            {"cropName": "crop3"},
-            {"cropName": "crop4"}
-          ],
-          "riskCheck": "1",
-          "nataCheck": "1",
-          "signature": selfDeclaration['signature'],
-        }));
+    final reuslt = await Dio().post(
+      'https://uniquetowinggoa.com/safemeat/public/api/declaration',
+      data: {
+        'vendorName': 'vendor Name',
+        'vendorAddress': 'vendor Address',
+        'vendorTown': 'vendor Town',
+        'vendorContact': '7896541236',
+        'vendorFax': '789654',
+        'vendorEmail': 'jh@gmail.com',
+        'vendorNGR': '456',
+        'vendorPIC': '423',
+        'vendorRefrence': '1234567896',
+        'buyerName': 'buyer Name',
+        'buyerAddress': 'buyer Address',
+        'buyerTown': 'buyer Town',
+        'buyerContact': '7896541236',
+        'buyerFax': '123',
+        'buyerEmail': 'jh@gmail.com',
+        'buyerNGR': '789',
+        'buyerPIC': '159',
+        'buyerRefrence': '1234567896',
+        'commodity': 'commodity',
+        'period': '30',
+        'variety1': 'variety 1',
+        'variety2': 'variety 2',
+        'quantity1': 25,
+        'quantity2': 25,
+        'sourceCheck': '2',
+        'materialCheck': '0',
+        'gmoCheck': '1',
+        'chemicalCheck': '1',
+        'chemicals': [
+          {'chemicalName': 'chemical1', 'rate': '200', 'applicationDate': '2022-08-25', 'WHP': '456'},
+          {'chemicalName': 'chemical2', 'rate': '2000', 'applicationDate': '2022-08-27', 'WHP': '753'},
+          {'chemicalName': 'chemical3', 'rate': '2650', 'applicationDate': '2022-08-21', 'WHP': '1369'},
+          {'chemicalName': 'chemical4', 'rate': '800', 'applicationDate': '2022-04-25', 'WHP': '789'}
+        ],
+        'qaCheck': '1',
+        'qaProgram': 'QA Program',
+        'certificateNumber': '123654',
+        'cvdCheck': '0',
+        'cropList': [
+          {'cropName': 'crop1'},
+          {'cropName': 'crop2'},
+          {'cropName': 'crop3'},
+          {'cropName': 'crop4'}
+        ],
+        'riskCheck': '1',
+        'nataCheck': '1',
+        'signature': selfDeclaration['signature'],
+      },
+    );
 
     log(reuslt.data['data']);
     final data = base64Decode(reuslt.data['data']);
 
-    Get.to(
+    await Get.to(
       () => Scaffold(
-        appBar: MyAppBar(
+        appBar: const MyAppBar(
           title: Text('CVD FORM PDF'),
         ),
         body: Image.memory(data),
@@ -195,10 +197,10 @@ class CvdCubit extends Cubit<CvdState> {
 
     final steps = <FormStepper>[];
     // final widgets = <Widget>[];
-    data.forEach((element) {
+    for (final element in data) {
       final formDataList = <CvdFormData>[];
       final list = element['data'] as List<String>;
-      list.forEach((e) {
+      for (final e in list) {
         final field = CvdFormData(
           name: e,
           controller: TextEditingController(),
@@ -206,14 +208,14 @@ class CvdCubit extends Cubit<CvdState> {
         formDataList.add(field);
         // steps.add(FormStepper(heading: heading, content: ));
         // emit(state.copyWith())
-      });
+      }
       steps.add(
         FormStepper(
           heading: element['field'].toString().toUpperCase(),
           formDataList: formDataList,
         ),
       );
-    });
+    }
 
     emit(state.copyWith(formStepper: steps));
   }
@@ -229,14 +231,14 @@ class CvdCubit extends Cubit<CvdState> {
 
   List<Map<String, Object>> formData() {
     final commonFields = [
-      "Name",
-      "Address",
-      "Town",
-      "Tel",
-      "Fax",
-      "Email",
-      "National Grower Registration (NGR) No",
-      "Property Identification Code (PIC)",
+      'Name',
+      'Address',
+      'Town',
+      'Tel',
+      'Fax',
+      'Email',
+      'National Grower Registration (NGR) No',
+      'Property Identification Code (PIC)',
     ];
 
     return [
@@ -244,21 +246,21 @@ class CvdCubit extends Cubit<CvdState> {
         'field': 'vendor details',
         'data': [
           ...commonFields,
-          "Vendors contract/ reference No",
+          'Vendors contract/ reference No',
         ],
       },
       {
         'field': 'Buyer details',
         'data': [
           ...commonFields,
-          "Buyers contract No",
+          'Buyers contract No',
         ],
       },
       {
         'field': 'Commodity details',
         'data': [
           // "Vendors contract/ reference No",
-          "Commodity",
+          'Commodity',
           'Variety 1',
           'Variety 2',
 
@@ -266,14 +268,14 @@ class CvdCubit extends Cubit<CvdState> {
           'Quantity 1',
           'Quantity 2',
 
-          "Total Quantity",
+          'Total Quantity',
         ],
       },
       {
         'field': 'Part A – Product Integrity',
         'data': [
           // "Vendors contract/ reference No",
-          "Commodity",
+          'Commodity',
           'Variety',
           'Variety',
 
@@ -281,14 +283,14 @@ class CvdCubit extends Cubit<CvdState> {
           'Quantity',
           'Quantity',
 
-          "Total Quantity",
+          'Total Quantity',
         ],
       },
       {
         'field': 'Part B – Chemical Use',
         'data': [
           // "Vendors contract/ reference No",
-          "Commodity",
+          'Commodity',
           'Variety',
           'Variety',
 
@@ -296,14 +298,14 @@ class CvdCubit extends Cubit<CvdState> {
           'Quantity',
           'Quantity',
 
-          "Total Quantity",
+          'Total Quantity',
         ],
       },
       {
         'field': 'Self Declaration',
         'data': [
           // "Vendors contract/ reference No",
-          "Commodity",
+          'Commodity',
           'Variety',
           'Variety',
 
@@ -311,7 +313,7 @@ class CvdCubit extends Cubit<CvdState> {
           'Quantity',
           'Quantity',
 
-          "Total Quantity",
+          'Total Quantity',
         ],
       },
       // partAProductIntegrity(),
@@ -376,7 +378,7 @@ class CvdCubit extends Cubit<CvdState> {
       'field': 'Part A – Product Integrity',
       'data': [
         {
-          'field': "commoditry source (tick one)",
+          'field': 'commoditry source (tick one)',
           'options': [
             {
               'id': 1,
@@ -397,7 +399,7 @@ class CvdCubit extends Cubit<CvdState> {
           ]
         },
         {
-          "field": "Does this commodity contain restricted animal materials (eg meat and bone meal)?",
+          'field': 'Does this commodity contain restricted animal materials (eg meat and bone meal)?',
           'options': [
             {
               'id': 1,
@@ -418,7 +420,7 @@ class CvdCubit extends Cubit<CvdState> {
           ]
         },
         {
-          "field": "With respect to Genetically Modified Organisms, this commodity: (tick one)",
+          'field': 'With respect to Genetically Modified Organisms, this commodity: (tick one)',
           'options': [
             {
               'id': 1,

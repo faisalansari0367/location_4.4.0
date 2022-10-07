@@ -26,7 +26,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
   bool showTable = false;
 
   Future<void> _init() async {
-    String data = await DefaultAssetBundle.of(context).loadString("assets/json/chemical_use.json");
+    final data = await DefaultAssetBundle.of(context).loadString('assets/json/chemical_use.json');
     final map = jsonDecode(data);
     form = ChemicalUseModel.fromJson(map);
     setState(() {});
@@ -40,7 +40,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
 
   @override
   Widget build(BuildContext context) {
-    if (form == null) return SizedBox();
+    if (form == null) return const SizedBox();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -68,7 +68,6 @@ class _ChemicalUseState extends State<ChemicalUse> {
             field: form?.question7?.field ?? '',
           ),
           QuestionWithCheckbox(
-            multipleSelection: false,
             field: form?.question8?.field ?? '',
             questionNo: '8',
             options: form?.question8?.options ?? [],
@@ -84,12 +83,12 @@ class _ChemicalUseState extends State<ChemicalUse> {
             if (formData.length < 5) {
               DialogService.error('Please answer all the questions');
             } else {
-              var cubit = context.read<CvdCubit>();
+              final cubit = context.read<CvdCubit>();
               formData['tableData'] = tableData;
               cubit.addFormData(formData);
               cubit.changeCurrent(0, isNext: true);
             }
-          }),
+          },),
         ],
       ),
     );
@@ -108,7 +107,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
     }
   }
 
-  _buildTable() {
+  Container _buildTable() {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),

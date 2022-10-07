@@ -33,7 +33,6 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../widgets/dialogs/dialog_layout.dart';
 import '../location_service/geolocator_service.dart';
-import '../location_service/maps_repo.dart';
 import '../models/polygon_model.dart';
 
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -53,7 +52,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     // final stream = context.read<MapsRepo>().polygonStream;
     // final cubit = context.read<MapsCubit>();
-
+    dev.log(state.name);
     switch (state) {
       case AppLifecycleState.detached:
         print('AppLifecycleState.detached');
@@ -97,7 +96,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
       // _handlePermission();
       await Permission.location.request();
       final result = await GeolocatorService.locationPermission();
-      print('result $result');
+      // print('result $result');
 
       // await GeolocatorService.locationPermission();
       // print(status.isGranted);
@@ -107,10 +106,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         final result = await Permission.locationAlways.request();
         print(PermissionStatus.values[result.index].name);
         final cubit = context.read<MapsCubit>();
-        cubit.init();
+        await cubit.init();
       } else {
         await 3.seconds.delay();
-        DialogService.showDialog(child: LocationPermissionDialog());
+        await DialogService.showDialog(child: const LocationPermissionDialog());
       }
 
       // Permission.location.request().then((value) async {
@@ -170,7 +169,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   @override
   void dispose() {
     // context.read<MapsRepo>().cancel();
-
+    dev.log('maps view is disposed');
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
@@ -209,7 +208,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
               onPressed: () => cubit.zoom(2),
               backgroundColor: Colors.white,
               heroTag: 'zoom_plus',
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 color: Colors.black,
               ),
@@ -219,7 +218,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
               heroTag: 'zoom_minus',
               onPressed: () => cubit.zoom(-2),
               backgroundColor: Colors.white,
-              child: Icon(
+              child: const Icon(
                 Icons.remove,
                 color: Colors.black,
               ),
@@ -248,14 +247,13 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   Widget _buildNavbar() {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
       child: BlocBuilder<MapsCubit, MapsState>(
         builder: (context, state) {
           return MySlideAnimation(
-            duration: kDuration,
             key: ValueKey(state.addingGeofence),
             // child: state.addingGeofence ? AddFence(cubit: cubit) : _normalNavbar(),
             child: Container(
@@ -271,7 +269,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   }
 
   Widget _getWidget(MapsState state) {
-    Widget result = SizedBox();
+    Widget result = const SizedBox();
     if (state.addingGeofence) {
       result = AddFence(cubit: cubit);
     } else if (state.isEditingFence) {
@@ -283,45 +281,46 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   }
 
   Row _defaultNavbar() {
+    final allowedRoles = [Roles.producer, Roles.agent, Roles.consignee, Roles.admin];
+    final isAllowed = allowedRoles.contains(cubit.userData?.role?.camelCase?.getRole);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         BottomNavbarItem(
           icon: Assets.icons.bottomNavbar.map.path,
-          title: ('Map Type'),
+          title: 'Map Type',
           onTap: () => DialogService.showDialog(
             child: DialogLayout(child: MapTypeWidget(cubit: cubit)),
           ),
         ),
-        if ([Roles.producer, Roles.agent, Roles.consignee].contains(cubit.userData?.role?.camelCase?.getRole))
+        if (isAllowed) ...[
           BottomNavbarItem(
             icon: Assets.icons.bottomNavbar.square.path,
-            title: ('Add Fencing'),
+            title: 'Add Fencing',
             onTap: cubit.setIsAddingGeofence,
           ),
-
-        // if ([Roles.producer, Roles.agent, Roles.consignee].contains(cubit.userData?.role?.camelCase?.getRole))
-        BottomNavbarItem(
-          iconData: LineIcons.drawPolygon,
-          title: ('Geofence List'),
-          onTap: () => BottomSheetService.showSheet(
-            child: DraggableScrollableSheet(
-              maxChildSize: 0.9,
-              expand: false,
-              minChildSize: 0.2,
-              initialChildSize: 0.4,
-              builder: (context, scrollController) {
-                return GeofencesList(
-                  onSelected: (value) {
-                    cubit.moveToSelectedPolygon(value);
-                    Get.back();
-                  },
-                  controller: scrollController,
-                );
-              },
+          BottomNavbarItem(
+            iconData: LineIcons.drawPolygon,
+            title: 'Geofence List',
+            onTap: () => BottomSheetService.showSheet(
+              child: DraggableScrollableSheet(
+                maxChildSize: 0.9,
+                expand: false,
+                minChildSize: 0.2,
+                initialChildSize: 0.4,
+                builder: (context, scrollController) {
+                  return GeofencesList(
+                    onSelected: (value) {
+                      cubit.moveToSelectedPolygon(value);
+                      Get.back();
+                    },
+                    controller: scrollController,
+                  );
+                },
+              ),
             ),
           ),
-        ),
+        ],
         // Spacer(),
       ],
     );
@@ -329,7 +328,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   Widget _showEditSheet() {
     return Container(
-      color: Color.fromARGB(255, 255, 255, 255),
+      color: const Color.fromARGB(255, 255, 255, 255),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -367,28 +366,31 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   Widget _buildMaps(MapsCubit cubit) {
     // final _polygonsService = context.read<PolygonsService>();
     return StreamBuilder<List<PolygonModel>>(
-      stream: context.read<MapsRepo>().polygonStream,
+      stream: cubit.mapsRepo.polygonStream,
       builder: (context, snapshot) {
         return StreamBuilder<List<LatLng>>(
           stream: context.read<PolygonsService>().stream,
-          initialData: [],
+          initialData: const [],
           builder: (context, polygonsData) {
             return BlocListener<MapsCubit, MapsState>(
               listener: _listener,
               listenWhen: (previous, current) => previous.insideFence != current.insideFence,
               child: BlocBuilder<MapsCubit, MapsState>(
                 builder: (context, state) {
-                  dev.log('widget is rebuilding');
+                  // dev.log('widget is rebuilding');
                   return GoogleMap(
                     initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
                     onMapCreated: cubit.onMapCreated,
                     mapType: state.mapType,
                     zoomControlsEnabled: false,
                     myLocationButtonEnabled: false,
+                    onLongPress: (s) {
+                      dev.log(s.toString());
+                    },
                     myLocationEnabled: true,
                     polylines: _polylines(state, polygonsData.data ?? []),
                     markers: _markers(polygonsData.data ?? [], state.currentLocation),
-                    polygons: (snapshot.data ?? []).map((e) => addPolygon(e)).toSet(),
+                    polygons: (snapshot.data ?? []).map(addPolygon).toSet(),
                     onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
                   );
                 },
@@ -403,14 +405,14 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   void addLatLng(LatLng latLng, LatLng currentLocation) {
     final distance = MapsToolkitService.distance(currentLocation, latLng);
     print(distance);
-    if (distance > 50000) {
-      Get.snackbar(
-        'Can not add fence',
-        'Fences can only be added inside 50km from current location. You are currently at ${(distance / 1000).toStringAsFixed(1)}km',
-        backgroundColor: Colors.white.withAlpha(100),
-      );
-      return;
-    }
+    // if (distance > 50000) {
+    //   Get.snackbar(
+    //     'Can not add fence',
+    //     'Fences can only be added inside 50km from current location. You are currently at ${(distance / 1000).toStringAsFixed(1)}km',
+    //     backgroundColor: Colors.white.withAlpha(100),
+    //   );
+    //   return;
+    // }
     context.read<PolygonsService>().addLatLng(latLng);
   }
 
@@ -481,8 +483,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         polylineId: PolylineId((Random().nextInt(100000000)).toString()),
         color: state.selectedColor,
         jointType: JointType.bevel,
-        startCap: Cap.buttCap,
-        patterns: [PatternItem.dot],
+        patterns: const [PatternItem.dot],
         width: 2.width.toInt(),
         points: points,
       ),
@@ -509,12 +510,13 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   Widget _buildBackButton() {
     return Container(
       padding: EdgeInsets.only(left: widget.fromDrawer ? 0 : 8),
-      decoration: MyDecoration.decoration(isCircle: true, color: Color.fromARGB(26, 255, 255, 255).withOpacity(.71)),
+      decoration:
+          MyDecoration.decoration(isCircle: true, color: const Color.fromARGB(26, 255, 255, 255).withOpacity(.71)),
       child: widget.fromDrawer
-          ? DrawerMenuIcon()
+          ? const DrawerMenuIcon()
           : IconButton(
               onPressed: goBack,
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
             ),
     );
   }

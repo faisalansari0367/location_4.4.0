@@ -26,20 +26,21 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
   late DrawerItems drawerItems;
 
   void initController() {
-    drawerItems = DrawerItems(context.read<Api>());
     final drawer = context.read<DrawerCubit>();
+    drawerItems = DrawerItems(context.read<Api>(), drawer: drawer);
     _controller = AnimationController(vsync: this, duration: duration);
     final curvedAnimation = CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
-    _scaleAnimation = Tween(begin: 1.0, end: 0.8).animate(curvedAnimation);
-    _slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(curvedAnimation);
-    _slideTransition = Tween<Offset>(begin: Offset(0, 0), end: Offset(0.7, 0)).animate(curvedAnimation);
-    _borderRadius = Tween<double>(begin: 0.0, end: 25.0).animate(_controller);
+    _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(curvedAnimation);
+    _slideAnimation = Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0)).animate(curvedAnimation);
+    _slideTransition = Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0.7, 0)).animate(curvedAnimation);
+    _borderRadius = Tween<double>(begin: 0, end: 25).animate(_controller);
 
     // borderradius tween
     // _borderRadius = Tween<double>(begin: 0.0, end: 25.0).animate(curvedAnimation);
     drawer.setController(_controller);
     if (context.read<Api>().getUserData() != null) {
       // drawer.setSelectedPage(2);
+      
     }
   }
 
@@ -80,11 +81,8 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    // Color.fromARGB(255, 122, 90, 239),
-                    // Colors.black,
-                    // Colors.black.withOpacity(0.9),
                     context.theme.primaryColor,
-                    Color.fromARGB(255, 146, 154, 244),
+                    const Color.fromARGB(255, 146, 154, 244),
                   ],
                 ),
               ),
@@ -139,8 +137,8 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context).shadowColor.withOpacity(0.5),
-                        blurRadius: 100.0, // soften the shadow
-                        spreadRadius: 1.0, //extend the shadow
+                        blurRadius: 100, // soften the shadow
+                        spreadRadius: 1, //extend the shadow
                       ),
                     ],
                   ),
@@ -166,7 +164,7 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
     );
   }
 
-  Widget _builder(context, value, child) {
+  Widget _builder(BuildContext context,int value,Widget? child) {
     return PageTransitionSwitcher(
       duration: const Duration(milliseconds: 1000),
       transitionBuilder: (
@@ -185,5 +183,4 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
     );
   }
 
-  Future<bool> _onWillPop() => Future.value(false);
 }

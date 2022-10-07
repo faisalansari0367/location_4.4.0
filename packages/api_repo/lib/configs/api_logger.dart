@@ -148,8 +148,7 @@ class PrettyDioLogger extends Interceptor {
     final uri = response.requestOptions.uri;
     final method = response.requestOptions.method;
     _printBoxed(
-        header: 'Response ║ $method ║ Status: ${response.statusCode} ${response.statusMessage}',
-        text: uri.toString());
+        header: 'Response ║ $method ║ Status: ${response.statusCode} ${response.statusMessage}', text: uri.toString());
   }
 
   void _printRequestHeader(RequestOptions options) {
@@ -175,8 +174,7 @@ class PrettyDioLogger extends Interceptor {
   void _printBlock(String msg) {
     final lines = (msg.length / maxWidth).ceil();
     for (var i = 0; i < lines; ++i) {
-      logPrint((i >= 0 ? '║ ' : '') +
-          msg.substring(i * maxWidth, math.min<int>(i * maxWidth + maxWidth, msg.length)));
+      logPrint((i >= 0 ? '║ ' : '') + msg.substring(i * maxWidth, math.min<int>(i * maxWidth + maxWidth, msg.length)));
     }
   }
 
@@ -251,8 +249,7 @@ class PrettyDioLogger extends Interceptor {
   }
 
   bool _canFlattenMap(Map map) {
-    return map.values.where((dynamic val) => val is Map || val is List).isEmpty &&
-        map.toString().length < maxWidth;
+    return map.values.where((dynamic val) => val is Map || val is List).isEmpty && map.toString().length < maxWidth;
   }
 
   bool _canFlattenList(List list) {

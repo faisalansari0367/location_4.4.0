@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/role_details/widgets/states.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
@@ -117,13 +116,12 @@ class _PropertyAddressState extends State<PropertyAddress> {
     final street = controllers['street']!;
     final town = controllers['town']!;
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       padding: kPadding,
       decoration: BoxDecoration(
         borderRadius: kBorderRadius,
         border: Border.all(
           color: Colors.grey.shade400,
-          width: 1,
         ),
       ),
       child: Column(
@@ -172,13 +170,11 @@ class _PropertyAddressState extends State<PropertyAddress> {
                       }),
                     ),
                   ),
-                  enabled: true,
                   inputFormatters: [CapitalizeAllInputFormatter()],
                   hintText: Strings.selectState,
-                  suffixIcon: Icon(Icons.keyboard_arrow_down),
+                  suffixIcon: const Icon(Icons.keyboard_arrow_down),
                   controller: state,
                   focusNode: AlwaysDisabledFocusNode(),
-                  readOnly: false,
                 ),
               if (address.fieldsToShow?['postcode'] ?? false)
                 MyTextField(
@@ -197,7 +193,7 @@ class _PropertyAddressState extends State<PropertyAddress> {
                   },
                   controller: postcode,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
                   ],
                 ),
             ],

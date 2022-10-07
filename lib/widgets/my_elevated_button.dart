@@ -75,9 +75,8 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
         alignment: Alignment.center,
         width: widget.width ?? double.infinity,
         constraints: BoxConstraints(
-          minHeight: 45.h,
+          minHeight: 50.h,
           minWidth: 64.w,
-          maxWidth: double.infinity,
         ),
         decoration: BoxDecoration(
           color: isLoading ? theme.disabledColor.withOpacity(0.10) : widget.color ?? theme.primaryColor,
@@ -149,7 +148,7 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
             fontSize: 3.5.width,
           ),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         SizedBox(
           height: 20,
           width: 20,

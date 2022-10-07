@@ -13,14 +13,17 @@ class _Keys {
   static const String userRoles = 'userRoles';
   static const String signInModel = 'signInModel';
   static const String isLoggedIn = 'isLoggedIn';
-  static const String roleFields = 'roleFields';
-  static const String roleData = 'roleData';
+  static const String forms = 'forms';
+  // static const String roleData = 'roleData';
   static const String userSpecies = 'userSpecies';
 }
 
-abstract class UserStorage {
+abstract class LocalStorage {
   User? getUser();
   Future<void> setUser(Map<String, dynamic> user);
+  Future<void> setUserForms(UserFormsData forms);
+  UserFormsData? getUserForms();
+
   Future<void> removeUser();
   Future<void> removeToken();
   Future<void> setIsLoggedIn(bool value);
@@ -56,7 +59,7 @@ abstract class UserStorage {
   Future<void>? setUserSpecies(UserSpecies species);
 }
 
-class StorageService implements UserStorage {
+class StorageService implements LocalStorage {
   final Box box;
   StorageService({
     required this.box,
@@ -205,7 +208,7 @@ class StorageService implements UserStorage {
   Map<String, dynamic>? getRoleData(String role) {
     final data = box.get(role);
     if (data == null) return <String, dynamic>{};
-    
+
     return _fromMap(data['data']);
   }
 
@@ -230,5 +233,17 @@ class StorageService implements UserStorage {
   @override
   Future<void>? setUserSpecies(UserSpecies species) async {
     await box.put(_Keys.userSpecies, species.toJson());
+  }
+
+  @override
+  UserFormsData? getUserForms() {
+    final data = box.get(_Keys.forms);
+    if (data == null) return null;
+    return UserFormsData.fromJson(_fromMap(data));
+  }
+
+  @override
+  Future<void> setUserForms(UserFormsData forms) async {
+    await box.put(_Keys.forms, forms.toJson());
   }
 }

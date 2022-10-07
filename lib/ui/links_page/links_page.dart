@@ -7,6 +7,6 @@ class LinksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LinksView();
+    return const LinksView();
   }
 }

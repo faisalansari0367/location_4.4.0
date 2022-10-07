@@ -11,7 +11,7 @@ class ScanQrPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ScanQrCubit(),
-      child: ScanQrView(),
+      child: const ScanQrView(),
     );
   }
 }

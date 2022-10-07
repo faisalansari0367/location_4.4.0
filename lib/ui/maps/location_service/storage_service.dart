@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/api_result.dart';
+import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/polygon_model.dart';
@@ -7,6 +10,8 @@ import 'maps_repo.dart';
 
 class _Keys {
   static const _getAllPolygonKey = 'get_all_polygon';
+  // static const _getAllPolygonKey = 'get_all_polygon';
+
   // static const id = 'get_all_polygon';
 }
 
@@ -16,8 +21,8 @@ class MapsStorageService implements MapsRepo {
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     final map = _box.get(_Keys._getAllPolygonKey);
     // print('all polygon data: $map');
-    if (map == null) return ApiResult.success(data: <PolygonModel>[]);
-    final data = (map as List<dynamic>).map((e) => PolygonModel.fromJson(Map<String, dynamic>.from(e))).toList();
+    if (map == null) return const ApiResult.success(data: <PolygonModel>[]);
+    final data = (map as List<dynamic>).map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e))).toList();
     return ApiResult.success(data: data);
   }
 
@@ -31,7 +36,7 @@ class MapsStorageService implements MapsRepo {
   @override
   Future<ApiResult<void>> savePolygon(PolygonModel model) async {
     final list = await getAllPolygon();
-    list.when(
+    await list.when(
       success: (list) async {
         // list.add(data);
         final data = list.map((e) => e.toJson()).toList();
@@ -39,21 +44,21 @@ class MapsStorageService implements MapsRepo {
       },
       failure: (failure) {},
     );
-    return ApiResult.success(data: Null);
+    return const ApiResult.success(data: Null);
     // await _box.put(model.id, model.toJson());
   }
 
   LogbookEntry? getLogbookEntry(String locationId) {
     final map = _box.get(locationId);
     if (map == null) return null;
-    final entrylogBook = LogbookEntry.getId(Map<String, dynamic>.from(map));
+    final entrylogBook = LogbookEntry.fromJson(Map<String, dynamic>.from(map));
     return entrylogBook;
   }
 
   Future<void> saveLogbookEntry(String locationId, LogbookEntry logbookEntry) async {
     return await _box.put(
       locationId,
-      logbookEntry.saveId(),
+      logbookEntry.toJson(),
     );
   }
 
@@ -63,7 +68,8 @@ class MapsStorageService implements MapsRepo {
 
   @override
   Stream<List<PolygonModel>> get polygonStream => _box.watch(key: _Keys._getAllPolygonKey).map((map) {
-        final data = (map as List<dynamic>).map((e) => PolygonModel.fromJson(Map<String, dynamic>.from(e))).toList();
+        final data =
+            (map.value as List<dynamic>).map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e))).toList();
         return data;
       });
 
@@ -79,22 +85,39 @@ class MapsStorageService implements MapsRepo {
 
   @override
   Future<ApiResult> logBookEntry(String pic, String? form, String locationId, {bool isExiting = false}) async {
-    return ApiResult.success(data: Null);
+    return const ApiResult.success(data: Null);
   }
 
   @override
   Future<ApiResult> updatePolygon(PolygonModel model) async {
-    return ApiResult.success(data: Null);
+    return const ApiResult.success(data: Null);
   }
 
   @override
-  Future<ApiResult<void>> notifyManager(String pic, String lat, String lng, String locationId) async {
-    return ApiResult.success(data: Null);
+  Future<ApiResult<String>> notifyManager(String pic, String lat, String lng, String locationId) async {
+    return const ApiResult.success(data: 'Notified manager');
   }
 
   @override
   Future<ApiResult> deletePolygon(PolygonModel model) {
     // TODO: implement deletePolygon
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveAllPolygon(List<PolygonModel> polygons) async {
+    final json = polygons.map((e) => e.toJson()).toList();
+    await _box.put(_Keys._getAllPolygonKey, json);
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> updateForm(String geofenceId, String form) async {
+    final entry = getLogbookEntry(geofenceId);
+    if (entry != null) {
+      entry.form = jsonDecode(form).map((field) => LogbookFormField.fromJson(field)).toList();
+      return _box.put(geofenceId, entry.toJson()).then((value) => ApiResult.success(data: entry));
+    } else {
+      return ApiResult.failure(error: NetworkExceptions.defaultError('Entry not found'));
+    }
   }
 }

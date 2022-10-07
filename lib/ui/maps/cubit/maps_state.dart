@@ -16,9 +16,10 @@ class MapsState extends Equatable {
   final double zoom;
   final PolygonModel? currentPolygon;
   final Color selectedColor;
-  
+  final bool isConnected;
 
   const MapsState({
+    this.isConnected = true,
     this.selectedColor = Colors.blue,
     this.currentPolygon,
     this.insideFence = false,
@@ -35,6 +36,7 @@ class MapsState extends Equatable {
 
   MapsState copyWith({
     bool? insideFence,
+    bool? isConnected,
     LatLng? currentLocation,
     MapType? mapType,
     List<LatLng>? latLngs,
@@ -48,6 +50,7 @@ class MapsState extends Equatable {
     Color? selectedColor,
   }) {
     return MapsState(
+      isConnected: isConnected ?? this.isConnected,
       insideFence: insideFence ?? this.insideFence,
       currentLocation: currentLocation ?? this.currentLocation,
       mapType: mapType ?? this.mapType,

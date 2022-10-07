@@ -1,4 +1,3 @@
-import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -24,9 +23,6 @@ class ShimmerAnimation extends StatelessWidget {
       highlightColor: imageBgColor,
       // baseColor: theme.colorScheme.secondary,
       baseColor: Colors.grey.shade300,
-      // baseColor: theme.cardColor,
-      // baseColor: Colors.grey[100]!,
-      direction: ShimmerDirection.ltr,
       child: shimmer,
     );
     return placeHolder;

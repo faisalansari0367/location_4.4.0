@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 
 extension StringExt on String {
   String get toCamelCase {
-    String string = '';
-    final result = this.trim().split(' ');
+    var string = '';
+    final result = trim().split(' ');
     // print(result);
-    for (var word in result) {
+    for (final word in result) {
       final cap = word.capitalize!;
       string += cap;
     }

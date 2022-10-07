@@ -87,14 +87,14 @@ class FieldData {
           onChanged: (p0) => controller.text = p0!,
           value: controller.text,
           hintText: name,
-          options: [
-            "Car (C) Licence",
-            "Light Rigid (LR) Licence",
-            "Medium Rigid (MR) Licence",
-            "Heavy Rigid (HR) Licence",
-            "Heavy Combination (HC) Licence",
-            "Multi Combination (MC) Licence",
-            "Rider (R) Licence",
+          options: const [
+            'Car (C) Licence',
+            'Light Rigid (LR) Licence',
+            'Medium Rigid (MR) Licence',
+            'Heavy Rigid (HR) Licence',
+            'Heavy Combination (HC) Licence',
+            'Multi Combination (MC) Licence',
+            'Rider (R) Licence',
           ],
         );
       case FieldType.region:
@@ -150,7 +150,7 @@ class FieldData {
       case FieldType.driversLicense:
         return MyTextField(
           hintText: name,
-          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+          inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9]'))],
           validator: Validator.text,
           controller: controller,
           // onChanged: (value) => controller.text = value,
@@ -210,7 +210,7 @@ class FieldData {
           hintText: name,
           controller: controller,
           validator: Validator.text,
-          inputFormatters: [],
+          inputFormatters: const [],
         );
 
       default:

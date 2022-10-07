@@ -1,9 +1,9 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/services/notifications/intent_service.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/admin/pages/users_list/view/roles_sheet.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/expanded_tile.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -27,11 +27,11 @@ class UsersView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<UsersCubit>();
     return Scaffold(
-      appBar: MyAppBar(title: Text('Users')),
+      appBar: const MyAppBar(title: Text('Users')),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: Column(
               children: [
                 Gap(2.h),
@@ -45,13 +45,11 @@ class UsersView extends StatelessWidget {
                           onChanged: cubit.setCurrentRole,
                         ),
                       ),
-                      enabled: true,
                       inputFormatters: [CapitalizeAllInputFormatter()],
                       hintText: 'Select Role',
-                      suffixIcon: Icon(Icons.keyboard_arrow_down),
+                      suffixIcon: const Icon(Icons.keyboard_arrow_down),
                       controller: TextEditingController(text: state.selectRole),
                       focusNode: AlwaysDisabledFocusNode(),
-                      readOnly: false,
                     );
                   },
                 ),
@@ -62,7 +60,7 @@ class UsersView extends StatelessWidget {
                       hintText: 'Search',
                       filled: true,
                       fillColor: kPrimaryColor.withOpacity(0.01),
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       controller: cubit.state.controller,
                       autovalidateMode: AutovalidateMode.disabled,
                     );
@@ -139,17 +137,6 @@ class UsersView extends StatelessWidget {
               );
             },
           ),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
-          // _userTile(context),
         ],
       ),
     );
@@ -157,23 +144,21 @@ class UsersView extends StatelessWidget {
 
   Container _userTile(BuildContext context, UserData user) {
     return Container(
-      // decoration: MyDecoration.decoration(),
       child: ExpandedTile(
         title: Text(
-          user.firstName! + ' ' + user.lastName!,
+          '${user.firstName!} ${user.lastName!}',
           style: context.textTheme.subtitle2?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: Text(user.role ?? ''),
-        trailing: SizedBox.shrink(),
+        trailing: const SizedBox.shrink(),
         children: [
-          Divider(),
+          const Divider(),
           Row(
             children: [
               Icon(
                 Icons.mail_outline,
-                // color: Colors.blueGrey,
                 color: context.theme.primaryColor,
               ),
               Gap(10.w),
@@ -188,7 +173,7 @@ class UsersView extends StatelessWidget {
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
 
           Row(
             children: [
@@ -210,22 +195,22 @@ class UsersView extends StatelessWidget {
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           Row(
             children: [
               // Text('Email')
-              Text('PIC:'),
+              const Text('PIC:'),
               Gap(10.w),
               Text(
                 user.pic ?? '',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   color: Colors.black54,
                 ),
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
 
           // Text
           Row(
@@ -236,22 +221,8 @@ class UsersView extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              // Text(
-              //   user.status!.name.capitalize!,
-              //   style: context.textTheme.subtitle1?.copyWith(
-              //     fontWeight: FontWeight.w500,
-              //     color: user.status!.color,
-              //   ),
-              // ),
-              Spacer(),
+              const Spacer(),
               _StatusWidget(user: user),
-              // _statusWidget(user, context.read<UsersCubit>().state.status[user.id!], context),
-              // ...UserStatus.values
-              //     .map((e) => UserStatusWidget(
-              //           margin: EdgeInsets.symmetric(horizontal: 10),
-              //           status: e,
-              //         ))
-              //     .toList()
             ],
           )
         ],
@@ -280,6 +251,22 @@ class __StatusWidgetState extends State<_StatusWidget> {
   @override
   Widget build(BuildContext context) {
     return PopupMenu(
+      options: UserStatus.values,
+      onSelected: (s) async {
+        final api = context.read<Api>();
+        final userData = api.getUserData();
+        userData?.status = s;
+
+        final result = await api.updateUser(userData: userData!);
+        result.when(success: (data) {
+          final cubit = context.read<UsersCubit>();
+          cubit.fetchUsers();
+          setState(() => selected = s);
+        }, failure: (error) {
+          DialogService.failure(error: error);
+        },);
+        // api.updateMe(user: api.user);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
         decoration: BoxDecoration(
@@ -291,17 +278,15 @@ class __StatusWidgetState extends State<_StatusWidget> {
           children: [
             Text(
               selected.name.capitalize!,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
-            Icon(
+            const Icon(
               Icons.keyboard_arrow_down_outlined,
               color: Colors.white,
             )
           ],
         ),
       ),
-      options: UserStatus.values,
-      onSelected: (s) => setState(() => selected = s),
     );
   }
 }
@@ -350,9 +335,9 @@ class PopupMenu<T> extends StatelessWidget {
     return PopupMenuButton<UserStatus>(
       itemBuilder: itemBuilder,
       shape: MyDecoration.dialogShape,
-      child: child,
       onSelected: onSelected,
       padding: EdgeInsets.zero,
+      child: child,
     );
   }
 

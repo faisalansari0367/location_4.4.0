@@ -35,15 +35,13 @@ class BottomNavbarItem extends StatelessWidget {
         child: AnimatedContainer(
           width: 110.w,
           // margin: EdgeInsets.symmetric(vertical: 10.h),
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
               // top: 10.sp,
               // left: 10.sp,
               // right: 10.sp,
               ),
           duration: 300.milliseconds,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Gap(15.h),
@@ -78,7 +76,6 @@ class BottomNavbarItem extends StatelessWidget {
         ? icon!.endsWith('.svg')
             ? SvgPicture.asset(
                 icon!,
-                fit: BoxFit.contain,
                 color: iconColor,
               )
             : Image.asset(

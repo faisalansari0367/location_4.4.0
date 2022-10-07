@@ -28,7 +28,7 @@ class DrawerMenuIcon extends StatelessWidget {
     );
   }
 
-  void _onPressedIcon(context) async {
+  void _onPressedIcon(BuildContext context) async {
     FocusScope.of(context).unfocus();
     final drawer = Provider.of<DrawerCubit>(context, listen: false);
     drawer.isOpen ? drawer.closeDrawer() : drawer.openDrawer();

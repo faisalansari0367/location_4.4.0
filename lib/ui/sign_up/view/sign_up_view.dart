@@ -1,10 +1,8 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/sign_up/cubit/sign_up_cubit.dart';
 import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/text_fields/phone_text_field.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,13 +24,12 @@ class _SignUpViewState extends State<SignUpView> {
     final gap = Gap(0.5.height);
 
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Form(
           key: key,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Assets.images.signup.image(),
@@ -45,14 +42,14 @@ class _SignUpViewState extends State<SignUpView> {
               ),
               SizedBox(height: 3.height),
               MyTextField(
-                inputFormatters: [],
+                inputFormatters: const [],
                 hintText: Strings.firstName,
                 validator: Validator.text,
                 onChanged: cubit.onFirstNameChanged,
               ),
               gap,
               MyTextField(
-                inputFormatters: [],
+                inputFormatters: const [],
                 hintText: Strings.surname,
                 validator: Validator.text,
                 onChanged: cubit.onSurnameChanged,

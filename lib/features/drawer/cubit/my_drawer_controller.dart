@@ -44,7 +44,7 @@ class DrawerCubit extends ChangeNotifier {
 
   Future<bool> _onGoBackTwice() async {
     final now = DateTime.now();
-    if (_currentBackPressTime == null || now.difference(_currentBackPressTime!) > Duration(seconds: 2)) {
+    if (_currentBackPressTime == null || now.difference(_currentBackPressTime!) > const Duration(seconds: 2)) {
       _currentBackPressTime = now;
       await Fluttertoast.showToast(msg: 'press back again to exit.');
       return Future.value(false);

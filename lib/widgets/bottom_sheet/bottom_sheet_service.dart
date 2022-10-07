@@ -7,15 +7,15 @@ class BottomSheetService {
     Get.bottomSheet(
       Container(
         decoration: MyDecoration.bottomSheetDecoration(),
-        child: child,
         padding: kPadding,
+        child: child,
       ),
       enterBottomSheetDuration: 175.milliseconds,
       exitBottomSheetDuration: 175.milliseconds,
       backgroundColor: Colors.white,
       barrierColor: Colors.black.withOpacity(0.1),
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),

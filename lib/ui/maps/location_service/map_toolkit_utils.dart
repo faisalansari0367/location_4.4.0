@@ -35,8 +35,8 @@ class MapsToolkitService {
     // bool geodesic = false,
   }) {
     final inRadius = <PolygonModel>{};
-    polygons.forEach((element) {
-      bool isInside = false;
+    for (final element in polygons) {
+      var isInside = false;
       isInside = isInsidePolygon(latLng: latLng, polygon: element.points);
       if (!isInside) {
         isInside = _mostNearPolyline(element.points, accuracy, latLng);
@@ -44,7 +44,7 @@ class MapsToolkitService {
       if (isInside) {
         inRadius.add(element);
       }
-    });
+    }
     return inRadius;
   }
 
@@ -70,7 +70,7 @@ class MapsToolkitService {
     // });
   }
 
-  static distance(LatLng from, LatLng to) {
+  static num distance(LatLng from, LatLng to) {
     final distance = mt.SphericalUtil.computeDistanceBetween(_fromLatLng(from), _fromLatLng(to));
     return distance;
   }
@@ -82,7 +82,7 @@ class MapsToolkitService {
   static CameraUpdate boundsFromLatLngList(List<LatLng> list) {
     assert(list.isNotEmpty);
     double x0 = 0, x1 = 0, y0 = 0, y1 = 0;
-    for (var latLng in list) {
+    for (final latLng in list) {
       if (x0 == 0) {
         x0 = x1 = latLng.latitude;
         y0 = y1 = latLng.longitude;

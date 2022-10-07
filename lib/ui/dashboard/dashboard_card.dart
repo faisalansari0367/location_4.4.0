@@ -17,7 +17,7 @@ class DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _color = Color.fromARGB(255, 255, 255, 255);
+    const _color = Color.fromARGB(255, 255, 255, 255);
     final size = MediaQuery.of(context).size;
     final imageSize = size.height * 0.05;
     return AnimatedButton(
@@ -32,22 +32,20 @@ class DashboardCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            image != null
-                ? Image.asset(
+            if (image != null) Image.asset(
                     image!,
                     // height: 40,
                     // width: 40,
                     height: imageSize,
                     width: imageSize,
                     // color: imagecolor ?? Colors.black.withOpacity(0.7),
-                  )
-                : Icon(
+                  ) else Icon(
                     iconData,
                     // size: 40,
                     size: imageSize,
                     color: Colors.black.withOpacity(0.7),
                   ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SizedBox(
               width: 120.w,
               child: AutoSizeText(

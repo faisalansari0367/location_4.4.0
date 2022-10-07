@@ -47,7 +47,7 @@ class Validator {
 
   static String? date(DateTime? date) {
     if (date == null) return 'This field is required';
-    var message;
+    String? message;
     if (date.isBefore(DateTime.now().subtract(10.days))) {
       message = "Can't be more than 10 days before today's date";
     }

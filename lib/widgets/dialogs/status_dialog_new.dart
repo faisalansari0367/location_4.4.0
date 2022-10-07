@@ -36,7 +36,7 @@ class StatusDialog extends StatelessWidget {
           ),
           Gap(2.height),
           MyElevatedButton(
-            text: ('Continue'),
+            text: 'Continue',
             width: 30.width,
             padding: EdgeInsets.all(10.sp),
             onPressed: () async {

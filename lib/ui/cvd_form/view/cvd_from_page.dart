@@ -15,7 +15,7 @@ class CvdFormPage extends StatelessWidget {
         api: context.read<Api>(),
         localApi: context.read<LocalApi>(),
       ),
-      child: CvdFormView(),
+      child: const CvdFormView(),
     );
   }
 }

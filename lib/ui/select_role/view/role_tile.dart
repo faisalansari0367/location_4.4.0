@@ -1,4 +1,3 @@
-import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +15,7 @@ class RoleTile extends StatefulWidget {
 class _RoleTileState extends State<RoleTile> {
   bool isLoading = false;
 
-  setLoading(bool value) {
+  void setLoading(bool value) {
     if (!mounted) return;
     setState(() {
       isLoading = value;
@@ -47,7 +46,7 @@ class _RoleTileState extends State<RoleTile> {
       trailing: isLoading
           ? SizedBox.square(
               dimension: 5.width,
-              child: CircularProgressIndicator(
+              child: const CircularProgressIndicator(
                 strokeWidth: 2,
               ),
             )

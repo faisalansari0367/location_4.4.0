@@ -11,7 +11,7 @@ part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
   final Api authRepo;
-  SignUpCubit(this.authRepo) : super(SignUpState());
+  SignUpCubit(this.authRepo) : super(const SignUpState());
 
   void onEmailChanged(String value) {
     emit(state.copyWith(email: value));
@@ -74,7 +74,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           error: error,
           onCancel: () {
             Get.back();
-            Get.off(() => LoginPage());
+            Get.off(() => const LoginPage());
           },
         );
       },

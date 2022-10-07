@@ -12,7 +12,7 @@ class DialogService {
     final result = await Get.dialog(
       child,
       transitionCurve: Curves.elasticOut,
-      transitionDuration: Duration(milliseconds: 400),
+      transitionDuration: const Duration(milliseconds: 400),
     );
     return result;
   }
@@ -27,7 +27,7 @@ class DialogService {
         onCancel: onCancel ?? Get.back,
       ),
       transitionCurve: Curves.elasticOut,
-      transitionDuration: Duration(milliseconds: 400),
+      transitionDuration: const Duration(milliseconds: 400),
     );
   }
 
@@ -39,7 +39,7 @@ class DialogService {
         onContinue: Get.back,
       ),
       transitionCurve: Curves.elasticOut,
-      transitionDuration: Duration(milliseconds: 400),
+      transitionDuration: const Duration(milliseconds: 400),
     );
   }
 
@@ -53,7 +53,7 @@ class DialogService {
         message: success,
       ),
       transitionCurve: Curves.elasticOut,
-      transitionDuration: Duration(milliseconds: 400),
+      transitionDuration: const Duration(milliseconds: 400),
     );
   }
 }

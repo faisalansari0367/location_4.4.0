@@ -72,7 +72,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
 
           Row(
             children: [
-              Icon(Icons.info, color: Colors.red),
+              const Icon(Icons.info, color: Colors.red),
               Gap(5.w),
               Text(
                 'Please read below points carefully',
@@ -88,15 +88,14 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
           Align(
             alignment: Alignment.centerLeft,
             child: RichText(
-              textAlign: TextAlign.start,
               text: TextSpan(
                 style: style,
                 text: 'I ',
                 children: [
                   TextSpan(text: nameController.text.isEmpty ? '____' : nameController.text),
-                  TextSpan(text: ' of '),
+                  const TextSpan(text: ' of '),
                   TextSpan(text: org.isEmpty ? '____' : org),
-                  TextSpan(text: ' declare that:'),
+                  const TextSpan(text: ' declare that:'),
                 ],
               ),
             ),
@@ -104,7 +103,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
           Gap(10.h),
           AutoSpacing(
             // removeLast: true,
-            spacing: Divider(),
+            spacing: const Divider(),
             // startSpacing: Divider(),
             children: [
               ...data.map((e) {
@@ -112,7 +111,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      (data.indexOf(e) + 1).toString() + '. ',
+                      '${data.indexOf(e) + 1}. ',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         // color: Colors.grey,
@@ -179,21 +178,21 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
           Gap(50.h),
         ],
       );
-    });
+    },);
   }
 
   String getName() {
     final userData = context.read<Api>().getUserData();
-    String data = '';
+    var data = '';
     if (userData?.firstName == null && userData?.lastName == null) {
     } else {
-      data = userData!.firstName! + ' ' + userData.lastName!;
+      data = '${userData!.firstName!} ${userData.lastName!}';
     }
     return data;
   }
 
   void _init() async {
-    String json = await DefaultAssetBundle.of(context).loadString("assets/json/declaration_form.json");
+    final json = await DefaultAssetBundle.of(context).loadString('assets/json/declaration_form.json');
     data = List<String>.from(jsonDecode(json)['conditions']);
     setState(() {});
   }

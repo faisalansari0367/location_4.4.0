@@ -45,7 +45,7 @@ class VisitorCheckInView extends StatelessWidget {
                         style: context.textTheme.headline6?.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 25.w,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: const Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
                       Gap(10.h),
@@ -53,7 +53,7 @@ class VisitorCheckInView extends StatelessWidget {
                         width: 60.width,
                         height: 60.width,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               // border: Border.all(width: 7.w),
                               ),
                           child: AnimatedSwitcher(
@@ -67,7 +67,7 @@ class VisitorCheckInView extends StatelessWidget {
                         'Scan me',
                         style: context.textTheme.headline6?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: const Color.fromARGB(255, 0, 0, 0),
                           fontSize: 25.h,
                         ),
                       ),
@@ -85,7 +85,7 @@ class VisitorCheckInView extends StatelessWidget {
 
   Widget _qrCode(VisitorCheckInState state) {
     if (state.qrCode == null) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     } else {
@@ -116,7 +116,7 @@ class VisitorCheckInView extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Text(
             'Something went wrong',
             textAlign: TextAlign.center,
@@ -143,10 +143,10 @@ class VisitorCheckInView extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
             ),
             child: AutoSizeText(
-              Strings.visitor + 's',
+              '${Strings.visitor}s',
               maxLines: 1,
               style: context.textTheme.headline6?.copyWith(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: const Color.fromARGB(255, 255, 255, 255),
                 fontSize: 40.w,
                 fontWeight: FontWeight.bold,
               ),
@@ -165,38 +165,40 @@ class VisitorCheckInView extends StatelessWidget {
               'Farm Biosecurity'.toUpperCase(),
               maxLines: 1,
               style: context.textTheme.headline6?.copyWith(
-                color: Color.fromARGB(255, 255, 0, 0),
+                color: const Color.fromARGB(255, 255, 0, 0),
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          Divider(
+          const Divider(
             color: Color.fromARGB(255, 0, 0, 0),
           ),
           SizedBox(
             width: double.infinity,
             child: AutoSizeText(
               'Please phone or visit the office before entering',
-              maxLines: 1,
+              maxLines: 2,
               textAlign: TextAlign.center,
               style: context.textTheme.subtitle1?.copyWith(
                 // color: Colors.white,
                 fontWeight: FontWeight.w600,
+                // fontSize: 14.w,
               ),
             ),
           ),
-          Divider(),
+          const Divider(),
           _phoneNumber(),
-          Divider(),
+          const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.info, color: Colors.red),
-              Gap(5.w),
+              // Icon(Icons.info, color: Colors.red),
+              // Gap(5.w),
               Expanded(
                 child: AutoSizeText(
-                  "Do not enter property without prior approval",
-                  maxLines: 1,
+                  'Do not enter property without prior consent',
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
                   style: context.textTheme.bodyText2?.copyWith(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
@@ -208,10 +210,10 @@ class VisitorCheckInView extends StatelessWidget {
           ),
           Divider(color: Colors.grey.shade300),
           Text(
-            "Vehicles, people and equipment can carry weed seeds, pests and diseases",
+            'Vehicles, people and equipment can carry weed seeds, pests and diseases',
             textAlign: TextAlign.center,
             style: context.textTheme.bodyText2?.copyWith(
-              color: Color.fromARGB(158, 255, 0, 0),
+              color: const Color.fromARGB(158, 255, 0, 0),
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -224,13 +226,13 @@ class VisitorCheckInView extends StatelessWidget {
     return BlocBuilder<VisitorCheckInCubit, VisitorCheckInState>(
       builder: (context, state) {
         final phoneNumber = context.read<VisitorCheckInCubit>().getPhoneNumber();
-        if (phoneNumber.trim().isEmpty) return SizedBox.shrink();
+        if (phoneNumber.trim().isEmpty) return const SizedBox.shrink();
         return GestureDetector(
           onTap: () => IntentService.dialIntent(phoneNumber),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.phone,
                 color: Color.fromARGB(255, 80, 106, 255),
               ),
@@ -241,7 +243,7 @@ class VisitorCheckInView extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   decoration: TextDecoration.underline,
                   // color: Color.fromARGB(255, 33, 65, 243),
-                  color: Color.fromARGB(255, 80, 106, 255),
+                  color: const Color.fromARGB(255, 80, 106, 255),
 
                   fontSize: 17.w,
                 ),

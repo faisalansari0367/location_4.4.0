@@ -7,7 +7,7 @@ class DrawerState extends Equatable {
   final bool isOpen;
   final int currentPage;
 
-  DrawerState({
+  const DrawerState({
     this.controller,
     this.isOpen = false,
     this.currentPage = 0,
