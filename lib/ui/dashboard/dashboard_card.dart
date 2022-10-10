@@ -18,6 +18,7 @@ class DashboardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const _color = Color.fromARGB(255, 255, 255, 255);
+    // const _color = kPrimaryColor;
     final size = MediaQuery.of(context).size;
     final imageSize = size.height * 0.05;
     return AnimatedButton(
@@ -32,19 +33,25 @@ class DashboardCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (image != null) Image.asset(
-                    image!,
-                    // height: 40,
-                    // width: 40,
-                    height: imageSize,
-                    width: imageSize,
-                    // color: imagecolor ?? Colors.black.withOpacity(0.7),
-                  ) else Icon(
-                    iconData,
-                    // size: 40,
-                    size: imageSize,
-                    color: Colors.black.withOpacity(0.7),
-                  ),
+            if (image != null)
+              Image.asset(
+                image!,
+                // height: 40,
+                // width: 40,
+                height: imageSize,
+                width: imageSize,
+                // color: _color,
+                // color: imagecolor ?? Colors.black.withOpacity(0.7),
+              )
+            else
+              Icon(
+                iconData,
+                // size: 40,
+                size: imageSize,
+                // color: _color,
+
+                // color: Colors.black.withOpacity(0.7),
+              ),
             const SizedBox(height: 20),
             SizedBox(
               width: 120.w,
@@ -54,7 +61,9 @@ class DashboardCard extends StatelessWidget {
                 maxLines: text.split(' ').length > 1 ? 2 : 1,
                 style: ThemeData.light().textTheme.bodyText2?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Colors.grey.shade900,
+                      // color: Colors.grey.shade900,
+                      // color: _color,
+
                       fontSize: 16.w,
                     ),
               ),

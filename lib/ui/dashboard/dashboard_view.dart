@@ -2,6 +2,7 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:background_location/ui/cvd_form/view/cvd_from_page.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
+import 'package:background_location/ui/forms/view/global_questionnaire_form.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
@@ -41,6 +42,7 @@ class DashboardView extends StatelessWidget {
         child: Column(
           // alignment: Alignment.center,
           children: [
+            Gap(10.h),
             _logo(),
             // Positioned(
             //   child: Image.asset(
@@ -86,6 +88,11 @@ class DashboardView extends StatelessWidget {
                   iconData: Icons.person,
                   onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
                 ),
+                // DashboardCard(
+                //   text: Strings.selectYourRole,
+                //   iconData: Icons.person,
+                //   onTap: () => Get.to(() => const SelectRolesRegistrationPage()),
+                // ),
                 DashboardCard(
                   text: Strings.links.toUpperCase(),
                   iconData: Icons.link,
@@ -116,6 +123,14 @@ class DashboardView extends StatelessWidget {
                     DialogService.showDialog(child: const ComingSoonDialog());
                   },
                 ),
+                // DashboardCard(
+                //   text: 'Global Form',
+                //   iconData: Icons.work_outline,
+                //   onTap: () {
+                //     // DialogService.showDialog(child: const ComingSoonDialog());
+                //     Get.to(() => GlobalQuestionnaireForm());
+                //   },
+                // ),
                 DashboardCard(
                   text: 'EMERGENCY WARNING!',
                   // iconData: LineIcons.info,
@@ -124,69 +139,7 @@ class DashboardView extends StatelessWidget {
                   // imagecolor: null,
                   image: 'assets/icons/warning_icon.png',
                   onTap: () {
-                    // DialogService.showDialog(child: ComingSoonDialog());
-                    DialogService.showDialog(
-                      child: DialogLayout(
-                        child: Padding(
-                          padding: kPadding,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // alert text
-                              Image.asset(
-                                'assets/icons/warning_icon.png',
-                                height: 20.height,
-                              ),
-                              Gap(10.h),
-                              Text(
-                                'Are you sure you want to send this WARNING alert?',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              // yes no buttons
-                              Row(
-                                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  // Spacer(),
-                                  // yes button
-                                  Gap(20.w),
-
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        Get.back();
-                                        await DialogService.showDialog(child: const ComingSoonDialog());
-                                      },
-                                      child: const Text('Yes'),
-                                    ),
-                                  ),
-                                  Gap(10.w),
-
-                                  // no button
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () async => Get.back(),
-                                      child: const Text('No'),
-                                    ),
-                                  ),
-                                  Gap(20.w),
-
-                                  // Gap(10.w),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // child: ErrorDialog(
-                      //   message: 'Are you sure you want to send this WARNING alert?',
-                      //   onTap: Get.back,
-                      // ),
-                    );
+                    _warningDialog();
                   },
                 ),
                 // DashboardCard(
@@ -201,6 +154,71 @@ class DashboardView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  _warningDialog() async {
+    DialogService.showDialog(
+      child: DialogLayout(
+        child: Padding(
+          padding: kPadding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // alert text
+              Image.asset(
+                'assets/icons/warning_icon.png',
+                height: 20.height,
+              ),
+              Gap(10.h),
+              Text(
+                'Are you sure you want to send this WARNING alert?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              // yes no buttons
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Spacer(),
+                  // yes button
+                  Gap(20.w),
+
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        Get.back();
+                        await DialogService.showDialog(child: const ComingSoonDialog());
+                      },
+                      child: const Text('Yes'),
+                    ),
+                  ),
+                  Gap(10.w),
+
+                  // no button
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async => Get.back(),
+                      child: const Text('No'),
+                    ),
+                  ),
+                  Gap(20.w),
+
+                  // Gap(10.w),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      // child: ErrorDialog(
+      //   message: 'Are you sure you want to send this WARNING alert?',
+      //   onTap: Get.back,
+      // ),
     );
   }
 

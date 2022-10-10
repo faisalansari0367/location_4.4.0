@@ -31,7 +31,32 @@ class LinksView extends StatelessWidget {
           spacing: Gap(15.h),
           children: [
             MyListTile(
+              text: 'iTRAKassets',
+              title: Align(
+                alignment: Alignment.centerLeft,
+                // width: 100.w,
+                child: Image.asset(
+                  'assets/images/itrakassets_logo.jpeg',
+                  height: 20.w,
+                ),
+              ),
+              onTap: () async => Get.to(
+                () => const Webview(
+                  url: 'https://itrakassets.com/',
+                  title: 'iTRAKassets',
+                ),
+              ),
+            ),
+            MyListTile(
               text: 'Farm Biosecurity'.toUpperCase(),
+              title: Align(
+                alignment: Alignment.centerLeft,
+                // width: 100.w,
+                child: Image.asset(
+                  'assets/images/farm_bio_security_logo.png',
+                  height: 30.w,
+                ),
+              ),
               onTap: () async => Get.to(
                 () => const Webview(
                   url: 'https://www.farmbiosecurity.com.au/',
@@ -41,18 +66,24 @@ class LinksView extends StatelessWidget {
             ),
             MyListTile(
               text: 'SAFE AND RESPONSIBLE ANIMAL TREATMENTS',
-              onTap: () async => await openPdf(context,
-                  'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-02-livestock-treatment-record-form.pdf',),
+              onTap: () async => await openPdf(
+                context,
+                'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-02-livestock-treatment-record-form.pdf',
+              ),
             ),
             MyListTile(
               text: 'Livestock treatment record'.toUpperCase(),
-              onTap: () async => await openPdf(context,
-                  'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-02-livestock-treatment-record-form.pdf',),
+              onTap: () async => await openPdf(
+                context,
+                'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-02-livestock-treatment-record-form.pdf',
+              ),
             ),
             MyListTile(
               text: 'Chemical inventory'.toUpperCase(),
-              onTap: () async => await openPdf(context,
-                  'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-03-chemical-inventory-form.pdf',),
+              onTap: () async => await openPdf(
+                context,
+                'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-03-chemical-inventory-form.pdf',
+              ),
             ),
           ],
         ),

@@ -215,4 +215,9 @@ class ApiRepo implements Api {
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId) {
     return _logRecordsRepo.markExit(geofenceId);
   }
+
+  @override
+  Future<ApiResult<User>> updateStatus({required UserData userData}) {
+    return _authRepo.updateStatus(userData: userData);
+  }
 }

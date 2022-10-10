@@ -232,4 +232,10 @@ class LocalApi extends Api {
     // TODO: implement markExit
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResult<User>> updateStatus({required UserData userData}) {
+    // TODO: implement updateStatus
+    throw UnimplementedError();
+  }
 }

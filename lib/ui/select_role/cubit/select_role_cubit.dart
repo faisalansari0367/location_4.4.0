@@ -19,9 +19,11 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
 
   final PushNotificationService pushNotificationService;
   SelectRoleCubit(this.api, this.localApi, this.pushNotificationService)
-      : super(SelectRoleState(
-          user: api.getUser()!,
-        ),) {
+      : super(
+          SelectRoleState(
+            user: api.getUser()!,
+          ),
+        ) {
     // api.userRolesStream.listen((event) {
     //   emit(state.copyWith(isLoading: false, roles: event));
     // });
@@ -45,6 +47,7 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     // Get.to(() => RoleDetailsPage(role: role));
     // final user = state.user;
     final user = apiService.getUser()!;
+
     user.role = userRole.role;
     user.registerationToken = await pushNotificationService.getFCMtoken();
     final result = await apiService.updateMe(user: user);
@@ -68,7 +71,7 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
       //   DialogService.showDialog(child: ErrorDialog(message: s.toString(), onTap: Get.back));
       // });
       result.when(
-        success: (data) => emit(state.copyWith(isLoading: false, roles: data)),
+        success: _onSuccess,
         failure: (error) {
           emit(state.copyWith(isLoading: false));
           DialogService.failure(error: error);
@@ -77,6 +80,19 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     } catch (e) {
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  void _onSuccess(List<UserRoles> data) {
+    final userData = api.getUserData();
+    final allowedRoles = userData?.allowedRoles ?? [];
+    final roles = data.where((element) => allowedRoles.contains(element.role)).map((e) => e.role).toList();
+    roles.add('International Traveller');
+    emit(
+      state.copyWith(
+        isLoading: false,
+        roles: data.where((element) => roles.contains(element.role)).toList(),
+      ),
+    );
   }
 
   @override

@@ -92,12 +92,6 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  User? getUser() => storage.getUser();
-
-  @override
-  Future<void> logout() async => await storage.setIsLoggedIn(false);
-
-  @override
   Future<ApiResult<ResponseModel>> forgotPassword({required String email}) async {
     try {
       final result = await client.post(Endpoints.forgotPassword, data: {"email": email.toLowerCase().trim()});
@@ -118,6 +112,34 @@ class AuthRepoImpl implements AuthRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
+  @override
+  Future<ApiResult<User>> updateUser({required UserData userData}) async {
+    try {
+      final json = userData.updateAllowedRoles();
+      final result = await client.patch('${Endpoints.users}/me', data: json);
+
+      // final result = await client.patch('${Endpoints.users}/me/${userData.id}', data: json);
+      final model = User.fromJson((result.data));
+      final _userData = UserData.fromJson(result.data['data']);
+      await storage.setUserData(_userData);
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  void _checkAndRemoveKey(Map<String, dynamic> json, String key) {
+    if (json[key] == null) {
+      json.remove(key);
+    }
+  }
+
+  @override
+  User? getUser() => storage.getUser();
+
+  @override
+  Future<void> logout() async => await storage.setIsLoggedIn(false);
 
   @override
   String? getToken() => storage.getToken();
@@ -141,7 +163,7 @@ class AuthRepoImpl implements AuthRepo {
   Future<void> setUserData(UserData userData) async => await storage.setUserData(userData);
 
   @override
-  Future<ApiResult<User>> updateUser({required UserData userData}) async {
+  Future<ApiResult<User>> updateStatus({required UserData userData}) async {
     try {
       final result = await client.patch('${Endpoints.users}/${userData.id}', data: userData.updateStatus());
       final model = User.fromJson((result.data));

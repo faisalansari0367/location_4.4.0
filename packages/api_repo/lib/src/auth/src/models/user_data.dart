@@ -52,12 +52,14 @@ class UserData {
   String? exitDate;
   String? passport;
   String? ngr;
+  List<String> allowedRoles = const [];
 
   String? registrationToken;
   DateTime? createdAt, updatedAt;
   UserStatus? status;
 
   UserData({
+    this.allowedRoles = const [],
     this.createdAt,
     this.updatedAt,
     this.status,
@@ -106,6 +108,7 @@ class UserData {
   }
 
   UserData.fromJson(Map<String, dynamic> json) {
+    allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
     status = getStatus(json['status']);
     ngr = json['ngr'];
 
@@ -156,8 +159,15 @@ class UserData {
     return data;
   }
 
+  Map<String, dynamic> updateAllowedRoles() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['allowedRoles'] = allowedRoles;
+    return data;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['allowedRoles'] = allowedRoles;
     data['status'] =
         status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
     data['firstName'] = firstName;

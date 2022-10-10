@@ -71,26 +71,27 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   Future<void> getLicenceCategories() async {
     final result = await api.getLicenceCategories();
     result.when(
-        success: (s) {
-          emit(state.copyWith(licenseCategories: s));
-          final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
-          if (field.isEmpty) return;
-          // field.first.data['licenseCategories'] = s;
-          final index = state.fieldsData.indexOf(field.first);
-          final fieldsData = state.fieldsData;
-          fieldsData[index] = FieldData(
-            name: field.first.name,
-            controller: field.first.controller,
-            data: {'licenseCategories': s},
-          );
-          emit(
-            state.copyWith(
-              fieldsData: fieldsData,
-              licenseCategories: s,
-            ),
-          );
-        },
-        failure: (failure) {},);
+      success: (s) {
+        emit(state.copyWith(licenseCategories: s));
+        final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
+        if (field.isEmpty) return;
+        // field.first.data['licenseCategories'] = s;
+        final index = state.fieldsData.indexOf(field.first);
+        final fieldsData = state.fieldsData;
+        fieldsData[index] = FieldData(
+          name: field.first.name,
+          controller: field.first.controller,
+          data: {'licenseCategories': s},
+        );
+        emit(
+          state.copyWith(
+            fieldsData: fieldsData,
+            licenseCategories: s,
+          ),
+        );
+      },
+      failure: (failure) {},
+    );
   }
 
   Map<String, dynamic> get userRoleDetails => state.userRoleDetails;
@@ -218,11 +219,13 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           ),
         );
       } else {
-        list.add(FieldData(
-          controller: TextEditingController(),
-          name: FieldType.address.name,
-          address: address,
-        ),);
+        list.add(
+          FieldData(
+            controller: TextEditingController(),
+            name: FieldType.address.name,
+            address: address,
+          ),
+        );
       }
     }
   }

@@ -10,12 +10,15 @@ class Strings {
       last = 'Last',
       password = 'Password',
       confirm = 'Confirm',
+      continue_ = 'Continue',
       surname = 'Surname',
       sign = 'Sign',
+      declaration = 'Declaration',
       in_ = 'In',
       up = 'Up',
       mobile = 'Mobile',
       submit = 'Submit',
+      form = 'Form',
       role = 'Role',
       select = 'Select',
       details = 'Details',
@@ -119,4 +122,12 @@ class Strings {
 
   //
   static String get areYouVisitingBelowPic => 'Are you visiting below PIC?';
+
+
+
+  /// dashboard
+  static const edecForms = 'eDEC ${form}s';
+
+  static String get cvdForm => 'CVD $form'.toUpperCase();  
+
 }

@@ -7,12 +7,13 @@ import '../../../constants/index.dart';
 class MyListTile extends StatefulWidget {
   final String text;
   final Future<void> Function() onTap;
-  final Widget? trailing;
+  final Widget? trailing, title;
   const MyListTile({
     Key? key,
     required this.text,
     required this.onTap,
     this.trailing,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -44,13 +45,14 @@ class _MyListTileState extends State<MyListTile> {
         setLoading(false);
       },
       selectedColor: Colors.black,
-      title: Text(
-        widget.text,
-        style: context.textTheme.subtitle2?.copyWith(
-          fontWeight: FontWeight.w600,
-          fontSize: 15.w,
-        ),
-      ),
+      title: widget.title ??
+          Text(
+            widget.text,
+            style: context.textTheme.subtitle2?.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 15.w,
+            ),
+          ),
       trailing: isLoading
           ? SizedBox.square(
               dimension: 5.width,
