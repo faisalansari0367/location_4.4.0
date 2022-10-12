@@ -51,7 +51,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     await _getFields();
     await getRoleDetails();
     await getSpecies();
-    if (role.toLowerCase() == Roles.employee.name) await getLicenceCategories();
+    await getLicenceCategories();
 
     // api.getLicenceCategories();
     // getLicenceCategories();
@@ -73,22 +73,22 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     result.when(
       success: (s) {
         emit(state.copyWith(licenseCategories: s));
-        final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
-        if (field.isEmpty) return;
+        // final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
+        // if (field.isEmpty) return;
         // field.first.data['licenseCategories'] = s;
-        final index = state.fieldsData.indexOf(field.first);
-        final fieldsData = state.fieldsData;
-        fieldsData[index] = FieldData(
-          name: field.first.name,
-          controller: field.first.controller,
-          data: {'licenseCategories': s},
-        );
-        emit(
-          state.copyWith(
-            fieldsData: fieldsData,
-            licenseCategories: s,
-          ),
-        );
+        // final index = state.fieldsData.indexOf(field.first);
+        // final fieldsData = state.fieldsData;
+        // fieldsData[index] = FieldData(
+        //   name: field.first.name,
+        //   controller: field.first.controller,
+        //   data: {'licenseCategories': s},
+        // );
+        // emit(
+        //   state.copyWith(
+        //     fieldsData: fieldsData,
+        //     licenseCategories: s,
+        //   ),
+        // );
       },
       failure: (failure) {},
     );

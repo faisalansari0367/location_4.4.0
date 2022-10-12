@@ -52,48 +52,65 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
           ),
           titleTextStyle: TextStyle(
             color: Colors.black,
-            fontSize: 20.w,
+            fontSize: 20,
           ),
         ),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0.width),
-        child: Column(
-          // mainAxisAlignment: Ma,
-          children: [
-            Flexible(
-              child: AppBar(
-                centerTitle: centreTitle,
-                // bottomOpacity: 0.5s,
-                // foregroundColor: Colors.,
-                // primary: true,
-                // backgroundColor: backgroundColor,
-                // backgroundColor: Color.fromARGB(255, 85, 177, 106),
-                // backgroundColor: Color(0xff3B4798),
-                backgroundColor: Colors.white,
-                leading: leading ?? (showBackButton ? leadingArrow : const DrawerMenuIcon()),
-                leadingWidth: showBackButton ? null : null,
-                actions: actions,
-                title: title,
-                elevation: elevation,
-                bottom: bottom,
-              ),
-            ),
-            if (showDivider) _bottom(),
-            // Divider(
-            //   height: 2,
-            //   endIndent: 5.width,
-            //   indent: 5.width,
-            //   color: Color.fromARGB(91, 0, 0, 0),
-            //   thickness: 1.w,
-            // ),
-          ],
-        ),
+      child: AppBar(
+        centerTitle: centreTitle,
+        // bottomOpacity: 0.5s,
+        // foregroundColor: Colors.,
+        // primary: true,
+        // backgroundColor: backgroundColor,
+        // backgroundColor: Color.fromARGB(255, 85, 177, 106),
+        // backgroundColor: Color(0xff3B4798),
+        backgroundColor: Colors.white,
+        leading: leading ?? (showBackButton ? leadingArrow : const DrawerMenuIcon()),
+        leadingWidth: showBackButton ? null : null,
+        actions: actions,
+        title: title,
+        elevation: elevation,
+        bottom: bottom ?? _bottom(),
       ),
     );
+    // child: Padding(
+    //   padding: EdgeInsets.symmetric(horizontal: 0.width),
+    //   child: Column(
+    //     // mainAxisAlignment: Ma,
+    //     children: [
+    //       Flexible(
+    //         child: AppBar(
+    //           centerTitle: centreTitle,
+    //           // bottomOpacity: 0.5s,
+    //           // foregroundColor: Colors.,
+    //           // primary: true,
+    //           // backgroundColor: backgroundColor,
+    //           // backgroundColor: Color.fromARGB(255, 85, 177, 106),
+    //           // backgroundColor: Color(0xff3B4798),
+    //           backgroundColor: Colors.white,
+    //           leading: leading ?? (showBackButton ? leadingArrow : const DrawerMenuIcon()),
+    //           leadingWidth: showBackButton ? null : null,
+    //           actions: actions,
+    //           title: title,
+    //           elevation: elevation,
+    //           bottom: bottom,
+    //         ),
+    //       ),
+    //       if (showDivider) _bottom(),
+    //       // Divider(
+    //       //   height: 2,
+    //       //   endIndent: 5.width,
+    //       //   indent: 5.width,
+    //       //   color: Color.fromARGB(91, 0, 0, 0),
+    //       //   thickness: 1.w,
+    //       // ),
+    //     ],
+    //   ),
+    // ),
+    // );
   }
 
-  Widget _bottom() {
+  PreferredSizeWidget _bottom() {
     final divider = Container(
       // indent: 5.width,
       width: 90.width,
@@ -103,9 +120,18 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
       height: 0.2.height,
     );
 
-    return divider;
+    return showDivider
+        ? PreferredSize(
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 25.w),
+              color: Colors.grey.withOpacity(0.2),
+              height: 1.0,
+            ),
+            preferredSize: const Size.fromHeight(4.0),
+          )
+        : const PreferredSize(child: SizedBox(), preferredSize: Size.fromHeight(0));
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(58.w);
+  Size get preferredSize => Size.fromHeight(58);
 }

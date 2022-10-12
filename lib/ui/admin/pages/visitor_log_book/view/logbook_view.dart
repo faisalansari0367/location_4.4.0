@@ -72,12 +72,12 @@ class _LogbookViewState extends State<LogbookView> {
                       }
 
                       return DataTable(
-                        dataRowHeight: 60.h,
-                        columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form']
+                        dataRowHeight: 60,
+                        columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration']
                             .map((e) => _dataColumn(e.capitalize!))
                             .toList(),
-                        rows: (snapshot.data ?? []).map(_dataRow).toList(),
-                        columnSpacing: 31.w,
+                        rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e))).toList(),
+                        columnSpacing: 31,
                       );
                     },
                   ),
@@ -101,8 +101,9 @@ class _LogbookViewState extends State<LogbookView> {
   }
 
   // DataRow _tableRow(data) {
-  DataRow _dataRow(LogbookEntry item) {
+  DataRow _dataRow(LogbookEntry item, int index) {
     return DataRow(
+      color: MaterialStateProperty.all(index % 2 == 0 ? Colors.grey.shade100 : Colors.white),
       // color: MaterialStateProperty.all(item.geofence?.color ?? Colors.transparent),
       cells: [
         _dataCell(item.id.toString()),
@@ -127,7 +128,7 @@ class _LogbookViewState extends State<LogbookView> {
               : Text(
                   'trespasser'.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     color: Colors.red,
                     fontWeight: FontWeight.w600,
                   ),
@@ -141,7 +142,7 @@ class _LogbookViewState extends State<LogbookView> {
   DataCell _dataCell(String data, {Color? color = Colors.black, bool isPic = false}) {
     return DataCell(
       Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+        padding: EdgeInsets.symmetric(horizontal: isPic ? 10.w : 0.w, vertical: 5.h),
         decoration: isPic
             ? BoxDecoration(
                 color: color,
@@ -152,7 +153,7 @@ class _LogbookViewState extends State<LogbookView> {
           data,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: 14,
             color: !isPic
                 ? null
                 : color!.computeLuminance() <= 0.5
@@ -167,39 +168,45 @@ class _LogbookViewState extends State<LogbookView> {
 
   DataColumn _dataColumn(String name) {
     return DataColumn(
-      label: Text(
-        name,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 16.w,
-          fontWeight: FontWeight.bold,
+      numeric: false,
+      label: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 0),
+        // alignment: Alignment.center,
+        child: Text(
+          name,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
   }
 
-  Widget itemBuilder(BuildContext p1, int index) {
-    final item = p1.read<LogBookCubit>().state.entries[index];
+  // Widget itemBuilder(BuildContext p1, int index) {
+  //   final item = p1.read<LogBookCubit>().state.entries[index];
 
-    return ListTile(
-      title: Text(
-        item.id.toString(),
-        style: TextStyle(
-          color: Colors.grey.shade900,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      subtitle: Text(
-        MyDecoration.formatDate(item.updatedAt),
-        style: TextStyle(
-          color: Colors.grey.shade600,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      // onTap: hasChildrens(item.form) ? null : () => Get.to(() => LogbookDetails(form: item.form)),
-      // trailing: !hasChildrens(item.form) ? Icon(Icons.chevron_right) : SizedBox.shrink(),
-    );
-  }
+  //   return ListTile(
+  //     title: Text(
+  //       item.id.toString(),
+  //       textAlign: TextAlign.center,
+  //       style: TextStyle(
+  //         color: Colors.grey.shade900,
+  //         fontWeight: FontWeight.w600,
+  //       ),
+  //     ),
+  //     subtitle: Text(
+  //       MyDecoration.formatDate(item.updatedAt),
+  //       style: TextStyle(
+  //         color: Colors.grey.shade600,
+  //         fontWeight: FontWeight.w600,
+  //       ),
+  //     ),
+  //     // onTap: hasChildrens(item.form) ? null : () => Get.to(() => LogbookDetails(form: item.form)),
+  //     // trailing: !hasChildrens(item.form) ? Icon(Icons.chevron_right) : SizedBox.shrink(),
+  //   );
+  // }
 
   bool hasChildrens(LogbookFormField? item) {
     if (item == null) return true;
@@ -208,14 +215,14 @@ class _LogbookViewState extends State<LogbookView> {
     return false;
   }
 
-  TableRow _tableRow(List<String> list) {
-    return TableRow(
-      children: [
-        for (var item in list)
-          TableCell(
-            child: Text(item),
-          ),
-      ],
-    );
-  }
+  // TableRow _tableRow(List<String> list) {
+  //   return TableRow(
+  //     children: [
+  //       for (var item in list)
+  //         TableCell(
+  //           child: Text(item),
+  //         ),
+  //     ],
+  //   );
+  // }
 }

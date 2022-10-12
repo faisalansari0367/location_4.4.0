@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:local_notification/local_notification.dart';
@@ -24,7 +23,6 @@ import '../../../services/notifications/push_notifications.dart';
 import '../location_service/maps_repo.dart';
 import '../location_service/maps_repo_local.dart';
 import '../models/polygon_model.dart';
-import '../view/widgets/dialog/notify_manager.dart';
 
 // import 'package:google_maps_flutter/google_maps_flutter.dart'
 //     show CameraPosition, CameraUpdate, GoogleMapController, LatLng, LatLngBounds;
@@ -134,24 +132,12 @@ class MapsCubit extends Cubit<MapsState> {
 
   Future<void> _getAllPolygon() async {
     final allPolygon = await mapsRepo.getAllPolygon();
-    final polygonSet = <PolygonModel>{};
-    // allPolygon.then((polygons) {
     allPolygon.when(
       success: (allPolygon) {
-        for (final element in allPolygon) {
-          final data = PolygonModel(
-            id: element.id!,
-            name: element.name,
-            points: element.points,
-            color: element.color,
-          );
-          polygonSet.add(data);
-        }
-        emit(state.copyWith(polygons: polygonSet));
+        emit(state.copyWith(polygons: allPolygon.toSet()));
       },
       failure: (error) => DialogService.failure(error: error),
     );
-    // });
   }
 
   void setIsAddingGeofence() {
@@ -263,51 +249,16 @@ class MapsCubit extends Cubit<MapsState> {
     this.controller.complete(controller);
   }
 
-  PolygonModel? getPolygon() {
-    final polygon = state.polygons.where(
-      (element) => MapsToolkitService.isInsidePolygon(
-        latLng: state.currentLocation,
-        polygon: element.points,
-      ),
-    );
-    if (polygon.isEmpty) return null;
-    return polygon.first;
-  }
-
-  Future<void> notifyManager() async {
-    print('notify manager api called');
-    final userData = api.getUserData();
-    final polygon = state.polygons.where(
-      (element) => MapsToolkitService.isInsidePolygon(
-        latLng: state.currentLocation,
-        polygon: element.points,
-      ),
-    );
-    if (polygon.isEmpty) return;
-    // if (polygon.length == 1) {
-    // print(polygon);
-    final result = await mapsRepo.notifyManager(
-      userData!.pic!,
-      state.currentLocation.latitude.toString(),
-      state.currentLocation.longitude.toString(),
-      polygon.first.id!,
-    );
-    result.when(
-      success: (s) async {
-        final name = '${polygon.first.createdBy?.firstName} ${polygon.first.createdBy?.lastName}';
-        final manager = name.isEmpty ? 'Property Manager' : name;
-        await DialogService.showDialog(
-          child: NotifyManagerDialog(
-            message: 'We have notified the ${manager} of your entry into the geofenced area',
-          ),
-        );
-      },
-      failure: (e) => DialogService.failure(error: e),
-    );
-    // }
-    // result.when();
-    // result.w(() => null)
-  }
+  // PolygonModel? getPolygon() {
+  //   final polygon = state.polygons.where(
+  //     (element) => MapsToolkitService.isInsidePolygon(
+  //       latLng: state.currentLocation,
+  //       polygon: element.points,
+  //     ),
+  //   );
+  //   if (polygon.isEmpty) return null;
+  //   return polygon.first;
+  // }
 
   Future<void> zoom(double zoom) async {
     emit(state.copyWith(zoom: min(max(1, state.zoom + zoom), 20)));
@@ -322,10 +273,8 @@ class MapsCubit extends Cubit<MapsState> {
     );
   }
 
-  final debouncer = Debouncer(delay: 1.seconds);
-  PolygonModel? userIsInsidePolygonId;
   void getLocationUpdates() async {
-    final trackPolygons = TrackPolygons(pic: userData!.pic!, mapsRepo: mapsRepo, api: api);
+    final trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
     // dev.log('lcoation updates is emitting');
 
     // final popups = MapsPopups(notifyManager, mapsRepo, this);
@@ -343,62 +292,7 @@ class MapsCubit extends Cubit<MapsState> {
       if (polygonsInCoverage.isNotEmpty) {
         trackPolygons.update(polygonsInCoverage, position);
       }
-
-      // state.polygons.map((e) => e.points)
-      // state.polygons.forEach((element) {
-      //   // element.points
-      //   final userIsEntering = MapsToolkitService.isInsidePolygon(latLng: position, polygon: element.points);
-
-      // });
-      // print('polygons in coverage $polygonsInCoverage');
-      // if (userIsInsidePolygonId != null) {
-      //   final isInside = MapsToolkitService.isInsidePolygon(
-      //     latLng: position,
-      //     polygon: userIsInsidePolygonId!.points,
-      //   );
-      //   if (!isInside) {
-      //     debouncer.call(() {
-      //       mapsRepo.logBookEntry(
-      //         userData!.pic!,
-      //         null,
-      //         userIsInsidePolygonId!.id!,
-      //         isExiting: true,
-      //       );
-      //     });
-      //   }
-      // } else {
-      //   if (polygonsInCoverage.isNotEmpty) {
-      //     polygonsInCoverage.forEach((element) {
-      //       final isInside = MapsToolkitService.isInsidePolygon(latLng: position, polygon: element.points);
-      //       if (isInside) {
-      //         debouncer.call(() {
-      //           mapsRepo.logBookEntry(
-      //             userData!.pic!,
-      //             null,
-      //             element.id!,
-      //           );
-      //           userIsInsidePolygonId = element;
-      //         });
-      //       }
-      //     });
-      //     // popups.showPopup(polygonsInCoverage);
-      //   }
-      // }
-      // popups.polygonsInCoverage.add(polygonsInCoverage);
-      // popups.controller.add(polygonsInCoverage.isNotEmpty);
     });
-  }
-
-  void _userIsInCoverage(Set<PolygonModel> polygons) {
-    final userIsInCoverage = polygons.where((element) {
-      return MapsToolkitService.isInsidePolygon(
-        latLng: state.currentLocation,
-        polygon: element.points,
-      );
-    });
-    if (userIsInCoverage.isNotEmpty) {
-      // show popup
-    }
   }
 
   void stopLocationUpdates() => _positionSubscription?.cancel();
@@ -410,17 +304,4 @@ class MapsCubit extends Cubit<MapsState> {
     mapsRepo.cancel();
     return super.close();
   }
-
-  // @override
-  // MapsState? fromJson(Map<String, dynamic> json) {
-  //   throw UnimplementedError();
-  // }
-
-  // @override
-  // Map<String, dynamic>? toJson(MapsState state) {
-  //   throw UnimplementedError();
-  // }
-
-  // Create a [PolyGeofenceService] instance and set options.
-
 }

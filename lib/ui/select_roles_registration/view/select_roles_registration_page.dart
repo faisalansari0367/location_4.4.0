@@ -5,12 +5,15 @@ import 'package:provider/provider.dart';
 import '../cubit/select_roles_registration_cubit.dart';
 
 class SelectRolesRegistrationPage extends StatelessWidget {
-  const SelectRolesRegistrationPage({ Key? key }) : super(key: key);
+  final List<String> allowedRoles;
+  final bool isFromRegistration;
+  const SelectRolesRegistrationPage({Key? key, this.allowedRoles = const [], this.isFromRegistration = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => RolesRegistrationCubit(context),
+      create: (context) => RolesRegistrationCubit(context, isFromRegistration: isFromRegistration),
       child: SelectRolesRegistrationView(),
     );
   }

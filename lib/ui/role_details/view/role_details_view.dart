@@ -152,10 +152,11 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       // else
       //   return Container();
       case 'licenseCategory':
-        map[name.toCamelCase] = userData[name.toCamelCase] ?? state.licenseCategories.first;
+        map[name.toCamelCase] =
+            userData[name.toCamelCase] ?? (state.licenseCategories.isEmpty ? null : state.licenseCategories.first);
         return MyDropdownField(
           options: state.licenseCategories,
-          value: map[name.toCamelCase] ?? userData[name.toCamelCase] ?? state.licenseCategories.first,
+          value: map[name.toCamelCase],
           onChanged: (value) {
             map[name.toCamelCase] = value;
             setState(() {});

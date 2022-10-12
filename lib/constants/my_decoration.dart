@@ -71,8 +71,20 @@ class MyDecoration {
     );
   }
 
+  static BoxDecoration bottomButtonShadow() {
+    return BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Color.fromARGB(255, 255, 255, 255),
+          blurRadius: 15,
+          offset: Offset(10, 50),
+          spreadRadius: 60,
+        ),
+      ],
+    );
+  }
+
   static String formatDate(DateTime? date) => date == null ? '' : DateFormat('dd-MM-yyyy').format(date);
   static String formatTime(DateTime? date) => date == null ? '' : DateFormat('hh:mm:ss a').format(date);
   static String formatDateTime(DateTime? date) => date == null ? '' : DateFormat.yMMMEd().format(date);
-  
 }

@@ -98,10 +98,18 @@ class _GeofencesListState extends State<GeofencesList> {
                     child: InputChip(
                       selected: filterType == e,
                       backgroundColor: Colors.grey.shade200,
-                      selectedColor: context.theme.primaryColor.withOpacity(0.2),
+                      selectedColor: context.theme.primaryColor.withOpacity(1),
                       // elevation: 5,
                       onPressed: setFilter,
-                      label: Text(e.name.replaceAll('_', ' ').capitalize!),
+                      checkmarkColor: filterType == e ? Colors.white : Colors.grey,
+
+                      label: Text(
+                        e.name.replaceAll('_', ' ').capitalize!,
+                        style: TextStyle(
+                          fontSize: 15.h,
+                          color: filterType == e ? Colors.white : Colors.grey.shade700,
+                        ),
+                      ),
                     ),
                   ),
                 )

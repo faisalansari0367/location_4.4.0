@@ -27,7 +27,7 @@ class _AddListState extends State<AddList> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Add other persons names',
+            'Add visitors',
             style: context.textTheme.bodyMedium,
           ),
           Gap(5.h),

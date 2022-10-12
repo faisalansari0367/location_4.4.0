@@ -107,6 +107,8 @@ class UserData {
     return result.first;
   }
 
+  String get fullName => '$firstName $lastName';
+
   UserData.fromJson(Map<String, dynamic> json) {
     allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
     status = getStatus(json['status']);

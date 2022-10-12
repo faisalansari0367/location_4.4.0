@@ -28,6 +28,8 @@ class ApiRepo implements Api {
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box);
     _userRepo = UserRepoImpl(client: _client, box: _box);
+
+    _authRepo.updateMe(user: User(), isUpdate: false);
     // _localesApi = LocalesRepo();
     // await _localesApi.initLocale();
   }
@@ -67,8 +69,8 @@ class ApiRepo implements Api {
   Future<ApiResult<RoleDetailsModel>> getFields(String role) => _userRepo.getFields(role);
 
   @override
-  Future<ApiResult<User>> updateMe({required User user}) async {
-    return await _authRepo.updateMe(user: user);
+  Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
+    return await _authRepo.updateMe(user: user, isUpdate: isUpdate);
   }
 
   // @override
@@ -196,10 +198,10 @@ class ApiRepo implements Api {
   @override
   Stream<List<LogbookEntry>> get logbookRecordsStream => _logRecordsRepo.logbookRecordsStream;
 
-  @override
-  Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId) {
-    return _logRecordsRepo.updateLogRecord(logId, geofenceId);
-  }
+  // @override
+  // Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId) {
+  //   return _logRecordsRepo.updateLogRecord(logId, geofenceId);
+  // }
 
   @override
   Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form) {
@@ -219,5 +221,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<User>> updateStatus({required UserData userData}) {
     return _authRepo.updateStatus(userData: userData);
+  }
+
+  @override
+  LogbookEntry? getLogRecord(String geofenceId) {
+    return _logRecordsRepo.getLogRecord(geofenceId);
   }
 }

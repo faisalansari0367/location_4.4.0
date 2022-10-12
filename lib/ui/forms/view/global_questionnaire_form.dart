@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/forms/cubit/forms_cubit_cubit.dart';
 import 'package:background_location/ui/forms/widget/add_list.dart';
 import 'package:background_location/ui/forms/widget/form_card.dart';
+import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
+import 'package:background_location/widgets/dialogs/no_signature_found.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:background_location/widgets/text_fields/time_field.dart';
@@ -14,10 +18,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import '../../../widgets/dialogs/dialog_service.dart';
 import '../models/global_questionnaire_form_model.dart';
 
 class GlobalQuestionnaireForm extends StatefulWidget {
-  const GlobalQuestionnaireForm({Key? key}) : super(key: key);
+  final PolygonModel polygonModel;
+  const GlobalQuestionnaireForm({Key? key, required this.polygonModel}) : super(key: key);
 
   @override
   State<GlobalQuestionnaireForm> createState() => _GlobalQuestionnaireFormState();
@@ -27,71 +33,119 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
   final model = GlobalQuestionnaireFormModel();
 
   List<String> names = [];
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        title: Text(Strings.declaration),
-        elevation: 3.0,
-      ),
-      body: SingleChildScrollView(
-        padding: kPadding,
-        child: AutoSpacing(
-          children: [
-            _card(model.q1),
-            _card(model.q2),
-            _card(model.q3),
-            _card(model.q4),
-            // _card(model.q5),
-            _addList(model.q5),
-            MyDropdownField(
-              onChanged: (s) {},
-              hintText: 'Risk Rating',
-              value: 'Low',
-              options: ['Low', 'Medium', 'High'],
-            ),
-            MyDateField(label: 'Expected departure date'),
-            MyTimeField(label: 'Expected departure time'),
-            SignatureWidget(
-              signature: context.read<Api>().getUserData()?.signature,
-            ),
+    // print(context.read<Api>().getUserData()?.toJson());
 
-            Container(
-              decoration: MyDecoration.decoration(),
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: CheckboxListTile(
-                title: Text(model.selfDeclaration.question),
-                value: model.selfDeclaration.value ?? false,
-                onChanged: (s) {
-                  setState(() {
-                    model.selfDeclaration.value = s;
-                  });
-                },
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) => Scaffold(
+        appBar: MyAppBar(
+          title: Text(Strings.declaration),
+          elevation: 3.0,
+        ),
+        body: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: kPadding,
+            child: AutoSpacing(
+              children: [
+                _card(model.q1),
+                _card(model.q2),
+                _card(model.q3),
+                _card(model.q4),
+                // _card(model.q5),
+                _addList(model.q5),
+                MyDropdownField(
+                  onChanged: (s) {
+                    model.riskRating.value = s;
+                    setState(() {});
+                  },
+                  hintText: model.riskRating.question,
+                  value: model.riskRating.value,
+                  options: ['Low', 'Medium', 'High'],
+                ),
+                MyDateField(
+                  label: model.expectedDepartureDate.question,
+                  date: model.expectedDepartureDate.value,
+                  onChanged: (s) {
+                    model.expectedDepartureDate.value = s;
+                    setState(() {});
+                  },
+                ),
+                MyTimeField(
+                  label: model.expectedDepartureTime.question,
+                  date: model.expectedDepartureTime.value,
+                  onChanged: (s) {
+                    model.expectedDepartureTime.value = s;
+                    setState(() {});
+                  },
+                ),
+                SignatureWidget(
+                  signature: context.read<Api>().getUserData()?.signature,
+                  onChanged: (s) {
+                    model.signature.value = s;
+                    setState(() {});
+                  },
+                ),
+
+                Container(
+                  decoration: MyDecoration.decoration(),
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  child: CheckboxListTile(
+                    title: Text(model.selfDeclaration.question),
+                    value: model.selfDeclaration.value ?? false,
+                    onChanged: (s) {
+                      setState(() {
+                        model.selfDeclaration.value = s;
+                      });
+                    },
+                  ),
+                ),
+                MyElevatedButton(
+                  text: 'Submit',
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    if (model.signature.value == null) {
+                      // DialogService.error('Please sign the declaration');
+                      DialogService.showDialog(
+                        child: NoSignatureFound(
+                          message: 'Please sign the declaration',
+                          buttonText: 'OK',
+                          onCancel: Get.back,
+                        ),
+                      );
+                      return;
+                    }
+                    final data = model.toJson();
+                    if (data.where((e) => e['value'] == null).isNotEmpty) {
+                      DialogService.error('Please fill all the fields');
+                      return;
+                    }
+                    if (model.selfDeclaration.value == false || model.selfDeclaration.value == null) {
+                      DialogService.error('Please accept the self declaration');
+                      return;
+                    } else if (model.q5.value == true && names.isEmpty) {
+                      DialogService.error('Please add the visitors name');
+                      return;
+                    } else if (model.q5.value == 'yes') {
+                      model.q5.value = names;
+                    }
+
+                    await submitFormData(jsonEncode(model.toJson()));
+                  },
+                ),
+              ],
             ),
-            // Container(
-            //   decoration: MyDecoration.decoration(),
-            //   padding: EdgeInsets.symmetric(
-            //     // horizontal: kPadding.left.w,
-            //     vertical: kPadding.top.h,
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       //
-
-            //       // declaration
-
-            //       // Expanded(
-            //       //   child: Text(
-            //       //     'I declare that the animals/products I am transporting are accompanied by correct movement documentation.',
-            //       //     // style: context.textTheme.headline6,
-            //       //   ),
-            //       // ),
-            //     ],
-            //   ),
-            // ),
-          ],
+          ),
         ),
       ),
     );
@@ -107,22 +161,12 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
         child: Column(
           children: [
             Container(
-              decoration: MyDecoration.decoration(),
+              // decoration: MyDecoration.decoration(),
               child: QuestionCard(
                 question: data.question,
                 selectedValue: data.value,
                 onChanged: (s) async {
                   if (s.toLowerCase() == 'yes') {
-                    // final result = await DialogService.showDialog(
-                    //   child: DialogLayout(
-                    //     // insetPadding: kPadding,
-                    //     child: AddList(),
-                    //   ),
-                    // );
-
-                    // if (result != null) {
-                    // names = result;
-                    // }
                   } else {
                     names = [];
                     setState(() {});
@@ -137,26 +181,26 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
               AddList(
                 onChanged: (value) => names = value,
               ),
-              // ListView.separated(
-              //   primary: false,
-              //   padding: EdgeInsets.symmetric(horizontal: 20.w),
-              //   separatorBuilder: (context, index) => const Divider(),
-              //   shrinkWrap: true,
-              //   itemCount: names.length,
-              //   itemBuilder: (context, index) {
-              //     return Text(
-              //       names[index],
-              //       style: TextStyle(
-              //         // fontSize: 17.sp,
-              //         fontWeight: FontWeight.w500,
-              //       ),
-              //     );
-              //   },
-              // ),
             ]
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> submitFormData(String json) async {
+    final result = await context.read<Api>().udpateForm(widget.polygonModel.id!, json);
+    result.when(
+      success: (data) {
+        DialogService.success(
+          'Form Submitted',
+          onCancel: () {
+            Get.back();
+            Get.back();
+          },
+        );
+      },
+      failure: (e) => DialogService.failure(error: e),
     );
   }
 

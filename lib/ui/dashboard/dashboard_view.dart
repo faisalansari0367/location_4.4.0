@@ -2,7 +2,6 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:background_location/ui/cvd_form/view/cvd_from_page.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
-import 'package:background_location/ui/forms/view/global_questionnaire_form.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
@@ -23,135 +22,137 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     context.read<MapsRepo>().logBookEntry(
-      //           context.read<Api>( ).getUserData()!.pic!,
-      //           null,
-      //           '35',
-      //         );
-      //   },
-      // ),
-      appBar: const MyAppBar(
-        showBackButton: false,
-        centreTitle: true,
-        // title: _logo(),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          // alignment: Alignment.center,
-          children: [
-            Gap(10.h),
-            _logo(),
-            // Positioned(
-            //   child: Image.asset(
-            //     'assets/icons/BIO_shield1 (1).png',
-            //     height: 26.height,
-            //   ),
-            // ),
-            GridView(
-              shrinkWrap: true,
-              primary: false,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: kPadding,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: kPadding.left.h,
-                crossAxisSpacing: kPadding.left.w,
-              ),
-              children: [
-                DashboardCard(
-                  text: Strings.visitorLogBook.toUpperCase(),
-                  iconData: Icons.book,
-                  onTap: () => Get.to(() => const LogbookPage()),
+    return LayoutBuilder(
+      builder: (context, constraints) => Scaffold(
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     context.read<MapsRepo>().logBookEntry(
+        //           context.read<Api>( ).getUserData()!.pic!,
+        //           null,
+        //           '35',
+        //         );
+        //   },
+        // ),
+        appBar: const MyAppBar(
+          showBackButton: false,
+          centreTitle: true,
+          // title: _logo(),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            // alignment: Alignment.center,
+            children: [
+              Gap(10.h),
+              _logo(),
+              // Positioned(
+              //   child: Image.asset(
+              //     'assets/icons/BIO_shield1 (1).png',
+              //     height: 26.height,
+              //   ),
+              // ),
+              GridView(
+                shrinkWrap: true,
+                primary: false,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: kPadding,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: kPadding.left.h,
+                  crossAxisSpacing: kPadding.left.w,
                 ),
-                DashboardCard(
-                  text: Strings.geofences.toUpperCase(),
-                  iconData: Icons.fence,
-                  onTap: () => Get.to(() => const MapsPage()),
-                ),
-                DashboardCard(
-                  text: Strings.settings.toUpperCase(),
-                  iconData: Icons.settings,
-                  onTap: () => Get.to(
-                    // () => SettingsPage(
-                    //   showBackbutton: true,
-                    // ),
-                    const SelectRolePage(
-                      showBackArrow: true,
+                children: [
+                  DashboardCard(
+                    text: Strings.visitorLogBook.toUpperCase(),
+                    iconData: Icons.book,
+                    onTap: () => Get.to(() => const LogbookPage()),
+                  ),
+                  DashboardCard(
+                    text: Strings.geofences.toUpperCase(),
+                    iconData: Icons.fence,
+                    onTap: () => Get.to(() => const MapsPage()),
+                  ),
+                  DashboardCard(
+                    text: Strings.settings.toUpperCase(),
+                    iconData: Icons.settings,
+                    onTap: () => Get.to(
+                      // () => SettingsPage(
+                      //   showBackbutton: true,
+                      // ),
+                      const SelectRolePage(
+                        showBackArrow: true,
+                      ),
                     ),
                   ),
-                ),
-                DashboardCard(
-                  text: Strings.envds,
-                  iconData: Icons.person,
-                  onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
-                ),
-                // DashboardCard(
-                //   text: Strings.selectYourRole,
-                //   iconData: Icons.person,
-                //   onTap: () => Get.to(() => const SelectRolesRegistrationPage()),
-                // ),
-                DashboardCard(
-                  text: Strings.links.toUpperCase(),
-                  iconData: Icons.link,
-                  onTap: () => Get.to(() => const LinksPage()),
-                ),
-                DashboardCard(
-                  text: Strings.visitorCheckIn.toUpperCase(),
-                  iconData: Icons.token_rounded,
-                  onTap: () => Get.to(() => const VisitorCheckInPage()),
-                ),
-                DashboardCard(
-                  text: 'eDEC Forms',
-                  iconData: Icons.format_list_bulleted_sharp,
-                  onTap: () {
-                    DialogService.showDialog(child: const ComingSoonDialog());
-                  },
-                  // onTap: () => Get.to(() => VisitorCheckInPage()),
-                ),
-                DashboardCard(
-                  text: 'CVD FORM',
-                  iconData: Icons.format_align_justify_rounded,
-                  onTap: () => Get.to(() => const CvdFormPage()),
-                ),
-                DashboardCard(
-                  text: 'WORK SAFETY',
-                  iconData: Icons.work_outline,
-                  onTap: () {
-                    DialogService.showDialog(child: const ComingSoonDialog());
-                  },
-                ),
-                // DashboardCard(
-                //   text: 'Global Form',
-                //   iconData: Icons.work_outline,
-                //   onTap: () {
-                //     // DialogService.showDialog(child: const ComingSoonDialog());
-                //     Get.to(() => GlobalQuestionnaireForm());
-                //   },
-                // ),
-                DashboardCard(
-                  text: 'EMERGENCY WARNING!',
-                  // iconData: LineIcons.info,
-                  // color: Colors.yellow,
-                  // iconData: Icons.info,
-                  // imagecolor: null,
-                  image: 'assets/icons/warning_icon.png',
-                  onTap: () {
-                    _warningDialog();
-                  },
-                ),
-                // DashboardCard(
-                //   text: 'FORMS',
-                //   iconData: Icons.work_outline,
-                //   onTap: () {
-                //     Get.to(() => FormsPage());
-                //   },
-                // ),
-              ],
-            ),
-          ],
+                  DashboardCard(
+                    text: Strings.envds,
+                    iconData: Icons.person,
+                    onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
+                  ),
+                  // DashboardCard(
+                  //   text: Strings.selectYourRole,
+                  //   iconData: Icons.person,
+                  //   onTap: () => Get.to(() => const SelectRolesRegistrationPage()),
+                  // ),
+                  DashboardCard(
+                    text: Strings.links.toUpperCase(),
+                    iconData: Icons.link,
+                    onTap: () => Get.to(() => const LinksPage()),
+                  ),
+                  DashboardCard(
+                    text: Strings.visitorCheckIn.toUpperCase(),
+                    iconData: Icons.token_rounded,
+                    onTap: () => Get.to(() => const VisitorCheckInPage()),
+                  ),
+                  DashboardCard(
+                    text: 'eDEC Forms',
+                    iconData: Icons.format_list_bulleted_sharp,
+                    onTap: () {
+                      DialogService.showDialog(child: const ComingSoonDialog());
+                    },
+                    // onTap: () => Get.to(() => VisitorCheckInPage()),
+                  ),
+                  DashboardCard(
+                    text: 'CVD FORM',
+                    iconData: Icons.format_align_justify_rounded,
+                    onTap: () => Get.to(() => const CvdFormPage()),
+                  ),
+                  DashboardCard(
+                    text: 'WORK SAFETY',
+                    iconData: Icons.work_outline,
+                    onTap: () {
+                      DialogService.showDialog(child: const ComingSoonDialog());
+                    },
+                  ),
+                  // DashboardCard(
+                  //   text: 'Global Form',
+                  //   iconData: Icons.work_outline,
+                  //   onTap: () {
+                  //     // DialogService.showDialog(child: const ComingSoonDialog());
+                  //     Get.to(() => GlobalQuestionnaireForm());
+                  //   },
+                  // ),
+                  DashboardCard(
+                    text: 'EMERGENCY WARNING!',
+                    // iconData: LineIcons.info,
+                    // color: Colors.yellow,
+                    // iconData: Icons.info,
+                    // imagecolor: null,
+                    image: 'assets/icons/warning_icon.png',
+                    onTap: () {
+                      _warningDialog();
+                    },
+                  ),
+                  // DashboardCard(
+                  //   text: 'FORMS',
+                  //   iconData: Icons.work_outline,
+                  //   onTap: () {
+                  //     Get.to(() => FormsPage());
+                  //   },
+                  // ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

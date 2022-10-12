@@ -64,6 +64,9 @@ class PolygonModel {
     // if (coordinates is List && coordinates.isNotEmpty) {
     //   polygons = coordinates[0];
     // }
+    if (!(json['createdBy'] is Map)) {
+      print(json['createdBy']);
+    }
 
     return PolygonModel(
       createdBy: UserData.fromJson(Map<String, dynamic>.from(json['createdBy'])),
@@ -93,6 +96,7 @@ class PolygonModel {
       name: json['name'],
       updatedAt: parseDateTime(json['updatedAt']),
       createdAt: parseDateTime(json['createdAt']),
+      pic: json['pic'],
     );
   }
 

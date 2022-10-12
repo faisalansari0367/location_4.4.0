@@ -9,12 +9,12 @@ import 'package:get/get.dart';
 import '../../../widgets/dialogs/dialog_service.dart';
 
 class RolesRegistrationCubit extends BaseModel {
+  final bool isFromRegistration;
   var state = SelectRolesRegistrationState(
-    selectedRoles: {},
     rolesList: [],
   );
 
-  RolesRegistrationCubit(BuildContext context) : super(context) {
+  RolesRegistrationCubit(BuildContext context, {this.isFromRegistration = true}) : super(context) {
     getRoles();
   }
 
@@ -41,24 +41,30 @@ class RolesRegistrationCubit extends BaseModel {
   Future<void> getRoles() async {
     setLoading(true);
     try {
-      // final result = await (baseState.isConnected ? apiService.getUserRoles() : localApi.getUserRoles());
-      // apiService.userRolesStream.listen((event) {
-      //   emit(state.copyWith(isLoading: false, roles: event));
-      // });
-      // result.listen((event) {
-      //   emit(state.copyWith(isLoading: false, roles: event));
-      // }, onError: (s) {
-      //   DialogService.showDialog(child: ErrorDialog(message: s.toString(), onTap: Get.back));
-      // });
       final result = await apiService.getUserRoles();
       setLoading(false);
       result.when(
-        success: (data) => emit(state.copyWith(rolesList: data.map((e) => SelectRoleModel(role: e.role)).toList())),
+        success: (data) {
+          emit(state.copyWith(rolesList: data.map((e) => SelectRoleModel(role: e.role)).toList()));
+          _fillRoles();
+        },
         failure: (error) => DialogService.failure(error: error),
       );
     } catch (e) {
       setLoading(false);
     }
+  }
+
+  void _fillRoles() {
+    final _allowedRoles = api.getUserData()?.allowedRoles ?? [];
+    if (_allowedRoles.isEmpty) return;
+    for (final role in state.rolesList) {
+      final roleIsSelected = _allowedRoles.contains(role.role);
+      if (roleIsSelected) {
+        role.isSelected = true;
+      }
+    }
+    notifyListeners();
   }
 
   // void selectRole(Role role) {

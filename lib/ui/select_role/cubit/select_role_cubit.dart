@@ -83,14 +83,14 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
   }
 
   void _onSuccess(List<UserRoles> data) {
-    final userData = api.getUserData();
-    final allowedRoles = userData?.allowedRoles ?? [];
-    final roles = data.where((element) => allowedRoles.contains(element.role)).map((e) => e.role).toList();
-    roles.add('International Traveller');
+    // final userData = api.getUserData();
+    // final allowedRoles = userData?.allowedRoles ?? [];
+    // final roles = data.where((element) => allowedRoles.contains(element.role)).map((e) => e.role).toList();
+    // roles.add('International Traveller');
     emit(
       state.copyWith(
         isLoading: false,
-        roles: data.where((element) => roles.contains(element.role)).toList(),
+        roles: data,
       ),
     );
   }

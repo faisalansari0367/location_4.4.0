@@ -20,85 +20,15 @@ class CreatePDf {
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Text('Log Records', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
-                // pw.PdfLogo(),
-                // pw.Image(),
               ],
             ),
           ),
           pw.Table.fromTextArray(
             headers: headers,
-            // ),
             data: rows,
-            // data: [
-            //   for (var row in rows)
-            //           pw.TableRow(
-            //             children: row
-            //                 .map(
-            //                   (e) => pw.Padding(
-            //                     padding: pw.EdgeInsets.all(4),
-            //                     child: pw.Text(e),
-            //                   ),
-            //                 )
-            //                 .toList(),
-            //           )
-            // ],
           ),
         ],
       ),
-      // pw.Page(
-
-      //   pageFormat: PdfPageFormat.a4,
-
-      //   build: (context) {
-      //     return pw.Column(
-      //       children: [
-      //         pw.Text(
-      //           'Log Records',
-      //           style: pw.TextStyle(
-      //             fontSize: 20,
-      //             fontWeight: pw.FontWeight.bold,
-      //           ),
-      //         ),
-      //         pw.SizedBox(height: 20),
-      //         pw.Expanded(
-      //           child: pw.Table(
-      //             border: pw.TableBorder.all(),
-      //             children: [
-      //               pw.TableRow(
-      //                 children: headers
-      //                     .map(
-      //                       (e) => pw.Padding(
-      //                         padding: pw.EdgeInsets.all(4),
-      //                         child: pw.Text(
-      //                           e,
-      //                           style: pw.TextStyle(
-      //                             fontSize: 14,
-      //                             fontWeight: pw.FontWeight.bold,
-      //                           ),
-      //                         ),
-      //                       ),
-      //                     )
-      //                     .toList(),
-      //               ),
-      //               for (var row in rows)
-      //                 pw.TableRow(
-      //                   children: row
-      //                       .map(
-      //                         (e) => pw.Padding(
-      //                           padding: pw.EdgeInsets.all(4),
-      //                           child: pw.Text(e),
-      //                         ),
-      //                       )
-      //                       .toList(),
-      //                 )
-      //             ],
-      //             // child: Text('Hello World'),
-      //           ),
-      //         ),
-      // ],
-      // );
-      // },
-      // ),
     );
 
     try {
@@ -110,4 +40,9 @@ class CreatePDf {
       log(e.toString());
     }
   }
+
+
+
+
+  
 }

@@ -28,6 +28,27 @@ class GlobalQuestionnaireFormModel {
   final q4 = QuestionData(question: 'Have any been overseas in the last 7 days?');
   final q5 = QuestionData(question: 'Are other people traveling onto the property with you?');
   final selfDeclaration = QuestionData(
-      question:
-          'I declare that the animals/products I am transporting are accompanied by correct movement documentation.');
+    question:
+        'I declare that the animals/products I am transporting are accompanied by correct movement documentation.',
+  );
+  final riskRating = QuestionData(question: 'Risk Rating', value: 'Low');
+  final expectedDepartureDate =
+      QuestionData(question: 'Expected departure date', value: DateTime.now().toIso8601String());
+  final expectedDepartureTime =
+      QuestionData(question: 'Expected departure time', value: DateTime.now().toIso8601String());
+  final signature = QuestionData(question: 'Signature');
+
+  List<Map<String, dynamic>> toJson() {
+    return [
+      q1.toJson(),
+      q2.toJson(),
+      q3.toJson(),
+      q4.toJson(),
+      q5.toJson(),
+      riskRating.toJson(),
+      expectedDepartureDate.toJson(),
+      expectedDepartureTime.toJson(),
+      signature.toJson(),
+    ];
+  }
 }

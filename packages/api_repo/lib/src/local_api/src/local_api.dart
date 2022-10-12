@@ -142,7 +142,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<User>> updateMe({required User user}) async {
+  Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
     // final userData = storage.getUserData();
     return ApiResult.success(data: user);
   }
@@ -236,6 +236,11 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<User>> updateStatus({required UserData userData}) {
     // TODO: implement updateStatus
+    throw UnimplementedError();
+  }
+
+  @override
+  LogbookEntry? getLogRecord(String geofenceId) {
     throw UnimplementedError();
   }
 }

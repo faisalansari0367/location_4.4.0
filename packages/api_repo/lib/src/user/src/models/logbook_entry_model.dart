@@ -125,7 +125,7 @@ class LogbookEntry {
     user = json['user'] != null ? UserData.fromJson(Map<String, dynamic>.from(json['user'])) : null;
     geofence = json['geofence'] != null ? Geofence.fromJson(Map<String, dynamic>.from(json['geofence'])) : null;
   }
-  
+
   Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
 
   LogbookEntry.getId(Map<String, dynamic> json) {
@@ -161,7 +161,7 @@ class LogbookEntry {
 
 class LogbookFormField {
   String? field;
-  String? value;
+  dynamic value;
 
   LogbookFormField({this.field, this.value});
 

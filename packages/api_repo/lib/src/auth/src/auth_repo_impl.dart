@@ -74,14 +74,14 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<User>> updateMe({required User user}) async {
+  Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
     try {
-      final result = await client.patch(Endpoints.updateMe, data: user.updateUser());
-      final model = User.fromJson((result.data));
+      final result = await client.patch(Endpoints.updateMe, data: isUpdate ? user.updateUser() : {});
+      final model = User.fromJson(result.data['data']);
       final userData = UserData.fromJson(result.data['data']);
       await Future.wait([
         storage.setUserData(userData),
-        storage.setUser(user.toJson()),
+        storage.setUser(model.toJson()),
       ]);
       // storage.setUserData(userData);
       // storage.setUser(user.toJson());

@@ -35,10 +35,12 @@ class LogbookDetails extends StatelessWidget {
     for (final item in form) {
       children.add(getWidget(item));
       // children.add(Gap(10.h));
-      children.add(Divider(
-        color: Colors.grey.shade300,
-        thickness: 1,
-      ),);
+      children.add(
+        Divider(
+          color: Colors.grey.shade300,
+          thickness: 1,
+        ),
+      );
     }
     return children;
   }
@@ -123,14 +125,19 @@ class LogbookDetails extends StatelessWidget {
         return SignatureWidget(
           signature: field.value,
         );
-      case 'expected departure time':
+
       case 'day/date/time':
         return _qna(field.field!, MyDecoration.formatDateTime(DateTime.tryParse(field.value!)));
       case 'time':
+      case 'expected departure time':
         return _qna(field.field!, MyDecoration.formatTime(DateTime.tryParse(field.value!)));
       case 'date':
+      case 'expected departure date':
         return _qna(field.field!, MyDecoration.formatDate(DateTime.tryParse(field.value!)));
       default:
+        if (field.value is List) {
+          return _qna(field.field!, field.value.join(', '));
+        }
         return _qna(field.field!, field.value!);
     }
   }

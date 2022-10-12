@@ -57,7 +57,7 @@ class _MyDropdownFieldState extends State<MyDropdownField> {
           maxChildSize: 0.9,
           expand: false,
           minChildSize: 0.2,
-          initialChildSize: 0.7,
+          initialChildSize: 0.5,
           builder: (context, scrollController) {
             return Options(
               controller: scrollController,

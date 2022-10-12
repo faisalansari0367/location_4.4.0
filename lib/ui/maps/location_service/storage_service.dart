@@ -67,9 +67,10 @@ class MapsStorageService implements MapsRepo {
   }
 
   @override
-  Stream<List<PolygonModel>> get polygonStream => _box.watch(key: _Keys._getAllPolygonKey).map((map) {
-        final data =
-            (map.value as List<dynamic>).map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e))).toList();
+  Stream<List<PolygonModel>> get polygonStream => _box.watch(key: _Keys._getAllPolygonKey).map((event) {
+        final data = (event.value as List<dynamic>)
+            .map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e)))
+            .toList();
         return data;
       });
 
