@@ -33,6 +33,7 @@ class _EditableTableState extends State<EditableTable> {
       borderColor: Colors.grey.shade300,
       saveIconColor: context.theme.primaryColor.withOpacity(0.8),
       onSubmitted: print,
+      
       onRowSaved: (value) {
         rows.add(value);
         print(rows);

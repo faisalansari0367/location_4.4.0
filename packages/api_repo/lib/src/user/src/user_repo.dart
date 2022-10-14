@@ -11,6 +11,8 @@ import 'models/models.dart';
 abstract class UserRepo {
   Future<ApiResult<List<UserRoles>>> getUserRoles();
   Future<ApiResult<RoleDetailsModel>> getFields(String role);
+  Future<ApiResult<RoleDetailsModel>> getRoles();
+
   Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data);
   Future<ApiResult<Map<String, dynamic>>> getRoleData(String role);
   // Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
@@ -18,6 +20,7 @@ abstract class UserRepo {
   Future<ApiResult<List<String>>> getFormQuestions();
   Future<ApiResult<UserSpecies>> getUserSpecies();
   Future<ApiResult<UserFormsData>> getUserForms();
+
   Future<ApiResult<List<String>>> getLicenceCategories();
   Future<void> getCvdPDf(Map<String, dynamic> data);
   Future<dynamic> getQrCode(String data);
@@ -181,6 +184,17 @@ class UserRepoImpl extends UserRepo {
             ),
           );
       return ApiResult.success(data: result.data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<RoleDetailsModel>> getRoles() async {
+    try {
+      final result = await client.get(Endpoints.roles);
+      final model = RoleDetailsModel.fromMap(result.data);
+      return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

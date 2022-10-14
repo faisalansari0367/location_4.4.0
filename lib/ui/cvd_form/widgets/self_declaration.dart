@@ -27,6 +27,8 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
 
   @override
   void initState() {
+    orgController = TextEditingController(text: context.read<Api>().getUserData()?.company);
+
     nameController = TextEditingController(text: getName());
     _init();
     super.initState();
@@ -41,144 +43,146 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
+      // stream: null,
+      builder: (context, constraints) {
+        return Column(
+          children: [
+            // Gap(20.h),
+            MyTextField(
+              hintText: 'Name',
+              controller: nameController,
 
-        // stream: null,
-        builder: (context, constraints) {
-      return Column(
-        children: [
-          // Gap(20.h),
-          MyTextField(
-            hintText: 'Name',
-            controller: nameController,
+              // value: getName(),
 
-            // value: getName(),
+              textCapitalization: TextCapitalization.characters,
+              onChanged: (s) => setState(() {
+                name = s;
+              }),
+            ),
+            Gap(10.h),
+            MyTextField(
+              hintText: 'Organization',
+              controller: orgController,
+              textCapitalization: TextCapitalization.characters,
+              onChanged: (s) {
+                setState(() {
+                  org = s;
+                });
+              },
+            ),
+            Gap(30.h),
 
-            textCapitalization: TextCapitalization.characters,
-            onChanged: (s) => setState(() {
-              name = s;
-            }),
-          ),
-          Gap(10.h),
-          MyTextField(
-            hintText: 'Organization',
-            textCapitalization: TextCapitalization.characters,
-            onChanged: (s) {
-              setState(() {
-                org = s;
-              });
-            },
-          ),
-          Gap(30.h),
-
-          Row(
-            children: [
-              const Icon(Icons.info, color: Colors.red),
-              Gap(5.w),
-              Text(
-                'Please read below points carefully',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 16.w,
+            Row(
+              children: [
+                const Icon(Icons.info, color: Colors.red),
+                Gap(5.w),
+                Text(
+                  'Please read below points carefully',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 16.w,
+                  ),
+                ),
+              ],
+            ),
+            Gap(20.h),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: RichText(
+                text: TextSpan(
+                  style: style,
+                  text: 'I ',
+                  children: [
+                    TextSpan(text: nameController.text.isEmpty ? '____' : nameController.text),
+                    const TextSpan(text: ' of '),
+                    TextSpan(text: orgController.text.isEmpty ? '____' : orgController.text),
+                    const TextSpan(text: ' declare that:'),
+                  ],
                 ),
               ),
-            ],
-          ),
-          Gap(20.h),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: RichText(
-              text: TextSpan(
-                style: style,
-                text: 'I ',
-                children: [
-                  TextSpan(text: nameController.text.isEmpty ? '____' : nameController.text),
-                  const TextSpan(text: ' of '),
-                  TextSpan(text: org.isEmpty ? '____' : org),
-                  const TextSpan(text: ' declare that:'),
-                ],
-              ),
             ),
-          ),
-          Gap(10.h),
-          AutoSpacing(
-            // removeLast: true,
-            spacing: const Divider(),
-            // startSpacing: Divider(),
-            children: [
-              ...data.map((e) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${data.indexOf(e) + 1}. ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        // color: Colors.grey,
-                        fontSize: 16.w,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        e.trim(),
+            Gap(10.h),
+            AutoSpacing(
+              // removeLast: true,
+              spacing: const Divider(),
+              // startSpacing: Divider(),
+              children: [
+                ...data.map((e) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${data.indexOf(e) + 1}. ',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          // color: Colors.grey,
                           fontSize: 16.w,
                         ),
                       ),
-                    ),
-                  ],
-                );
-              }).toList(),
-            ],
-          ),
-          Gap(20.h),
-          SignatureWidget(
-            onChanged: (s) {
-              signature = s;
-              setState(() {});
-            },
-          ),
-          Gap(20.h),
+                      Expanded(
+                        child: Text(
+                          e.trim(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.w,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ],
+            ),
+            Gap(20.h),
+            SignatureWidget(
+              signature: context.read<CvdCubit>().signature,
+              onChanged: (s) {
+                signature = s;
+                setState(() {});
+              },
+            ),
+            Gap(20.h),
 
-          MyDateField(
-            label: 'Date',
-            date: DateTime.now().toIso8601String(),
-          ),
-          // if (signature != null)
-          //   Positioned(
-          //     right: 0,
-          //     bottom: 0,
-          //     child: Padding(
-          //       padding: EdgeInsets.all(10),
-          //       child: Text(
-          //         'Date: ${MyDecoration.formatDate(DateTime.now())}',
-          //         style: TextStyle(
-          //           fontWeight: FontWeight.bold,
-          //           fontSize: 18.w,
-          //         ),
-          //       ),
-          //     ),
-          //   )
+            MyDateField(
+              label: 'Date',
+              date: DateTime.now().toIso8601String(),
+            ),
+            // if (signature != null)
+            //   Positioned(
+            //     right: 0,
+            //     bottom: 0,
+            //     child: Padding(
+            //       padding: EdgeInsets.all(10),
+            //       child: Text(
+            //         'Date: ${MyDecoration.formatDate(DateTime.now())}',
+            //         style: TextStyle(
+            //           fontWeight: FontWeight.bold,
+            //           fontSize: 18.w,
+            //         ),
+            //       ),
+            //     ),
+            //   )
 
-          Gap(20.h),
-          MyElevatedButton(
-            text: 'Submit',
-            onPressed: () async {
-              final cubit = context.read<CvdCubit>();
-              final data = {
-                'signature': signature,
-                'date': DateTime.now().toIso8601String(),
-              };
-              cubit.addFormData(data);
-              cubit.getApiData();
-              print(cubit.state.data);
-            },
-          ),
-          Gap(50.h),
-        ],
-      );
-    },);
+            Gap(20.h),
+            MyElevatedButton(
+              text: 'Submit',
+              onPressed: () async {
+                final cubit = context.read<CvdCubit>();
+
+                // final data = {
+                //   'signature': signature,
+                //   'date': DateTime.now().toIso8601String(),
+                // };
+                cubit.signature = signature;
+                cubit.getApiData();
+              },
+            ),
+            Gap(50.h),
+          ],
+        );
+      },
+    );
   }
 
   String getName() {
@@ -186,7 +190,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
     var data = '';
     if (userData?.firstName == null && userData?.lastName == null) {
     } else {
-      data = '${userData!.firstName!} ${userData.lastName!}';
+      data = userData!.fullName;
     }
     return data;
   }

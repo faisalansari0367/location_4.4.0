@@ -1,62 +1,65 @@
 {
     "field": "Part A – Product Integrity",
     "data": {
-        "question1": {
+        "sourceCheck": {
             "field": "commoditry source (tick one)",
+            "value": null,
             "options": [
                 {
-                    "id": 1,
-                    "value": "Single Source, Single Storage (eg off the header)"
+                    "value": 1,
+                    "label": "Single Source, Single Storage (eg off the header)"
                 },
                 {
-                    "id": 2,
-                    "value": "Single Source, Comingled Storage (eg farm silo)"
+                    "value": 2,
+                    "label": "Single Source, Comingled Storage (eg farm silo)"
                 },
                 {
-                    "id": 3,
-                    "value": "Multi-Vendor Storage (eg grain depot, cotton gin seed storage)"
+                    "value": 3,
+                    "label": "Multi-Vendor Storage (eg grain depot, cotton gin seed storage)"
                 },
                 {
-                    "id": 4,
-                    "value": "Factory Developed Product (eg ethanol plant, gluten plant)"
+                    "value": 4,
+                    "label": "Factory Developed Product (eg ethanol plant, gluten plant)"
                 }
             ]
         },
-        "question2": {
+        "materialCheck": {
             "field": "Does this commodity contain restricted animal materials (eg meat and bone meal)?",
+            "value": null,
             "options": [
                 {
-                    "id": 1,
-                    "value": "Single Source, Single Storage (eg off the header)"
+                    "value": 1,
+                    "label": "Single Source, Single Storage (eg off the header)"
                 },
                 {
-                    "id": 2,
-                    "value": "Single Source, Comingled Storage (eg farm silo)"
+                    "value": 2,
+                    "label": "Single Source, Comingled Storage (eg farm silo)"
                 },
                 {
-                    "id": 3,
-                    "value": "Multi-Vendor Storage (eg grain depot, cotton gin seed storage)"
+                    "value": 3,
+                    "label": "Multi-Vendor Storage (eg grain depot, cotton gin seed storage)"
                 },
                 {
-                    "id": 4,
-                    "value": "Factory Developed Product (eg ethanol plant, gluten plant)"
+                    "value": 4,
+                    "label": "Factory Developed Product (eg ethanol plant, gluten plant)"
                 }
             ]
         },
-        "question3": {
+        "gmoCheck": {
             "field": "With respect to Genetically Modified Organisms, this commodity: (tick one)",
+            "value": null,
             "options": [
                 {
-                    "id": 1,
-                    "value": "Is non GMO as defined by 99% non GMO"
+                    "value": 1,
+                    "label": "Is non GMO as defined by 99% non GMO"
                 },
                 {
-                    "id": 2,
-                    "value": "Is non GMO as defined by 95% non GMO"
+                    "value": 2,
+                    "label": "Is non GMO as defined by 95% non GMO"
                 },
                 {
-                    "id": 3,
-                    "value": "Contains greater than 5% GMO or content unknown"
+                    "value": 3,
+                    "label": "Contains greater than 5% GMO or content unknown"
                 }
             ]
         }

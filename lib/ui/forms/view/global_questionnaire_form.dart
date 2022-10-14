@@ -10,6 +10,7 @@ import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/no_signature_found.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/text_fields/time_field.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,15 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                 _card(model.q4),
                 // _card(model.q5),
                 _addList(model.q5),
+                MyTextField(
+                  hintText: model.q6.question,
+                  // textCapitalization: TextCapitalization.characters,
+                  inputFormatters: [CapitalizeAllInputFormatter()],
+                  onChanged: (value) {
+                    model.q6.value = value;
+                    setState(() {});
+                  },
+                ),
                 MyDropdownField(
                   onChanged: (s) {
                     model.riskRating.value = s;

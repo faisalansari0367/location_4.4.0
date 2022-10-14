@@ -1,4 +1,6 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:background_location/theme/color_constants.dart';
+import 'package:background_location/ui/admin/pages/visitor_log_book/view/create_pdf.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_radio_button.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
@@ -9,14 +11,24 @@ import 'package:gap/gap.dart';
 import '../../../../../constants/index.dart';
 
 class LogbookDetails extends StatelessWidget {
-  final List<LogbookFormField> form;
-  const LogbookDetails({Key? key, required this.form}) : super(key: key);
+  final LogbookEntry item;
+  const LogbookDetails({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(
+      appBar: MyAppBar(
+        elevation: 5,
         title: Text('Log details'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              CreatePDf.printDeclarationForm(item);
+            },
+            icon: Icon(Icons.picture_as_pdf),
+          ),
+          Gap(20.w),
+        ],
         // showDivider: true,
         // backgroundColor: context.theme.primaryColor,
       ),
@@ -24,7 +36,7 @@ class LogbookDetails extends StatelessWidget {
         padding: kPadding,
         child: Column(
           // children: [for (var item in form) getWidget(item)],
-          children: cardChildren(form),
+          children: cardChildren(item.form),
         ),
       ),
     );
@@ -253,14 +265,15 @@ class LogbookDetails extends StatelessWidget {
               ),
               Gap(5.h),
 
-              // answer text style ̏ ̏ ̏ ̏ ̏ ̏
+             
               Text(
-                answer.trim(),
+                answer.trim().toUpperCase(),
                 style: TextStyle(
-                  color: Colors.grey.shade700,
+                  // color: Colors.grey.shade700,
                   // color: textColor,
                   fontWeight: FontWeight.w600,
                   fontSize: 18.w,
+                  color: answer.toUpperCase() == 'NO' ? Colors.red : kPrimaryColor,
                 ),
               ),
               // Gap(15.h),

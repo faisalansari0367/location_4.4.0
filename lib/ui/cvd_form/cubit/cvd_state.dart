@@ -7,8 +7,10 @@ class CvdState extends Equatable {
   final List<FormStepper> formStepper;
   final Map data;
   final int currentStep;
+  final bool isLoading;
 
   const CvdState({
+    this.isLoading = false,
     this.data = const {},
     this.forms = const [],
     this.formData = const [],
@@ -17,9 +19,10 @@ class CvdState extends Equatable {
   });
 
   @override
-  List<Object> get props => [forms, formData, formStepper, currentStep, data];
+  List<Object> get props => [forms, formData, formStepper, currentStep, data, isLoading];
 
   CvdState copyWith({
+    bool? isLoading,
     List<Forms>? forms,
     List<CvdFormData>? formData,
     List<FormStepper>? formStepper,
@@ -27,6 +30,7 @@ class CvdState extends Equatable {
     int? currentStep,
   }) {
     return CvdState(
+      isLoading: isLoading ?? this.isLoading,
       forms: forms ?? this.forms,
       formData: formData ?? this.formData,
       formStepper: formStepper ?? this.formStepper,

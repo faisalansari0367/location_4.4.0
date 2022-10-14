@@ -26,7 +26,8 @@ class GlobalQuestionnaireFormModel {
       question:
           'Have you taken all reasonable measures to ensure that shoes, clothing and equipment are free from potential weed and disease contaminants:');
   final q4 = QuestionData(question: 'Have any been overseas in the last 7 days?');
-  final q5 = QuestionData(question: 'Are other people traveling onto the property with you?');
+  final q5 = QuestionData(question: 'Are other people travelling onto the property with you?');
+  final q6 = QuestionData(question: 'Rego');
   final selfDeclaration = QuestionData(
     question:
         'I declare that the animals/products I am transporting are accompanied by correct movement documentation.',
@@ -45,6 +46,7 @@ class GlobalQuestionnaireFormModel {
       q3.toJson(),
       q4.toJson(),
       q5.toJson(),
+      q6.toJson(),
       riskRating.toJson(),
       expectedDepartureDate.toJson(),
       expectedDepartureTime.toJson(),

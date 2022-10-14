@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../../constants/countries.dart';
 
 class PhoneTextField extends StatefulWidget {
-  final void Function(String, String)? onChanged;
+  final void Function(String number, String countryCode)? onChanged;
   final TextEditingController? controller;
   const PhoneTextField({Key? key, this.onChanged, this.controller}) : super(key: key);
 

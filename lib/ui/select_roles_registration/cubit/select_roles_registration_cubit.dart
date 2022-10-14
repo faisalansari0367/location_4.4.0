@@ -41,11 +41,11 @@ class RolesRegistrationCubit extends BaseModel {
   Future<void> getRoles() async {
     setLoading(true);
     try {
-      final result = await apiService.getUserRoles();
+      final result = await apiService.getRoles();
       setLoading(false);
       result.when(
         success: (data) {
-          emit(state.copyWith(rolesList: data.map((e) => SelectRoleModel(role: e.role)).toList()));
+          emit(state.copyWith(rolesList: data.data.map((e) => SelectRoleModel(role: e)).toList()));
           _fillRoles();
         },
         failure: (error) => DialogService.failure(error: error),

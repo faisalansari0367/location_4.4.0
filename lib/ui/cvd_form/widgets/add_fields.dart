@@ -1,14 +1,14 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class AddFields extends StatefulWidget {
   final String field;
+  final ValueChanged<List<String>> onChanged;
   final String? no;
-  const AddFields({Key? key, required this.field, this.no}) : super(key: key);
+  const AddFields({Key? key, required this.field, this.no, required this.onChanged}) : super(key: key);
 
   @override
   State<AddFields> createState() => _AddFieldsState();
@@ -20,7 +20,8 @@ class _AddFieldsState extends State<AddFields> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      decoration: MyDecoration.decoration().copyWith(border: Border.all(color: Colors.grey.shade200)),
       padding: kPadding,
       child: Column(
         children: [
@@ -52,9 +53,9 @@ class _AddFieldsState extends State<AddFields> {
                 (e) => Row(
                   children: [
                     Expanded(
-                      child: MyTextField(
+                      child: TextFormField(
                         focusNode: AlwaysDisabledFocusNode(),
-                        decoration: MyDecoration.recangularInputDecoration(context),
+                        // decoration: MyDecoration.recangularInputDecoration(context),
                         onChanged: (s) => value = s,
                       ),
                     ),
@@ -74,9 +75,9 @@ class _AddFieldsState extends State<AddFields> {
             children: [
               // Gap(20.w),
               Expanded(
-                child: MyTextField(
+                child: TextFormField(
                   validator: (s) => null,
-                  decoration: MyDecoration.recangularInputDecoration(context),
+                  // decoration: MyDecoration.recangularInputDecoration(context),
                   onChanged: (s) => setState(() {
                     value = s;
                   }),
@@ -85,13 +86,14 @@ class _AddFieldsState extends State<AddFields> {
               IconButton(
                 // alignment: Alignment.topCenter,
 
-                padding: EdgeInsets.only(bottom: value.isEmpty ? 20.h : 0.h),
+                // padding: EdgeInsets.only(bottom: value.isEmpty ? 20.h : 0.h),
                 onPressed: value.isEmpty
                     ? null
                     : () {
                         FocusScope.of(context).unfocus();
                         fields.add(value);
                         value = '';
+                        widget.onChanged.call(fields);
                         setState(() {});
                       },
                 icon: const Icon(Icons.add),

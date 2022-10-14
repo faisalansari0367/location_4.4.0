@@ -1,0 +1,47 @@
+{
+    "name": {
+        "key": "name",
+        "label": "Name",
+        "value": null
+    },
+    "address": {
+        "key": "address",
+        "label": "Address",
+        "value": null
+    },
+    "town": {
+        "key": "town",
+        "label": "Town",
+        "value": null
+    },
+    "tel": {
+        "key": "phoneNumber",
+        "label": "Tel",
+        "value": null
+    },
+    "fax": {
+        "key": "fax",
+        "label": "Fax",
+        "value": null
+    },
+    "email": {
+        "key": "email",
+        "label": "Email",
+        "value": null
+    },
+    "ngr": {
+        "key": "ngr",
+        "label": "National Grower Registration (NGR) No",
+        "value": null
+    },
+    "pic": {
+        "key": "pic",
+        "label": "Property Identification Code (PIC)",
+        "value": null
+    },
+    "referenceNo": {
+        "key": "referenceNo",
+        "label": "Vendors contract/reference number",
+        "value": null
+    }
+}

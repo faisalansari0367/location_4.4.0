@@ -1,10 +1,11 @@
 import 'package:background_location/theme/color_constants.dart';
-import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
+import '../cubit/cvd_cubit.dart';
 
 const todoColor = Colors.grey;
 // final _processIndex = 0;
@@ -24,10 +25,12 @@ class CustomSteppar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(isCompleted);
+    // final _processIndex = currentStep;
+    // final _progressValue = ((currentStep + 1) / stepper.length) * 100;
     return Container(
       width: double.infinity,
       height: 100.h,
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -38,6 +41,50 @@ class CustomSteppar extends StatelessWidget {
           ),
         ],
       ),
+      // child: Row(
+      //   children: [
+      //     Stack(
+      //       alignment: Alignment.center,
+      //       children: [
+      //         SizedBox.square(
+      //           dimension: 70,
+      //           child: CircularProgressIndicator(
+      //             value: _progressValue / 100,
+      //             backgroundColor: Colors.grey.shade300,
+      //           ),
+      //         ),
+      //         Text(
+      //           '${currentStep + 1} 0f ${stepper.length}',
+      //           style: TextStyle(
+      //             color: Colors.black,
+      //             fontSize: 16.sp,
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //     Spacer(),
+      //     Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         Text(
+      //           stepper.elementAt(currentStep),
+      //           style: context.textTheme.headline6!.copyWith(
+      //             color: Colors.black,
+      //             fontWeight: FontWeight.bold,
+      //           ),
+      //         ),
+      //         Text(
+      //           'Next: ' + stepper.elementAt(currentStep + 1),
+      //           style: context.textTheme.bodyMedium?.copyWith(
+      //             color: Colors.black45,
+      //             fontWeight: FontWeight.w600,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ],
+      // ),
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(bottom: 10.h),

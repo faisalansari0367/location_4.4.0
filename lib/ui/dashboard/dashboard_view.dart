@@ -1,7 +1,8 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
-import 'package:background_location/ui/cvd_form/view/cvd_from_page.dart';
+import 'package:background_location/ui/cvd_forms/view/cvd_forms.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
+import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
@@ -33,17 +34,22 @@ class DashboardView extends StatelessWidget {
         //         );
         //   },
         // ),
-        appBar: const MyAppBar(
+        appBar: MyAppBar(
           showBackButton: false,
           centreTitle: true,
-          // title: _logo(),
+
+          // backgroundColor: Colors.red,
+          title: SizedBox(
+            height: 50.h,
+            child: _logo(),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
             // alignment: Alignment.center,
             children: [
-              Gap(10.h),
-              _logo(),
+              // Gap(10.h),
+              // _logo(),
               // Positioned(
               //   child: Image.asset(
               //     'assets/icons/BIO_shield1 (1).png',
@@ -62,14 +68,74 @@ class DashboardView extends StatelessWidget {
                 ),
                 children: [
                   DashboardCard(
-                    text: Strings.visitorLogBook.toUpperCase(),
-                    iconData: Icons.book,
-                    onTap: () => Get.to(() => const LogbookPage()),
+                    text: Strings.visitorCheckIn.toUpperCase(),
+                    iconData: Icons.qr_code,
+                    onTap: () => Get.to(() => const VisitorCheckInPage()),
+                  ),
+                  DashboardCard(
+                    text: 'WORK SAFETY',
+                    iconData: Icons.work_outline,
+                    onTap: () {
+                      DialogService.showDialog(child: const ComingSoonDialog());
+                    },
+                  ),
+                  DashboardCard(
+                    text: Strings.links.toUpperCase(),
+                    iconData: Icons.link,
+                    onTap: () => Get.to(() => const LinksPage()),
+                  ),
+                  DashboardCard(
+                    text: 'EMERGENCY WARNING!',
+                    // iconData: LineIcons.info,
+                    // color: Colors.yellow,
+                    // iconData: Icons.info,
+                    // imagecolor: null,
+                    image: 'assets/icons/warning_icon.png',
+                    onTap: () {
+                      _warningDialog();
+                    },
                   ),
                   DashboardCard(
                     text: Strings.geofences.toUpperCase(),
                     iconData: Icons.fence,
                     onTap: () => Get.to(() => const MapsPage()),
+                  ),
+                  DashboardCard(
+                    text: Strings.envds,
+                    iconData: Icons.person,
+                    onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
+                  ),
+
+                  DashboardCard(
+                    text: 'CVD FORMS',
+                    iconData: Icons.format_align_justify_rounded,
+                    // onTap: () => Get.to(() => const CvdFormPage()),
+                    onTap: () async {
+                      // DialogService.showDialog(child: const ComingSoonDialog());
+
+                      Get.to(() => const CvdForms());
+                      // Get.back();
+                    },
+                  ),
+
+                  // DashboardCard(
+                  //   text: Strings.selectYourRole,
+                  //   iconData: Icons.person,
+                  //   onTap: () => Get.to(() => const SelectRolesRegistrationPage()),
+                  // ),
+
+                  DashboardCard(
+                    text: 'eDEC Forms',
+                    iconData: Icons.format_list_bulleted_sharp,
+                    onTap: () {
+                      Get.to(() => EdecFormsPage());
+                    },
+                    // onTap: () => Get.to(() => VisitorCheckInPage()),
+                  ),
+                  DashboardCard(
+                    text: Strings.visitorLogBook.toUpperCase(),
+                    iconData: Icons.book,
+                    onTap: () => Get.to(() => const LogbookPage()),
                   ),
                   DashboardCard(
                     text: Strings.settings.toUpperCase(),
@@ -83,46 +149,7 @@ class DashboardView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  DashboardCard(
-                    text: Strings.envds,
-                    iconData: Icons.person,
-                    onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
-                  ),
-                  // DashboardCard(
-                  //   text: Strings.selectYourRole,
-                  //   iconData: Icons.person,
-                  //   onTap: () => Get.to(() => const SelectRolesRegistrationPage()),
-                  // ),
-                  DashboardCard(
-                    text: Strings.links.toUpperCase(),
-                    iconData: Icons.link,
-                    onTap: () => Get.to(() => const LinksPage()),
-                  ),
-                  DashboardCard(
-                    text: Strings.visitorCheckIn.toUpperCase(),
-                    iconData: Icons.token_rounded,
-                    onTap: () => Get.to(() => const VisitorCheckInPage()),
-                  ),
-                  DashboardCard(
-                    text: 'eDEC Forms',
-                    iconData: Icons.format_list_bulleted_sharp,
-                    onTap: () {
-                      DialogService.showDialog(child: const ComingSoonDialog());
-                    },
-                    // onTap: () => Get.to(() => VisitorCheckInPage()),
-                  ),
-                  DashboardCard(
-                    text: 'CVD FORM',
-                    iconData: Icons.format_align_justify_rounded,
-                    onTap: () => Get.to(() => const CvdFormPage()),
-                  ),
-                  DashboardCard(
-                    text: 'WORK SAFETY',
-                    iconData: Icons.work_outline,
-                    onTap: () {
-                      DialogService.showDialog(child: const ComingSoonDialog());
-                    },
-                  ),
+
                   // DashboardCard(
                   //   text: 'Global Form',
                   //   iconData: Icons.work_outline,
@@ -131,17 +158,7 @@ class DashboardView extends StatelessWidget {
                   //     Get.to(() => GlobalQuestionnaireForm());
                   //   },
                   // ),
-                  DashboardCard(
-                    text: 'EMERGENCY WARNING!',
-                    // iconData: LineIcons.info,
-                    // color: Colors.yellow,
-                    // iconData: Icons.info,
-                    // imagecolor: null,
-                    image: 'assets/icons/warning_icon.png',
-                    onTap: () {
-                      _warningDialog();
-                    },
-                  ),
+
                   // DashboardCard(
                   //   text: 'FORMS',
                   //   iconData: Icons.work_outline,

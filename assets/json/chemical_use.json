@@ -1,68 +1,88 @@
 {
     "field": "Chemical Use",
-    "question4": {
+    "chemicalCheck": {
         "field": "Is this commodity within a withholding period (WHP), Export Slaughter Interval (ESI) or Export Animal Feed Interval (EAFI) following treatment with any plant chemical including a pickling or seed treatment, fumigant, pesticide or insecticide?",
+        "value": null,
         "options": [
-            "Yes, enter details in the table below",
-            "No"
-        ],
-        "tableHeader": [
             {
-                "title": "Chemical applied",
-                "index": 1,
-                "key": "checmical_applied"
+                "label": "Yes",
+                "value": "1"
             },
             {
-                "title": "Rate (Tonne/ Ha)",
-                "index": 1,
-                "key": "Rate (Tonne/ Ha)"
-            },
-            {
-                "title": "Application date",
-                "index": 1,
-                "key": "application_date"
-            },
-            {
-                "title": "WHP/ ESI/ EAFI",
-                "index": 1,
-                "key": "WHP/ ESI/ EAFI"
+                "label": "No",
+                "value": "0"
             }
         ]
     },
-    "question5": {
+    "qaCheck": {
         "field": "Has the commodity been grown and/or stored under an independently audited QA program which includes chemical residue management?",
+        "value": null,
         "options": [
-            "No",
-            "Yes, Provide details"
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
         ],
-        "QA program": "",
-        "Accreditation/ Certification Number": "",
         "note": "If this commodity has been grown or stored under such a QA program, please now read and sign Part C. If not, please now complete the remainder of Part B."
     },
-    "question6": {
+    "qaProgram": {
+        "field": "QA Program",
+        "value": null
+    },
+    "certificateNumber": {
+        "field": "Accreditation/ Certification Number",
+        "value": null
+    },
+    "cvdCheck": {
         "field": "Is the vendor of this commodity currently aware of its full chemical treatment history or holds a CVD containing this history?",
+        "value": null,
         "options": [
-            "No",
-            "Yes"
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
         ]
     },
-    "question7": {
+    "cropList": {
         "field": "List all known adjacent crops grown within 100 metres of this commodity (only applicable for single source commodities)",
-        "options": ""
+        "options": []
     },
-    "question8": {
+    "riskCheck": {
         "field": "If the commodity is a by-product, has a risk assessment been completed? (tick one)",
         "options": [
-            "No",
-            "Yes, attach copy of risk assessment",
-            "N/A (see explanatory notes)"
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            },
+            {
+                "label": "N/A (see explanatory notes)",
+                "value": "2"
+            }
         ]
     },
-    "question9": {
+    "nataCheck": {
         "field": "Has the commodity been analysed for chemical residues or toxins by a lab accredited by NATA for the specific test required?",
         "options": [
-            "No",
-            "Yes, attach details of test results"
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
         ]
     }
 }

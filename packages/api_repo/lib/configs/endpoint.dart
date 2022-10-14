@@ -16,6 +16,8 @@ class Endpoints {
       licenceCategories = '$records/licenceCategories',
       fieldsRecords = '$records/fieldsRecord',
       forms = '$records/forms',
+      roles = '$records/roles',
+
 
       // users
       getFields = '$users/fields',

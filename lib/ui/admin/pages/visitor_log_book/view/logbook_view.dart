@@ -40,6 +40,7 @@ class _LogbookViewState extends State<LogbookView> {
       builder: (context, state) {
         return Scaffold(
           appBar: MyAppBar(
+            elevation: 5,
             title: const Text('Visitor Log book'),
             actions: [
               if (!state.isLoading)
@@ -117,7 +118,7 @@ class _LogbookViewState extends State<LogbookView> {
         DataCell(
           (item.form.isNotEmpty)
               ? TextButton(
-                  onPressed: () => Get.to(() => LogbookDetails(form: item.form)),
+                  onPressed: () => Get.to(() => LogbookDetails(item: item)),
                   style: TextButton.styleFrom(
                     textStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
@@ -126,7 +127,7 @@ class _LogbookViewState extends State<LogbookView> {
                   child: const Text('View'),
                 )
               : Text(
-                  'trespasser'.toUpperCase(),
+                  'Unregistered'.toUpperCase(),
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.red,

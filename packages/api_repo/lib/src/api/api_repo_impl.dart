@@ -227,4 +227,9 @@ class ApiRepo implements Api {
   LogbookEntry? getLogRecord(String geofenceId) {
     return _logRecordsRepo.getLogRecord(geofenceId);
   }
+
+  @override
+  Future<ApiResult<RoleDetailsModel>> getRoles() {
+    return _userRepo.getRoles();
+  }
 }

@@ -1,8 +1,10 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
+import 'package:background_location/ui/cvd_form/pages/buyer_details.dart';
+import 'package:background_location/ui/cvd_form/pages/transporter.dart';
+import 'package:background_location/ui/cvd_form/pages/vendor_details.dart';
 import 'package:background_location/ui/cvd_form/widgets/chemical_use.dart';
 import 'package:background_location/ui/cvd_form/widgets/commodity_details.dart';
-import 'package:background_location/ui/cvd_form/widgets/common_page.dart';
 import 'package:background_location/ui/cvd_form/widgets/custom_steppar.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +26,12 @@ class CvdFormView extends StatefulWidget {
 class _CvdFormViewState extends State<CvdFormView> {
   final controller = PageController();
   late CvdCubit cubit;
-  int index = -1;
+  // int index = -1;
   @override
   void initState() {
     cubit = context.read<CvdCubit>();
+    cubit.init(context);
+
     super.initState();
   }
 
@@ -40,11 +44,12 @@ class _CvdFormViewState extends State<CvdFormView> {
       ),
       body: BlocBuilder<CvdCubit, CvdState>(
         builder: (context, state) {
-          index = -1;
+          if (state.isLoading) return Center(child: CircularProgressIndicator());
+          // index = -1;
           return Column(
             children: [
               CustomSteppar(
-                onChanged: (value) => cubit.changeCurrent(value),
+                onChanged: (value) => cubit.moveToPage(value),
                 currentStep: state.currentStep,
                 stepper: cubit.stepNames,
                 // isCompleted: cubit.isStepCompleted(),
@@ -54,15 +59,26 @@ class _CvdFormViewState extends State<CvdFormView> {
                   physics: const NeverScrollableScrollPhysics(),
                   controller: cubit.pageController,
                   children: [
-                    CommonPage(data: state.formStepper[0].formDataList),
-                    CommonPage(data: state.formStepper[1].formDataList),
+                    // CommonPage(data: state.formStepper[0].formDataList),
+                    VendorDetails(
+                      vendorDetailsModel: cubit.vendorDetails,
+                    ),
+                    BuyerDetails(
+                      buyerDetails: cubit.buyerDetailsModel,
+                    ),
+                    TransporterDetails(transporDetails: cubit.transporterDetails),
                     // CommonPage(data: state.formStepper[2].formDataList),
-                    const CommodityDetails(),
-                    const ProductIntegrity(),
-                    const ChemicalUse(),
+                    CommodityDetails(
+                      commodityDetails: cubit.commodityDetails,
+                    ),
+                    ProductIntegrity(
+                      productIntegrityDetails: cubit.productIntegrityDetailsModel,
+                    ),
+                    ChemicalUse(
+                      chemicalUseDetailsModel: cubit.chemicalUseDetailsModel,
+                    ),
                     const SelfDeclaration(),
                   ].map((e) {
-                    index++;
                     return SingleChildScrollView(
                       padding: kPadding,
                       child: e,
@@ -94,9 +110,7 @@ class _CvdFormViewState extends State<CvdFormView> {
   }
 
   Widget vendorDetails(List<String> fields) {
-    return Column(
-      
-    );
+    return Column();
   }
 
   Row _actions(CvdState state, int index) {

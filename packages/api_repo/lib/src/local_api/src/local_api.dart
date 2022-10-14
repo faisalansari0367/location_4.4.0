@@ -243,4 +243,9 @@ class LocalApi extends Api {
   LogbookEntry? getLogRecord(String geofenceId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResult<RoleDetailsModel>> getRoles() {
+    throw UnimplementedError();
+  }
 }
