@@ -111,14 +111,14 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
             isLoading: false,
           ),
         );
-        _getFieldsData();
+        // _getFieldsData();
       },
       failure: _failure,
     );
   }
 
   Future<void> getSpecies() async {
-    if (role != 'Producer') return;
+    if (!['Expo\'s', 'Producer'].contains(role)) return;
     final result = await apiService.getUserSpecies();
     result.when(
       success: (data) {
@@ -430,6 +430,31 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           await DialogService.showDialog(
             child: NetworkErrorDialog(
               message: 'Country of origin and country visiting cannot be the same',
+              onCancel: Get.back,
+            ),
+          );
+          return;
+        }
+      }
+
+      if (data.containsKey('startDate') && data.containsKey('endDate')) {
+        var message = '';
+        final entryDate = DateTime.parse(data['startDate']);
+        final exitDate = DateTime.parse(data['endDate']);
+        print(exitDate.difference(entryDate).inDays);
+        if (entryDate.isAfter(exitDate)) {
+          message = 'Entry date cannot be after exit date';
+        } else if (entryDate.compareTo(exitDate) == 0) {
+          message = 'Entry date cannot be equal to exit date';
+        } else if (entryDate.isBefore(DateTime.now().subtract(10.days))) {
+          message = "Can't be more than 10 days before today's date";
+        } else if (exitDate.difference(entryDate).inDays > 10) {
+          message = 'Entry date cannot be more than 10 days after today';
+        }
+        if (message.isNotEmpty) {
+          await DialogService.showDialog(
+            child: NetworkErrorDialog(
+              message: message,
               onCancel: Get.back,
             ),
           );

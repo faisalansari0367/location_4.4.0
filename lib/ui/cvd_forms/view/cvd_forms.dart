@@ -23,12 +23,17 @@ class _CvdFormsState extends State<CvdForms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+        title: Text('CVD Forms'),
+      ),
       body: FutureBuilder<List<FileSystemEntity>>(
         future: FormsStorageService().getCvdForms(),
         builder: (context, snapshot) {
           return MyListview(
             data: snapshot.data ?? [],
+            emptyWidget: Center(
+              child: Text('No forms found'),
+            ),
             itemBuilder: (context, index) {
               return ListTile(
                 onTap: () => OpenFile.open(snapshot.data![index].path),

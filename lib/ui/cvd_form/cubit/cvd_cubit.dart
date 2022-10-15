@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/api/api_repo.dart';
@@ -128,12 +127,15 @@ class CvdCubit extends Cubit<CvdState> {
     } else if (isPrevious) {
       step = state.currentStep - 1;
     }
-    stepCompleted[min(_step - 1, 0)] = true;
+    stepCompleted[(_step == 0 ? _step : _step - 1)] = true;
     emit(state.copyWith(currentStep: _step));
     moveToPage(_step);
   }
 
   void moveToPage(int page) {
+    if (!stepCompleted[page - 1]) {
+      return;
+    }
     emit(state.copyWith(currentStep: page));
     pageController.animateToPage(
       page,
@@ -143,7 +145,6 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   void getApiData() async {
-    
     try {
       final result = await Dio().post(
         'https://uniquetowinggoa.com/safemeat/public/api/declaration',
@@ -159,7 +160,6 @@ class CvdCubit extends Cubit<CvdState> {
         },
       );
 
-    
       final formsService = FormsStorageService();
       final file = await formsService.saveCvdForm(result.data);
       await OpenFile.open(file.path);
@@ -245,8 +245,6 @@ class CvdCubit extends Cubit<CvdState> {
     emit(state.copyWith(data: map));
   }
 
-  
-
   Object? failure(NetworkExceptions error) {
     return null;
   }
@@ -255,6 +253,4 @@ class CvdCubit extends Cubit<CvdState> {
     emit(state.copyWith(forms: data.data?.forms));
     // data.data.forms;
   }
-
 }
-

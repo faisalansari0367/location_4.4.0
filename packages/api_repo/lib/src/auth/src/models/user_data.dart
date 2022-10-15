@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 enum UserStatus { active, inactive, delete }
@@ -52,6 +53,16 @@ class UserData {
   String? exitDate;
   String? passport;
   String? ngr;
+  String? businessName;
+  String? sector;
+  String? contactName;
+  String? eventName;
+  String? contactEmail;
+  String? contactNumber;
+  DateTime? startDate;
+  DateTime? endDate;
+  String? edec;
+
   List<String> allowedRoles = const [];
 
   String? registrationToken;
@@ -59,10 +70,6 @@ class UserData {
   UserStatus? status;
 
   UserData({
-    this.allowedRoles = const [],
-    this.createdAt,
-    this.updatedAt,
-    this.status,
     this.firstName,
     this.lastName,
     this.email,
@@ -75,10 +82,10 @@ class UserData {
     this.street,
     this.town,
     this.postcode,
+    this.id,
     this.signature,
     this.logOn,
     this.employeeNumber,
-    this.id,
     this.driversLicense,
     this.ddt,
     this.persons,
@@ -97,8 +104,20 @@ class UserData {
     this.entryDate,
     this.exitDate,
     this.passport,
-    this.registrationToken,
     this.ngr,
+    this.businessName,
+    this.sector,
+    this.contactName,
+    this.eventName,
+    this.contactEmail,
+    this.contactNumber,
+    this.startDate,
+    this.endDate,
+    this.edec,
+    this.allowedRoles = const [],
+    this.registrationToken,
+    this.updatedAt,
+    this.status,
   });
 
   static UserStatus getStatus(String? status) {
@@ -111,6 +130,7 @@ class UserData {
 
   UserData.fromJson(Map<String, dynamic> json) {
     allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
+
     status = getStatus(json['status']);
     ngr = json['ngr'];
 
@@ -151,6 +171,21 @@ class UserData {
     registrationToken = json['registrationToken'];
     createdAt = json['createdAt'] == null ? null : DateTime.tryParse(json['createdAt'])?.toLocal();
     updatedAt = json['updatedAt'] == null ? null : DateTime.tryParse(json['updatedAt'])?.toLocal();
+    businessName = json['businessName'];
+    sector = json['sector'];
+    contactName = json['contactName'];
+    eventName = json['eventName'];
+    contactEmail = json['contactEmail'];
+    contactNumber = json['contactNumber'];
+    startDate = json['startDate'] == null ? null : DateTime.tryParse(json['startDate'])?.toLocal();
+    endDate = json['endDate'] == null ? null : DateTime.tryParse(json['endDate'])?.toLocal();
+    edec = json['edec'];
+  }
+
+  DateTime? _parseDate(String? data) {
+    if (data == null) return null;
+    final date = DateTime.tryParse(data)?.toLocal();
+    return date;
   }
 
   Map<String, dynamic> updateStatus() {

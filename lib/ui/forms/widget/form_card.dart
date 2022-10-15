@@ -62,8 +62,8 @@ class QuestionCard extends StatelessWidget {
     );
   }
 
-  bool? get groupValue => selectedValue == null ? null : selectedValue == 'yes';
-  bool? value(String value) => selectedValue == null ? null : selectedValue == value;
+  bool? get groupValue => selectedValue == null ? null : selectedValue?.toLowerCase() == 'yes';
+  bool? value(String value) => selectedValue == null ? null : selectedValue?.toLowerCase() == value;
 
   void _onChanged(bool? value) {
     if (value == null) return;

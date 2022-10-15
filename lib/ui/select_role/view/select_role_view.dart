@@ -92,7 +92,7 @@ class SelectRoleView extends StatelessWidget {
             BlocBuilder<SelectRoleCubit, SelectRoleState>(
               builder: (context, state) {
                 return Visibility(
-                  visible: state.user.role! != 'Admin',
+                  // visible: state.user.role! != 'Admin',
                   child: _selectRoleButton(context),
                 );
               },

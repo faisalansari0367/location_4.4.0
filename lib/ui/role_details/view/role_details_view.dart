@@ -1,4 +1,6 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/ui/forms/widget/form_card.dart';
 import 'package:background_location/ui/role_details/cubit/role_details_cubit.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/my_cross_fade.dart';
@@ -28,6 +30,12 @@ class RoleDetailsView extends StatefulWidget {
 
 class _RoleDetailsViewState extends State<RoleDetailsView> {
   final map = <String, dynamic>{};
+  UserData? _userData;
+  @override
+  void initState() {
+    _userData = context.read<Api>().getUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +113,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
 
   List<String> sortedFields(List<String> fields) {
     final _fields = [...fields];
+    _fields.remove('Species');
     final hasSignature = fields.contains('Signature');
     final hasCompanyAddress = fields.contains('Company Address');
     if (hasCompanyAddress) {
@@ -136,8 +145,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     final userData = state.userRoleDetails;
 
     if (userData.containsKey(name.toCamelCase)) {
-      controller.text = (map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '').toString();
-      map[name.toCamelCase] = userData[name.toCamelCase];
+      final value = (map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '').toString();
+      controller.text = value;
+      map[name.toCamelCase] = value;
     }
     textEditingControllerListener(controller, name.toCamelCase);
     switch (name.toCamelCase) {
@@ -151,6 +161,18 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       //   );
       // else
       //   return Container();
+      case 'sector':
+        map[name.toCamelCase] = 'Government';
+        //     userData[name.toCamelCase] ?? (state.licenseCategories.isEmpty ? null : state.licenseCategories.first);
+        return MyDropdownField(
+          options: ['Government', 'Water', 'Gas', 'Power', 'Waste'],
+          value: map[name.toCamelCase],
+          onChanged: (value) {
+            map[name.toCamelCase] = value;
+            setState(() {});
+          },
+        );
+
       case 'licenseCategory':
         map[name.toCamelCase] =
             userData[name.toCamelCase] ?? (state.licenseCategories.isEmpty ? null : state.licenseCategories.first);
@@ -163,16 +185,25 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           },
         );
 
+      case 'contactName':
+        controller.text = _userData?.fullName ?? '';
+        return MyTextField(
+          hintText: name,
+          controller: controller,
+        );
+
       case 'region':
         return MyTextField(
           hintText: name,
           controller: controller,
         );
       case 'email':
+      case 'contactEmail':
         return EmailField(
           controller: controller,
         );
       case 'phoneNumber':
+      case 'contactNumber':
       case 'mobile':
         controller.text = userData['phoneNumber'] ?? '';
         return PhoneTextField(
@@ -228,6 +259,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       // case FieldType.date:
       case 'date':
       case 'entryDate':
+      // case 'startDate':
+      case 'endDate':
       case 'exitDate':
       case 'licenseExpiryDate':
         return MyDateField(
@@ -239,7 +272,34 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
             print(map);
           },
         );
+      case 'startDate':
+        map[name.toCamelCase] = userData[name.toCamelCase] ?? DateTime.now().toIso8601String();
+        return MyDateField(
+          label: name,
+          // date: controller.text,
+          date: map[name.toCamelCase] ?? '',
+          onChanged: (value) {
+            controller.text = value;
+            print(map);
+          },
+        );
       // case FieldType.driversLicense:
+      case "edec":
+        // final value = map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '';
+        return QuestionCard(
+          question: name,
+          selectedValue: controller.text,
+          onChanged: (s) {
+            controller.text = s;
+            print(map[name.toCamelCase]);
+            setState(() {});
+          },
+          // hintText: name,
+          // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          // validator: Validator.text,
+          // controller: controller,
+          // onChanged: (value) => controller.text = value,
+        );
       case "driver'sLicense":
         controller.text = map["driver'sLicense"] ?? userData['driversLicense'] ?? '';
         return MyTextField(

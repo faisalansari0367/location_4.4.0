@@ -69,19 +69,22 @@ class DashboardView extends StatelessWidget {
                 children: [
                   DashboardCard(
                     text: Strings.visitorCheckIn.toUpperCase(),
-                    iconData: Icons.qr_code,
+                    // iconData: Icons.qr_code,
+                    image: 'assets/icons/Check In.png',
                     onTap: () => Get.to(() => const VisitorCheckInPage()),
                   ),
                   DashboardCard(
                     text: 'WORK SAFETY',
-                    iconData: Icons.work_outline,
+                    // iconData: Icons.work_outline,
+                    image: 'assets/icons/Work Safety.png',
                     onTap: () {
                       DialogService.showDialog(child: const ComingSoonDialog());
                     },
                   ),
                   DashboardCard(
                     text: Strings.links.toUpperCase(),
-                    iconData: Icons.link,
+                    // iconData: Icons.link,
+                    image: 'assets/icons/Links.png',
                     onTap: () => Get.to(() => const LinksPage()),
                   ),
                   DashboardCard(
@@ -97,12 +100,16 @@ class DashboardView extends StatelessWidget {
                   ),
                   DashboardCard(
                     text: Strings.geofences.toUpperCase(),
-                    iconData: Icons.fence,
+                    // iconData: Icons.fence,
+                    image: 'assets/icons/Geofences (1).png',
                     onTap: () => Get.to(() => const MapsPage()),
                   ),
                   DashboardCard(
                     text: Strings.envds,
-                    iconData: Icons.person,
+                    // iconData: Icons.person,
+                    image: 'assets/icons/eNVD.jpg',
+                    size: 65.w,
+
                     onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
                   ),
 
@@ -126,7 +133,8 @@ class DashboardView extends StatelessWidget {
 
                   DashboardCard(
                     text: 'eDEC Forms',
-                    iconData: Icons.format_list_bulleted_sharp,
+                    // iconData: Icons.format_list_bulleted_sharp,
+                    image: 'assets/icons/eDEC forms.png',
                     onTap: () {
                       Get.to(() => EdecFormsPage());
                     },
@@ -134,7 +142,8 @@ class DashboardView extends StatelessWidget {
                   ),
                   DashboardCard(
                     text: Strings.visitorLogBook.toUpperCase(),
-                    iconData: Icons.book,
+                    // iconData: Icons.book,
+                    image: 'assets/icons/Logbook.jpg',
                     onTap: () => Get.to(() => const LogbookPage()),
                   ),
                   DashboardCard(

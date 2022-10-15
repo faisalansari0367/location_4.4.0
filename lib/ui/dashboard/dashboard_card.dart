@@ -11,16 +11,24 @@ class DashboardCard extends StatelessWidget {
   final IconData? iconData;
   final Color? imagecolor;
   final String? image;
+  final double? size;
   const DashboardCard(
-      {Key? key, required this.text, this.color = Colors.red, this.iconData, this.onTap, this.image, this.imagecolor})
+      {Key? key,
+      required this.text,
+      this.color = Colors.red,
+      this.iconData,
+      this.onTap,
+      this.image,
+      this.imagecolor,
+      this.size})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const _color = Color.fromARGB(255, 255, 255, 255);
     // const _color = kPrimaryColor;
-    final size = MediaQuery.of(context).size;
-    final imageSize = size.height * 0.05;
+    final _size = MediaQuery.of(context).size;
+    final imageSize = size ?? _size.height * 0.05;
     return AnimatedButton(
       onTap: () => onTap?.call(),
       child: Container(
