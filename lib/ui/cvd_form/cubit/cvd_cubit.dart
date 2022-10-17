@@ -10,6 +10,7 @@ import 'package:background_location/ui/cvd_form/models/cvd_form_data.dart';
 import 'package:background_location/ui/cvd_form/models/product_integrity_details_model.dart';
 import 'package:background_location/ui/cvd_form/models/transporter_details_model.dart';
 import 'package:background_location/ui/cvd_form/widgets/form_stepper.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
@@ -100,6 +101,8 @@ class CvdCubit extends Cubit<CvdState> {
 
   final map = {};
   final PageController pageController = PageController();
+  final ScrollController stepController = ScrollController();
+
   final List<String> stepNames = [
     'Vendor Details',
     'Buyer Details',
@@ -127,15 +130,25 @@ class CvdCubit extends Cubit<CvdState> {
     } else if (isPrevious) {
       step = state.currentStep - 1;
     }
-    stepCompleted[(_step == 0 ? _step : _step - 1)] = true;
+    stepCompleted[_step] = true;
     emit(state.copyWith(currentStep: _step));
     moveToPage(_step);
   }
 
   void moveToPage(int page) {
-    if (!stepCompleted[page - 1]) {
-      return;
+    if (page != 0) {
+      if (!stepCompleted[page - 1]) {
+        return;
+      }
     }
+    if (page > 1) {
+      stepController.animateTo(
+        (90 * page).toDouble(),
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+
     emit(state.copyWith(currentStep: page));
     pageController.animateToPage(
       page,
@@ -144,14 +157,14 @@ class CvdCubit extends Cubit<CvdState> {
     );
   }
 
-  void getApiData() async {
+  Future<void> getApiData() async {
     try {
       final result = await Dio().post(
         'https://uniquetowinggoa.com/safemeat/public/api/declaration',
         data: _cvdFormData,
         options: dio.Options(
-          responseType: ResponseType.bytes,
-        ),
+            // responseType: ResponseType.bytes,
+            ),
         onReceiveProgress: (a, b) {
           print('$a $b');
         },
@@ -159,9 +172,16 @@ class CvdCubit extends Cubit<CvdState> {
           print('$a $b');
         },
       );
+      print(result.data);
+      if (result.data['status'] == false) {
+        final error = result.data['data'] as Map;
 
+        DialogService.error('${result.data['message']} \n ${error.values.first}');
+        return;
+      }
       final formsService = FormsStorageService();
-      final file = await formsService.saveCvdForm(result.data);
+      final bytes = base64Decode(result.data['data']);
+      final file = await formsService.saveCvdForm(bytes);
       await OpenFile.open(file.path);
 
       // await Get.to(
@@ -182,7 +202,7 @@ class CvdCubit extends Cubit<CvdState> {
       'vendorName': vendorDetails.name!.value,
       'vendorAddress': vendorDetails.address!.value,
       'vendorTown': vendorDetails.town!.value,
-      'vendorContact': vendorDetails.tel!.value,
+      'vendorContact': (vendorDetails.tel!.value),
       'vendorFax': vendorDetails.fax!.value,
       'vendorEmail': vendorDetails.email!.value,
       'vendorNGR': vendorDetails.ngr!.value,

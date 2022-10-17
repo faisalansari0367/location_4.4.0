@@ -1,16 +1,21 @@
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/ui/cvd_form/widgets/add_fields.dart';
-import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
+import 'package:background_location/ui/cvd_form/widgets/add_table_entries.dart';
 import 'package:background_location/ui/cvd_form/widgets/cvd_textfield.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
+import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
-import '../../../constants/my_decoration.dart';
 import '../cubit/cvd_cubit.dart';
+import 'common_buttons.dart';
 
 class ChemicalUse extends StatefulWidget {
   final ChemicalUseDetailsModel chemicalUseDetailsModel;
@@ -21,15 +26,14 @@ class ChemicalUse extends StatefulWidget {
 }
 
 class _ChemicalUseState extends State<ChemicalUse> {
-  // ChemicalUseModel? form;
   ChemicalUseDetailsModel? form;
   final formData = {};
   List<Map> tableData = [];
   bool showTable = false;
+  String riskAssesment = '';
+  String testResults = '';
 
   Future<void> _init() async {
-    // final data = await DefaultAssetBundle.of(context).loadString('assets/json/chemical_use.json');
-    // final map = jsonDecode(data);
     form = widget.chemicalUseDetailsModel;
     setState(() {});
   }
@@ -46,36 +50,99 @@ class _ChemicalUseState extends State<ChemicalUse> {
     return SingleChildScrollView(
       child: AutoSpacing(
         children: [
+          Text(
+            'Part B - Chemical Use',
+            style: context.textTheme.headline6?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           _QuestionWithCheckbox(
-            // field: form?.chemicalCheck?.field ?? '',
             questionNo: '4',
             fieldData: form!.chemicalCheck!,
-            // options: form!.chemicalCheck!.options!.map((e) => e.label!).toList(),
-            // value: form!.chemicalCheck!.options!,
-            // onChanged: (index) {
-            //   final e = form!.chemicalCheck!.options![index];
-            //   form?.chemicalCheck?.value = e.value;
-            // },
+            onChanged: (v) {
+              if (v ?? false) {
+                BottomSheetService.showSheet(child: AddTableEntries(
+                  onChanged: (value) {
+                    tableData.add(value);
+                    setState(() {});
+                  },
+                ));
+              }
+            },
+            children: [
+              Table(
+                border: TableBorder.all(style: BorderStyle.solid, color: Colors.grey.shade400),
+                defaultVerticalAlignment: TableCellVerticalAlignment.top,
+                children: [
+                  TableRow(
+                    children: [
+                      Text('Chemical Applied'),
+                      Text('Rate (Tonne/ Ha)'),
+                      Text('Application Date'),
+                      Text('WHP/ ESI/ EAFI'),
+                    ],
+                  ),
+                  ...tableData.map(
+                    (e) => TableRow(
+                      children: [
+                        Text(e['chemicalName'] ?? ''),
+                        Text(e['rate'] ?? ''),
+                        Text(MyDecoration.formatDate(DateTime.tryParse(e['applicationDate']))),
+                        Text(e['WHP'] ?? ''),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              TextButton(
+                onPressed: () {
+                  BottomSheetService.showSheet(child: AddTableEntries(
+                    onChanged: (value) {
+                      tableData.add(value);
+                      setState(() {});
+                    },
+                  ));
+                },
+                child: Text(
+                  'Add Entries',
+                  textAlign: TextAlign.right,
+                ),
+              ),
+              // EditableTable(
+              //     headers: ['Chemical Applied', 'Rate (Tonne/ Ha)', 'Application Date', 'WHP/ ESI/ EAFI'],
+
+              //     onRowAdd: onRowAdd)
+            ],
           ),
-          // if (showTable) _buildTable(),
-          // ChemicalUseQuestion4(),
+          Divider(
+            color: Colors.grey,
+            height: 2,
+          ),
           _QuestionWithCheckbox(
-            // // field: form?.qaCheck?.field ?? '',
             questionNo: '5',
             fieldData: form!.qaCheck!,
-            // onChanged: (index) {
-            //   final e = form!.qaCheck!.options![index];
-            //   form?.qaCheck?.value = e.value;
-            // },
+            onChanged: (s) {},
+            children: [
+              Gap(20.h),
+              CvdTextField(
+                name: form!.qaProgram!.field!,
+                value: form!.qaProgram?.value,
+                onChanged: (s) {
+                  form?.qaProgram?.value = s;
+                },
+              ),
+              CvdTextField(
+                name: form!.certificateNumber!.field!,
+                value: form!.certificateNumber?.value,
+                onChanged: (s) {
+                  form?.certificateNumber?.value = s;
+                },
+              ),
+            ],
           ),
           _QuestionWithCheckbox(
-            // // field: form?.cvdCheck?.field ?? '',
             questionNo: '6',
             fieldData: form!.cvdCheck!,
-            // onChanged: (index) {
-            //   final e = form!.cvdCheck!.options![index];
-            //   form?.cvdCheck?.value = e.value;
-            // },
           ),
           AddFields(
             no: '7. ',
@@ -85,36 +152,63 @@ class _ChemicalUseState extends State<ChemicalUse> {
             },
           ),
           _QuestionWithCheckbox(
-            // // field: form?.riskCheck?.field ?? '',
             questionNo: '8',
             fieldData: form!.riskCheck!,
-            // onChanged: (index) {
-            //   final e = form!.riskCheck!.options![index];
-            //   form?.riskCheck?.value = e.value;
-            // },
+            children: [
+              Divider(),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Risk Assesment Results',
+                      style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      riskAssesment,
+                      style: context.textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            onChanged: (value) {
+              if (form!.riskCheck!.value == '1') {
+                _enterTextPopup(riskAssesment, 'Enter Risk Assesment');
+              }
+            },
           ),
           _QuestionWithCheckbox(
-            // // field: form?.nataCheck?.field ?? '',
             questionNo: '9',
             fieldData: form!.nataCheck!,
-            // onChanged: (index) {
-            //   final e = form!.nataCheck!.options![index];
-            //   form?.nataCheck?.value = e.value;
-            // },
-          ),
-          CvdTextField(
-            name: form!.qaProgram!.field!,
-            value: form!.qaProgram?.value,
             onChanged: (s) {
-              form?.qaProgram?.value = s;
+              if (form!.nataCheck!.value == '1') {
+                _enterTextPopup(testResults, 'Enter Test Results');
+              }
             },
-          ),
-          CvdTextField(
-            name: form!.certificateNumber!.field!,
-            value: form!.certificateNumber?.value,
-            onChanged: (s) {
-              form?.certificateNumber?.value = s;
-            },
+            children: [
+              Divider(),
+              Container(
+                padding: EdgeInsets.all(10),
+                width: double.infinity,
+                decoration: MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Test Results',
+                      style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      testResults,
+                      style: context.textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           CommonButtons(
             onContinue: () {
@@ -127,16 +221,10 @@ class _ChemicalUseState extends State<ChemicalUse> {
                   }
                 }
               }
-              // _form.forEach((key, value) {
-              // });
-              // if (formData.length < 5) {
-              //   DialogService.error('Please answer all the questions');
-              // } else {
+
               final cubit = context.read<CvdCubit>();
-              //   formData['tableData'] = tableData;
-              //   cubit.addFormData(formData);
+
               cubit.changeCurrent(cubit.state.currentStep, isNext: true);
-              // }
             },
           ),
         ],
@@ -144,41 +232,62 @@ class _ChemicalUseState extends State<ChemicalUse> {
     );
   }
 
-  // void _onChanged(Map<dynamic, dynamic> map) {
-  //   formData.addAll(map);
-  // if (formData.containsKey(form?.question4?.field)) {
-  //   final value = formData[form?.question4?.field];
-  //     if (value is Set) {
-  //       if ((value.first as String).contains('Yes')) {
-  //         showTable = true;
-  //         setState(() {});
-  //       } else {
-  //         showTable = true;
-  //         setState(() {});
-  //       }
-  //     }
-  //   }
-  // }
-// }
+  // datarow
+  Widget _dataCell(String text) {
+    return Text(
+      text,
+      style: TextStyle(),
+    );
+  }
+
+  void _enterTextPopup(String value, String hint) {
+    DialogService.showDialog(
+      child: DialogLayout(
+        child: Padding(
+          padding: kPadding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: hint,
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 10,
+                minLines: 3,
+                onChanged: (s) {
+                  value = s;
+                },
+              ),
+              Gap(10.h),
+              MyElevatedButton(
+                text: 'Save',
+                onPressed: () async {
+                  Get.back();
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _QuestionWithCheckbox extends StatefulWidget {
   final String questionNo;
-  // final Options? value;
-  final FieldData fieldData;
 
-  // // final ValueChanged<int>? onChanged;
-  // // final List<Options> options;
-  // final bool multipleSelection;
+  final FieldData fieldData;
+  final ValueChanged<bool?>? onChanged;
+  final List<Widget> children;
+
   const _QuestionWithCheckbox({
     Key? key,
-    // required this.field,
     required this.questionNo,
-    // required this.options,
-    // this.multipleSelection = false,
-    //   // this.onChanged,
-    //   // this.value,
     required this.fieldData,
+    this.onChanged,
+    this.children = const [],
   }) : super(key: key);
 
   @override
@@ -190,8 +299,6 @@ class _QuestionWithCheckboxState extends State<_QuestionWithCheckbox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: MyDecoration.decoration().copyWith(border: Border.all(color: Colors.grey.shade200)),
-      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -227,16 +334,10 @@ class _QuestionWithCheckboxState extends State<_QuestionWithCheckbox> {
                     ),
                   ),
                   child: CheckboxListTile(
-                    // value: getValue(widget.field, e),
                     value: e.value == widget.fieldData.value,
                     onChanged: (s) {
-                      // if (!widget.multipleSelection) {
-                      // setValue(widget.field, e, canSelectOne: true);
-                      // } else {
-                      // setValue(widget.field, e);
-                      // }
                       widget.fieldData.value = e.value;
-                      //   // widget.onChanged?.call(e);
+                      widget.onChanged?.call(e.value == '1');
                       setState(() {});
                     },
                     title: Text(
@@ -250,29 +351,9 @@ class _QuestionWithCheckboxState extends State<_QuestionWithCheckbox> {
                 ),
               )
               .toList(),
+          if (widget.fieldData.value == '1') ...widget.children,
         ],
       ),
     );
   }
-
-  // bool? getValue(String? field, String? id) {
-  // final data = formData[field!];
-  // if (data == null) return false;
-  // if (data is int) return {data}.contains(id);
-  // return (formData[field] as Set?)?.contains(id);
 }
-
-  // void setValue(String field, String id, {bool canSelectOne = false}) {
-    // final dataSet = <String>{};
-    // // final data = formData[field];
-    // if (data == null) {
-    //   dataSet.add(id);
-    //   // formData[field] = dataSet;
-    // } else {
-    //   if (!canSelectOne) dataSet.addAll(data);
-    //   dataSet.contains(id) ? dataSet.remove(id) : dataSet.add(id);
-    //   // formData[field] = dataSet;
-    // }
-    // print(formData);
-  // }
-// }

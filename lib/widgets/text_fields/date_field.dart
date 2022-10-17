@@ -7,8 +7,9 @@ import 'package:intl/intl.dart';
 class MyDateField extends StatefulWidget {
   final String label;
   final ValueChanged<String>? onChanged;
+  final InputDecoration?  decoration;
   final String? date;
-  const MyDateField({Key? key, this.onChanged, required this.label, this.date}) : super(key: key);
+  const MyDateField({Key? key, this.onChanged, required this.label, this.date, this.decoration}) : super(key: key);
 
   @override
   State<MyDateField> createState() => _MyDateFieldState();
@@ -33,6 +34,7 @@ class _MyDateFieldState extends State<MyDateField> {
     return MyTextField(
       focusNode: AlwaysDisabledFocusNode(),
       onTap: _showDatePicker,
+      decoration: widget.decoration,
       suffixIcon: const Icon(Icons.date_range_outlined),
       hintText: widget.label,
       textInputType: TextInputType.datetime,

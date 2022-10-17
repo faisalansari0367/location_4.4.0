@@ -3,10 +3,12 @@ import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/ui/cvd_form/models/product_integrity_details_model.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class ProductIntegrity extends StatefulWidget {
   final ProductIntegrityDetailsModel productIntegrityDetails;
@@ -41,9 +43,26 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
 
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'Part A - Product Integrity',
+            style: context.textTheme.headline6?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Gap(20.h),
           // ...form!.data!.question1!
-          qna(form!.sourceCheck!, 0),
+          qna(
+            form!.sourceCheck!,
+            0,
+            // children: [
+            //   MyTextField(),
+            //   MyTextField(),
+            //   MyTextField(),
+            //   MyTextField(),
+            // ],
+          ),
           qna(form!.materialCheck!, 1),
           qna(form!.gmoCheck!, 2),
           CommonButtons(
@@ -82,7 +101,7 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
     );
   }
 
-  Widget qna(FieldData data, int index) {
+  Widget qna(FieldData data, int index, {List<Widget> children = const []}) {
     return Container(
       // decoration: BoxDecoration(),
       // padding: kPadding.copyWith(
@@ -135,11 +154,6 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
                           data.value = e.value;
                         });
                       }
-                      // if ([0, 2].contains(index)) {
-                      //   setValue(data.field!, int.parse(e.value!), canSelectOne: true);
-                      // } else {
-                      //   setValue(data.field!, int.parse(e.value!));
-                      // }
                     },
                     title: Text(
                       e.label!,
@@ -152,6 +166,10 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
                 ),
               )
               .toList(),
+          if (data.value == 'yes' && children.isNotEmpty) ...[
+            Gap(10.h),
+            ...children,
+          ]
         ],
       ),
     );

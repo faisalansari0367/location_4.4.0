@@ -23,34 +23,47 @@ class CommonButtons extends StatelessWidget {
       builder: (context, state) {
         return Row(
           children: [
-            const Spacer(),
-            OutlinedButton(
-              onPressed: onContinue,
-              style: OutlinedButton.styleFrom(
-                shape: const StadiumBorder(),
-              ),
-              child: Text(
-                'Continue',
-                style: TextStyle(
-                  fontSize: 18.w,
-                  fontWeight: FontWeight.bold,
+            // const Spacer(),
+
+            // Gap(10.w),
+
+            Expanded(
+              child: ElevatedButton(
+                onPressed: state.currentStep == 0
+                    ? null
+                    : () {
+                        context.read<CvdCubit>().changeCurrent(state.currentStep - 1);
+                      },
+                style: OutlinedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  minimumSize: Size(50.w, 50.h),
+                ),
+                child: Text(
+                  'Back',
+                  // style: TextStyle(
+                  //   fontSize: 18.w,
+                  //   // color: Colors.black.withOpacity(0.7),
+                  //   fontWeight: FontWeight.bold,
+                  // ),
                 ),
               ),
             ),
-            Gap(10.w),
-            OutlinedButton(
-              onPressed: () {
-                context.read<CvdCubit>().changeCurrent(state.currentStep - 1);
-              },
-              style: OutlinedButton.styleFrom(
-                shape: const StadiumBorder(),
-              ),
-              child: Text(
-                'Back',
-                style: TextStyle(
-                  fontSize: 18.w,
-                  // color: Colors.black.withOpacity(0.7),
-                  fontWeight: FontWeight.bold,
+            Gap(20.w),
+            Expanded(
+              child: ElevatedButton(
+                // onPressed: () async => onContinue,
+                style: OutlinedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  minimumSize: Size(50.w, 50.h),
+                ),
+
+                onPressed: onContinue,
+                child: Text(
+                  'Continue',
+                  // style: TextStyle(
+                  //   fontSize: 18.w,
+                  //   fontWeight: FontWeight.bold,
+                  // ),
                 ),
               ),
             ),

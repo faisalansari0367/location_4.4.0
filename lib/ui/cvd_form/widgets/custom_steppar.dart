@@ -86,6 +86,7 @@ class CustomSteppar extends StatelessWidget {
       //   ],
       // ),
       child: ListView(
+        controller: context.read<CvdCubit>().stepController,
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.only(bottom: 10.h),
         children: stepper
@@ -166,7 +167,7 @@ class CustomSteppar extends StatelessWidget {
                 color: isActive ? kPrimaryColor : const Color.fromARGB(255, 25, 25, 25),
               ),
               child: SizedBox(
-                width: 80.w,
+                width: 90.w,
                 child: Text(
                   name,
                   maxLines: 2,

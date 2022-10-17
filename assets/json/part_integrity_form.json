@@ -2,7 +2,7 @@
     "field": "Part A – Product Integrity",
     "data": {
         "sourceCheck": {
-            "field": "commoditry source (tick one)",
+            "field": "Commodity source (tick one)",
             "value": null,
             "options": [
                 {
@@ -29,19 +29,11 @@
             "options": [
                 {
                     "value": 1,
-                    "label": "Single Source, Single Storage (eg off the header)"
+                    "label": "Yes"
                 },
                 {
                     "value": 2,
-                    "label": "Single Source, Comingled Storage (eg farm silo)"
-                },
-                {
-                    "value": 3,
-                    "label": "Multi-Vendor Storage (eg grain depot, cotton gin seed storage)"
-                },
-                {
-                    "value": 4,
-                    "label": "Factory Developed Product (eg ethanol plant, gluten plant)"
+                    "label": "No"
                 }
             ]
         },

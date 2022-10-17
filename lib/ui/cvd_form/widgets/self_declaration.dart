@@ -175,7 +175,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                 //   'date': DateTime.now().toIso8601String(),
                 // };
                 cubit.signature = signature;
-                cubit.getApiData();
+                await cubit.getApiData();
               },
             ),
             Gap(50.h),

@@ -58,9 +58,35 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
             child: AutoSpacing(
               children: [
                 _card(model.q1),
-                _card(model.q2),
+                // _card(model.q2),
+                Container(
+                  decoration: MyDecoration.decoration(),
+                  child: QuestionCard(
+                    question: model.q2.question,
+                    selectedValue: model.q2.value,
+                    onChanged: (s) {
+                      if (s.toLowerCase() == 'no') {
+                        DialogService.error('Consider the safety of others before you enter this zone.');
+                      }
+                      onChanged(model.q2, s);
+                    },
+                  ),
+                ),
                 _card(model.q3),
-                _card(model.q4),
+                // _card(model.q4),
+                Container(
+                  decoration: MyDecoration.decoration(),
+                  child: QuestionCard(
+                    question: model.q4.question,
+                    selectedValue: model.q4.value,
+                    onChanged: (s) {
+                      if (s.toLowerCase() == 'yes') {
+                        DialogService.error('Make sure you contact the owner before entering the Property.');
+                      }
+                      onChanged(model.q4, s);
+                    },
+                  ),
+                ),
                 // _card(model.q5),
                 _addList(model.q5),
                 MyTextField(
