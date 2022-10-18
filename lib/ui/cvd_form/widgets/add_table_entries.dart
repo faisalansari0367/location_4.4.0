@@ -68,6 +68,9 @@ class _AddTableEntriesState extends State<AddTableEntries> {
         MyTextField(
           hintText: 'Rate (Tonne/ Ha)',
           controller: rateController,
+          textInputType: TextInputType.number,
+          // inputFormatters: [FilteringTextInputFormatter.],
+          // validator: (s) => ,
           decoration: InputDecoration(
             labelText: 'Rate (Tonne/ Ha)',
           ),
@@ -96,7 +99,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
         ),
         Gap(10.h),
         MyElevatedButton(
-          text: 'Add Entry',
+          text: 'Save',
           onPressed: () async {
             Get.back();
             widget.onChanged!({
@@ -187,7 +190,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
     setState(() {
       selected = option;
       productName.text = option.aPVMARegisteredProductName!;
-      whpDays.text = option.wHPDays!;
+      whpDays.text = '${option.wHPDays!} / ${option.eSIDays} / ';
     });
   }
 }

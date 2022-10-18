@@ -94,7 +94,8 @@ class _ChemicalUseState extends State<ChemicalUse> {
                   ),
                 ],
               ),
-              TextButton(
+              Gap(10.h),
+              ElevatedButton(
                 onPressed: () {
                   BottomSheetService.showSheet(child: AddTableEntries(
                     onChanged: (value) {
@@ -104,8 +105,11 @@ class _ChemicalUseState extends State<ChemicalUse> {
                   ));
                 },
                 child: Text(
-                  'Add Entries',
+                  'Add Another Product',
                   textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               // EditableTable(

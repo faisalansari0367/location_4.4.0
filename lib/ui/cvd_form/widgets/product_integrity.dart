@@ -3,7 +3,6 @@ import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/ui/cvd_form/models/product_integrity_details_model.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,7 +87,8 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
               final cubit = context.read<CvdCubit>();
               // cubit.addFormData(newMap);
               cubit.productIntegrityDetailsModel = form!;
-              cubit.changeCurrent(cubit.state.currentStep + 1);
+              // cubit.changeCurrent(cubit.state.currentStep + 1);
+              cubit.moveToNext();
             },
           ),
 

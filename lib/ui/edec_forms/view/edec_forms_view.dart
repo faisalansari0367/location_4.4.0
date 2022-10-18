@@ -18,7 +18,7 @@ class EdecFormsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: const Text('EDEC Forms'),
+        title: const Text('eDEC Forms'),
       ),
       body: Padding(
         padding: kPadding,

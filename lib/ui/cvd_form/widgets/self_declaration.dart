@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/dialogs/no_signature_found.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class SelfDeclaration extends StatefulWidget {
   const SelfDeclaration({Key? key}) : super(key: key);
@@ -169,6 +172,17 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
               text: 'Submit',
               onPressed: () async {
                 final cubit = context.read<CvdCubit>();
+
+                if (cubit.signature == null) {
+                  DialogService.showDialog(
+                    child: NoSignatureFound(
+                      message: 'Please sign the declaration',
+                      buttonText: 'Ok',
+                      onCancel: Get.back,
+                    ),
+                  );
+                  return;
+                }
 
                 // final data = {
                 //   'signature': signature,

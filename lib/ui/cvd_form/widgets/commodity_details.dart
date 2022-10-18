@@ -26,7 +26,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
   final formKey = GlobalKey<FormState>();
   late CommodityDetailsModel commodityDetails;
   final units = ['Kg', 'Tonne', 'Lt', 'Bail', 'Roll'];
-  String unit = 'Kg';
+  String unit = 'Tonne';
 
   @override
   void initState() {

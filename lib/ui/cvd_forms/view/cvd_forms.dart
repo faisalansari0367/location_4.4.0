@@ -30,7 +30,7 @@ class _CvdFormsState extends State<CvdForms> {
         future: FormsStorageService().getCvdForms(),
         builder: (context, snapshot) {
           return MyListview(
-            data: snapshot.data ?? [],
+            data: _sortData(snapshot.data ?? []),
             emptyWidget: Center(
               child: Text('No forms found'),
             ),
@@ -41,12 +41,22 @@ class _CvdFormsState extends State<CvdForms> {
                   Icons.picture_as_pdf,
                   color: Colors.red,
                 ),
-                title: Text(snapshot.data![index].path.split('/').last),
+                title: Text(snapshot.data![index].path.split('/').last.replaceFirst('.', 'to')),
               );
             },
           );
         },
       ),
     );
+  }
+
+  DateTime getDateTime(FileSystemEntity file) {
+    return DateTime.parse(file.path.split('CVD Form ').last);
+  }
+
+  List<FileSystemEntity> _sortData(List<FileSystemEntity> files) {
+    // dd-mm--yy
+    files.sort((a, b) => (b.statSync().accessed).compareTo(a.statSync().accessed));
+    return files;
   }
 }
