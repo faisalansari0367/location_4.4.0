@@ -1,5 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -24,7 +23,7 @@ class VendorDetails extends StatefulWidget {
 class _VendorDetailsState extends State<VendorDetails> {
   bool isLoading = false;
   UserData? userData;
-  late VendorDetailsModel vendorDetails;
+  // late widget.VendorDetailsModel widget.vendorDetails;
   final formKey = GlobalKey<FormState>();
 
   //
@@ -35,15 +34,17 @@ class _VendorDetailsState extends State<VendorDetails> {
   }
 
   Future<void> _init() async {
-    vendorDetails = widget.vendorDetailsModel;
+    // final vendorDetails = widget.vendorDetailsModel;
     isLoading = true;
     userData = context.read<Api>().getUserData();
-    vendorDetails.fillData(userData?.toJson());
-    vendorDetails.address?.value = getAddress();
-    vendorDetails.name?.value = userData?.fullName ?? '';
+    widget.vendorDetailsModel.fillData(userData?.toJson());
+    widget.vendorDetailsModel.address?.value = getAddress();
+    widget.vendorDetailsModel.name?.value = userData?.fullName ?? '';
     isLoading = false;
     setState(() {});
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,51 +57,56 @@ class _VendorDetailsState extends State<VendorDetails> {
             spacing: Gap(15.h),
             children: [
               CvdTextField(
-                name: vendorDetails.name!.label!,
-                value: vendorDetails.name?.value,
-                onChanged: (value) => vendorDetails.name?.value = value,
+                name: widget.vendorDetailsModel.name!.label!,
+                value: widget.vendorDetailsModel.name?.value,
+                onChanged: (value) => widget.vendorDetailsModel.name?.value = value,
               ),
               CvdTextField(
-                name: vendorDetails.address!.label!,
-                value: vendorDetails.address?.value,
-                onChanged: (value) => vendorDetails.address?.value = value,
+                name: widget.vendorDetailsModel.address!.label!,
+                value: widget.vendorDetailsModel.address?.value,
+                onChanged: (value) => widget.vendorDetailsModel.address?.value = value,
               ),
               CvdTextField(
-                name: vendorDetails.town!.label!,
-                value: vendorDetails.town?.value,
-                onChanged: (value) => vendorDetails.town?.value = value,
+                name: widget.vendorDetailsModel.town!.label!,
+                value: widget.vendorDetailsModel.town?.value,
+                onChanged: (value) => widget.vendorDetailsModel.town?.value = value,
               ),
               PhoneTextField(
-                controller: TextEditingController(text: vendorDetails.tel?.value),
-                onChanged: (phone, s) => vendorDetails.tel?.value = phone,
+                controller: TextEditingController(text: widget.vendorDetailsModel.tel?.value),
+                onChanged: (phone, s) => widget.vendorDetailsModel.tel?.value = phone,
               ),
               CvdTextField(
-                name: vendorDetails.fax!.label!,
-                value: vendorDetails.fax?.value,
-                onChanged: (value) => vendorDetails.fax?.value = value,
+                name: widget.vendorDetailsModel.fax!.label!,
+                value: widget.vendorDetailsModel.fax?.value,
+                validator: (String? s) => null,
+                onChanged: (value) => widget.vendorDetailsModel.fax?.value = value,
               ),
               EmailField(
-                controller: TextEditingController(text: vendorDetails.email?.value),
-                // value: vendorDetails.email?.value,
-                onChanged: (value) => vendorDetails.email?.value = value,
+                controller: TextEditingController(text: widget.vendorDetailsModel.email?.value),
+                // value: widget.vendorDetailsModel.email?.value,
+                onChanged: (value) => widget.vendorDetailsModel.email?.value = value,
               ),
               CvdTextField(
-                name: vendorDetails.ngr!.label!,
-                value: vendorDetails.ngr?.value,
-                onChanged: (value) => vendorDetails.ngr?.value = value,
+                name: widget.vendorDetailsModel.ngr!.label!,
+                value: widget.vendorDetailsModel.ngr?.value,
+                validator: (String? s) => null,
+                onChanged: (value) => widget.vendorDetailsModel.ngr?.value = value,
               ),
               CvdTextField(
                 inputFormatters: [CapitalizeAllInputFormatter()],
                 maxLength: 8,
-                validator: Validator.pic,
-                name: vendorDetails.pic!.label!,
-                value: vendorDetails.pic?.value,
-                onChanged: (value) => vendorDetails.pic?.value = value,
+                // validator: Validator.pic,
+                validator: (String? s) => null,
+
+                name: widget.vendorDetailsModel.pic!.label!,
+                value: widget.vendorDetailsModel.pic?.value,
+                onChanged: (value) => widget.vendorDetailsModel.pic?.value = value,
               ),
               CvdTextField(
-                name: vendorDetails.refrenceNo!.label!,
-                value: vendorDetails.refrenceNo?.value,
-                onChanged: (value) => vendorDetails.refrenceNo?.value = value,
+                name: widget.vendorDetailsModel.refrenceNo!.label!,
+                value: widget.vendorDetailsModel.refrenceNo?.value,
+                onChanged: (value) => widget.vendorDetailsModel.refrenceNo?.value = value,
+                validator: (String? s) => null,
               ),
             ],
           ),
@@ -110,8 +116,8 @@ class _VendorDetailsState extends State<VendorDetails> {
             final isValidated = formKey.currentState!.validate();
             final cubit = context.read<CvdCubit>();
             if (isValidated) {
-              cubit.vendorDetails = vendorDetails;
-              cubit.changeCurrent(cubit.state.currentStep + 1);
+              cubit.vendorDetails = widget.vendorDetailsModel;
+              cubit.moveToNext();
               // cubit.addFormData(formData);
             }
           },

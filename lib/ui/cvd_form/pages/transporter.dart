@@ -80,7 +80,8 @@ class _TransporterDetailsState extends State<TransporterDetails> {
             if (isValidated) {
               print(transporterDetails);
               cubit.transporterDetails = transporterDetails;
-              cubit.changeCurrent(cubit.state.currentStep + 1);
+              // cubit.changeCurrent(cubit.state.currentStep + 1);
+              cubit.moveToNext();
             }
           },
         ),

@@ -156,27 +156,14 @@ class _ChemicalUseState extends State<ChemicalUse> {
             fieldData: form!.riskCheck!,
             children: [
               Divider(),
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Risk Assesment Results',
-                      style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      riskAssesment,
-                      style: context.textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
+              _resultsBox(context, 'Risk Assesment Results', riskAssesment),
             ],
             onChanged: (value) {
               if (form!.riskCheck!.value == '1') {
-                _enterTextPopup(riskAssesment, 'Enter Risk Assesment');
+                _enterTextPopup((s) {
+                  riskAssesment = s;
+                  setState(() {});
+                }, 'Enter Risk Assesment');
               }
             },
           ),
@@ -185,29 +172,15 @@ class _ChemicalUseState extends State<ChemicalUse> {
             fieldData: form!.nataCheck!,
             onChanged: (s) {
               if (form!.nataCheck!.value == '1') {
-                _enterTextPopup(testResults, 'Enter Test Results');
+                _enterTextPopup((s) {
+                  testResults = s;
+                  setState(() {});
+                }, 'Enter Test Results');
               }
             },
             children: [
               Divider(),
-              Container(
-                padding: EdgeInsets.all(10),
-                width: double.infinity,
-                decoration: MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Test Results',
-                      style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      testResults,
-                      style: context.textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
+              _resultsBox(context, 'Test Results', testResults),
             ],
           ),
           CommonButtons(
@@ -232,6 +205,27 @@ class _ChemicalUseState extends State<ChemicalUse> {
     );
   }
 
+  Container _resultsBox(BuildContext context, String text, String value) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      width: double.infinity,
+      decoration: MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            value,
+            style: context.textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
   // datarow
   Widget _dataCell(String text) {
     return Text(
@@ -240,7 +234,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
     );
   }
 
-  void _enterTextPopup(String value, String hint) {
+  void _enterTextPopup(ValueChanged<String> onChanged, String hint) {
     DialogService.showDialog(
       child: DialogLayout(
         child: Padding(
@@ -255,9 +249,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
                 ),
                 maxLines: 10,
                 minLines: 3,
-                onChanged: (s) {
-                  value = s;
-                },
+                onChanged: onChanged,
               ),
               Gap(10.h),
               MyElevatedButton(

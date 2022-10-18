@@ -29,7 +29,7 @@ class _BuyerDetailsState extends State<BuyerDetails> {
 
   //
   @override
-  void initState() {
+  void initState() { 
     super.initState();
     _init();
   }
@@ -37,6 +37,11 @@ class _BuyerDetailsState extends State<BuyerDetails> {
   Future<void> _init() async {
     buyerDetails = widget.buyerDetails;
   }
+
+  //   * Fax
+  // * NGR
+  // * PIC
+  // * Buyers contract number
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +75,7 @@ class _BuyerDetailsState extends State<BuyerDetails> {
               CvdTextField(
                 name: buyerDetails.fax!.label!,
                 value: buyerDetails.fax?.value,
+                validator: Validator.none,
                 onChanged: (value) => buyerDetails.fax?.value = value,
               ),
               EmailField(
@@ -80,18 +86,22 @@ class _BuyerDetailsState extends State<BuyerDetails> {
               CvdTextField(
                 name: buyerDetails.ngr!.label!,
                 value: buyerDetails.ngr?.value,
+                validator: Validator.none,
                 onChanged: (value) => buyerDetails.ngr?.value = value,
               ),
               CvdTextField(
                 inputFormatters: [CapitalizeAllInputFormatter()],
                 maxLength: 8,
-                validator: Validator.pic,
+                // validator: Validator.pic,
+                validator: Validator.none,
+
                 name: buyerDetails.pic!.label!,
                 value: buyerDetails.pic?.value,
                 onChanged: (value) => buyerDetails.pic?.value = value,
               ),
               if (buyerDetails.contractNo?.label != null)
                 CvdTextField(
+                  validator: Validator.none,
                   name: buyerDetails.contractNo!.label!,
                   value: buyerDetails.contractNo?.value,
                   onChanged: (value) => buyerDetails.contractNo?.value = value,
@@ -106,7 +116,7 @@ class _BuyerDetailsState extends State<BuyerDetails> {
             // cubit.addFormData(formData);
             if (isValidated) {
               cubit.buyerDetailsModel = buyerDetails;
-              cubit.changeCurrent(cubit.state.currentStep + 1);
+              cubit.moveToNext();
               print(buyerDetails);
             }
           },

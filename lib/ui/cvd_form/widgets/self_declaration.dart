@@ -138,7 +138,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
             SignatureWidget(
               signature: context.read<CvdCubit>().signature,
               onChanged: (s) {
-                signature = s;
+                context.read<CvdCubit>().signature = s;
                 setState(() {});
               },
             ),
@@ -174,7 +174,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                 //   'signature': signature,
                 //   'date': DateTime.now().toIso8601String(),
                 // };
-                cubit.signature = signature;
+                // cubit.signature = signature;
                 await cubit.getApiData();
               },
             ),

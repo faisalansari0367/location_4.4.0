@@ -135,6 +135,17 @@ class CvdCubit extends Cubit<CvdState> {
     moveToPage(_step);
   }
 
+  void moveToNext() {
+    final page = state.currentStep + 1;
+    stepCompleted[state.currentStep] = true;
+    emit(state.copyWith(currentStep: page));
+    pageController.animateToPage(
+      page,
+      curve: Curves.fastOutSlowIn,
+      duration: 500.milliseconds,
+    );
+  }
+
   void moveToPage(int page) {
     if (page != 0) {
       if (!stepCompleted[page - 1]) {

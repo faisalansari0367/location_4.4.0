@@ -54,6 +54,8 @@ class Validator {
     return message;
   }
 
+  static String? none(String? value) => null;
+
   //  static String? dob(String? value) {
   //   final validate = ValidationBuilder().('Mobile is not valid').build();
   //   // final validate = ValidationBuilder().minLength(3).build();

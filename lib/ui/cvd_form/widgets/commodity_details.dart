@@ -1,3 +1,4 @@
+import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:background_location/ui/cvd_form/models/cvd_field_data.dart';
 import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
@@ -64,6 +65,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
           CvdTextField(
             name: commodityDetails.variety2!.label!,
             value: commodityDetails.variety2?.value,
+            validator: Validator.none,
             onChanged: (s) => onChanged(s, commodityDetails.variety2!),
           ),
           MyDateField(
@@ -121,10 +123,11 @@ class _CommodityDetailsState extends State<CommodityDetails> {
           //   },
           // ),
           quantityField(commodityDetails.quantity1!),
-          quantityField(commodityDetails.quantity2!),
+          quantityField(commodityDetails.quantity2!, validator: Validator.none),
           MyTextField(
             hintText: 'Total Quantity',
             controller: TextEditingController(text: getTotal()),
+            validator: Validator.none,
             onChanged: (s) {
               map['totalQuantity'] = s;
               setState(() {});
@@ -138,7 +141,8 @@ class _CommodityDetailsState extends State<CommodityDetails> {
                 // cubit.addFormData(map);
                 // cubit.changeCurrent(0, isNext: true);
                 cubit.commodityDetails = commodityDetails;
-                cubit.changeCurrent(cubit.state.currentStep + 1);
+                // cubit.changeCurrent(cubit.state.currentStep + 1);
+                cubit.moveToNext();
                 // cubit.
               }
             },
@@ -152,7 +156,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
     data.value = value;
   }
 
-  Widget quantityField(CvdFieldData data) {
+  Widget quantityField(CvdFieldData data, {String? Function(String?)? validator}) {
     return Row(
       children: [
         Expanded(
@@ -164,6 +168,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
             name: data.label!,
             // controller: TextEditingController(text: data.value),
             value: data.value,
+            validator: validator,
             onChanged: (s) {
               data.value = s;
               setState(() {});
