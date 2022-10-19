@@ -1,4 +1,5 @@
 import 'package:api_repo/configs/client.dart';
+import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
@@ -11,6 +12,7 @@ class ApiRepo implements Api {
   late AuthRepo _authRepo;
   late UserRepo _userRepo;
   late LogRecordsRepo _logRecordsRepo;
+  late FunctionsRepo _functionsRepo;
 
   late Box _box;
   // late LocalesApi _localesApi;
@@ -28,7 +30,7 @@ class ApiRepo implements Api {
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box);
     _userRepo = UserRepoImpl(client: _client, box: _box);
-
+    _functionsRepo = FunctionsRepoImpl(client: _client);
     _authRepo.updateMe(user: User(), isUpdate: false);
     // _localesApi = LocalesRepo();
     // await _localesApi.initLocale();
@@ -231,5 +233,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<RoleDetailsModel>> getRoles() {
     return _userRepo.getRoles();
+  }
+
+  @override
+  Future<ApiResult> sendEmergencyNotification() async {
+    return _functionsRepo.sendEmergencyNotification();
   }
 }

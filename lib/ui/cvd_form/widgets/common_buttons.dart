@@ -36,6 +36,9 @@ class CommonButtons extends StatelessWidget {
                       },
                 style: OutlinedButton.styleFrom(
                   shape: const StadiumBorder(),
+                  // primary: Colors.black
+                  // ,
+                  // backgroundColor: Color.fromARGB(200, 0, 0, 0),
                   minimumSize: Size(50.w, 50.h),
                 ),
                 child: Text(

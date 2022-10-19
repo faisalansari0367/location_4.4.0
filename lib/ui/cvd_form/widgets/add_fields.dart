@@ -55,6 +55,7 @@ class _AddFieldsState extends State<AddFields> {
                     Expanded(
                       child: TextFormField(
                         focusNode: AlwaysDisabledFocusNode(),
+                        initialValue: e,
                         // decoration: MyDecoration.recangularInputDecoration(context),
                         onChanged: (s) => value = s,
                       ),
@@ -75,12 +76,22 @@ class _AddFieldsState extends State<AddFields> {
             children: [
               // Gap(20.w),
               Expanded(
-                child: TextFormField(
-                  validator: (s) => null,
-                  // decoration: MyDecoration.recangularInputDecoration(context),
-                  onChanged: (s) => setState(() {
-                    value = s;
-                  }),
+                child: Focus(
+                  onFocusChange: (b) {
+                    if (!b) {
+                      fields.add(value);
+                      value = '';
+                      widget.onChanged.call(fields);
+                      setState(() {});
+                    }
+                  },
+                  child: TextFormField(
+                    validator: (s) => null,
+                    // decoration: MyDecoration.recangularInputDecoration(context),
+                    onChanged: (s) => setState(() {
+                      value = s;
+                    }),
+                  ),
                 ),
               ),
               IconButton(

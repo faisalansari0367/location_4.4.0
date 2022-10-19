@@ -33,10 +33,13 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     // final drawer = Provider.of<MyDrawerController>(context, listen: false);
+    final color =
+        (backgroundColor ?? context.theme.backgroundColor).computeLuminance() > 0.5 ? Colors.black : Colors.white;
     final leadingArrow = IconButton(
-      icon: const Icon(
+      icon: Icon(
         Icons.arrow_back_ios,
-        color: Colors.black,
+        // color: Colors.black,
+        color: color,
       ),
       onPressed: onBackPressed ?? Get.back,
     );
@@ -51,7 +54,8 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
             // color: Colors.white,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            // color: Colors.black,
+            color: color,
             fontSize: 20,
           ),
         ),
@@ -64,7 +68,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
         // backgroundColor: backgroundColor,
         // backgroundColor: Color.fromARGB(255, 85, 177, 106),
         // backgroundColor: Color(0xff3B4798),
-        backgroundColor: Colors.white,
+        backgroundColor: backgroundColor ?? Colors.white,
         leading: leading ?? (showBackButton ? leadingArrow : const DrawerMenuIcon()),
         leadingWidth: showBackButton ? null : null,
         actions: actions,

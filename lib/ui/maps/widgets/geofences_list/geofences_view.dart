@@ -60,7 +60,7 @@ class _GeofencesListState extends State<GeofencesList> {
         Row(
           children: [
             Text(
-              'Select A Geofence',
+              'Select A Location',
               style: context.textTheme.headline6?.copyWith(
                 fontWeight: FontWeight.bold,
               ),

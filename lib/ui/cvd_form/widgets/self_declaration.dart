@@ -31,7 +31,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
   @override
   void initState() {
     orgController = TextEditingController(text: context.read<Api>().getUserData()?.company);
-
+    context.read<CvdCubit>().organisationName = orgController.text;
     nameController = TextEditingController(text: getName());
     _init();
     super.initState();
@@ -69,6 +69,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
               textCapitalization: TextCapitalization.characters,
               onChanged: (s) {
                 setState(() {
+                  context.read<CvdCubit>().organisationName = s;
                   org = s;
                 });
               },
@@ -172,7 +173,6 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
               text: 'Submit',
               onPressed: () async {
                 final cubit = context.read<CvdCubit>();
-
                 if (cubit.signature == null) {
                   DialogService.showDialog(
                     child: NoSignatureFound(
@@ -183,12 +183,6 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                   );
                   return;
                 }
-
-                // final data = {
-                //   'signature': signature,
-                //   'date': DateTime.now().toIso8601String(),
-                // };
-                // cubit.signature = signature;
                 await cubit.getApiData();
               },
             ),

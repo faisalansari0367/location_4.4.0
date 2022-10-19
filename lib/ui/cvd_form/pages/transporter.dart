@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/cvd_form/models/transporter_details_model.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
+import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,6 +66,7 @@ class _TransporterDetailsState extends State<TransporterDetails> {
                 onChanged: (value) => transporterDetails.company?.value = value,
               ),
               CvdTextField(
+                inputFormatters: [CapitalizeAllInputFormatter()],
                 name: transporterDetails.registration!.label!,
                 value: transporterDetails.registration?.value,
                 onChanged: (value) => transporterDetails.registration?.value = value,

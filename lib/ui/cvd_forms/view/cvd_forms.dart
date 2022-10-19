@@ -41,7 +41,7 @@ class _CvdFormsState extends State<CvdForms> {
                   Icons.picture_as_pdf,
                   color: Colors.red,
                 ),
-                title: Text(snapshot.data![index].path.split('/').last.replaceFirst('.', 'to')),
+                title: Text(snapshot.data![index].path.split('/').last),
               );
             },
           );

@@ -160,7 +160,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
     return Row(
       children: [
         Expanded(
-          flex: 2,
+          // flex: 2,
           child: CvdTextField(
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             textInputType: TextInputType.number,

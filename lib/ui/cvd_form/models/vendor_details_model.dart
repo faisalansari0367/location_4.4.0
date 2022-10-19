@@ -9,7 +9,11 @@ class VendorDetailsModel extends CvdBaseModel {
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = super.toJson();
-    refrenceNo?.key = this.refrenceNo?.toJson() as String?;
+    if (refrenceNo != null) {
+      data[refrenceNo!.key!] = refrenceNo!.toJson();
+    }
+
+    // refrenceNo?.key = this.refrenceNo?.toJson();
     return data;
   }
 

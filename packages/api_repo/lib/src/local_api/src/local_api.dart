@@ -248,4 +248,10 @@ class LocalApi extends Api {
   Future<ApiResult<RoleDetailsModel>> getRoles() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResult> sendEmergencyNotification() {
+    // TODO: implement sendEmergencyNotification
+    throw UnimplementedError();
+  }
 }

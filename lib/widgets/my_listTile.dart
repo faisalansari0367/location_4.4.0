@@ -6,6 +6,7 @@ import '../../../constants/index.dart';
 
 class MyListTile extends StatefulWidget {
   final String text;
+  final TextStyle? style;
   final Future<void> Function() onTap;
   final Widget? trailing, title;
   const MyListTile({
@@ -13,7 +14,7 @@ class MyListTile extends StatefulWidget {
     required this.text,
     required this.onTap,
     this.trailing,
-    this.title,
+    this.title, this.style,
   }) : super(key: key);
 
   @override
@@ -59,7 +60,7 @@ class _MyListTileState extends State<MyListTile> {
               style: context.textTheme.subtitle2?.copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 15.w,
-              ),
+              ).merge(widget.style),
             ),
         trailing: isLoading
             ? SizedBox.square(

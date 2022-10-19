@@ -18,7 +18,6 @@ class Endpoints {
       forms = '$records/forms',
       roles = '$records/roles',
 
-
       // users
       getFields = '$users/fields',
       updateMe = '$users/me',
@@ -31,6 +30,7 @@ class Endpoints {
   static const markExit = '$logRecords/mark-exit';
 
   static const qrCode = '$functions/qrcode';
+  static const sendEmergencyNotification = '$functions/send-emergency-notification';
 
   // static String user(int id) => '/user/$id';
 }

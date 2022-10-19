@@ -8,8 +8,14 @@ import '../../models/polygon_model.dart';
 
 class GeofenceCard extends StatelessWidget {
   final PolygonModel item;
+  final bool isSelected;
   final VoidCallback? onTap;
-  const GeofenceCard({Key? key, required this.item, this.onTap}) : super(key: key);
+  const GeofenceCard({
+    Key? key,
+    required this.item,
+    this.onTap,
+    this.isSelected = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +27,7 @@ class GeofenceCard extends StatelessWidget {
           padding: kPadding,
           decoration: BoxDecoration(
             border: _border(item),
+            color: isSelected ? item.color.withOpacity(0.3) : Colors.transparent,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

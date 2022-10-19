@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +12,7 @@ import 'package:get/get.dart';
 import '../models/witholding_period_model.dart';
 
 class AddTableEntries extends StatefulWidget {
-  final ValueChanged<Map>? onChanged;
+  final ValueChanged<ChemicalTable>? onChanged;
   const AddTableEntries({Key? key, this.onChanged}) : super(key: key);
 
   @override
@@ -21,8 +22,8 @@ class AddTableEntries extends StatefulWidget {
 class _AddTableEntriesState extends State<AddTableEntries> {
   var list = <WitholdingPeriodModel>[];
   WitholdingPeriodModel? selected;
+  final formKey = GlobalKey<FormState>();
   final productName = TextEditingController();
-  // final productDescription= TextEditingController();
   final whpDays = TextEditingController();
   final rateController = TextEditingController();
   final applicationDate = TextEditingController(text: DateTime.now().toIso8601String());
@@ -46,71 +47,82 @@ class _AddTableEntriesState extends State<AddTableEntries> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Autocomplete<WitholdingPeriodModel>(
-          optionsBuilder: optionsBuilder,
-          optionsViewBuilder: _optionsViewBuilder,
-          fieldViewBuilder: _fieldViewBuilder,
-          displayStringForOption: _displayStringForOption,
-          onSelected: _onSelected,
-        ),
-        Gap(20.h),
-        MyTextField(
-          hintText: 'Chemical Applied',
-          controller: productName,
-          decoration: InputDecoration(
-            labelText: ('Chemical Applied'),
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Autocomplete<WitholdingPeriodModel>(
+            optionsBuilder: optionsBuilder,
+            optionsViewBuilder: _optionsViewBuilder,
+            fieldViewBuilder: _fieldViewBuilder,
+            displayStringForOption: _displayStringForOption,
+            onSelected: _onSelected,
           ),
-        ),
-        Gap(10.h),
-        MyTextField(
-          hintText: 'Rate (Tonne/ Ha)',
-          controller: rateController,
-          textInputType: TextInputType.number,
-          // inputFormatters: [FilteringTextInputFormatter.],
-          // validator: (s) => ,
-          decoration: InputDecoration(
-            labelText: 'Rate (Tonne/ Ha)',
+          Gap(20.h),
+          MyTextField(
+            hintText: 'Chemical Applied',
+            controller: productName,
+            decoration: InputDecoration(
+              labelText: ('Chemical Applied'),
+            ),
           ),
+          Gap(10.h),
+          MyTextField(
+            hintText: 'Rate (Tonne/ Ha)',
+            controller: rateController,
+            textInputType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Rate (Tonne/ Ha)',
+            ),
+          ),
+          Gap(10.h),
+          MyDateField(
+            label: 'Application date',
+            date: DateTime.now().toIso8601String(),
+            onChanged: (s) {
+              applicationDate.text = s;
+            },
+            decoration: InputDecoration(
+              labelText: 'Application date',
+              suffixIcon: const Icon(Icons.date_range_outlined),
+            ),
+          ),
+          Gap(10.h),
+          MyTextField(
+            hintText: 'WHP/ ESI/ EAFI',
+            controller: whpDays,
+            decoration: InputDecoration(
+              labelText: 'WHP/ ESI/ EAFI',
+            ),
+          ),
+          Gap(10.h),
+          MyElevatedButton(
+            text: 'Save',
+            onPressed: () async {
+              if (!formKey.currentState!.validate()) return;
+              Get.back();
 
-          // controller: selected?.productNumber,
-        ),
-        Gap(10.h),
-        MyDateField(
-          label: 'Application date',
-          date: DateTime.now().toIso8601String(),
-          onChanged: (s) {
-            applicationDate.text = s;
-          },
-          decoration: InputDecoration(
-            labelText: 'Application date',
-            suffixIcon: const Icon(Icons.date_range_outlined),
+              final chemicalTableModel = ChemicalTable(
+                applicationDate: applicationDate.text,
+                chemicalName: productName.text,
+                rate: rateController.text,
+                wHP: whpDays.text,
+              );
+
+              widget.onChanged?.call(chemicalTableModel);
+
+              // widget.onChanged!({
+
+              //   'chemicalName': productName.text,
+              //   'rate': rateController.text,
+              //   'applicationDate': applicationDate.text,
+              //   'WHP': whpDays.text,
+              // });
+            },
           ),
-        ),
-        Gap(10.h),
-        MyTextField(
-          hintText: 'WHP/ ESI/ EAFI',
-          controller: whpDays,
-          decoration: InputDecoration(
-            labelText: 'WHP/ ESI/ EAFI',
-          ),
-        ),
-        Gap(10.h),
-        MyElevatedButton(
-          text: 'Save',
-          onPressed: () async {
-            Get.back();
-            widget.onChanged!({
-              'chemicalName': productName.text,
-              'rate': rateController.text,
-              'applicationDate': applicationDate.text,
-              'WHP': whpDays.text,
-            });
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 

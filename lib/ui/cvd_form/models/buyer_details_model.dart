@@ -9,7 +9,11 @@ class BuyerDetailsModel extends CvdBaseModel {
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = super.toJson();
-    contractNo?.key = this.contractNo?.toJson() as String?;
+    if (contractNo != null) {
+      data[contractNo!.key!] = contractNo!.toJson();
+    }
+
+    // contractNo?.key = this.contractNo?.toJson() as String?;
     return data;
   }
 

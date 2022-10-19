@@ -14,6 +14,7 @@
             }
         ]
     },
+    "chemicalTable": [],
     "qaCheck": {
         "field": "Has the commodity been grown and/or stored under an independently audited QA program which includes chemical residue management?",
         "value": null,

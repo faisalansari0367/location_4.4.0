@@ -28,7 +28,7 @@ class ChemicalUse extends StatefulWidget {
 class _ChemicalUseState extends State<ChemicalUse> {
   ChemicalUseDetailsModel? form;
   final formData = {};
-  List<Map> tableData = [];
+  List<ChemicalTable> tableData = [];
   bool showTable = false;
   String riskAssesment = '';
   String testResults = '';
@@ -64,6 +64,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
                 BottomSheetService.showSheet(child: AddTableEntries(
                   onChanged: (value) {
                     tableData.add(value);
+                    widget.chemicalUseDetailsModel.chemicalTable = tableData;
                     setState(() {});
                   },
                 ));
@@ -85,10 +86,10 @@ class _ChemicalUseState extends State<ChemicalUse> {
                   ...tableData.map(
                     (e) => TableRow(
                       children: [
-                        Text(e['chemicalName'] ?? ''),
-                        Text(e['rate'] ?? ''),
-                        Text(MyDecoration.formatDate(DateTime.tryParse(e['applicationDate']))),
-                        Text(e['WHP'] ?? ''),
+                        Text(e.chemicalName ?? ''),
+                        Text(e.rate ?? ''),
+                        Text(MyDecoration.formatDate(DateTime.tryParse(e.applicationDate!))),
+                        Text(e.wHP ?? ''),
                       ],
                     ),
                   ),
@@ -201,7 +202,8 @@ class _ChemicalUseState extends State<ChemicalUse> {
 
               final cubit = context.read<CvdCubit>();
 
-              cubit.changeCurrent(cubit.state.currentStep, isNext: true);
+              // cubit.changeCurrent(cubit.state.currentStep, isNext: true);
+              cubit.moveToNext();
             },
           ),
         ],

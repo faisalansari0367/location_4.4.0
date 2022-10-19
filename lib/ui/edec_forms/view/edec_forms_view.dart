@@ -32,7 +32,7 @@ class EdecFormsView extends StatelessWidget {
               },
             ),
             MyListTile(
-                text: 'Feedsafe Personal Qurantine Declaration',
+                text: 'Feedsafe Personal Quarantine Declaration',
                 onTap: () async {
                   comingSoon();
                 }),

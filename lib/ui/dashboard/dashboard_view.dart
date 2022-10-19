@@ -1,16 +1,18 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:background_location/ui/cvd_forms/view/cvd_forms.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
+import 'package:background_location/ui/emergency_warning/emergency_warning.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
-import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
+import 'package:background_location/ui/visitors/visitors_page.dart';
 import 'package:background_location/widgets/dialogs/coming_soon.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -68,13 +70,19 @@ class DashboardView extends StatelessWidget {
                 ),
                 children: [
                   DashboardCard(
-                    text: Strings.visitorCheckIn.toUpperCase(),
+                    text: 'Visitors',
                     // iconData: Icons.qr_code,
                     image: 'assets/icons/Check In.png',
-                    onTap: () => Get.to(() => const VisitorCheckInPage()),
+                    onTap: () => Get.to(() => const VisitorsPage()),
                   ),
+                  // DashboardCard(
+                  //   text: 'Visitor Check-Ins',
+                  //   // iconData: Icons.qr_code,
+                  //   image: 'assets/icons/Check In.png',
+                  //   onTap: () => Get.to(() => const VisitorCheckInPage()),
+                  // ),
                   DashboardCard(
-                    text: 'WORK SAFETY',
+                    text: 'Work Safety',
                     // iconData: Icons.work_outline,
                     image: 'assets/icons/Work Safety.png',
                     onTap: () {
@@ -82,7 +90,7 @@ class DashboardView extends StatelessWidget {
                     },
                   ),
                   DashboardCard(
-                    text: Strings.links.toUpperCase(),
+                    text: 'Links',
                     // iconData: Icons.link,
                     image: 'assets/icons/Links.png',
                     onTap: () => Get.to(() => const LinksPage()),
@@ -95,11 +103,12 @@ class DashboardView extends StatelessWidget {
                     // imagecolor: null,
                     image: 'assets/icons/warning_icon.png',
                     onTap: () {
-                      _warningDialog();
+                      // _warningDialog(context);
+                      Get.to(() => EmergencyWarning());
                     },
                   ),
                   DashboardCard(
-                    text: Strings.geofences.toUpperCase(),
+                    text: 'Location',
                     // iconData: Icons.fence,
                     image: 'assets/icons/Geofences (1).png',
                     onTap: () => Get.to(() => const MapsPage()),
@@ -114,7 +123,7 @@ class DashboardView extends StatelessWidget {
                   ),
 
                   DashboardCard(
-                    text: 'CVD FORMS',
+                    text: 'CVD Forms',
                     iconData: Icons.format_align_justify_rounded,
                     // onTap: () => Get.to(() => const CvdFormPage()),
                     onTap: () async {
@@ -140,14 +149,14 @@ class DashboardView extends StatelessWidget {
                     },
                     // onTap: () => Get.to(() => VisitorCheckInPage()),
                   ),
+                  // DashboardCard(
+                  //   text: Strings.visitorLogBook.capitalize!,
+                  //   // iconData: Icons.book,
+                  //   image: 'assets/icons/Logbook.jpg',
+                  //   onTap: () => Get.to(() => const LogbookPage()),
+                  // ),
                   DashboardCard(
-                    text: Strings.visitorLogBook.toUpperCase(),
-                    // iconData: Icons.book,
-                    image: 'assets/icons/Logbook.jpg',
-                    onTap: () => Get.to(() => const LogbookPage()),
-                  ),
-                  DashboardCard(
-                    text: Strings.settings.toUpperCase(),
+                    text: Strings.settings.capitalize!,
                     iconData: Icons.settings,
                     onTap: () => Get.to(
                       // () => SettingsPage(
@@ -184,7 +193,7 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  _warningDialog() async {
+  _warningDialog(BuildContext context) async {
     DialogService.showDialog(
       child: DialogLayout(
         child: Padding(
@@ -219,7 +228,19 @@ class DashboardView extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         Get.back();
-                        await DialogService.showDialog(child: const ComingSoonDialog());
+                        final result = await context.read<Api>().sendEmergencyNotification();
+                        result.when(
+                          success: (data) {
+                            DialogService.success(
+                              'Alert sent successfully',
+                              onCancel: Get.back,
+                            );
+                          },
+                          failure: (error) {
+                            DialogService.error('Failed to sent Alert');
+                          },
+                        );
+                        // await DialogService.showDialog(child: const ComingSoonDialog());
                       },
                       child: const Text('Yes'),
                     ),

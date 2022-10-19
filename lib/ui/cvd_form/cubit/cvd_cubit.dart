@@ -4,6 +4,7 @@ import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/api/api_repo.dart';
 import 'package:api_repo/src/local_api/src/local_api.dart';
 import 'package:api_repo/src/user/src/models/user_forms_data.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/forms_storage_service.dart';
 import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/ui/cvd_form/models/cvd_form_data.dart';
@@ -17,6 +18,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:open_file/open_file.dart';
 
 import '../models/buyer_details_model.dart';
@@ -28,21 +30,27 @@ part 'cvd_state.dart';
 class CvdCubit extends Cubit<CvdState> {
   final Api api;
   final LocalApi localApi;
+  late Box _box;
 
   CvdCubit({required this.api, required this.localApi}) : super(const CvdState()) {
     // getCvdForm();
   }
 
-  void init(BuildContext context) {
-    _fetchVendorDetailsModel(context);
-    _fetchBuyerDetailsModel(context);
-    _fetchTransporterDetailsModel(context);
-    _fetchCommodityDetailsModel(context);
-    _fetchChemicalUseDetailsModel(context);
-    _fetchPartIntegrityDetailsModel(context);
+  void init(BuildContext context) async {
+    final futures = [
+      _fetchVendorDetailsModel(context),
+      _fetchBuyerDetailsModel(context),
+      _fetchTransporterDetailsModel(context),
+      _fetchCommodityDetailsModel(context),
+      _fetchChemicalUseDetailsModel(context),
+      _fetchPartIntegrityDetailsModel(context),
+    ];
+    await Future.wait(futures);
+    _box = await Hive.openBox('cvdbox');
+    _fromJson();
   }
 
-  String? signature;
+  String? signature, organisationName;
 
   VendorDetailsModel vendorDetails = VendorDetailsModel();
   BuyerDetailsModel buyerDetailsModel = BuyerDetailsModel();
@@ -139,12 +147,22 @@ class CvdCubit extends Cubit<CvdState> {
     final page = state.currentStep + 1;
     stepCompleted[state.currentStep] = true;
     emit(state.copyWith(currentStep: page));
+    saveFormData();
     pageController.animateToPage(
       page,
       curve: Curves.fastOutSlowIn,
       duration: 500.milliseconds,
     );
+    if (page > 1) {
+      stepController.animateTo(
+        (90 * page).toDouble(),
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
+
+  void saveFormData() => _toJson();
 
   void moveToPage(int page) {
     if (page != 0) {
@@ -173,9 +191,7 @@ class CvdCubit extends Cubit<CvdState> {
       final result = await Dio().post(
         'https://uniquetowinggoa.com/safemeat/public/api/declaration',
         data: _cvdFormData,
-        options: dio.Options(
-            // responseType: ResponseType.bytes,
-            ),
+        options: dio.Options(),
         onReceiveProgress: (a, b) {
           print('$a $b');
         },
@@ -183,10 +199,8 @@ class CvdCubit extends Cubit<CvdState> {
           print('$a $b');
         },
       );
-      print(result.data);
       if (result.data['status'] == false) {
         final error = result.data['data'] as Map;
-
         DialogService.error('${result.data['message']} \n ${error.values.first}');
         return;
       }
@@ -194,15 +208,7 @@ class CvdCubit extends Cubit<CvdState> {
       final bytes = base64Decode(result.data['data']);
       final file = await formsService.saveCvdForm(bytes);
       await OpenFile.open(file.path);
-
-      // await Get.to(
-      //   () => Scaffold(
-      //     appBar: const MyAppBar(
-      //       title: Text('CVD FORM PDF'),
-      //     ),
-      //     body: Image.memory(file.readAsBytesSync()),
-      //   ),
-      // );
+      Get.back();
     } catch (e) {
       print(e);
     }
@@ -229,9 +235,8 @@ class CvdCubit extends Cubit<CvdState> {
       'buyerPIC': buyerDetailsModel.pic!.value,
       'buyerRefrence': buyerDetailsModel.contractNo!.value,
       'commodity': commodityDetails.commodity!.value,
-      // 'period': commodityDetails.deliveryPeriod!.value,
-      'period': '30',
-      // commodityDetails.deliveryPeriod!.value
+      // 'period': '30',
+      'period': MyDecoration.formatDate(DateTime.tryParse(commodityDetails.deliveryPeriod!.value!)),
       'variety1': commodityDetails.variety1!.value,
       'variety2': commodityDetails.variety2!.value,
       'quantity1': commodityDetails.quantity1!.value,
@@ -240,16 +245,18 @@ class CvdCubit extends Cubit<CvdState> {
       'materialCheck': productIntegrityDetailsModel.materialCheck?.value,
       'gmoCheck': productIntegrityDetailsModel.gmoCheck?.value,
       'chemicalCheck': chemicalUseDetailsModel.chemicalCheck?.value,
-      'chemicals': [
-        {'chemicalName': 'chemical1', 'rate': '200', 'applicationDate': '2022-08-25', 'WHP': '456'},
-        {'chemicalName': 'chemical2', 'rate': '2000', 'applicationDate': '2022-08-27', 'WHP': '753'},
-        {'chemicalName': 'chemical3', 'rate': '2650', 'applicationDate': '2022-08-21', 'WHP': '1369'},
-        {'chemicalName': 'chemical4', 'rate': '800', 'applicationDate': '2022-04-25', 'WHP': '789'}
-      ],
+      // 'chemicals': [
+      //   {'chemicalName': 'chemical1', 'rate': '200', 'applicationDate': '2022-08-25', 'WHP': '456'},
+      //   {'chemicalName': 'chemical2', 'rate': '2000', 'applicationDate': '2022-08-27', 'WHP': '753'},
+      //   {'chemicalName': 'chemical3', 'rate': '2650', 'applicationDate': '2022-08-21', 'WHP': '1369'},
+      //   {'chemicalName': 'chemical4', 'rate': '800', 'applicationDate': '2022-04-25', 'WHP': '789'}
+      // ],
+      'chemicals': chemicalUseDetailsModel.chemicalTable.map((e) => e.toJson()).toList(),
       'qaCheck': chemicalUseDetailsModel.qaCheck?.value,
       'qaProgram': chemicalUseDetailsModel.qaProgram?.value,
       'certificateNumber': chemicalUseDetailsModel.certificateNumber?.value,
       'cvdCheck': chemicalUseDetailsModel.cvdCheck?.value,
+      'organisationName': organisationName,
       // 'cropList': [
       //   {'cropName': 'crop1'},
       //   {'cropName': 'crop2'},
@@ -258,6 +265,7 @@ class CvdCubit extends Cubit<CvdState> {
       // ],
       'cropList': chemicalUseDetailsModel.cropList?.value!.split(',').map((e) => {'cropName': e}).toList(),
       'riskCheck': chemicalUseDetailsModel.riskCheck?.value,
+      // 'organisationName':
       'nataCheck': chemicalUseDetailsModel.nataCheck?.value,
       'signature': signature,
     };
@@ -283,5 +291,29 @@ class CvdCubit extends Cubit<CvdState> {
   void success(UserFormsData data) {
     emit(state.copyWith(forms: data.data?.forms));
     // data.data.forms;
+  }
+
+  void _toJson() {
+    final json = {
+      'vendorDetails': vendorDetails.toJson(),
+      'buyerDetailsModel': buyerDetailsModel.toJson(),
+      'transporterDetails': transporterDetails.toJson(),
+      'commodityDetails': commodityDetails.toJson(),
+      'chemicalUseDetailsModel': chemicalUseDetailsModel.toJson(),
+      'productIntegrityDetailsModel': productIntegrityDetailsModel.toJson(),
+    };
+    _box.put('json', json);
+  }
+
+  void _fromJson() {
+    final json = _box.get('json');
+    if (json == null) return;
+    if (json['vendorDetails'] != null) vendorDetails = VendorDetailsModel.fromJson(json['vendorDetails']);
+    // vendorDetails = VendorDetailsModel.fromJson(json['venderDetails'] );
+    buyerDetailsModel = BuyerDetailsModel.fromJson(json['buyerDetailsModel']);
+    transporterDetails = TransporterDetailsModel.fromJson(json['transporterDetails']);
+    commodityDetails = CommodityDetailsModel.fromJson(json['commodityDetails']);
+    chemicalUseDetailsModel = ChemicalUseDetailsModel.fromJson(json['chemicalUseDetailsModel']);
+    productIntegrityDetailsModel = ProductIntegrityDetailsModel.fromJson(json['productIntegrityDetailsModel']);
   }
 }

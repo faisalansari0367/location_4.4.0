@@ -38,73 +38,79 @@ class _CvdFormViewState extends State<CvdFormView> {
   @override
   Widget build(BuildContext context) {
     // cubit.getCvdForm();
-    return Scaffold(
-      appBar: MyAppBar(
-        title: Text('Cvd Form'.toUpperCase()),
-      ),
-      body: BlocBuilder<CvdCubit, CvdState>(
-        builder: (context, state) {
-          if (state.isLoading) return Center(child: CircularProgressIndicator());
-          // index = -1;
-          return Column(
-            children: [
-              CustomSteppar(
-                onChanged: (value) => cubit.moveToPage(value),
-                currentStep: state.currentStep,
-                stepper: cubit.stepNames,
-                // isCompleted: cubit.isStepCompleted(),
-              ),
-              Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: cubit.pageController,
-                  children: [
-                    // CommonPage(data: state.formStepper[0].formDataList),
-                    VendorDetails(
-                      vendorDetailsModel: cubit.vendorDetails,
-                    ),
-                    BuyerDetails(
-                      buyerDetails: cubit.buyerDetailsModel,
-                    ),
-                    TransporterDetails(transporDetails: cubit.transporterDetails),
-                    // CommonPage(data: state.formStepper[2].formDataList),
-                    CommodityDetails(
-                      commodityDetails: cubit.commodityDetails,
-                    ),
-                    ProductIntegrity(
-                      productIntegrityDetails: cubit.productIntegrityDetailsModel,
-                    ),
-                    ChemicalUse(
-                      chemicalUseDetailsModel: cubit.chemicalUseDetailsModel,
-                    ),
-                    const SelfDeclaration(),
-                  ].map((e) {
-                    return SingleChildScrollView(
-                      padding: kPadding,
-                      child: e,
-                    );
-                  }).toList(),
-                  // itemBuilder: (context, index) {
-                  // final e = state.formStepper.elementAt(index);
-                  // final step = FormStepper(
-                  //   actions: Padding(
-                  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  //     child: _actions(state, index),
-                  //   ),
-                  //   heading: e.heading,
-                  //   isActive: state.formStepper.indexOf(e) == state.currentStep,
-                  //   formDataList: e.formDataList,
-                  // );
-                  // return Padding(
-                  //   padding: kPadding,
-                  //   child: step.content,
-                  // );
-                  // },
+    return WillPopScope(
+      onWillPop: () {
+        cubit.saveFormData();
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: MyAppBar(
+          title: Text('Cvd Form'.toUpperCase()),
+        ),
+        body: BlocBuilder<CvdCubit, CvdState>(
+          builder: (context, state) {
+            if (state.isLoading) return Center(child: CircularProgressIndicator());
+            // index = -1;
+            return Column(
+              children: [
+                CustomSteppar(
+                  onChanged: (value) => cubit.moveToPage(value),
+                  currentStep: state.currentStep,
+                  stepper: cubit.stepNames,
+                  // isCompleted: cubit.isStepCompleted(),
                 ),
-              ),
-            ],
-          );
-        },
+                Expanded(
+                  child: PageView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: cubit.pageController,
+                    children: [
+                      // CommonPage(data: state.formStepper[0].formDataList),
+                      VendorDetails(
+                        vendorDetailsModel: cubit.vendorDetails,
+                      ),
+                      BuyerDetails(
+                        buyerDetails: cubit.buyerDetailsModel,
+                      ),
+                      TransporterDetails(transporDetails: cubit.transporterDetails),
+                      // CommonPage(data: state.formStepper[2].formDataList),
+                      CommodityDetails(
+                        commodityDetails: cubit.commodityDetails,
+                      ),
+                      ProductIntegrity(
+                        productIntegrityDetails: cubit.productIntegrityDetailsModel,
+                      ),
+                      ChemicalUse(
+                        chemicalUseDetailsModel: cubit.chemicalUseDetailsModel,
+                      ),
+                      const SelfDeclaration(),
+                    ].map((e) {
+                      return SingleChildScrollView(
+                        padding: kPadding,
+                        child: e,
+                      );
+                    }).toList(),
+                    // itemBuilder: (context, index) {
+                    // final e = state.formStepper.elementAt(index);
+                    // final step = FormStepper(
+                    //   actions: Padding(
+                    //     padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    //     child: _actions(state, index),
+                    //   ),
+                    //   heading: e.heading,
+                    //   isActive: state.formStepper.indexOf(e) == state.currentStep,
+                    //   formDataList: e.formDataList,
+                    // );
+                    // return Padding(
+                    //   padding: kPadding,
+                    //   child: step.content,
+                    // );
+                    // },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
