@@ -5,46 +5,41 @@ import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
-import 'package:background_location/ui/splash/new_splash_screen.dart';
 import 'package:background_location/widgets/animations/my_slide_animation.dart';
-import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:local_auth_repo/local_auth.dart';
 
 import '../../constants/constans.dart';
-import '../../features/drawer/view/drawer_page.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class NewSplashScreen extends StatefulWidget {
+  const NewSplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<NewSplashScreen> createState() => _NewSplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _NewSplashScreenState extends State<NewSplashScreen> {
   bool showSplash = true;
 
   @override
   void initState() {
     final isLoggedIn = context.read<Api>().isLoggedIn;
 
-    Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
-      // Get.offAll(() => NewSplashScreen());
-      if (!isLoggedIn) return LoginPage();
-      final user = context.read<Api>().getUser()!;
-      final localAuth = LocalAuth();
-      final result = await localAuth.authenticate();
-      if (!result) {
-        await Get.off(() => LoginPage(email: user.email));
-      } else {
-        await Get.off(() => const DrawerPage());
-      }
-    });
+    // Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
+    //   if (!isLoggedIn) return;
+    //   final user = context.read<Api>().getUser()!;
+    //   final localAuth = LocalAuth();
+    //   final result = await localAuth.authenticate();
+    //   if (!result) {
+    //     await Get.off(() => LoginPage(email: user.email));
+    //   } else {
+    //     await Get.off(() => const DrawerPage());
+    //   }
+    // });
     // Future.delayed((kSplashDuration.inSeconds - 0.5).seconds, () {
     //   if (!mounted) return;
     //   setState(() {
@@ -57,9 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final size = 13.width;
-
     return Scaffold(
-      backgroundColor: Color(0XFF79C351),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Column(
@@ -67,48 +60,23 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Gap(10.height),
-            Center(
-              child: Image.asset(
-                Assets.icons.appIcon.path,
-                fit: BoxFit.fitHeight,
-                // alignment: Alignment.center,
-                height: 70.width,
-                // width: 100.width,
-                // scale: 0.1,
+            MySlideAnimation(
+              child: FadeInAnimation(
+                duration: kDuration,
+                child: Center(
+                  child: Image.asset(
+                    Assets.icons.appIcon.path,
+                    fit: BoxFit.fitHeight,
+                    // alignment: Alignment.center,
+                    height: 70.width,
+                    // width: 100.width,
+                    // scale: 0.1,
+                  ),
+                ),
               ),
             ),
             // Gap(10.height),
             Gap(2.height),
-            // AppName(
-
-            // ),
-            Center(
-              child: AutoSizeText.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'BIO',
-                      style: TextStyle(
-                        color: const Color(0xff3B4798),
-                        fontWeight: FontWeight.bold,
-                        fontSize: size,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'PLUS',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        // fontWeight: FontWeight.w500,
-                        fontSize: size,
-                      ),
-                    ),
-                  ],
-                  style: context.textTheme.headline5,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-              ),
-            ),
             AnimatedOpacity(
               opacity: showSplash ? 0 : 1,
               duration: 375.milliseconds,
@@ -140,7 +108,31 @@ class _SplashScreenState extends State<SplashScreen> {
                   //   ),
                   // ),
                   // BioSecureLogo(),
-                  const AppName(),
+                  // const AppName(),
+                  AutoSizeText.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'BIO',
+                          style: TextStyle(
+                            color: const Color(0xff3B4798),
+                            fontWeight: FontWeight.bold,
+                            fontSize: size,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'PLUS',
+                          style: TextStyle(
+                            color: const Color(0xff75B950),
+                            fontWeight: FontWeight.bold,
+                            fontSize: size,
+                          ),
+                        ),
+                      ],
+                      style: context.textTheme.headline5,
+                    ),
+                    maxLines: 1,
+                  ),
                   Gap(2.height),
 
                   // Gap(15.height),

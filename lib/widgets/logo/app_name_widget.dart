@@ -22,7 +22,7 @@ class AppName extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: 'SECURE',
+            text: 'PLUS',
             style: TextStyle(
               color: const Color(0xff75B950),
               fontWeight: FontWeight.bold,

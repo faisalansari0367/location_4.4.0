@@ -36,7 +36,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
       final data = e.response?.data['data'];
-      if (data.containsKey('logRecord')) {
+      if (data?.containsKey('logRecord')) {
         // return ApiResult.failure(message: data['logRecord']);
         if (data != null) {
           return _updateLogRecord(data['logRecord'], geofenceId, form: form);
@@ -58,6 +58,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
       final data = e.response?.data;
+      if(data == null) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
       if (!data.containsKey('data')) {
         return ApiResult.failure(error: NetworkExceptions.getDioException(e));
       }

@@ -236,7 +236,7 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult> sendEmergencyNotification() async {
-    return _functionsRepo.sendEmergencyNotification();
+  Future<ApiResult> sendEmergencyNotification({required List<int> ids}) async {
+    return _functionsRepo.sendEmergencyNotification(ids: ids);
   }
 }

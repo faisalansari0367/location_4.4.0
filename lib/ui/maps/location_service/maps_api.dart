@@ -253,7 +253,7 @@ class MapsApi implements MapsRepo {
 
   @override
   Future<void> saveAllPolygon(List<PolygonModel> polygons) {
-    throw UnimplementedError();
+    return storage.saveAllPolygon(polygons);
   }
 
   // @override

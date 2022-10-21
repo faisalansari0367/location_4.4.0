@@ -23,7 +23,8 @@ class GeofenceCard extends StatelessWidget {
       onTap: onTap,
       child: ClipRRect(
         borderRadius: kBorderRadius,
-        child: Container(
+        child: AnimatedContainer(
+          duration: 250.milliseconds,
           padding: kPadding,
           decoration: BoxDecoration(
             border: _border(item),

@@ -301,7 +301,7 @@ class MapsCubit extends Cubit<MapsState> {
   Future<void> close() {
     stopLocationUpdates();
     _polygonsService.clear();
-    mapsRepo.cancel();
+    // mapsRepo.cancel();
     return super.close();
   }
 }

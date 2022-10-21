@@ -1,10 +1,7 @@
-import 'package:background_location/ui/cvd_form/models/cvd_list_item.dart';
-
 class CvdFieldData {
   String? key;
   String? label;
   String? value;
- 
 
   CvdFieldData({this.key, this.label, this.value});
 

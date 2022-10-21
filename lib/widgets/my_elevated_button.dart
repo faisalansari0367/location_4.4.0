@@ -10,6 +10,7 @@ class MyElevatedButton extends StatefulWidget {
   final Color? color;
   final bool isLoading;
   final Future<void> Function()? onPressed;
+  final double? height;
   final EdgeInsets? padding;
   final double? width;
   const MyElevatedButton({
@@ -21,6 +22,7 @@ class MyElevatedButton extends StatefulWidget {
     this.text,
     this.padding,
     this.color,
+    this.height,
   }) : super(key: key);
 
   @override
@@ -77,6 +79,7 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
         constraints: BoxConstraints(
           minHeight: 50.h,
           minWidth: 64.w,
+          maxHeight: widget.height ?? 50.h,
         ),
         decoration: BoxDecoration(
           color: isLoading ? theme.disabledColor.withOpacity(0.10) : widget.color ?? theme.primaryColor,

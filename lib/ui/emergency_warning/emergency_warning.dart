@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/widgets/my_appbar.dart';
+import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,53 +23,107 @@ class EmergencyWarning extends StatefulWidget {
 
 class _EmergencyWarningState extends State<EmergencyWarning> {
   final selectedZones = Set<int>();
+  late Stream<List<PolygonModel>> _stream;
+
+  @override
+  void initState() {
+    _stream = context.read<MapsRepo>().polygonStream.map(
+          (event) => event
+              // .where(
+              //   (element) => element.createdBy?.id == context.read<Api>().getUserData()?.id,
+              // )
+              .toList(),
+        );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(selectedZones);
     return Scaffold(
-      appBar: MyAppBar(),
-      bottomNavigationBar: GestureDetector(
-        onTap: (() => _warningDialog(context)),
-        child: Container(
-          decoration: MyDecoration.decoration(
-            color: Color.fromARGB(255, 255, 23, 23),
-            // color: Colors.grey,
-          ),
-          height: 100.h,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Send Notification',
-                style: context.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32.sp,
-                  color: Colors.white,
-                ),
-              ),
-              Gap(20.w),
-              Icon(
-                Icons.send,
-                color: Colors.white,
-                size: 40,
-              ),
-            ],
+      appBar: MyAppBar(
+        title: Text(
+          'Emergency Warning',
+          style: context.textTheme.headline6?.copyWith(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+            fontSize: 32.sp,
           ),
         ),
+        centreTitle: true,
+      ),
+      bottomNavigationBar: Container(
+        height: 100,
+        decoration: MyDecoration.decoration(),
+        child: SizedBox(
+          child: Center(
+            child: MyElevatedButton(
+              onPressed: () async {
+                await _warningDialog(context);
+              },
+              width: 90.width,
+              color: Colors.red,
+              height: 60.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Send Notification',
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 32.sp,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Gap(20.w),
+                  Icon(
+                    Icons.send,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // child: Container(
+        //   decoration: MyDecoration.decoration(
+        //     color: Color.fromARGB(255, 255, 23, 23),
+        //     // color: Colors.grey,
+        //   ),
+        //   height: 100.h,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Text(
+        //         'Send Notification',
+        //         style: context.textTheme.bodyMedium?.copyWith(
+        //           fontWeight: FontWeight.bold,
+        //           fontSize: 32.sp,
+        //           color: Colors.white,
+        //         ),
+        //       ),
+        //       Gap(20.w),
+        //       Icon(
+        //         Icons.send,
+        //         color: Colors.white,
+        //         size: 40,
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: [
-            Text(
-              'Emergency Warning',
-              style: context.textTheme.headline6?.copyWith(
-                color: Colors.red,
-                fontWeight: FontWeight.bold,
-                fontSize: 32.sp,
-              ),
-            ),
+            // Text(
+            //   'Emergency Warning',
+            //   style: context.textTheme.headline6?.copyWith(
+            //     color: Colors.red,
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 32.sp,
+            //   ),
+            // ),
             Center(
               child: Image.asset(
                 'assets/icons/warning_icon.png',
@@ -84,14 +139,11 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
             Gap(20.h),
             Expanded(
               child: StreamBuilder<List<PolygonModel>>(
-                stream: context.read<MapsRepo>().polygonStream.map((event) =>
-                    event.where((element) => element.createdBy?.id == context.read<Api>().getUserData()?.id).toList()),
+                stream: _stream,
                 builder: (context, snapshot) {
                   return Scrollbar(
-                    // controller: widget.controller,
                     child: ListView.separated(
                       separatorBuilder: (context, index) => Gap(10.h),
-                      // controller: widget.controller,
                       itemCount: sort(snapshot.data ?? []).length,
                       itemBuilder: (context, index) {
                         final fence = snapshot.data![index];
@@ -162,7 +214,9 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                     child: ElevatedButton(
                       onPressed: () async {
                         Get.back();
-                        final result = await context.read<Api>().sendEmergencyNotification();
+                        final result = await context.read<Api>().sendEmergencyNotification(
+                              ids: selectedZones.toList(),
+                            );
                         result.when(
                           success: (data) {
                             DialogService.success(

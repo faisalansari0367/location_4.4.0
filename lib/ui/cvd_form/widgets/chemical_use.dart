@@ -30,8 +30,8 @@ class _ChemicalUseState extends State<ChemicalUse> {
   final formData = {};
   List<ChemicalTable> tableData = [];
   bool showTable = false;
-  String riskAssesment = '';
-  String testResults = '';
+  // String riskAssesment = '';
+  // String testResults = '';
 
   Future<void> _init() async {
     form = widget.chemicalUseDetailsModel;
@@ -46,6 +46,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
 
   @override
   Widget build(BuildContext context) {
+      final cubit = context.read<CvdCubit>();
     if (form == null) return const SizedBox();
     return SingleChildScrollView(
       child: AutoSpacing(
@@ -161,12 +162,12 @@ class _ChemicalUseState extends State<ChemicalUse> {
             fieldData: form!.riskCheck!,
             children: [
               Divider(),
-              _resultsBox(context, 'Risk Assesment Results', riskAssesment),
+              _resultsBox(context, 'Risk Assesment Results', cubit.riskAssesment),
             ],
             onChanged: (value) {
               if (form!.riskCheck!.value == '1') {
                 _enterTextPopup((s) {
-                  riskAssesment = s;
+                  cubit.riskAssesment = s;
                   setState(() {});
                 }, 'Enter Risk Assesment');
               }
@@ -178,14 +179,14 @@ class _ChemicalUseState extends State<ChemicalUse> {
             onChanged: (s) {
               if (form!.nataCheck!.value == '1') {
                 _enterTextPopup((s) {
-                  testResults = s;
+                  cubit.testResults = s;
                   setState(() {});
                 }, 'Enter Test Results');
               }
             },
             children: [
               Divider(),
-              _resultsBox(context, 'Test Results', testResults),
+              _resultsBox(context, 'Test Results', cubit.testResults),
             ],
           ),
           CommonButtons(

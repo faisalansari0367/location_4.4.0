@@ -5,7 +5,7 @@ import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/configs/endpoint.dart';
 
 abstract class FunctionsRepo {
-  Future<ApiResult> sendEmergencyNotification();
+  Future<ApiResult> sendEmergencyNotification({required List<int> ids});
 }
 
 class FunctionsRepoImpl implements FunctionsRepo {
@@ -14,11 +14,9 @@ class FunctionsRepoImpl implements FunctionsRepo {
     required this.client,
   });
   @override
-  Future<ApiResult> sendEmergencyNotification() async {
+  Future<ApiResult> sendEmergencyNotification({required List<int> ids}) async {
     try {
-      final response = await client.post(
-        Endpoints.sendEmergencyNotification,
-      );
+      final response = await client.post(Endpoints.sendEmergencyNotification, data: {'geofences': ids});
       return ApiResult.success(data: response);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

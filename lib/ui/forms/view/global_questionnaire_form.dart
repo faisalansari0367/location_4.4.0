@@ -200,7 +200,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
               // decoration: MyDecoration.decoration(),
               child: QuestionCard(
                 question: data.question,
-                selectedValue: data.value,
+                selectedValue: data.value is List<String> ? 'yes' : data.value,
                 onChanged: (s) async {
                   if (s.toLowerCase() == 'yes') {
                   } else {
@@ -232,7 +232,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
           'Form Submitted',
           onCancel: () {
             Get.back();
-            Get.back();
+            Get.back(); 
           },
         );
       },

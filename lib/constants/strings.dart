@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 class Strings {
 // AppName
-  static const String appName = 'BIOSECURE';
+  static const String appName = 'BIOPLUS';
 
   static const name = 'Name',
       email = 'Email',
@@ -123,11 +123,8 @@ class Strings {
   //
   static String get areYouVisitingBelowPic => 'Are you visiting below PIC?';
 
-
-
   /// dashboard
   static const edecForms = 'eDEC ${form}s';
 
-  static String get cvdForm => 'CVD $form'.toUpperCase();  
-
+  static String get cvdForm => 'CVD $form'.toUpperCase();
 }

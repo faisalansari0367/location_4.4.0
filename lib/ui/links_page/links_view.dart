@@ -36,8 +36,8 @@ class LinksView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 // width: 100.w,
                 child: Image.asset(
-                  'assets/images/itrakassets_logo.jpeg',
-                  height: 20.w,
+                  'assets/images/iTRAK_link_logo.jpeg',
+                  height: 50.w,
                 ),
               ),
               onTap: () async => Get.to(

@@ -1,4 +1,3 @@
-import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/cvd_forms/view/cvd_forms.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
@@ -8,11 +7,10 @@ import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitors/visitors_page.dart';
 import 'package:background_location/widgets/dialogs/coming_soon.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -193,83 +191,6 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  _warningDialog(BuildContext context) async {
-    DialogService.showDialog(
-      child: DialogLayout(
-        child: Padding(
-          padding: kPadding,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // alert text
-              Image.asset(
-                'assets/icons/warning_icon.png',
-                height: 20.height,
-              ),
-              Gap(10.h),
-              Text(
-                'Are you sure you want to send this WARNING alert?',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              // yes no buttons
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Spacer(),
-                  // yes button
-                  Gap(20.w),
-
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        Get.back();
-                        final result = await context.read<Api>().sendEmergencyNotification();
-                        result.when(
-                          success: (data) {
-                            DialogService.success(
-                              'Alert sent successfully',
-                              onCancel: Get.back,
-                            );
-                          },
-                          failure: (error) {
-                            DialogService.error('Failed to sent Alert');
-                          },
-                        );
-                        // await DialogService.showDialog(child: const ComingSoonDialog());
-                      },
-                      child: const Text('Yes'),
-                    ),
-                  ),
-                  Gap(10.w),
-
-                  // no button
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () async => Get.back(),
-                      child: const Text('No'),
-                    ),
-                  ),
-                  Gap(20.w),
-
-                  // Gap(10.w),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      // child: ErrorDialog(
-      //   message: 'Are you sure you want to send this WARNING alert?',
-      //   onTap: Get.back,
-      // ),
-    );
-  }
-
   Row _logo() {
     return Row(
       // crossAxisAlignment: CrossAxisAlignment.center,
@@ -280,22 +201,24 @@ class DashboardView extends StatelessWidget {
           'assets/icons/BIO_shield1 (1).png',
           height: 7.height,
         ),
-        Text(
-          'BIO',
-          style: TextStyle(
-            color: const Color(0xff3B4798),
-            fontWeight: FontWeight.bold,
-            fontSize: 20.w,
-          ),
-        ),
-        Text(
-          'SECURE',
-          style: TextStyle(
-            color: const Color(0xff75B950),
-            fontWeight: FontWeight.bold,
-            fontSize: 20.w,
-          ),
-        ),
+        Gap(5.w),
+        AppName(),
+        // Text(
+        //   'BIO',
+        //   style: TextStyle(
+        //     color: const Color(0xff3B4798),
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: 20.w,
+        //   ),
+        // ),
+        // Text(
+        //   'SECURE',
+        //   style: TextStyle(
+        //     color: const Color(0xff75B950),
+        //     fontWeight: FontWeight.bold,
+        //     fontSize: 20.w,
+        //   ),
+        // ),
       ],
     );
   }

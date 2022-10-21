@@ -32,6 +32,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
   void initState() {
     super.initState();
     commodityDetails = widget.commodityDetails;
+    commodityDetails.deliveryPeriod?.value = DateTime.now().toIso8601String();
     // map['DeliveryPeriod'] = DateTime.now().toIso8601String();
     super.initState();
   }
@@ -70,7 +71,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
           ),
           MyDateField(
             label: commodityDetails.deliveryPeriod!.label!,
-            date: commodityDetails.deliveryPeriod?.value ?? DateTime.now().toIso8601String(),
+            date: commodityDetails.deliveryPeriod?.value,
             onChanged: (s) => onChanged(s, commodityDetails.deliveryPeriod!),
           ),
           // CvdTextField(

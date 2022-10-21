@@ -66,13 +66,23 @@ class _AddListState extends State<AddList> {
     return Row(
       children: [
         Expanded(
-          child: TextFormField(
-            // controller: controller,
-            onChanged: (s) {
-              setState(() {
-                value = s;
-              });
+          child: Focus(
+            onFocusChange: (b) {
+              if (!b) {
+                fields.add(value);
+                value = '';
+                widget.onChanged?.call(fields);
+                setState(() {});
+              }
             },
+            child: TextFormField(
+              // controller: controller,
+              onChanged: (s) {
+                setState(() {
+                  value = s;
+                });
+              },
+            ),
           ),
           flex: 4,
         ),

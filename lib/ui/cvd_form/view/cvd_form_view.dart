@@ -41,11 +41,15 @@ class _CvdFormViewState extends State<CvdFormView> {
     return WillPopScope(
       onWillPop: () {
         cubit.saveFormData();
-        return Future.value(false);
+        return Future.value(true);
       },
       child: Scaffold(
         appBar: MyAppBar(
           title: Text('Cvd Form'.toUpperCase()),
+          onBackPressed: () {
+            cubit.saveFormData();
+            Get.back();
+          },
         ),
         body: BlocBuilder<CvdCubit, CvdState>(
           builder: (context, state) {

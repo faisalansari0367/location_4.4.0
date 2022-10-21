@@ -51,6 +51,8 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   String? signature, organisationName;
+  String riskAssesment = '';
+  String testResults = '';
 
   VendorDetailsModel vendorDetails = VendorDetailsModel();
   BuyerDetailsModel buyerDetailsModel = BuyerDetailsModel();
@@ -208,7 +210,7 @@ class CvdCubit extends Cubit<CvdState> {
       final bytes = base64Decode(result.data['data']);
       final file = await formsService.saveCvdForm(bytes);
       await OpenFile.open(file.path);
-      Get.back();
+      // Get.back();
     } catch (e) {
       print(e);
     }
@@ -234,6 +236,11 @@ class CvdCubit extends Cubit<CvdState> {
       'buyerNGR': buyerDetailsModel.ngr!.value,
       'buyerPIC': buyerDetailsModel.pic!.value,
       'buyerRefrence': buyerDetailsModel.contractNo!.value,
+      'driverName': transporterDetails.name?.value,
+      'driverEmail': transporterDetails.email?.value,
+      'driverContact': transporterDetails.mobile?.value,
+      'companyName': transporterDetails.company?.value,
+      'registration': transporterDetails.registration?.value,
       'commodity': commodityDetails.commodity!.value,
       // 'period': '30',
       'period': MyDecoration.formatDate(DateTime.tryParse(commodityDetails.deliveryPeriod!.value!)),
@@ -257,6 +264,8 @@ class CvdCubit extends Cubit<CvdState> {
       'certificateNumber': chemicalUseDetailsModel.certificateNumber?.value,
       'cvdCheck': chemicalUseDetailsModel.cvdCheck?.value,
       'organisationName': organisationName,
+      'riskAssesment': riskAssesment,
+      'testResult': testResults,
       // 'cropList': [
       //   {'cropName': 'crop1'},
       //   {'cropName': 'crop2'},
@@ -310,10 +319,13 @@ class CvdCubit extends Cubit<CvdState> {
     if (json == null) return;
     if (json['vendorDetails'] != null) vendorDetails = VendorDetailsModel.fromJson(json['vendorDetails']);
     // vendorDetails = VendorDetailsModel.fromJson(json['venderDetails'] );
-    buyerDetailsModel = BuyerDetailsModel.fromJson(json['buyerDetailsModel']);
-    transporterDetails = TransporterDetailsModel.fromJson(json['transporterDetails']);
-    commodityDetails = CommodityDetailsModel.fromJson(json['commodityDetails']);
-    chemicalUseDetailsModel = ChemicalUseDetailsModel.fromJson(json['chemicalUseDetailsModel']);
-    productIntegrityDetailsModel = ProductIntegrityDetailsModel.fromJson(json['productIntegrityDetailsModel']);
+    if (json['buyerDetailsModel'] != null) buyerDetailsModel = BuyerDetailsModel.fromJson(json['buyerDetailsModel']);
+    if (json['transporterDetails'] != null)
+      transporterDetails = TransporterDetailsModel.fromJson(json['transporterDetails']);
+    if (json['commodityDetails'] != null) commodityDetails = CommodityDetailsModel.fromJson(json['commodityDetails']);
+    if (json['chemicalUseDetailsModel'] != null)
+      chemicalUseDetailsModel = ChemicalUseDetailsModel.fromJson(json['chemicalUseDetailsModel']);
+    if (json['productIntegrityDetailsModel'] != null)
+      productIntegrityDetailsModel = ProductIntegrityDetailsModel.fromJson(json['productIntegrityDetailsModel']);
   }
 }
