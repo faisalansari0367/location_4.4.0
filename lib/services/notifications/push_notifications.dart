@@ -2,7 +2,10 @@
 
 import 'dart:developer';
 
+import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/dialogs/emergency_warning.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get/get.dart';
 import 'package:local_notification/local_notification.dart';
 
 // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -35,6 +38,14 @@ class PushNotificationService {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
+        if (message.notification?.title == 'WARNING!') {
+          if (Get.isDialogOpen ?? false) {
+            Get.back();
+          }
+          DialogService.showDialog(child: EmergencyWarningDialog(message: message.notification?.body ?? ''));
+          return;
+        }
+
         final result = await localNotificationService.showNotification(
           title: message.notification?.title ?? '',
           message: message.notification?.body ?? '',

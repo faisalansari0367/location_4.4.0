@@ -31,7 +31,7 @@ class LogRecordsLocalService {
 
   final _controller = BehaviorSubject<List<LogbookEntry>>.seeded([]);
 
-  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, LogbookEntry logbookEntry) async {
+  Future<ApiResult<LogbookEntry>> saveLogRecord(String geofenceId, LogbookEntry logbookEntry) async {
     try {
       await box.put(geofenceId, logbookEntry.toJson());
       return ApiResult.success(data: logbookEntry);

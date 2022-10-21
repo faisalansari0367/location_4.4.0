@@ -73,7 +73,7 @@ class TrackPolygons {
   }
 
   void showPopup() async {
-    if (currentPolygon?.id == null) {
+    if (currentPolygon?.id != null) {
       final entry = api.getLogRecord(currentPolygon!.id!);
       if (entry?.enterDate != null) {
         return;

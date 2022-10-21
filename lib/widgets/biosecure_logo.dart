@@ -25,7 +25,7 @@ class BioSecureLogo extends StatelessWidget {
           ),
         ),
         Text(
-          'SECURE',
+          'PLUS',
           style: TextStyle(
             color: const Color(0xff75B950),
             fontWeight: FontWeight.bold,

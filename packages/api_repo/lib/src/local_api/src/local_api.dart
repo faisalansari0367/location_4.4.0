@@ -250,7 +250,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult> sendEmergencyNotification({required List<int> ids}) async {
+  Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids}) async {
     return const ApiResult.failure(error: NetworkExceptions.defaultError('Not available in offline mode'));
   }
 }

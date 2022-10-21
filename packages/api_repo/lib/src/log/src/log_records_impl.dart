@@ -30,12 +30,12 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (form == null) data2.remove('form');
       final result = await client.post(Endpoints.logRecords, data: data2);
       final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+      await storage.saveLogRecord(geofenceId, logbookEntry);
 
-      await storage.createLogRecord(geofenceId, logbookEntry);
       log('logRecord ${logbookEntry.id} created');
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
-      final data = e.response?.data['data'];
+      final data = e.response?.data['data'] ?? {};
       if (data?.containsKey('logRecord')) {
         // return ApiResult.failure(message: data['logRecord']);
         if (data != null) {
@@ -50,15 +50,33 @@ class LogRecordsImpl implements LogRecordsRepo {
   @override
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId) async {
     try {
-      final hasEntry = storage.getLogRecord(geofenceId);
+      LogbookEntry? hasEntry = storage.getLogRecord(geofenceId);
+      hasEntry ??= getLogRecord(geofenceId);
       final result = await client.patch('${Endpoints.markExit}/${hasEntry!.id}');
       final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
 
-      await storage.createLogRecord(geofenceId, logbookEntry);
+      await storage.saveLogRecord(geofenceId, logbookEntry);
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
       final data = e.response?.data;
-      if(data == null) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+
+      if (data['message'] != null) {
+        final isExited = data['message'] == "You already exited this geofence";
+        if (isExited) {
+          final getLatestRecord = getLogRecord(geofenceId);
+          if (getLatestRecord != null) {
+            final result = await client.patch('${Endpoints.markExit}/${getLatestRecord.id}');
+            final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+
+            await storage.saveLogRecord(geofenceId, logbookEntry);
+            return ApiResult.success(data: logbookEntry);
+          } else {
+            return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+          }
+        }
+      }
+
+      if (data == null) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
       if (!data.containsKey('data')) {
         return ApiResult.failure(error: NetworkExceptions.getDioException(e));
       }
@@ -89,10 +107,9 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   Future<ApiResult<LogbookEntry>> _updateLogRecord(int logId, String geofenceId, {String? form}) async {
     try {
-      final result = await client.patch(
-        '${Endpoints.logRecords}/$logId',
-        data: form != null ? {'form': form, 'geofenceID': geofenceId} : {'geofenceID': geofenceId},
-      );
+      final data = {'geofenceID': geofenceId};
+      if (form != null) data['form'] = form;
+      final result = await client.patch('${Endpoints.logRecords}/$logId', data: data);
       final json = Map<String, dynamic>.from(result.data['data']);
       final logbookEntry = LogbookEntry.fromJson(json);
       storage.updateLogRecord(geofenceId, logbookEntry);
@@ -111,16 +128,6 @@ class LogRecordsImpl implements LogRecordsRepo {
       }
       final hasData = response.containsKey(['data']);
       if (!hasData) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-      // if (data['data']?.containsKey('logRecord') ?? false) {
-      //   // return ApiResult.failure(message: data['logRecord']);
-      //   if (data != null) {
-      //     // return updateLogRecord(data['data']['logRecord'], geofenceId, form: form);
-      //   }
-      // }
-      // if (data != null) {
-      //   return updateLogRecord(data, geofenceId);
-      // }
-
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
@@ -136,6 +143,9 @@ class LogRecordsImpl implements LogRecordsRepo {
       // await storage.removeLogbookEntry(locationId);
 
       final hasEntry = storage.getLogRecord(geofenceId);
+      // final difference = DateTime.now().difference(hasEntry?.enterDate ?? DateTime.now()).inMinutes;
+      // final difference = hasEntry?.enterDate?.difference(DateTime.now()).inMinutes;
+      // log('time difference is $difference');
 
       if (hasEntry == null) {
         return await createLogRecord(geofenceId, form: form);
@@ -153,51 +163,32 @@ class LogRecordsImpl implements LogRecordsRepo {
       // update record
 
       if (hasExitDate) {
-        final exitDate = hasEntry.exitDate?.add(const Duration(minutes: 30));
-        final canCreateNew = exitDate?.isAfter(DateTime.now()) ?? false;
-        if (canCreateNew) {
+        // final exitDate = hasEntry.exitDate?.add(const Duration(minutes: 30));
+        final entryExitDifference = DateTime.now().difference(hasEntry.exitDate!).inMinutes;
+        print('difference between enter and exit date is $entryExitDifference in minutes');
+
+        // final canCreateNew = exitDate?.isAfter(DateTime.now().toLocal()) ?? false;
+        if (entryExitDifference > 30) {
           // delete old record from storage
           await storage.removeLogRecord(geofenceId);
           // create new record
           return await createLogRecord(geofenceId, form: form);
         } else {
-          return await _updateLogRecord(hasEntry.id!, geofenceId, form: form);
+          return const ApiResult.failure(
+              error:
+                  NetworkExceptions.defaultError('user has entered few minutes ago, no need to create new log record'));
         }
-      } else if (hasEntryDate) {
-        // if entry date is after now
-        // entry date is 12: 30 + 30 minutes = 13:00
-        // now DateTime.now().isAfter(13:00)
-        // update exit time to now
-
-        // final entryDate = hasEntry.enterDate!.add(const Duration(minutes: 30));
-        // final canUpdateExitTime = entryDate.isAfter(DateTime.now());
-        return await _updateLogRecord(hasEntry.id!, geofenceId);
-        // if (canUpdateExitTime) {
-        // final result = await client.patch(
-        //   '${_Endpoints.logRecords}$locationId',
-        //   data: {
-        //     'exitDate': DateTime.now().toIso8601String(),
-        //   },
-        // );
-        // }
-      } else {
-        // create new record
-        return await createLogRecord(geofenceId, form: form);
       }
 
-      /// user has entered again before 30 minutes
-      // if (hasEntryDate && hasExitDate && entryDate?.isAfter(DateTime.now()) ?? false) {
-      //   return ApiResult.failure(error: NetworkExceptions.custom('You have entered again before 30 minutes'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('user has entered few minutes ago, no need to create new log record'));
+
+      // else if (hasEntryDate) {
+      //   return const ApiResult.failure(error: NetworkExceptions.defaultError('user is inside nothing to do here'));
+      // } else {
+      //   // create new record
+      //   return await createLogRecord(geofenceId, form: form);
       // }
-
-      // final data2 = {'form': form, 'geofenceID': locationId};
-      // if (form == null) data2.remove('form');
-      // final result = await client.post(_Endpoints.logRecords, data: data2);
-      // final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
-      // await storage.saveLogbookEntry(locationId, logbookEntry);
-
-      // await _createLogbookEntry(geofenceId, form);
-      // return const ApiResult.success(data: Null);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
@@ -211,33 +202,22 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (logRecord != null) {
         final result = await client.patch(
           '${Endpoints.logRecords}/${logRecord.id}',
-          data: {'form': form},
+          data: {'form': form, 'geofenceID': geofenceId},
         );
         final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
-        await storage.createLogRecord(geofenceId, logbookEntry);
+        await storage.saveLogRecord(geofenceId, logbookEntry);
         return ApiResult.success(data: logbookEntry);
       } else {
-        // final records = await storage.getLogbookRecords();
-        // late ApiResult<LogbookEntry> _result;
-        // await records.when(success: (s) async {
-        //   final _logbookEntry = s.data?.firstWhere((element) => element.geofence!.id == int.parse(geofenceId));
-        //   if (_logbookEntry != null) {
-        //     final result = await client.patch('${Endpoints.logRecords}/${_logbookEntry.id}', data: {'form': form});
-        //     final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
-        //     await storage.createLogRecord(geofenceId, logbookEntry);
-        //     _result = ApiResult.success(data: logbookEntry);
-        //   }
-        // }, failure: (f) {
-        //   _result = ApiResult.failure(error: NetworkExceptions.getDioException(f));
-        // });
-        // return _result;
-        final result = await createLogRecord(geofenceId, form: form);
-        return result;
+        final id = getLogRecord(geofenceId);
+        final result = await client.patch(
+          '${Endpoints.logRecords}/${id?.id}',
+          data: {'form': form, 'geofenceID': geofenceId},
+        );
+        final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+        await storage.saveLogRecord(geofenceId, logbookEntry);
+        return ApiResult.success(data: logbookEntry);
       }
     } on DioError catch (e) {
-      if (e.response?.statusCode == 400) {
-        return await createLogRecord(geofenceId, form: form);
-      }
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }

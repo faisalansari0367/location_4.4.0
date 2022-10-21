@@ -146,6 +146,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                 ),
                 MyElevatedButton(
                   text: 'Submit',
+                  isLoading: false,
                   onPressed: () async {
                     if (!_formKey.currentState!.validate()) {
                       return;
@@ -176,7 +177,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                       model.q5.value = names;
                     }
 
-                    await submitFormData(jsonEncode(model.toJson()));
+                    submitFormData(jsonEncode(model.toJson()));
                   },
                 ),
               ],
@@ -232,7 +233,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
           'Form Submitted',
           onCancel: () {
             Get.back();
-            Get.back(); 
+            Get.back();
           },
         );
       },

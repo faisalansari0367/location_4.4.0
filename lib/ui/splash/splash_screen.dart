@@ -5,13 +5,10 @@ import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
-import 'package:background_location/ui/splash/new_splash_screen.dart';
-import 'package:background_location/widgets/animations/my_slide_animation.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:local_auth_repo/local_auth.dart';
@@ -35,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
       // Get.offAll(() => NewSplashScreen());
-      if (!isLoggedIn) return LoginPage();
+      if (!isLoggedIn) return Get.off(() => LoginPage());
       final user = context.read<Api>().getUser()!;
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();

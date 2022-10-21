@@ -195,6 +195,7 @@ class DashboardView extends StatelessWidget {
     return Row(
       // crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         // Gap(20.h),
         Image.asset(

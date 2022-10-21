@@ -27,14 +27,25 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
 
   @override
   void initState() {
+    _getPolygon();
+    // Future.delayed(1.seconds, () {
+    //   DialogService.showDialog(child: EmergencyWarningDialog());
+    // });
     _stream = context.read<MapsRepo>().polygonStream.map(
           (event) => event
-              // .where(
-              //   (element) => element.createdBy?.id == context.read<Api>().getUserData()?.id,
-              // )
+              .where(
+                (element) => element.createdBy?.id == context.read<Api>().getUserData()?.id,
+              )
               .toList(),
         );
     super.initState();
+  }
+
+  Future<void> _getPolygon() async {
+    final repo = context.read<MapsRepo>();
+    final hasData = await repo.polygonStream.isEmpty;
+    repo.getAllPolygon();
+    if (hasData) {}
   }
 
   @override
@@ -219,13 +230,71 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                             );
                         result.when(
                           success: (data) {
-                            DialogService.success(
-                              'Alert sent successfully',
-                              onCancel: Get.back,
+                            DialogService.showDialog(
+                              child: DialogLayout(
+                                child: Padding(
+                                  padding: kPadding,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: data.isEmpty
+                                        ? [
+                                            Gap(20.h),
+                                            Text(
+                                              'No one is on the property to notify.',
+                                              textAlign: TextAlign.center,
+                                              style: context.textTheme.headline6?.copyWith(
+                                                fontWeight: FontWeight.bold,
+
+                                                // color: context.theme.primaryColor,
+                                              ),
+                                            ),
+                                            Gap(20.h),
+                                            MyElevatedButton(
+                                              text: 'Go back',
+                                              onPressed: () async => Get.back(),
+                                            ),
+                                          ]
+                                        : [
+                                            Gap(10.h),
+                                            Text(
+                                              'Notification sent to ${data.length} users',
+                                              style: context.textTheme.headline6?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: context.theme.primaryColor,
+                                              ),
+                                            ),
+                                            Gap(20.h),
+                                            Expanded(
+                                              child: ListView.separated(
+                                                separatorBuilder: (context, index) => Divider(height: 1),
+                                                itemBuilder: (context, index) {
+                                                  return ListTile(
+                                                    title: Text(data[index].fullName),
+                                                    subtitle: Text(data[index].role ?? ''),
+                                                    dense: true,
+                                                  );
+                                                },
+                                                itemCount: data.length,
+                                              ),
+                                            ),
+                                            Gap(10.h),
+                                            MyElevatedButton(
+                                              text: 'Go back',
+                                              onPressed: () async => Get.back(),
+                                            ),
+                                          ],
+                                  ),
+                                ),
+                              ),
                             );
+                            // DialogService.success(
+                            //   // 'Alert sent successfully',
+                            //   onCancel: Get.back,
+                            // );
                           },
                           failure: (error) {
-                            DialogService.error('Failed to sent Alert');
+                            DialogService.error('Failed to send Alert');
                           },
                         );
                         // await DialogService.showDialog(child: const ComingSoonDialog());
