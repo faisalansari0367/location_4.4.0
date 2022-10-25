@@ -16,6 +16,7 @@
     },
     "chemicalTable": [],
     "qaCheck": {
+        "key": "qaCheck",
         "field": "Has the commodity been grown and/or stored under an independently audited QA program which includes chemical residue management?",
         "value": null,
         "options": [
@@ -31,6 +32,7 @@
         "note": "If this commodity has been grown or stored under such a QA program, please now read and sign Part C. If not, please now complete the remainder of Part B."
     },
     "qaProgram": {
+        "key": "qaProgram",
         "field": "QA Program",
         "value": null
     },
@@ -53,6 +55,7 @@
         ]
     },
     "cropList": {
+        "key": "Crop List",
         "field": "List all known adjacent crops grown within 100 metres of this commodity (only applicable for single source commodities)",
         "options": []
     },

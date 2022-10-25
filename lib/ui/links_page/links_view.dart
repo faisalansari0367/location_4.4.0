@@ -31,23 +31,6 @@ class LinksView extends StatelessWidget {
           spacing: Gap(15.h),
           children: [
             MyListTile(
-              text: 'iTRAKassets',
-              title: Align(
-                alignment: Alignment.centerLeft,
-                // width: 100.w,
-                child: Image.asset(
-                  'assets/images/iTRAK_link_logo.jpeg',
-                  height: 50.w,
-                ),
-              ),
-              onTap: () async => Get.to(
-                () => const Webview(
-                  url: 'https://itrakassets.com/',
-                  title: 'iTRAKassets',
-                ),
-              ),
-            ),
-            MyListTile(
               text: 'Farm Biosecurity'.toUpperCase(),
               title: Align(
                 alignment: Alignment.centerLeft,
@@ -65,24 +48,65 @@ class LinksView extends StatelessWidget {
               ),
             ),
             MyListTile(
-              text: 'SAFE AND RESPONSIBLE ANIMAL TREATMENTS',
+              text: 'SAFE AND RESPONSIBLE ANIMAL TREATMENTS'.capitalize!,
               onTap: () async => await openPdf(
                 context,
                 'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-02-livestock-treatment-record-form.pdf',
               ),
             ),
             MyListTile(
-              text: 'Livestock treatment record'.toUpperCase(),
+              text: 'Livestock treatment record'.capitalize!,
               onTap: () async => await openPdf(
                 context,
                 'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-02-livestock-treatment-record-form.pdf',
               ),
             ),
             MyListTile(
-              text: 'Chemical inventory'.toUpperCase(),
+              text: 'Chemical inventory'.capitalize!,
               onTap: () async => await openPdf(
                 context,
                 'https://www.integritysystems.com.au/globalassets/isc/pdf-files/lpa-documents/lpa-records-templates/lpa-03-chemical-inventory-form.pdf',
+              ),
+            ),
+            MyListTile(
+              text: 'Carbon Farming'.capitalize!,
+              onTap: () async => await openPdf(
+                context,
+                'https://agriculture.vic.gov.au/__data/assets/pdf_file/0010/578719/Cents-of-Carbon.pdf',
+              ),
+            ),
+            MyListTile(
+              text: 'iTRAK'.toUpperCase(),
+              title: Align(
+                alignment: Alignment.centerLeft,
+                // width: 100.w,
+                child: Image.asset(
+                  'assets/images/itrak.jpeg',
+                  height: 50.w,
+                ),
+              ),
+              onTap: () async => Get.to(
+                () => const Webview(
+                  url: 'https://www.i-trak.com.au/',
+                  title: 'iTRAK',
+                ),
+              ),
+            ),
+            MyListTile(
+              text: 'iTRAKassets',
+              title: Align(
+                alignment: Alignment.centerLeft,
+                // width: 100.w,
+                child: Image.asset(
+                  'assets/images/iTRAK_link_logo.jpeg',
+                  height: 50.w,
+                ),
+              ),
+              onTap: () async => Get.to(
+                () => const Webview(
+                  url: 'https://itrakassets.com/',
+                  title: 'iTRAKassets',
+                ),
               ),
             ),
           ],

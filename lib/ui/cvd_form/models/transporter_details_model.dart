@@ -15,7 +15,7 @@ class TransporterDetailsModel {
     this.registration,
   });
 
-  TransporterDetailsModel.fromJson(Map<String, dynamic> json) {
+  TransporterDetailsModel.fromJson(Map json) {
     name = json['name'] != null ? new CvdFieldData.fromJson(json['name']) : null;
     mobile = json['mobile'] != null ? new CvdFieldData.fromJson(json['mobile']) : null;
     email = json['email'] != null ? new CvdFieldData.fromJson(json['email']) : null;

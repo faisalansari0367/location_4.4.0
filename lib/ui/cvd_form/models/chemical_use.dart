@@ -27,7 +27,7 @@ class ChemicalUseDetailsModel {
     this.chemicalTable = const [],
   });
 
-  ChemicalUseDetailsModel.fromJson(Map<String, dynamic> json) {
+  ChemicalUseDetailsModel.fromJson(Map json) {
     field = json['field'];
     chemicalTable = (json['chemicalTable'] as List).map((e) => ChemicalTable.fromJson(e)).toList();
     chemicalCheck = json['chemicalCheck'] != null ? new FieldData.fromJson(json['chemicalCheck']) : null;
@@ -104,7 +104,7 @@ class Options {
 
   Options({this.label, this.value});
 
-  Options.fromJson(Map<String, dynamic> json) {
+  Options.fromJson(Map json) {
     label = json['label'];
     value = json['value'].toString();
   }
@@ -171,13 +171,15 @@ class Options {
 class FieldData {
   String? field;
   String? value;
+  String? key;
   List<Options>? options;
 
-  FieldData({this.field, this.options});
+  FieldData({this.field, this.options, this.key});
 
-  FieldData.fromJson(Map<String, dynamic> json) {
+  FieldData.fromJson(Map json) {
     field = json['field'];
     value = json['value'];
+    key = json['key'];
     if (json['options'] != null) {
       options = <Options>[];
       json['options'].forEach((v) {
@@ -190,6 +192,7 @@ class FieldData {
     final Map<String, dynamic> data = new Map<String, dynamic>();
 
     data['field'] = this.field;
+    data['key'] = this.key;
     if (this.options != null) {
       data['options'] = this.options!.map((v) => v.toJson()).toList();
     }
@@ -206,7 +209,7 @@ class ChemicalTable {
 
   ChemicalTable({this.chemicalName, this.rate, this.applicationDate, this.wHP});
 
-  ChemicalTable.fromJson(Map<String, dynamic> json) {
+  ChemicalTable.fromJson(Map json) {
     chemicalName = json['chemicalName'];
     rate = json['rate'];
     applicationDate = json['applicationDate'];

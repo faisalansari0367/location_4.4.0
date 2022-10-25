@@ -94,7 +94,7 @@ class DashboardView extends StatelessWidget {
                     onTap: () => Get.to(() => const LinksPage()),
                   ),
                   DashboardCard(
-                    text: 'EMERGENCY WARNING!',
+                    text: 'EMERGENCY WARNING!'.capitalize!,
                     // iconData: LineIcons.info,
                     // color: Colors.yellow,
                     // iconData: Icons.info,

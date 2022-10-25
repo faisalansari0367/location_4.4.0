@@ -29,7 +29,7 @@ class _EnterPropertyState extends State<EnterProperty> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              Strings.areYouVisitingBelowPic,
+              'Are you entering any of these Locations?\nSelect from the list below',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.sp,
@@ -39,7 +39,8 @@ class _EnterPropertyState extends State<EnterProperty> {
             StreamBuilder<Set<PolygonModel>>(
               stream: widget.stream,
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.isEmpty) return const Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData || snapshot.data!.isEmpty)
+                  return const Center(child: CircularProgressIndicator());
                 return AnimatedSize(
                   duration: 300.milliseconds,
                   child: AutoSpacing(
@@ -63,14 +64,20 @@ class _EnterPropertyState extends State<EnterProperty> {
                 //     );
                 //   },
                 // ),
-                TextButton(
+                ElevatedButton(
                   child: Text(
                     Strings.no,
                     style: TextStyle(
                       fontSize: 20.h,
-                      color: Colors.red,
+                      color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(10.r),
+                    // ),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop(false);

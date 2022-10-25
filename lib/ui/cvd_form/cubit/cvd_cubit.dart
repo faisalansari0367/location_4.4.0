@@ -114,13 +114,13 @@ class CvdCubit extends Cubit<CvdState> {
   final ScrollController stepController = ScrollController();
 
   final List<String> stepNames = [
-    'Vendor Details',
-    'Buyer Details',
+    'Vendor\nDetails',
+    'Buyer\nDetails',
     'Transporter',
-    'Commodity Details',
-    'Product Integrity',
-    'Chemical Use',
-    'Self Declaration'
+    'Commodity\nDetails',
+    'Product\nIntegrity',
+    'Chemical\nUse',
+    'Self\nDeclaration'
   ];
   final List<bool> stepCompleted = [
     false,
@@ -272,7 +272,9 @@ class CvdCubit extends Cubit<CvdState> {
       //   {'cropName': 'crop3'},
       //   {'cropName': 'crop4'}
       // ],
-      'cropList': chemicalUseDetailsModel.cropList?.value!.split(',').map((e) => {'cropName': e}).toList(),
+      'cropList': chemicalUseDetailsModel.cropList?.value == null
+          ? null
+          : chemicalUseDetailsModel.cropList?.value!.split(',').map((e) => {'cropName': e}).toList(),
       'riskCheck': chemicalUseDetailsModel.riskCheck?.value,
       // 'organisationName':
       'nataCheck': chemicalUseDetailsModel.nataCheck?.value,

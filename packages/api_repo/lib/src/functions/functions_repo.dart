@@ -20,7 +20,8 @@ class FunctionsRepoImpl implements FunctionsRepo {
     try {
       final response = await client.post(
         Endpoints.sendEmergencyNotification,
-        data: {'geofences': ids},
+        // data: {'geofences': ids},
+        queryParameters: {'geofences': ids},
       );
 
       final data = response.data['data'] as List;

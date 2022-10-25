@@ -17,7 +17,7 @@ class CommodityDetailsModel {
       this.quantity1,
       this.quantity2,
       this.totalQuantity});
-  CommodityDetailsModel.fromJson(Map<String, dynamic> json) {
+  CommodityDetailsModel.fromJson(Map json) {
     commodity = json['commodity'] != null ? new CvdFieldData.fromJson(json['commodity']) : null;
     variety1 = json['variety1'] != null ? new CvdFieldData.fromJson(json['variety1']) : null;
     variety2 = json['variety2'] != null ? new CvdFieldData.fromJson(json['variety2']) : null;

@@ -256,13 +256,26 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           // validator: Validator.ngr,
           // maxLength: 8,
         );
-      // case FieldType.date:
+
+      case 'licenseExpiryDate':
+        return MyDateField(
+          label: name,
+          // date: controller.text,
+          validator: Validator.none,
+          date: map[name.toCamelCase] ?? '',
+          onChanged: (value) {
+            controller.text = value;
+            print(map);
+          },
+        );
+
+      //K case FieldType.date:
       case 'date':
       case 'entryDate':
       // case 'startDate':
       case 'endDate':
       case 'exitDate':
-      case 'licenseExpiryDate':
+        // case 'licenseExpiryDate':
         return MyDateField(
           label: name,
           // date: controller.text,

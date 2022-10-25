@@ -35,6 +35,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
 
   Future<void> _init() async {
     form = widget.chemicalUseDetailsModel;
+    tableData = widget.chemicalUseDetailsModel.chemicalTable;
     setState(() {});
   }
 
@@ -46,7 +47,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
 
   @override
   Widget build(BuildContext context) {
-      final cubit = context.read<CvdCubit>();
+    final cubit = context.read<CvdCubit>();
     if (form == null) return const SizedBox();
     return SingleChildScrollView(
       child: AutoSpacing(
@@ -72,30 +73,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
               }
             },
             children: [
-              Table(
-                border: TableBorder.all(style: BorderStyle.solid, color: Colors.grey.shade400),
-                defaultVerticalAlignment: TableCellVerticalAlignment.top,
-                children: [
-                  TableRow(
-                    children: [
-                      Text('Chemical Applied'),
-                      Text('Rate (Tonne/ Ha)'),
-                      Text('Application Date'),
-                      Text('WHP/ ESI/ EAFI'),
-                    ],
-                  ),
-                  ...tableData.map(
-                    (e) => TableRow(
-                      children: [
-                        Text(e.chemicalName ?? ''),
-                        Text(e.rate ?? ''),
-                        Text(MyDecoration.formatDate(DateTime.tryParse(e.applicationDate!))),
-                        Text(e.wHP ?? ''),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              _table(),
               Gap(10.h),
               ElevatedButton(
                 onPressed: () {
@@ -114,10 +92,6 @@ class _ChemicalUseState extends State<ChemicalUse> {
                   ),
                 ),
               ),
-              // EditableTable(
-              //     headers: ['Chemical Applied', 'Rate (Tonne/ Ha)', 'Application Date', 'WHP/ ESI/ EAFI'],
-
-              //     onRowAdd: onRowAdd)
             ],
           ),
           Divider(
@@ -192,8 +166,17 @@ class _ChemicalUseState extends State<ChemicalUse> {
           CommonButtons(
             onContinue: () {
               final _form = form!.toJson();
+
+              final cubit = context.read<CvdCubit>();
               for (var value in _form.values) {
                 if (value is Map) {
+                  // value['key']
+                  if ([form!.cropList?.key, form!.qaProgram?.key, form!.certificateNumber?.key]
+                      .contains(value['key'])) {
+                    cubit.moveToNext();
+                    return;
+                  }
+
                   if (value['value'] == null) {
                     DialogService.error('Please fill the ${value['field']}');
                     return;
@@ -201,14 +184,39 @@ class _ChemicalUseState extends State<ChemicalUse> {
                 }
               }
 
-              final cubit = context.read<CvdCubit>();
-
               // cubit.changeCurrent(cubit.state.currentStep, isNext: true);
               cubit.moveToNext();
             },
           ),
         ],
       ),
+    );
+  }
+
+  Table _table() {
+    return Table(
+      border: TableBorder.all(style: BorderStyle.solid, color: Colors.grey.shade400),
+      defaultVerticalAlignment: TableCellVerticalAlignment.top,
+      children: [
+        TableRow(
+          children: [
+            Text('Chemical Applied'),
+            Text('Rate (Tonne/ Ha)'),
+            Text('Application Date'),
+            Text('WHP/ ESI/ EAFI'),
+          ],
+        ),
+        ...tableData.map(
+          (e) => TableRow(
+            children: [
+              Text(e.chemicalName ?? ''),
+              Text(e.rate ?? ''),
+              Text(MyDecoration.formatDate(DateTime.tryParse(e.applicationDate!))),
+              Text(e.wHP ?? ''),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

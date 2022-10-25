@@ -273,7 +273,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         message = 'Entry date cannot be after exit date';
       } else if (entry.compareTo(exit) == 0) {
         message = 'Entry date cannot be equal to exit date';
-      } else if (entry.isBefore(DateTime.now().subtract(10.days))) {
+      } else if (entry.isBefore(DateTime.now().subtract(10.days)) && state.userRoleDetails['role'] != 'Employee') {
         message = "Can't be more than 10 days before today's date";
       } else if (exit.difference(entry).inDays > 10) {
         message = 'Entry date cannot be more than 10 days after today';

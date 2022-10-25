@@ -24,7 +24,7 @@ class VendorDetailsModel extends CvdBaseModel {
   }
 
   @override
-  VendorDetailsModel.fromJson(Map<String, dynamic> json) {
+  VendorDetailsModel.fromJson(Map json) {
     name = json['name'] != null ? CvdFieldData.fromJson(json['name']) : null;
     address = json['address'] != null ? CvdFieldData.fromJson(json['address']) : null;
     town = json['town'] != null ? CvdFieldData.fromJson(json['town']) : null;

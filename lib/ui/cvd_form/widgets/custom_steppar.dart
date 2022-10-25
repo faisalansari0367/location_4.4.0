@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/theme/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -167,8 +168,8 @@ class CustomSteppar extends StatelessWidget {
                 color: isActive ? kPrimaryColor : const Color.fromARGB(255, 25, 25, 25),
               ),
               child: SizedBox(
-                width: 90.w,
-                child: Text(
+                width: 100.w,
+                child: AutoSizeText(
                   name,
                   maxLines: 2,
                   textAlign: TextAlign.center,

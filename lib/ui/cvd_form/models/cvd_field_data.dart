@@ -5,7 +5,7 @@ class CvdFieldData {
 
   CvdFieldData({this.key, this.label, this.value});
 
-  CvdFieldData.fromJson(Map<String, dynamic> json) {
+  CvdFieldData.fromJson(Map json) {
     key = json['key'];
     label = json['label'];
     value = json['value'];

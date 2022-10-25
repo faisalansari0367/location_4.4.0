@@ -58,7 +58,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       await storage.saveLogRecord(geofenceId, logbookEntry);
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
-      final data = e.response?.data;
+      final data = e.response?.data as Map;
 
       if (data['message'] != null) {
         final isExited = data['message'] == "You already exited this geofence";
@@ -80,14 +80,13 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (!data.containsKey('data')) {
         return ApiResult.failure(error: NetworkExceptions.getDioException(e));
       }
+
       // if (data != null) {
       //   return updateLogRecord(data, geofenceId);
       // }
       if (data.containsKey('logRecord')) {
         // return ApiResult.failure(message: data['logRecord']);
-        if (data != null) {
-          return _updateLogRecord(data['logRecord'], geofenceId);
-        }
+        return _updateLogRecord(data['logRecord'], geofenceId);
       }
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
@@ -195,7 +194,7 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form) async {
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logRecordId}) async {
     final logRecord = storage.getLogRecord(geofenceId);
 
     try {
@@ -210,7 +209,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       } else {
         final id = getLogRecord(geofenceId);
         final result = await client.patch(
-          '${Endpoints.logRecords}/${id?.id}',
+          '${Endpoints.logRecords}/${logRecordId ?? id?.id}',
           data: {'form': form, 'geofenceID': geofenceId},
         );
         final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
@@ -218,6 +217,16 @@ class LogRecordsImpl implements LogRecordsRepo {
         return ApiResult.success(data: logbookEntry);
       }
     } on DioError catch (e) {
+      final data = e.response?.data as Map;
+      if (data.containsKey('message')) {
+        if (data['message'] == 'Log Record does not exist') {
+          final logRecord = getLogRecord(geofenceId)?.id;
+          if (logRecord != null) {
+            return udpateForm(geofenceId, form, logRecordId: logRecord);
+          }
+          // return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+        }
+      }
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }

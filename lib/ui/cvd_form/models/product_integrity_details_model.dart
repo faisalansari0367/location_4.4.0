@@ -11,7 +11,7 @@ class ProductIntegrityDetailsModel {
     this.gmoCheck,
   });
 
-  ProductIntegrityDetailsModel.fromJson(Map<String, dynamic> json) {
+  ProductIntegrityDetailsModel.fromJson(Map json) {
     sourceCheck = json['sourceCheck'] != null ? new FieldData.fromJson(json['sourceCheck']) : null;
     materialCheck = json['materialCheck'] != null ? new FieldData.fromJson(json['materialCheck']) : null;
     gmoCheck = json['gmoCheck'] != null ? new FieldData.fromJson(json['gmoCheck']) : null;
