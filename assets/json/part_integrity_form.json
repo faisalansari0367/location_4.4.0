@@ -42,15 +42,15 @@
             "value": null,
             "options": [
                 {
-                    "value": 1,
+                    "value": 0,
                     "label": "Is non GMO as defined by 99% non GMO"
                 },
                 {
-                    "value": 2,
+                    "value": 1,
                     "label": "Is non GMO as defined by 95% non GMO"
                 },
                 {
-                    "value": 3,
+                    "value": 2,
                     "label": "Contains greater than 5% GMO or content unknown"
                 }
             ]

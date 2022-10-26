@@ -24,12 +24,13 @@ class TrackPolygons {
   PolygonModel? currentPolygon;
   bool isManagerNotified = false;
   final CallRestricter hidePopUpTimer = CallRestricter(duration: 1.minutes, callback: hidePopUp);
-  late NotifyManagerHandler notifyManager;
+  NotifyManagerHandler notifyManager = NotifyManagerHandler();
   final CallRestricter dontShowAgain = CallRestricter(duration: 15.minutes, callback: () {});
   late LogbookEntryHandler logbookEntryHandler;
 
   TrackPolygons({required this.mapsRepo, required this.api}) {
-    notifyManager = NotifyManagerHandler(mapsRepo, duration: 5.minutes);
+    // notifyManager ??= NotifyManagerHandler(mapsRepo, duration: 5.minutes);
+    notifyManager.init(mapsRepo);
     logbookEntryHandler = LogbookEntryHandler(
       mapsRepo: mapsRepo,
       api: api,
@@ -58,25 +59,38 @@ class TrackPolygons {
 
     // showPopup();
 
-    hidePopUpTimer.call(() {
-      if (currentPolygon?.id != null) {
-        final entry = api.getLogRecord(currentPolygon!.id!);
-        if ((entry?.form.isNotEmpty ?? false)) {
-          return;
+    hidePopUpTimer.call(
+      () {
+        if (currentPolygon?.id != null) {
+          final entry = api.getLogRecord(currentPolygon!.id!);
+          if ((entry?.form.isNotEmpty ?? false)) {
+            return;
+          }
         }
-      }
-      dontShowAgain.call(showPopup);
-    });
+        dontShowAgain.call(showPopup);
+      },
+    );
 
     /// this will take care of updating and calling the notify manager after a certain duration
     notifyManager.updateData(currentPosition, currentPolygon);
+  }
+
+  int getDifference(DateTime? date) {
+    if (date == null) return 0;
+    final difference = DateTime.now().difference(date);
+    return difference.inMinutes;
   }
 
   void showPopup() async {
     if (currentPolygon?.id != null) {
       final entry = api.getLogRecord(currentPolygon!.id!);
       if (entry?.enterDate != null) {
-        return;
+        final difference = DateTime.now().difference(entry!.enterDate!).inMinutes;
+        print('$difference is the difference');
+        if (difference < 15) {
+          return;
+        }
+        if (getDifference(entry.exitDate) > 30) {}
       }
     }
     await DialogService.showDialog(
@@ -84,7 +98,7 @@ class TrackPolygons {
         stream: polygonsInCoverage.stream,
         // onTap: (s) => Get.to(() => EntryForm(polygonModel: s)),
         onTap: (s) {
-          stopTimers();
+          _stopTimers();
           Get.to(() => GlobalQuestionnaireForm(polygonModel: s));
         },
         onNO: () {},
@@ -101,37 +115,29 @@ class TrackPolygons {
     );
 
     if (userIsInside.isNotEmpty) {
-      // don't show pop up if the zone is the same
       if (userIsInside.first.id != currentPolygon?.id) {
-        print('user has already entered in a different zone');
         hidePopUpTimer.cancel();
         dontShowAgain.cancel();
       }
       currentPolygon = userIsInside.first;
-
       logbookEntryHandler.update(true, currentPolygon!);
     } else {
       if (currentPolygon == null) return;
-
       logbookEntryHandler.update(false, currentPolygon!);
-      await 100.milliseconds.delay();
       // currentPolygon = null;
     }
   }
 
-  void isLoggedInToCurrentZone() {
-    if (currentPolygon == null) return;
-    api.logbookRecordsStream.listen((event) {
-      final data = event.where((element) => element.geofence!.id == currentPolygon!.id).toList();
-      if (data.isEmpty) return;
-      final first = data.first;
-      print(first);
-    });
+  void dispose() {
+    _stopTimers();
   }
 
-  void stopTimers() {
+  void _stopTimers() {
     hidePopUpTimer.cancel();
     notifyManager.cancel();
+    dontShowAgain.cancel();
+    hidePopUpTimer.cancel();
+    logbookEntryHandler.cancel();
   }
 }
 
@@ -149,7 +155,5 @@ class CallRestricter {
     }
   }
 
-  void cancel() {
-    _timer?.cancel();
-  }
+  void cancel() => _timer?.cancel();
 }

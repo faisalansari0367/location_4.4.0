@@ -41,6 +41,7 @@ class MapsCubit extends Cubit<MapsState> {
   final Api api;
   final MapsRepoLocal mapsRepoLocal;
   late MapsRepo mapsRepo;
+  late TrackPolygons trackPolygons;
 
   MapsCubit(
     this._notificationService,
@@ -59,6 +60,7 @@ class MapsCubit extends Cubit<MapsState> {
           ),
         ) {
     mapsRepo = _mapsRepo;
+    trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
     MyConnectivity().connectionStream.listen((event) {
       mapsRepo = event ? _mapsRepo : mapsRepoLocal;
       emit(state.copyWith(isConnected: event));
@@ -76,7 +78,7 @@ class MapsCubit extends Cubit<MapsState> {
     // so that device can determin the connectivity status
     await 200.milliseconds.delay();
     await updateCurrentLocation();
-    await _getAllPolygon();
+    // await _getAllPolygon();
     if (polygonId != null) moveToSelectedPolygon(polygonId!);
     getLocationUpdates();
     emit(state.copyWith());
@@ -274,7 +276,6 @@ class MapsCubit extends Cubit<MapsState> {
   }
 
   void getLocationUpdates() async {
-    final trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
     // dev.log('lcoation updates is emitting');
 
     // final popups = MapsPopups(notifyManager, mapsRepo, this);
@@ -300,6 +301,7 @@ class MapsCubit extends Cubit<MapsState> {
   @override
   Future<void> close() {
     stopLocationUpdates();
+    trackPolygons.dispose();
     _polygonsService.clear();
     // mapsRepo.cancel();
     return super.close();

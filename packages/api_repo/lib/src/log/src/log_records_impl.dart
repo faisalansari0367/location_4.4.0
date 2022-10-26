@@ -60,6 +60,17 @@ class LogRecordsImpl implements LogRecordsRepo {
     } on DioError catch (e) {
       final data = e.response?.data as Map;
 
+      switch (data['message']) {
+        case 'Log Record does not exist':
+          final hasEntry = getLogRecord(geofenceId);
+          if (hasEntry == null) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+          final result = await client.patch('${Endpoints.markExit}/${hasEntry.id}');
+          final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+          await storage.saveLogRecord(geofenceId, logbookEntry);
+          return ApiResult.success(data: logbookEntry);
+        default:
+      }
+
       if (data['message'] != null) {
         final isExited = data['message'] == "You already exited this geofence";
         if (isExited) {
@@ -151,7 +162,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       }
 
       // final entryDate = hasEntry?.enterDate?.add(const Duration(minutes: 30));
-      final hasEntryDate = hasEntry.enterDate != null;
+      // final hasEntryDate = hasEntry.enterDate != null;
       final hasExitDate = hasEntry.exitDate?.microsecond != null;
 
       // if has exit date and exit date is after now
@@ -164,7 +175,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (hasExitDate) {
         // final exitDate = hasEntry.exitDate?.add(const Duration(minutes: 30));
         final entryExitDifference = DateTime.now().difference(hasEntry.exitDate!).inMinutes;
-        print('difference between enter and exit date is $entryExitDifference in minutes');
+        // print('difference between enter and exit date is $entryExitDifference in minutes');
 
         // final canCreateNew = exitDate?.isAfter(DateTime.now().toLocal()) ?? false;
         if (entryExitDifference > 30) {
@@ -173,14 +184,19 @@ class LogRecordsImpl implements LogRecordsRepo {
           // create new record
           return await createLogRecord(geofenceId, form: form);
         } else {
-          return const ApiResult.failure(
-              error:
-                  NetworkExceptions.defaultError('user has entered few minutes ago, no need to create new log record'));
+          return ApiResult.failure(
+            error: NetworkExceptions.defaultError(
+              'user has entered $entryExitDifference minutes ago, no need to create new log record',
+            ),
+          );
         }
       }
 
       return const ApiResult.failure(
-          error: NetworkExceptions.defaultError('user has entered few minutes ago, no need to create new log record'));
+        error: NetworkExceptions.defaultError(
+          'user has not exited from previous fence',
+        ),
+      );
 
       // else if (hasEntryDate) {
       //   return const ApiResult.failure(error: NetworkExceptions.defaultError('user is inside nothing to do here'));

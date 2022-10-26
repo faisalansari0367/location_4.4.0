@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:async';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
@@ -26,15 +28,22 @@ class MapsApi implements MapsRepo {
     // getAllPolygon();
   }
 
+  // final _debouncer = CallbackDebouncer(1.seconds);
+
+  Completer? completer;
+
   final _controller = BehaviorSubject<List<PolygonModel>>.seeded([]);
 
   @override
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     try {
+      if (completer != null && !(completer?.isCompleted ?? true)) return ApiResult.success(data: _controller.value);
+      completer = Completer<void>();
       final result = await client.get(_Endpoints.geofences);
       final data = (result.data['data'] as List<dynamic>).map((e) => PolygonModel.fromJson(e)).toList();
       _controller.add(data);
       await storage.saveAllPolygon(data);
+      completer?.complete();
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

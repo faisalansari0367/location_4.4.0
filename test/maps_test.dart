@@ -31,7 +31,7 @@
 //       mapsPopups.controller.add(isInside);
 
 //       // testWidgets('check if dialog is open', (tester) {
-        
+
 //       // });
 //       // if (isInside) {
 
@@ -41,3 +41,67 @@
 //     });
 //   }));
 // }
+
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+
+class MarkExitHandler {
+  // PolygonModel? model;
+  bool isExiting;
+  // final Api api;
+  Timer? timer;
+
+  int called = 0;
+
+  MarkExitHandler({
+    // required this.model,
+    this.isExiting = false,
+    // required this.api,
+    this.timer,
+  });
+
+  void callExit([bool isExiting = false]) {
+    // model = polygonModel;
+    this.isExiting = isExiting;
+    cancel();
+    timer = Timer(2.seconds, callback);
+    printTimer();
+  }
+
+  void printTimer() {
+    Timer.periodic(1.seconds, (_) {
+      log('timer is running ${timer?.isActive}');
+    });
+  }
+
+  void cancel() => timer?.cancel();
+
+  void markExit() async {}
+
+  void callback() {
+    log('callback called');
+    called++;
+  }
+}
+
+void main() async {
+  // mark exit handler test
+  final markExit = MarkExitHandler();
+  group('markExit Handler', () {
+    test('Mark exit', () async {
+      markExit.callExit(true);
+      await 1.seconds.delay();
+      markExit.callExit(false);
+      await 1.seconds.delay();
+      markExit.callExit(true);
+      await 3.seconds.delay();
+      markExit.callExit(true);
+      await 2.seconds.delay();
+
+      expect(markExit.called, 2);
+    });
+  });
+}

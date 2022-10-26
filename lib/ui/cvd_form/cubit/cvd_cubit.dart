@@ -273,7 +273,7 @@ class CvdCubit extends Cubit<CvdState> {
       //   {'cropName': 'crop4'}
       // ],
       'cropList': chemicalUseDetailsModel.cropList?.value == null
-          ? null
+          ? []
           : chemicalUseDetailsModel.cropList?.value!.split(',').map((e) => {'cropName': e}).toList(),
       'riskCheck': chemicalUseDetailsModel.riskCheck?.value,
       // 'organisationName':

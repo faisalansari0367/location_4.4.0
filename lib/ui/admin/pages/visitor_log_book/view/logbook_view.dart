@@ -34,7 +34,6 @@ class _LogbookViewState extends State<LogbookView> {
 
   @override
   Widget build(BuildContext context) {
-    final api = context.read<Api>();
     final cubit = context.read<LogBookCubit>();
     return BlocBuilder<LogBookCubit, LogBookState>(
       builder: (context, state) {
