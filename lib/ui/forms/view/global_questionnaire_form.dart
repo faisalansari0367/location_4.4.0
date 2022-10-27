@@ -177,7 +177,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                       model.q5.value = names;
                     }
 
-                    submitFormData(jsonEncode(model.toJson()));
+                    await submitFormData(jsonEncode(model.toJson()));
                   },
                 ),
               ],

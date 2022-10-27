@@ -16,6 +16,15 @@ import '../view/widgets/dialog/enter_property.dart';
 import 'logbook_entry_handler.dart';
 import 'notify_manager_handler.dart';
 
+/// 1. hide pop up after 30 seconds
+/// if user did not fill out the form in 30 seconds, the pop up will be hidden
+/// 2. IF still in geofences after a further 60 seconds – present entry popup option again
+/// iF they have remained  in the same geofence and still not registered after a further 180 seconds
+/// if still not filled out the form, notify manager and update the logbook entry
+///
+///
+///
+
 class TrackPolygons {
   final MapsRepo mapsRepo;
   final Api api;
@@ -23,10 +32,11 @@ class TrackPolygons {
   final polygonsInCoverage = BehaviorSubject<Set<PolygonModel>>.seeded({});
   PolygonModel? currentPolygon;
   bool isManagerNotified = false;
-  final CallRestricter hidePopUpTimer = CallRestricter(duration: 1.minutes, callback: hidePopUp);
+  final CallRestricter hidePopUpTimer = CallRestricter(duration: 30.seconds, callback: hidePopUp);
   NotifyManagerHandler notifyManager = NotifyManagerHandler();
-  final CallRestricter dontShowAgain = CallRestricter(duration: 3.minutes, callback: () {});
+  final CallRestricter dontShowAgain = CallRestricter(duration: 180.seconds, callback: () {});
   late LogbookEntryHandler logbookEntryHandler;
+  int attemptOfShowingPopUp = 0;
 
   TrackPolygons({required this.mapsRepo, required this.api}) {
     // notifyManager ??= NotifyManagerHandler(mapsRepo, duration: 5.minutes);
@@ -63,16 +73,20 @@ class TrackPolygons {
       () {
         if (currentPolygon?.id != null) {
           final entry = api.getLogRecord(currentPolygon!.id!);
-          if ((entry?.form.isNotEmpty ?? false)) {
-            return;
+          if (entry != null) {
+            final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
+            print('$difference is the difference');
+            if (entry.form.isNotEmpty) {
+              return;
+            }
           }
         }
-        dontShowAgain.call(showPopup);
+        dontShowAgain.call(() => showPopup(currentPosition));
       },
     );
 
     /// this will take care of updating and calling the notify manager after a certain duration
-    notifyManager.updateData(currentPosition, currentPolygon);
+    // notifyManager.updateData(currentPosition, currentPolygon);
   }
 
   int getDifference(DateTime? date) {
@@ -81,24 +95,31 @@ class TrackPolygons {
     return difference.inMinutes;
   }
 
-  void showPopup() async {
-    if (currentPolygon?.id != null) {
-      final entry = api.getLogRecord(currentPolygon!.id!);
-      if (entry?.enterDate != null) {
-        final difference = DateTime.now().difference(entry!.enterDate!).inMinutes;
-        print('$difference is the difference');
-        if (difference < 15) {
-          return;
-        }
-        if (getDifference(entry.exitDate) > 30) {}
-      }
+  void showPopup(LatLng position) async {
+    if (attemptOfShowingPopUp >= 3) return;
+    if (attemptOfShowingPopUp == 2) {
+      notifyManager.updateData(position, currentPolygon);
     }
+
+    attemptOfShowingPopUp++;
+    // if (currentPolygon?.id != null) {
+    // final entry = api.getLogRecord(currentPolygon!.id!);
+    // if (entry?.enterDate != null) {
+    //   final difference = DateTime.now().difference(entry!.enterDate!).inMinutes;
+    //   print('$difference is the difference');
+    //   if (difference < 15) {
+    //     return;
+    //   }
+    //   if (getDifference(entry.exitDate) > 30) {}
+    // }
+    // }
     await DialogService.showDialog(
       child: EnterProperty(
         stream: polygonsInCoverage.stream,
         // onTap: (s) => Get.to(() => EntryForm(polygonModel: s)),
         onTap: (s) {
           _stopTimers();
+          hidePopUp();
           Get.to(() => GlobalQuestionnaireForm(polygonModel: s));
         },
         onNO: () {},
@@ -118,11 +139,14 @@ class TrackPolygons {
       if (userIsInside.first.id != currentPolygon?.id) {
         hidePopUpTimer.cancel();
         dontShowAgain.cancel();
+        attemptOfShowingPopUp = 0;
       }
       currentPolygon = userIsInside.first;
       logbookEntryHandler.update(true, currentPolygon!);
     } else {
       if (currentPolygon == null) return;
+      attemptOfShowingPopUp = 0;
+
       logbookEntryHandler.update(false, currentPolygon!);
       // currentPolygon = null;
     }

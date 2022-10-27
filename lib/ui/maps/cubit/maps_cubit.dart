@@ -78,7 +78,8 @@ class MapsCubit extends Cubit<MapsState> {
     // so that device can determin the connectivity status
     await 200.milliseconds.delay();
     await updateCurrentLocation();
-    await _getAllPolygon();
+    // await _getAllPolygon();
+    api.getLogbookRecords();
     if (polygonId != null) moveToSelectedPolygon(polygonId!);
     getLocationUpdates();
     emit(state.copyWith());

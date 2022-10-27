@@ -4,7 +4,6 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:get/get.dart';
 
 import '../location_service/maps_repo.dart';
 import '../models/polygon_model.dart';
@@ -33,9 +32,8 @@ class LogbookEntryHandler {
     markExitHandler?.cancel();
   }
 
-
   void _logbookEntry([bool isExiting = false]) async {
-    log('isExiting $isExiting \n polygonModel ${polygonModel?.toJson()}');
+    // log('isExiting $isExiting \n polygonModel ${polygonModel?.toJson()}');
     if (polygonModel == null) return;
     if (isExiting) {
       markExitHandler?.callExit(polygonModel, isExiting);
@@ -80,16 +78,17 @@ class MarkExitHandler {
   void callExit(PolygonModel? polygonModel, [bool isExiting = false]) {
     model = polygonModel;
     this.isExiting = isExiting;
+    timer = Timer(_duration, callback);
     cancel();
-    timer = Timer(10.seconds, callback);
-    printTimer();
+    // printTimer();
   }
 
-  void printTimer() {
-    logger = Timer.periodic(1.seconds, (_) {
-      log('api will be called in ${_duration.inSeconds - 1}');
-    });
-  }
+  // void printTimer() {
+  //   var seconds = _duration.inSeconds;
+  //   logger = Timer.periodic(1.seconds, (_) {
+  //     log('api will be called in ${seconds - 1}');
+  //   });
+  // }
 
   void cancel() {
     logger?.cancel();
@@ -97,6 +96,7 @@ class MarkExitHandler {
   }
 
   void markExit() async {
+    cancel();
     final result = await api.markExit(model!.id!);
     result.when(
       success: (s) {

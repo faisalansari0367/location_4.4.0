@@ -1,11 +1,9 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/theme/color_constants.dart';
-import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
 import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/my_appbar.dart';
@@ -56,16 +54,16 @@ class _VisitorsPageState extends State<VisitorsPage> {
                   Get.to(() => VisitorCheckInPage());
                 },
               ),
-              Gap(25.h),
-              MyListTile(
-                text: 'Visitor Logbook',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                ),
-                onTap: () async {
-                  Get.to(() => LogbookPage());
-                },
-              )
+              // Gap(25.h),
+              // MyListTile(
+              //   text: 'Visitor Logbook',
+              //   style: TextStyle(
+              //     fontSize: 18.sp,
+              //   ),
+              //   onTap: () async {
+              //     Get.to(() => LogbookPage());
+              //   },
+              // )
             ],
           ),
         ),

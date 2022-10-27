@@ -20,11 +20,12 @@ class NotifyManagerHandler {
   LatLng? position;
   PolygonModel? polygon;
   Timer? logger;
-  late Duration duration = Duration(minutes: 10);
+  late Duration duration = Duration(seconds: 180);
 
   static final NotifyManagerHandler _instance = NotifyManagerHandler._internal();
 
   factory NotifyManagerHandler() {
+    // _instance.duration = duration;
     return _instance;
   }
 
@@ -44,18 +45,16 @@ class NotifyManagerHandler {
 
   /// this function will be called after the duration passed while instantiating the class
   void call() {
+    log('calling notify manager');
     if (!(_timer?.isActive ?? false)) {
       _timer = Timer(
         duration,
         () {
           log('notified manager');
+          _notifyManager();
           cancel();
         },
       );
-      // int seconds = 0;
-      // logger = Timer.periodic(1.seconds, (_) {
-      //   log('notification manager timer ${seconds++}');
-      // });
     }
   }
 
