@@ -37,13 +37,13 @@ class MapsApi implements MapsRepo {
   @override
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     try {
-      if (completer != null && !(completer?.isCompleted ?? true)) return ApiResult.success(data: _controller.value);
-      completer = Completer<void>();
+      // if (completer != null && !(completer?.isCompleted ?? true)) return ApiResult.success(data: _controller.value);
+      // completer = Completer<void>();
       final result = await client.get(_Endpoints.geofences);
       final data = (result.data['data'] as List<dynamic>).map((e) => PolygonModel.fromJson(e)).toList();
       _controller.add(data);
       await storage.saveAllPolygon(data);
-      completer?.complete();
+      // completer?.complete();
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

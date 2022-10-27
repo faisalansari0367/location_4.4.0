@@ -13,6 +13,7 @@ class Strings {
       continue_ = 'Continue',
       surname = 'Surname',
       sign = 'Sign',
+      records = 'Records',
       declaration = 'Declaration',
       in_ = 'In',
       up = 'Up',
@@ -127,4 +128,5 @@ class Strings {
   static const edecForms = 'eDEC ${form}s';
 
   static String get cvdForm => 'CVD $form'.toUpperCase();
+  static String get cvdForms => 'CVD ${form}s';
 }

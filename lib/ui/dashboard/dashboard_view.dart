@@ -1,9 +1,9 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/cvd_forms/view/cvd_forms.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:background_location/ui/emergency_warning/emergency_warning.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
+import 'package:background_location/ui/records/records_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitors/visitors_page.dart';
 import 'package:background_location/widgets/dialogs/coming_soon.dart';
@@ -121,13 +121,13 @@ class DashboardView extends StatelessWidget {
                   ),
 
                   DashboardCard(
-                    text: 'CVD Forms',
+                    text: Strings.records,
                     iconData: Icons.format_align_justify_rounded,
                     // onTap: () => Get.to(() => const CvdFormPage()),
                     onTap: () async {
                       // DialogService.showDialog(child: const ComingSoonDialog());
 
-                      Get.to(() => const CvdForms());
+                      Get.to(() => const RecordsPage());
                       // Get.back();
                     },
                   ),

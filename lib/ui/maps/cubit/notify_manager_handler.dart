@@ -20,7 +20,7 @@ class NotifyManagerHandler {
   LatLng? position;
   PolygonModel? polygon;
   Timer? logger;
-  late Duration duration = Duration(minutes: 15);
+  late Duration duration = Duration(minutes: 10);
 
   static final NotifyManagerHandler _instance = NotifyManagerHandler._internal();
 

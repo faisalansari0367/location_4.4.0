@@ -25,7 +25,7 @@ class TrackPolygons {
   bool isManagerNotified = false;
   final CallRestricter hidePopUpTimer = CallRestricter(duration: 1.minutes, callback: hidePopUp);
   NotifyManagerHandler notifyManager = NotifyManagerHandler();
-  final CallRestricter dontShowAgain = CallRestricter(duration: 15.minutes, callback: () {});
+  final CallRestricter dontShowAgain = CallRestricter(duration: 3.minutes, callback: () {});
   late LogbookEntryHandler logbookEntryHandler;
 
   TrackPolygons({required this.mapsRepo, required this.api}) {
