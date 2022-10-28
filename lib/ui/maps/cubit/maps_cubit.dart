@@ -79,7 +79,7 @@ class MapsCubit extends Cubit<MapsState> {
     await 200.milliseconds.delay();
     await updateCurrentLocation();
     // await _getAllPolygon();
-    api.getLogbookRecords();
+    // api.getLogbookRecords();
     if (polygonId != null) moveToSelectedPolygon(polygonId!);
     getLocationUpdates();
     emit(state.copyWith());

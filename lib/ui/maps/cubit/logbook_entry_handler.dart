@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:get/get.dart';
 
 import '../location_service/maps_repo.dart';
 import '../models/polygon_model.dart';
@@ -79,16 +80,16 @@ class MarkExitHandler {
     model = polygonModel;
     this.isExiting = isExiting;
     timer = Timer(_duration, callback);
-    cancel();
-    // printTimer();
+    // cancel();
+    printTimer();
   }
 
-  // void printTimer() {
-  //   var seconds = _duration.inSeconds;
-  //   logger = Timer.periodic(1.seconds, (_) {
-  //     log('api will be called in ${seconds - 1}');
-  //   });
-  // }
+  void printTimer() {
+    var seconds = _duration.inSeconds;
+    logger = Timer.periodic(1.seconds, (_) {
+      log('api will be called in ${seconds - 1}');
+    });
+  }
 
   void cancel() {
     logger?.cancel();

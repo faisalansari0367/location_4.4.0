@@ -98,6 +98,7 @@ class LogbookEntry {
   DateTime? createdAt;
   DateTime? updatedAt;
   Geofence? geofence;
+  
   UserData? user;
 
   LogbookEntry({

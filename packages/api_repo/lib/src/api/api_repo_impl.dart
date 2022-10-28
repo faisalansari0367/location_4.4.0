@@ -206,8 +206,8 @@ class ApiRepo implements Api {
   // }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form) {
-    return _logRecordsRepo.udpateForm(geofenceId, form);
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId}) {
+    return _logRecordsRepo.udpateForm(geofenceId, form, logId: logId);
   }
 
   @override

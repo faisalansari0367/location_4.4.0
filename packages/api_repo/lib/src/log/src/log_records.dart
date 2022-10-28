@@ -6,7 +6,7 @@ abstract class LogRecordsRepo {
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form});
   // Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId);
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form);
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId});
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId);
   LogbookEntry? getLogRecord(String geofenceId);
 

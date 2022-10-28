@@ -75,9 +75,12 @@ class TrackPolygons {
           final entry = api.getLogRecord(currentPolygon!.id!);
           if (entry != null) {
             final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
-            print('$difference is the difference');
-            if (entry.form.isNotEmpty) {
-              return;
+            if (difference < 15) {
+              // showPopup();
+              print('$difference is the difference');
+              if (entry.form.isNotEmpty) {
+                return;
+              }
             }
           }
         }
@@ -85,7 +88,7 @@ class TrackPolygons {
       },
     );
 
-    /// this will take care of updating and calling the notify manager after a certain duration
+    /// this will take care of updating and callin`g the notify manager after a certain duration
     // notifyManager.updateData(currentPosition, currentPolygon);
   }
 
@@ -118,9 +121,10 @@ class TrackPolygons {
         stream: polygonsInCoverage.stream,
         // onTap: (s) => Get.to(() => EntryForm(polygonModel: s)),
         onTap: (s) {
+        
           _stopTimers();
           hidePopUp();
-          Get.to(() => GlobalQuestionnaireForm(polygonModel: s));
+          Get.to(() => GlobalQuestionnaireForm(zoneId: s.id!));
         },
         onNO: () {},
       ),
@@ -145,6 +149,9 @@ class TrackPolygons {
       logbookEntryHandler.update(true, currentPolygon!);
     } else {
       if (currentPolygon == null) return;
+      // attemptOfShowingPopUp = 0;
+      hidePopUpTimer.cancel();
+      dontShowAgain.cancel();
       attemptOfShowingPopUp = 0;
 
       logbookEntryHandler.update(false, currentPolygon!);

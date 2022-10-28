@@ -5,7 +5,6 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/forms/cubit/forms_cubit_cubit.dart';
 import 'package:background_location/ui/forms/widget/add_list.dart';
 import 'package:background_location/ui/forms/widget/form_card.dart';
-import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/no_signature_found.dart';
 import 'package:background_location/widgets/my_appbar.dart';
@@ -23,8 +22,9 @@ import '../../../widgets/dialogs/dialog_service.dart';
 import '../models/global_questionnaire_form_model.dart';
 
 class GlobalQuestionnaireForm extends StatefulWidget {
-  final PolygonModel polygonModel;
-  const GlobalQuestionnaireForm({Key? key, required this.polygonModel}) : super(key: key);
+  final String zoneId;
+  final int? logrecordId;
+  const GlobalQuestionnaireForm({Key? key, required this.zoneId, this.logrecordId}) : super(key: key);
 
   @override
   State<GlobalQuestionnaireForm> createState() => _GlobalQuestionnaireFormState();
@@ -226,7 +226,11 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
   }
 
   Future<void> submitFormData(String json) async {
-    final result = await context.read<Api>().udpateForm(widget.polygonModel.id!, json);
+    final result = await context.read<Api>().udpateForm(
+          widget.zoneId.toString(),
+          json,
+          logId: widget.logrecordId,
+        );
     result.when(
       success: (data) {
         DialogService.success(

@@ -155,7 +155,7 @@ class LogRecordsImpl implements LogRecordsRepo {
     try {
       // await storage.removeLogbookEntry(locationId);
 
-      final hasEntry = storage.getLogRecord(geofenceId);
+      final hasEntry = getLogRecord(geofenceId);
       // final difference = DateTime.now().difference(hasEntry?.enterDate ?? DateTime.now()).inMinutes;
       // final difference = hasEntry?.enterDate?.difference(DateTime.now()).inMinutes;
       // log('time difference is $difference');
@@ -181,9 +181,9 @@ class LogRecordsImpl implements LogRecordsRepo {
         // print('difference between enter and exit date is $entryExitDifference in minutes');
 
         // final canCreateNew = exitDate?.isAfter(DateTime.now().toLocal()) ?? false;
-        if (entryExitDifference > 30) {
+        if (entryExitDifference > 15) {
           // delete old record from storage
-          await storage.removeLogRecord(geofenceId);
+          // await storage.removeLogRecord(geofenceId);
           // create new record
           return await createLogRecord(geofenceId, form: form);
         } else {
@@ -213,10 +213,14 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logRecordId}) async {
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId}) async {
     final logRecord = storage.getLogRecord(geofenceId);
 
     try {
+      if (logId != null) {
+        return _patchForm(geofenceId, form, logId);
+      }
+
       if (logRecord != null) {
         return _patchForm(geofenceId, form, logRecord.id!);
         // final result = await client.patch(
@@ -285,7 +289,11 @@ class LogRecordsImpl implements LogRecordsRepo {
     final userId = storageService.getUser()?.id;
     final record = _logRecords.where((element) => element.geofence?.id == int.parse(geofenceId));
     final recordsByUser = record.where((element) => element.user?.id == userId);
-    return record.isNotEmpty ? recordsByUser.first : null;
+    final recordsPast15Minutes = recordsByUser.where((element) {
+      return DateTime.now().difference(element.enterDate!).inMinutes <= 15;
+    });
+
+    return recordsPast15Minutes.isNotEmpty ? recordsPast15Minutes.first : null;
   }
 }
 
