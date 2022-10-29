@@ -40,6 +40,8 @@ class _LogbookViewState extends State<LogbookView> {
     super.initState();
   }
 
+  static const list = [if (kDebugMode) 'id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration'];
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LogBookCubit>();
@@ -52,10 +54,8 @@ class _LogbookViewState extends State<LogbookView> {
             actions: [
               if (!state.isLoading)
                 IconButton(
-                  onPressed: () {
-                    context.read<LogBookCubit>().generatePDf();
-                  },
                   icon: const Icon(Icons.picture_as_pdf),
+                  onPressed: context.read<LogBookCubit>().generatePDf,
                 ),
             ],
           ),
@@ -66,30 +66,16 @@ class _LogbookViewState extends State<LogbookView> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SingleChildScrollView(
-                  // child: DataTable(
-                  //   columns: ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'form']
-                  //       .map((e) => _dataColumn(e.capitalize!))
-                  //       .toList(),
-                  //   rows: state.entries.map(_dataRow).toList(),
-                  // ),
+                  controller: cubit.scrollController,
                   child: StreamBuilder<List<LogbookEntry>>(
                     stream: cubit.api.logbookRecordsStream,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
-
                       return DataTable(
                         dataRowHeight: 60,
-                        columns: [
-                          if (kDebugMode) 'id',
-                          'Full Name',
-                          'entry date',
-                          'exit date',
-                          'Zone',
-                          'pic',
-                          'Declaration'
-                        ].map((e) => _dataColumn(e.capitalize!)).toList(),
+                        columns: list.map((e) => _dataColumn(e.capitalize!)).toList(),
                         rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
                         columnSpacing: 31,
                       );
@@ -97,16 +83,6 @@ class _LogbookViewState extends State<LogbookView> {
                   ),
                 ),
               ),
-              // );
-              // return MyListview<LogbookEntry>(
-              //   // emptyWidget: Center(
-              //   //   child: Text('No data found'),
-              //   // ),
-              //   onRetry: context.read<LogBookCubit>().getRecords,
-              //   isLoading: state.isLoading,
-              //   spacing: Container(color: Colors.grey.shade200, height: 2.h),
-              //   data: state.entries,
-              //   itemBuilder: itemBuilder,
             ),
           ),
         );
@@ -117,8 +93,9 @@ class _LogbookViewState extends State<LogbookView> {
   // DataRow _tableRow(data) {
   DataRow _dataRow(LogbookEntry item, int index, LogBookState state) {
     return DataRow(
-      color: MaterialStateProperty.all(index % 2 == 0 ? Colors.grey.shade100 : Colors.white),
-      // color: MaterialStateProperty.all(item.geofence?.color ?? Colors.transparent),
+      color: MaterialStateProperty.all(
+        index % 2 == 0 ? Colors.grey.shade100 : Colors.white,
+      ),
       cells: [
         if (kDebugMode) _dataCell(item.id.toString()),
         _dataCell('${item.user!.firstName!} ${item.user!.lastName}'),
@@ -126,8 +103,6 @@ class _LogbookViewState extends State<LogbookView> {
         _dataCell('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
         _dataCell(item.geofence?.name ?? ''),
         _dataCell(item.geofence?.pic ?? '', color: item.geofence?.color, isPic: true),
-
-        // item.geofence.
         DataCell(
           (item.form.isNotEmpty)
               ? TextButton(
@@ -140,79 +115,7 @@ class _LogbookViewState extends State<LogbookView> {
                   child: const Text('View'),
                 )
               : GestureDetector(
-                  // onTap: !isCurrentUser(context, item.id)
-                  onTap: !(_user?.id == item.user!.id)
-                      ? null
-                      : () {
-                          DialogService.showDialog(
-                            child: DialogLayout(
-                              child: Padding(
-                                padding: kPadding,
-                                child: Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(10.h),
-                                    Text(
-                                      'Do you want to complete the declaration form now for ${item.user!.firstName} ${item.user!.lastName} into location ${item.geofence?.name}?',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 30.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    Gap(20.h),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: MyElevatedButton(
-                                            onPressed: () async {
-                                              Get.back();
-                                            },
-                                            // child: const Text('No'),
-                                            child: Text(
-                                              'No',
-                                              style: TextStyle(
-                                                fontSize: 30.sp,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            color: Color.fromARGB(255, 0, 0, 0),
-                                          ),
-                                        ),
-                                        Gap(20.w),
-                                        Expanded(
-                                          child: MyElevatedButton(
-                                            onPressed: () async {
-                                              Get.back();
-                                              Get.to(
-                                                () => GlobalQuestionnaireForm(
-                                                  zoneId: item.geofence!.id!.toString(),
-                                                  logrecordId: item.id,
-                                                ),
-                                              );
-                                            },
-                                            // text: 'Yes',
-                                            color: Colors.green,
-                                            child: Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                fontSize: 30.sp,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                  onTap: !(_user?.id == item.user!.id) ? null : () => _completeDeclarationDialog(item),
                   child: Text(
                     'Unregistered'.toUpperCase(),
                     style: TextStyle(
@@ -224,6 +127,77 @@ class _LogbookViewState extends State<LogbookView> {
                 ),
         ),
       ],
+    );
+  }
+
+  Future<dynamic> _completeDeclarationDialog(LogbookEntry item) {
+    return DialogService.showDialog(
+      child: DialogLayout(
+        child: Padding(
+          padding: kPadding,
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Gap(10.h),
+              Text(
+                'Do you want to complete the declaration form now for ${item.user!.firstName} ${item.user!.lastName} into location ${item.geofence?.name}?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Gap(20.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: MyElevatedButton(
+                      onPressed: () async {
+                        Get.back();
+                      },
+                      // child: const Text('No'),
+                      child: Text(
+                        'No',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ),
+                  Gap(20.w),
+                  Expanded(
+                    child: MyElevatedButton(
+                      onPressed: () async {
+                        Get.back();
+                        Get.to(
+                          () => GlobalQuestionnaireForm(
+                            zoneId: item.geofence!.id!.toString(),
+                            logrecordId: item.id,
+                          ),
+                        );
+                      },
+                      // text: 'Yes',
+                      color: Colors.green,
+                      child: Text(
+                        'Yes',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -249,7 +223,7 @@ class _LogbookViewState extends State<LogbookView> {
             fontSize: 14,
             color: !isPic
                 ? null
-                : color!.computeLuminance() <= 0.5
+                : (color ?? Colors.transparent).computeLuminance() <= 0.5
                     ? Colors.white
                     : Colors.black,
             fontWeight: FontWeight.w600,
@@ -262,60 +236,14 @@ class _LogbookViewState extends State<LogbookView> {
   DataColumn _dataColumn(String name) {
     return DataColumn(
       numeric: false,
-      label: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0),
-        // alignment: Alignment.center,
-        child: Text(
-          name,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+      label: Text(
+        name,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
-
-  // Widget itemBuilder(BuildContext p1, int index) {
-  //   final item = p1.read<LogBookCubit>().state.entries[index];
-
-  //   return ListTile(
-  //     title: Text(
-  //       item.id.toString(),
-  //       textAlign: TextAlign.center,
-  //       style: TextStyle(
-  //         color: Colors.grey.shade900,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //     ),
-  //     subtitle: Text(
-  //       MyDecoration.formatDate(item.updatedAt),
-  //       style: TextStyle(
-  //         color: Colors.grey.shade600,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //     ),
-  //     // onTap: hasChildrens(item.form) ? null : () => Get.to(() => LogbookDetails(form: item.form)),
-  //     // trailing: !hasChildrens(item.form) ? Icon(Icons.chevron_right) : SizedBox.shrink(),
-  //   );
-  // }
-
-  bool hasChildrens(LogbookFormField? item) {
-    if (item == null) return true;
-    // if (item.form is! Map) return true;
-    // if (item is Map) return true;
-    return false;
-  }
-
-  // TableRow _tableRow(List<String> list) {
-  //   return TableRow(
-  //     children: [
-  //       for (var item in list)
-  //         TableCell(
-  //           child: Text(item),
-  //         ),
-  //     ],
-  //   );
-  // }
 }

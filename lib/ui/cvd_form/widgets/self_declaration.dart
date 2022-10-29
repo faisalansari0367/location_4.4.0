@@ -169,21 +169,26 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
             //   )
 
             Gap(20.h),
-            MyElevatedButton(
-              text: 'Submit',
-              onPressed: () async {
-                final cubit = context.read<CvdCubit>();
-                if (cubit.signature == null) {
-                  DialogService.showDialog(
-                    child: NoSignatureFound(
-                      message: 'Please sign the declaration',
-                      buttonText: 'Ok',
-                      onCancel: Get.back,
-                    ),
-                  );
-                  return;
-                }
-                await cubit.getApiData();
+            BlocBuilder<CvdCubit, CvdState>(
+              builder: (context, state) {
+                return MyElevatedButton(
+                  // isLoading: state.isLoading,
+                  text: 'Submit',
+                  onPressed: () async {
+                    final cubit = context.read<CvdCubit>();
+                    if (cubit.signature == null) {
+                      DialogService.showDialog(
+                        child: NoSignatureFound(
+                          message: 'Please sign the declaration',
+                          buttonText: 'Ok',
+                          onCancel: Get.back,
+                        ),
+                      );
+                      return;
+                    }
+                    await cubit.getApiData();
+                  },
+                );
               },
             ),
             Gap(50.h),

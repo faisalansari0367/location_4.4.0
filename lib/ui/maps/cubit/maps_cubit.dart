@@ -24,13 +24,7 @@ import '../location_service/maps_repo.dart';
 import '../location_service/maps_repo_local.dart';
 import '../models/polygon_model.dart';
 
-// import 'package:google_maps_flutter/google_maps_flutter.dart'
-//     show CameraPosition, CameraUpdate, GoogleMapController, LatLng, LatLngBounds;
-// import 'package:location_repo/location_repo.dart' show LocationRepo, MapsRepo, PolygonLatLng, PolygonModel, Position;
-// import 'package:location_repo/location_repo.dart' as location_repo;
-
 part 'maps_state.dart';
-// part 'maps_state.g.dart';
 
 class MapsCubit extends Cubit<MapsState> {
   final NotificationService _notificationService;
@@ -78,8 +72,6 @@ class MapsCubit extends Cubit<MapsState> {
     // so that device can determin the connectivity status
     await 200.milliseconds.delay();
     await updateCurrentLocation();
-    // await _getAllPolygon();
-    // api.getLogbookRecords();
     if (polygonId != null) moveToSelectedPolygon(polygonId!);
     getLocationUpdates();
     emit(state.copyWith());
@@ -281,6 +273,8 @@ class MapsCubit extends Cubit<MapsState> {
 
     // final popups = MapsPopups(notifyManager, mapsRepo, this);
     final locationupdates = await GeolocatorService.getLocationUpdates();
+    // DeepCollection
+    // Set<PolygonModel> _polygons = {};
     _positionSubscription = locationupdates.listen((event) {
       final position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
@@ -289,11 +283,13 @@ class MapsCubit extends Cubit<MapsState> {
         polygons: state.polygons,
         accuracy: event.accuracy,
       );
-      // dev.log('message ${polygonsInCoverage.length}');
 
       if (polygonsInCoverage.isNotEmpty) {
         trackPolygons.update(polygonsInCoverage, position);
       }
+      // }
+
+      // dev.log('message ${polygonsInCoverage.length}');
     });
   }
 

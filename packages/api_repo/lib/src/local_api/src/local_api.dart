@@ -33,7 +33,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords() {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1}) {
     throw UnimplementedError();
   }
 
@@ -240,7 +240,7 @@ class LocalApi extends Api {
   }
 
   @override
-  LogbookEntry? getLogRecord(String geofenceId) {
+  Future<LogbookEntry?> getLogRecord(String geofenceId) {
     throw UnimplementedError();
   }
 

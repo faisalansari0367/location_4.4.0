@@ -22,7 +22,6 @@ import 'package:background_location/widgets/dialogs/location_permission_dialog.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
@@ -202,28 +201,28 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             CurrentLocation(
               onPressed: cubit.updateCurrentLocation,
             ),
-            Gap(10.h),
+            // Gap(10.h),
 
-            FloatingActionButton(
-              onPressed: () => cubit.zoom(2),
-              backgroundColor: Colors.white,
-              heroTag: 'zoom_plus',
-              child: const Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-            ),
-            Gap(10.h),
-            FloatingActionButton(
-              heroTag: 'zoom_minus',
-              onPressed: () => cubit.zoom(-2),
-              backgroundColor: Colors.white,
-              child: const Icon(
-                Icons.remove,
-                color: Colors.black,
-              ),
-            ),
-            // if (Platform.isAndroid) Gap(10.height),
+            // FloatingActionButton(
+            //   onPressed: () => cubit.zoom(2),
+            //   backgroundColor: Colors.white,
+            //   heroTag: 'zoom_plus',
+            //   child: const Icon(
+            //     Icons.add,
+            //     color: Colors.black,
+            //   ),
+            // ),
+            // Gap(10.h),
+            // FloatingActionButton(
+            //   heroTag: 'zoom_minus',
+            //   onPressed: () => cubit.zoom(-2),
+            //   backgroundColor: Colors.white,
+            //   child: const Icon(
+            //     Icons.remove,
+            //     color: Colors.black,
+            //   ),
+            // ),
+            // // if (Platform.isAndroid) Gap(10.height),
           ],
         ),
         // appBar: MyAppBar(

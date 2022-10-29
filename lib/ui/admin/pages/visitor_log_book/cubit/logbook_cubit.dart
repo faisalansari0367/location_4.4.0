@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:background_location/helpers/callback_debouncer.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/cubit/logbook_state.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/create_pdf.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
@@ -12,8 +13,25 @@ import '../../../../../constants/index.dart';
 
 class LogBookCubit extends Cubit<LogBookState> {
   final Api api;
+  late ScrollController scrollController = ScrollController();
+  final CallbackDebouncer _debouncer = CallbackDebouncer(100.milliseconds);
   LogBookCubit({required this.api}) : super(const LogBookState()) {
     getRecords();
+
+    scrollController.addListener(() {
+      if (isAtEnd) {
+        _debouncer.call(() {
+          // emit(state.copyWith(page: state.page + 1));
+          // getRecords();
+        });
+      }
+    });
+  }
+
+  // isAtEnd
+  bool get isAtEnd {
+    // add delta
+    return scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100;
   }
 
   Future<void> generatePDf() async {
@@ -36,10 +54,6 @@ class LogBookCubit extends Cubit<LogBookState> {
   }
 
   Future<void> getRecords() async {
-    // emit(state.copyWith(isLoading: true));
-    // await Get.showSnackbar(GetSnackBar(
-    //   title: 'Logbook updating',
-    // ));
     await 100.milliseconds.delay();
     BottomSheetService.showSheet(
       child: Row(
@@ -53,15 +67,12 @@ class LogBookCubit extends Cubit<LogBookState> {
         ],
       ),
     );
-    final result = await api.getLogbookRecords();
+    final result = await api.getLogbookRecords(page: state.page);
 
     result.when(
       success: (s) async {
         if (Get.isBottomSheetOpen ?? false) Get.back();
-        // await Get.showSnackbar(GetSnackBar(
-        //   title: 'Logbook updated',
-        // )).show();
-        emit(state.copyWith(entries: s.data));
+        emit(state.copyWith(entries: [...state.entries, ...(s.data ?? [])]));
       },
       failure: (failure) => DialogService.failure(error: failure),
     );

@@ -14,7 +14,6 @@ import 'package:background_location/ui/cvd_form/widgets/form_stepper.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/dio.dart' as dio;
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,6 +36,7 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   void init(BuildContext context) async {
+    _box = await Hive.openBox('cvdbox');
     final futures = [
       _fetchVendorDetailsModel(context),
       _fetchBuyerDetailsModel(context),
@@ -46,7 +46,6 @@ class CvdCubit extends Cubit<CvdState> {
       _fetchPartIntegrityDetailsModel(context),
     ];
     await Future.wait(futures);
-    _box = await Hive.openBox('cvdbox');
     _fromJson();
   }
 
@@ -189,17 +188,11 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   Future<void> getApiData() async {
+    // emit(state.copyWith(isLoading: true));
     try {
       final result = await Dio().post(
         'https://uniquetowinggoa.com/safemeat/public/api/declaration',
         data: _cvdFormData,
-        options: dio.Options(),
-        onReceiveProgress: (a, b) {
-          print('$a $b');
-        },
-        onSendProgress: (a, b) {
-          print('$a $b');
-        },
       );
       if (result.data['status'] == false) {
         final error = result.data['data'] as Map;
@@ -210,10 +203,12 @@ class CvdCubit extends Cubit<CvdState> {
       final bytes = base64Decode(result.data['data']);
       final file = await formsService.saveCvdForm(bytes);
       await OpenFile.open(file.path);
-      // Get.back();
+      Get.back();
+      Get.back();
     } catch (e) {
       print(e);
     }
+    // emit(state.copyWith(isLoading: false));
   }
 
   Map<String, Object?> get _cvdFormData {
@@ -226,7 +221,7 @@ class CvdCubit extends Cubit<CvdState> {
       'vendorEmail': vendorDetails.email!.value,
       'vendorNGR': vendorDetails.ngr!.value,
       'vendorPIC': vendorDetails.pic!.value,
-      'vendorRefrence': vendorDetails.refrenceNo!.value,
+      'vendorReference': vendorDetails.refrenceNo!.value,
       'buyerName': buyerDetailsModel.name!.value,
       'buyerAddress': buyerDetailsModel.address!.value,
       'buyerTown': buyerDetailsModel.town!.value,
@@ -235,7 +230,7 @@ class CvdCubit extends Cubit<CvdState> {
       'buyerEmail': buyerDetailsModel.email!.value,
       'buyerNGR': buyerDetailsModel.ngr!.value,
       'buyerPIC': buyerDetailsModel.pic!.value,
-      'buyerRefrence': buyerDetailsModel.contractNo!.value,
+      'buyerReference': buyerDetailsModel.contractNo!.value,
       'driverName': transporterDetails.name?.value,
       'driverEmail': transporterDetails.email?.value,
       'driverContact': transporterDetails.mobile?.value,

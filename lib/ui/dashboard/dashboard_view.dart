@@ -122,7 +122,8 @@ class DashboardView extends StatelessWidget {
 
                   DashboardCard(
                     text: Strings.records,
-                    iconData: Icons.format_align_justify_rounded,
+                    // iconData: Icons.format_align_justify_rounded,
+                    image: 'assets/icons/edit.png',
                     // onTap: () => Get.to(() => const CvdFormPage()),
                     onTap: () async {
                       // DialogService.showDialog(child: const ComingSoonDialog());
@@ -155,7 +156,8 @@ class DashboardView extends StatelessWidget {
                   // ),
                   DashboardCard(
                     text: Strings.settings.capitalize!,
-                    iconData: Icons.settings,
+                    // iconData: Icons.settings,
+                    image: 'assets/icons/settings.png',
                     onTap: () => Get.to(
                       // () => SettingsPage(
                       //   showBackbutton: true,

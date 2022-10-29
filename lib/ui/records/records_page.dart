@@ -22,11 +22,11 @@ class _RecordsPageState extends State<RecordsPage> {
     return Scaffold(
       appBar: MyAppBar(
         title: const Text(Strings.records),
+        elevation: 5,
       ),
       body: ListView(
         padding: kPadding,
         children: [
-          Gap(25.h),
           MyListTile(
             text: Strings.cvdForms,
             style: TextStyle(
@@ -36,7 +36,7 @@ class _RecordsPageState extends State<RecordsPage> {
               Get.to(() => CvdForms());
             },
           ),
-          Gap(25.h),
+          Gap(20.h),
           MyListTile(
             text: 'Visitor Logbook',
             style: TextStyle(

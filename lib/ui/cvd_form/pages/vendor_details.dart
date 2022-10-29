@@ -44,8 +44,6 @@ class _VendorDetailsState extends State<VendorDetails> {
     setState(() {});
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     if (isLoading) const Center(child: CircularProgressIndicator());

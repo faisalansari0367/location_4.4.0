@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
@@ -58,6 +59,8 @@ class TrackPolygons {
 
   //
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
+    if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) return;
+    print('calling update function');
     _userIsInside(polygonsInCoverage, currentPosition);
     this.polygonsInCoverage.add(polygonsInCoverage);
 
@@ -65,26 +68,27 @@ class TrackPolygons {
 
     // page is maps page
     // dialog is not showing
-    if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) return;
 
     // showPopup();
 
     hidePopUpTimer.call(
-      () {
+      () async {
         if (currentPolygon?.id != null) {
-          final entry = api.getLogRecord(currentPolygon!.id!);
+          final entry = await api.getLogRecord(currentPolygon!.id!);
+          log('logRecord id is : ${entry?.id}');
+          log('form is empty : ${entry?.form.isEmpty}');
+          log('should show pop up : ${entry?.form.isEmpty}');
           if (entry != null) {
-            final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
-            if (difference < 15) {
-              // showPopup();
-              print('$difference is the difference');
-              if (entry.form.isNotEmpty) {
-                return;
-              }
+            // final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
+            if (entry.form.isNotEmpty) {
+              return;
             }
           }
         }
-        dontShowAgain.call(() => showPopup(currentPosition));
+        print('calling hide pop up timer function');
+        dontShowAgain.call(() {
+          showPopup(currentPosition);
+        });
       },
     );
 
@@ -105,30 +109,21 @@ class TrackPolygons {
     }
 
     attemptOfShowingPopUp++;
-    // if (currentPolygon?.id != null) {
-    // final entry = api.getLogRecord(currentPolygon!.id!);
-    // if (entry?.enterDate != null) {
-    //   final difference = DateTime.now().difference(entry!.enterDate!).inMinutes;
-    //   print('$difference is the difference');
-    //   if (difference < 15) {
-    //     return;
-    //   }
-    //   if (getDifference(entry.exitDate) > 30) {}
-    // }
-    // }
     await DialogService.showDialog(
       child: EnterProperty(
         stream: polygonsInCoverage.stream,
         // onTap: (s) => Get.to(() => EntryForm(polygonModel: s)),
         onTap: (s) {
-        
           _stopTimers();
-          hidePopUp();
-          Get.to(() => GlobalQuestionnaireForm(zoneId: s.id!));
+
+          Get.to(() => GlobalQuestionnaireForm(
+                zoneId: s.id!,
+              ));
         },
         onNO: () {},
       ),
     );
+    hidePopUp();
   }
 
   void _userIsInside(Set<PolygonModel> polygons, LatLng currentPosition) async {
@@ -181,7 +176,7 @@ class CallRestricter {
 
   void call(VoidCallback onCall) {
     if (!(_timer?.isActive ?? false)) {
-      onCall();
+      onCall.call();
       _timer = Timer(duration, callback);
     }
   }

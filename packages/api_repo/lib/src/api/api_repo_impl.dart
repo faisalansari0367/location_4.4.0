@@ -129,8 +129,8 @@ class ApiRepo implements Api {
   UserData? getUserData() => _authRepo.getUserData();
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords() {
-    return _logRecordsRepo.getLogbookRecords();
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1}) {
+    return _logRecordsRepo.getLogbookRecords(page: page);
   }
 
   @override
@@ -226,7 +226,7 @@ class ApiRepo implements Api {
   }
 
   @override
-  LogbookEntry? getLogRecord(String geofenceId) {
+  Future<LogbookEntry?> getLogRecord(String geofenceId) {
     return _logRecordsRepo.getLogRecord(geofenceId);
   }
 

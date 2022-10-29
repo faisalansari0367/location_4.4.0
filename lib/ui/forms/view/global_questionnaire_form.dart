@@ -43,8 +43,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
 
   @override
   Widget build(BuildContext context) {
-    // print(context.read<Api>().getUserData()?.toJson());
-
     return LayoutBuilder(
       builder: (context, constraints) => Scaffold(
         appBar: MyAppBar(
@@ -58,7 +56,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
             child: AutoSpacing(
               children: [
                 _card(model.q1),
-                // _card(model.q2),
                 Container(
                   decoration: MyDecoration.decoration(),
                   child: QuestionCard(
@@ -73,7 +70,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                   ),
                 ),
                 _card(model.q3),
-                // _card(model.q4),
                 Container(
                   decoration: MyDecoration.decoration(),
                   child: QuestionCard(
@@ -87,7 +83,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                     },
                   ),
                 ),
-                // _card(model.q5),
                 _addList(model.q5),
                 MyTextField(
                   hintText: model.q6.question,
@@ -130,7 +125,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                     setState(() {});
                   },
                 ),
-
                 Container(
                   decoration: MyDecoration.decoration(),
                   padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -152,7 +146,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                       return;
                     }
                     if (model.signature.value == null) {
-                      // DialogService.error('Please sign the declaration');
                       DialogService.showDialog(
                         child: NoSignatureFound(
                           message: 'Please sign the declaration',
@@ -226,6 +219,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
   }
 
   Future<void> submitFormData(String json) async {
+    final api = context.read<Api>();
     final result = await context.read<Api>().udpateForm(
           widget.zoneId.toString(),
           json,
@@ -236,6 +230,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
         DialogService.success(
           'Form Submitted',
           onCancel: () {
+            // api.getLogbookRecords();
             Get.back();
             Get.back();
           },

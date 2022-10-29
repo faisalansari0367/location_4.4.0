@@ -36,100 +36,109 @@ class _LoginViewState extends State<LoginView> {
         padding: kPadding.copyWith(top: 0),
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Image.asset(
-                    Assets.icons.appIcon.path,
-                    fit: BoxFit.cover,
-                    height: 60.width,
-                  ),
-                ),
-                const Center(child: AppName()),
-                Gap(4.height),
-
-                Text(
-                  Strings.login,
-                  style: context.textTheme.headline4?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 2.height),
-                EmailField(
-                  controller: cubit.emailController,
-                  onChanged: cubit.onChangedEmail,
-                ),
-                SizedBox(height: 2.height),
-                PasswordField(onChanged: cubit.onChangedPassword, onSubmitted: (s) => onLogin()),
-                Gap(1.height),
-                GestureDetector(
-                  onTap: () => Get.to(() => const ForgotPassword()),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      '${Strings.forgotPassword}?',
-                      style: context.textTheme.subtitle2?.copyWith(
-                        color: context.theme.primaryColor,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedContainer(
+                      duration: 500.milliseconds,
+                      curve: Curves.decelerate,
+                      child: Center(
+                        // heightFactor: 1.5,
+                        child: Image.asset(
+                          Assets.icons.appIcon.path,
+                          fit: BoxFit.cover,
+                          height: constraints.maxHeight / 3,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(height: 2.height),
-                BlocBuilder<LoginCubit, LoginState>(
-                  builder: (context, state) {
-                    return MyElevatedButton(
-                      onPressed: onLogin,
-                      isLoading: state.isLoading,
-                      // isLoading: ,
-                      text: Strings.login,
-                    );
-                  },
-                ),
+                    const Center(child: AppName()),
+                    Gap(4.height),
 
-                Gap(3.height),
-                Align(
-                  child: TextButton(
-                    onPressed: () => Get.to(() => const SignUpPage()),
-                    style: TextButton.styleFrom(
-                      textStyle: context.textTheme.bodyText2?.copyWith(
-                        fontWeight: FontWeight.w600,
+                    Text(
+                      Strings.login,
+                      style: context.textTheme.headline4?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                    child: Text(
-                      '${Strings.newToItrack} ${Strings.register}',
-                      // style: context.textTheme.bodyText2.copy,
+                    SizedBox(height: 2.height),
+                    EmailField(
+                      controller: cubit.emailController,
+                      onChanged: cubit.onChangedEmail,
                     ),
-                  ),
-                ),
-                // New to Itrack ? Register
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Text(
-                //       Strings.newToItrack,
-                //       style: context.textTheme.subtitle2?.copyWith(
-                //           // color: context.theme.primaryColor,s
-                //           ),
-                //     ),
-                //     SizedBox(width: 10.w),
-                //     GestureDetector(
-                //       onTap: () => Get.to(SignUpPage()),
-                //       child: Text(
-                //         Strings.register,
-                //         style: context.textTheme.subtitle2?.copyWith(
-                //           color: context.theme.primaryColor,
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                    SizedBox(height: 2.height),
+                    PasswordField(onChanged: cubit.onChangedPassword, onSubmitted: (s) => onLogin()),
+                    Gap(1.height),
+                    GestureDetector(
+                      onTap: () => Get.to(() => const ForgotPassword()),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '${Strings.forgotPassword}?',
+                          style: context.textTheme.subtitle2?.copyWith(
+                            color: context.theme.primaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 2.height),
+                    BlocBuilder<LoginCubit, LoginState>(
+                      builder: (context, state) {
+                        return MyElevatedButton(
+                          onPressed: onLogin,
+                          isLoading: state.isLoading,
+                          // isLoading: ,
+                          text: Strings.login,
+                        );
+                      },
+                    ),
 
-                SizedBox(height: 1.height),
-              ],
-            ),
+                    Gap(3.height),
+                    Align(
+                      child: TextButton(
+                        onPressed: () => Get.to(() => const SignUpPage()),
+                        style: TextButton.styleFrom(
+                          textStyle: context.textTheme.bodyText2?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: Text(
+                          '${Strings.newToItrack} ${Strings.register}',
+                          // style: context.textTheme.bodyText2.copy,
+                        ),
+                      ),
+                    ),
+                    // New to Itrack ? Register
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       Strings.newToItrack,
+                    //       style: context.textTheme.subtitle2?.copyWith(
+                    //           // color: context.theme.primaryColor,s
+                    //           ),
+                    //     ),
+                    //     SizedBox(width: 10.w),
+                    //     GestureDetector(
+                    //       onTap: () => Get.to(SignUpPage()),
+                    //       child: Text(
+                    //         Strings.register,
+                    //         style: context.textTheme.subtitle2?.copyWith(
+                    //           color: context.theme.primaryColor,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
+                    SizedBox(height: 1.height),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

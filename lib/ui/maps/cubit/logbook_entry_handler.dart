@@ -39,6 +39,8 @@ class LogbookEntryHandler {
     if (isExiting) {
       markExitHandler?.callExit(polygonModel, isExiting);
       return;
+    } else {
+      markExitHandler?.cancel();
     }
     final result = await api.logBookEntry(
       polygonModel!.pic!,
@@ -65,7 +67,7 @@ class MarkExitHandler {
   bool isExiting;
   final Api api;
   Timer? timer;
-  final _duration = Duration(seconds: 10);
+  final _duration = Duration(seconds: 20);
 
   Timer? logger;
 
@@ -79,16 +81,20 @@ class MarkExitHandler {
   void callExit(PolygonModel? polygonModel, [bool isExiting = false]) {
     model = polygonModel;
     this.isExiting = isExiting;
-    timer = Timer(_duration, callback);
     // cancel();
-    printTimer();
+    if (!(timer?.isActive ?? false)) {
+      timer = Timer(_duration, callback);
+      printTimer();
+    }
+    // if (!isExiting) cancel();
   }
 
   void printTimer() {
-    var seconds = _duration.inSeconds;
+    var seconds = 20;
     logger = Timer.periodic(1.seconds, (_) {
-      log('api will be called in ${seconds - 1}');
+      log('api will be called in ${seconds--}');
     });
+    Future.delayed(_duration, logger?.cancel);
   }
 
   void cancel() {
@@ -97,11 +103,11 @@ class MarkExitHandler {
   }
 
   void markExit() async {
-    cancel();
     final result = await api.markExit(model!.id!);
     result.when(
       success: (s) {
         log('logbook exit date updated');
+        cancel();
       },
       failure: (e) => {
         log(NetworkExceptions.getErrorMessage(e)),
