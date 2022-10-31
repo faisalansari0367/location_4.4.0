@@ -39,15 +39,17 @@ class LogBookCubit extends Cubit<LogBookState> {
     // Permission.manageExternalStorage.request();
     print(result);
     final rows = state.entries
-        .map((item) => [
-              (item.id.toString()),
-              ('${item.user!.firstName!} ${item.user!.lastName}'),
-              ('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
-              ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
-              (item.geofence?.name ?? ''),
-              (item.geofence?.pic ?? ''),
-              item.form.isNotEmpty ? 'View'.toUpperCase() : 'Trespasser'.toUpperCase()
-            ])
+        .map(
+          (item) => [
+            (item.id.toString()),
+            ('${item.user!.firstName!} ${item.user!.lastName}'),
+            ('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
+            ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
+            (item.geofence?.name ?? ''),
+            (item.geofence?.pic ?? ''),
+            item.form.isNotEmpty ? 'View'.toUpperCase() : 'Trespasser'.toUpperCase()
+          ],
+        )
         .toList();
     final headers = ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration'];
     CreatePDf.createLogbookPDf(headers, rows);
@@ -72,7 +74,7 @@ class LogBookCubit extends Cubit<LogBookState> {
     result.when(
       success: (s) async {
         if (Get.isBottomSheetOpen ?? false) Get.back();
-        emit(state.copyWith(entries: [...state.entries, ...(s.data ?? [])]));
+        emit(state.copyWith(entries: s.data));
       },
       failure: (failure) => DialogService.failure(error: failure),
     );

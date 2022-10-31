@@ -30,7 +30,7 @@ class GlobalQuestionnaireFormModel {
   final q6 = QuestionData(question: 'Rego');
   final selfDeclaration = QuestionData(
     question:
-        'I declare that the animals/products I am transporting are accompanied by correct movement documentation.',
+        'I declare that any animals/products I am transporting are accompanied by correct movement documentation.',
   );
   final riskRating = QuestionData(question: 'Risk Rating', value: 'Low');
   final expectedDepartureDate =

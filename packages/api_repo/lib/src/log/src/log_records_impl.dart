@@ -99,7 +99,7 @@ class LogRecordsImpl implements LogRecordsRepo {
   @override
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1}) async {
     try {
-      var queryParameters = {'page': page, 'limit': 50};
+      var queryParameters = {'page': page, 'limit': 100};
       final result = await client.get(Endpoints.logRecords, queryParameters: queryParameters);
       final data = LogbookResponseModel.fromJson(result.data);
       storage.saveLogbookRecords(data);
@@ -256,6 +256,7 @@ class LogRecordsImpl implements LogRecordsRepo {
   @override
   Future<LogbookEntry?> getLogRecord(String geofenceId) async {
     if (_logRecords.isEmpty) {
+     
       await _completer.future;
     }
     final userId = storageService.getUser()?.id;
@@ -273,15 +274,15 @@ class LogRecordsImpl implements LogRecordsRepo {
 
     // find the latest record
 
-    final latestRecord = recordsByUser.reduce((value, element) {
-      if (value.enterDate!.isAfter(element.enterDate!)) {
-        return value;
-      } else {
-        return element;
-      }
-    });
+    // final latestRecord = recordsByUser.reduce((value, element) {
+    //   if (value.enterDate!.isAfter(element.enterDate!)) {
+    //     return value;
+    //   } else {
+    //     return element;
+    //   }
+    // });
 
-    print(latestRecord.id);
+    // print(latestRecord.id); 
 
     final recordsPast15Minutes = recordsByUser.where((element) {
       if (element.form.isEmpty) {

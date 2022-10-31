@@ -50,6 +50,20 @@ class _EnterPropertyState extends State<EnterProperty> {
                 );
               },
             ),
+            // ListView.builder(
+            //   itemCount: widget.stream,
+            //   builder: (context, snapshot) {
+            //     if (!snapshot.hasData || snapshot.data!.isEmpty)
+            //       return const Center(child: CircularProgressIndicator());
+            //     return AnimatedSize(
+            //       duration: 300.milliseconds,
+            //       child: AutoSpacing(
+            //         spacing: Gap(10.h),
+            //         children: snapshot.data!.map(_tile).toList(),
+            //       ),
+            //     );
+            //   },
+            // ),
             Gap(20.h),
             Row(
               children: [

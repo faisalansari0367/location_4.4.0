@@ -33,6 +33,7 @@ class TrackPolygons {
   final polygonsInCoverage = BehaviorSubject<Set<PolygonModel>>.seeded({});
   PolygonModel? currentPolygon;
   bool isManagerNotified = false;
+
   final CallRestricter hidePopUpTimer = CallRestricter(duration: 30.seconds, callback: hidePopUp);
   NotifyManagerHandler notifyManager = NotifyManagerHandler();
   final CallRestricter dontShowAgain = CallRestricter(duration: 180.seconds, callback: () {});
@@ -62,7 +63,7 @@ class TrackPolygons {
     if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) return;
     print('calling update function');
     _userIsInside(polygonsInCoverage, currentPosition);
-    this.polygonsInCoverage.add(polygonsInCoverage);
+    // this.polygonsInCoverage.add(polygonsInCoverage);
 
     // show popup if polygons are in coverage
 
@@ -103,12 +104,15 @@ class TrackPolygons {
   }
 
   void showPopup(LatLng position) async {
+    if (currentPolygon == null) {
+      return;
+    }
     if (attemptOfShowingPopUp >= 3) return;
     if (attemptOfShowingPopUp == 2) {
       notifyManager.updateData(position, currentPolygon);
     }
-
     attemptOfShowingPopUp++;
+
     await DialogService.showDialog(
       child: EnterProperty(
         stream: polygonsInCoverage.stream,
@@ -141,6 +145,7 @@ class TrackPolygons {
         attemptOfShowingPopUp = 0;
       }
       currentPolygon = userIsInside.first;
+      this.polygonsInCoverage.add({currentPolygon!});
       logbookEntryHandler.update(true, currentPolygon!);
     } else {
       if (currentPolygon == null) return;

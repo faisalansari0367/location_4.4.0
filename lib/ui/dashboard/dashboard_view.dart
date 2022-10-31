@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
@@ -11,15 +12,27 @@ import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../links_page/links_page.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   final bool fromDrawer;
   const DashboardView({Key? key, this.fromDrawer = false}) : super(key: key);
+
+  @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
+  @override
+  void initState() {
+    context.read<Api>().getLogbookRecords();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
