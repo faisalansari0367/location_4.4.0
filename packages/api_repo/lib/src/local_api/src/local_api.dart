@@ -253,4 +253,10 @@ class LocalApi extends Api {
   Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids}) async {
     return const ApiResult.failure(error: NetworkExceptions.defaultError('Not available in offline mode'));
   }
+
+  @override
+  Future<void> getEnvdToken() {
+    // TODO: implement getEnvdToken
+    throw UnimplementedError();
+  }
 }

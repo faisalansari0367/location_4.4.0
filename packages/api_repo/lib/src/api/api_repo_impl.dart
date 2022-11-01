@@ -239,4 +239,9 @@ class ApiRepo implements Api {
   Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids}) async {
     return _functionsRepo.sendEmergencyNotification(ids: ids);
   }
+
+  @override
+  Future<void> getEnvdToken() {
+    return _functionsRepo.getEnvdToken();
+  }
 }

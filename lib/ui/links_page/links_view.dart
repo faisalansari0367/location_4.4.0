@@ -116,15 +116,7 @@ class LinksView extends StatelessWidget {
   }
 
   Future<void> openPdf(BuildContext context, String url) async {
-    // Get.to(() {
-    //   return Scaffold(
-    //     body: PDF().cachedFromUrl(
-    //       url,
-    //       placeholder: (progress) => Center(child: Text('$progress %')),
-    //       errorWidget: (error) => Center(child: Text(error.toString())),
-    //     ),
-    //   );
-    // });
+    
     final api = context.read<Api>();
     final result = await api.openPdf(url);
     result.when(

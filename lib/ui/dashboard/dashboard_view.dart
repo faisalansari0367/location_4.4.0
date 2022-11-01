@@ -3,6 +3,7 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:background_location/ui/emergency_warning/emergency_warning.dart';
+import 'package:background_location/ui/envd/view/evnd_page.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/records/records_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
@@ -130,7 +131,11 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/eNVD.jpg',
                     size: 65.w,
 
-                    onTap: () => DialogService.showDialog(child: const ComingSoonDialog()),
+                    onTap: () {
+                      // context.read<Api>().getEnvdToken();
+                      Get.to(() => const EnvdPage());
+                      // DialogService.showDialog(child: const ComingSoonDialog());
+                    },
                   ),
 
                   DashboardCard(

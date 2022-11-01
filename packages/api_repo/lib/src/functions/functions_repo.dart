@@ -8,6 +8,8 @@ import 'package:api_repo/configs/endpoint.dart';
 
 abstract class FunctionsRepo {
   Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids});
+  Future<void> getEnvdToken();
+  // Future<void> getEnvdForms();
 }
 
 class FunctionsRepoImpl implements FunctionsRepo {
@@ -31,4 +33,32 @@ class FunctionsRepoImpl implements FunctionsRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
+  static const envdUrl = 'https://auth-uat.integritysystems.com.au';
+
+  @override
+  Future<void> getEnvdToken() async {
+    final data = {
+      'client_id': 'itrack',
+      'client_secret': 'u7euFqDzqZzP2T9SmL7Y',
+      'grant_type': 'password',
+      'scope': 'lpa_scope',
+      'username': 'QDZZ3333-2305875',
+      'password': 'Q6qN2VquqqtpkBP!'
+    };
+    final result = await client.build().post(envdUrl + '/connect/token', data: data);
+    final accessToken = result.data['access_token'];
+    print(accessToken);
+  }
+
+  @override
+  Future<void> getEnvdForms() async {
+    final result = await client.build().post(
+          envdUrl + '/graphql',
+        );
+  }
+
+  /// envd
+  ///
+
 }

@@ -9,7 +9,8 @@ import 'package:dio/dio.dart';
 // import '../repositories/auth/auth_repository.dart';
 import 'api_logger.dart';
 
-export 'package:dio/dio.dart' show DioError, Response;
+export 'package:dio/dio.dart' show DioError, Response, Dio;
+
 
 class Client {
   // String baseUrl = '';
