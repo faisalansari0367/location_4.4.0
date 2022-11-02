@@ -27,7 +27,9 @@ import '../models/polygon_model.dart';
 part 'maps_state.dart';
 
 class MapsCubit extends Cubit<MapsState> {
+  // ignore: unused_field
   final NotificationService _notificationService;
+  // ignore: unused_field
   final PushNotificationService _pushNotificationService;
   final PolygonModel? polygonId;
   final MapsRepo _mapsRepo;

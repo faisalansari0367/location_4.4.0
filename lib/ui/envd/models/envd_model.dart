@@ -66,7 +66,7 @@ class Items {
   String? pdfUrl;
   String? submittedAt;
   String? updatedAt;
-  Null? updatedBy;
+  String? updatedBy;
   String? status;
   String? species;
   Owner? owner;

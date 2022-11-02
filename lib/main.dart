@@ -8,7 +8,6 @@ import 'package:background_location/services/notifications/connectivity/connecti
 import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
-import 'package:background_location/ui/splash/new_splash_screen.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -191,7 +190,7 @@ class _MyAppState extends State<MyApp> {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         getPages: [
-          GetPage(name: '/', page: () => const NewSplashScreen()),
+          // GetPage(name: '/', page: () => const NewSplashScreen()),
         ],
 
         // home: SplashScreen(),

@@ -27,33 +27,7 @@ class FormsCubit extends ChangeNotifier {
     // _mapData(questions ?? [], this);
   }
 
-  static List<QuestionData> _mapFormData(List<String> questions) {
-    return questions
-        .map(
-          (e) => QuestionData(
-            question: e,
-            // value: e,
-          ),
-        )
-        .toList();
-  }
 
-  void _mapData(List<String> questions, FormsCubit cubit) {
-    final result = questions
-        .map(
-          (e) => UserFormData(
-            cubit,
-            questionData: QuestionData(question: e),
-            controller: TextEditingController(),
-            name: e,
-
-            // value: e['value'],
-          ),
-        )
-        .toList();
-    state = state.copyWith(formData: result);
-    notifyListeners();
-  }
 
   void _listenForServiceRoles() {
     // api.getUserRoles();

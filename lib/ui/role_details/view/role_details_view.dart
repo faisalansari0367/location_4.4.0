@@ -206,9 +206,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       case 'contactNumber':
       case 'mobile':
         controller.text = userData['phoneNumber'] ?? '';
-        return PhoneTextField(
-          controller: controller,
-        );
+        return PhoneTextField(controller: controller);
       case 'pic':
         return MyTextField(
           inputFormatters: [CapitalizeAllInputFormatter()],

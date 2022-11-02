@@ -52,7 +52,6 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         bloc: cubit,
         listener: (BuildContext context, ForgotPasswordState state) {
           if (state.error != null) {
-            // TODO your code here
           }
         },
         builder: (BuildContext context, ForgotPasswordState state) {

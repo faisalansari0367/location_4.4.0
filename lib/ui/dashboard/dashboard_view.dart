@@ -3,6 +3,7 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:background_location/ui/emergency_warning/emergency_warning.dart';
+import 'package:background_location/ui/envd/cubit/graphql_client.dart';
 import 'package:background_location/ui/envd/view/evnd_page.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/records/records_page.dart';
@@ -31,8 +32,16 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
-    context.read<Api>().getLogbookRecords();
+    _init();
     super.initState();
+  }
+
+  void _init() async {
+    final api = context.read<Api>();
+    final hasNoLogRecords = await api.logbookRecordsStream.isEmpty;
+    if (hasNoLogRecords) {
+      api.getLogbookRecords();
+    }
   }
 
   @override
@@ -131,9 +140,12 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/eNVD.jpg',
                     size: 65.w,
 
-                    onTap: () {
+                    onTap: () async {
                       // context.read<Api>().getEnvdToken();
-                      Get.to(() => const EnvdPage());
+                      final isInit = await GraphQlClient(userData: context.read<Api>().getUserData()!).init();
+                      if (isInit) {
+                        Get.to(() => const EnvdPage());
+                      }
                       // DialogService.showDialog(child: const ComingSoonDialog());
                     },
                   ),

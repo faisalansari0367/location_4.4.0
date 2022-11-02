@@ -69,6 +69,7 @@ class UserRepoImpl extends UserRepo {
       // storage.setRoleData(role, data);
       // ignore: void_checks
 
+      // ignore: void_checks
       return const ApiResult.success(data: Null);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -158,9 +159,8 @@ class UserRepoImpl extends UserRepo {
 
   @override
   Future<void> getCvdPDf(Map<String, dynamic> data) async {
-    final result = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration', data: data);
-    // TODO: implement getCvdPDf
-    print(result);
+    // final result = await Dio().post('https://uniquetowinggoa.com/safemeat/public/api/declaration', data: data);
+    // print(result);
     // throw UnimplementedError();
   }
 

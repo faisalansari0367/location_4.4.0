@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:background_location/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,12 +13,14 @@ class ErrorDialog extends StatelessWidget {
   final String message;
   final String? buttonText;
   final VoidCallback onTap;
+  final bool showCloseButton;
 
   const ErrorDialog({
     Key? key,
     required this.message,
     this.buttonText,
     required this.onTap,
+    this.showCloseButton = true,
   }) : super(key: key);
 
   @override
@@ -39,17 +42,19 @@ class ErrorDialog extends StatelessWidget {
             ),
           ),
           Gap(2.height),
-          MyElevatedButton(
-            text: buttonText ?? ('Continue'),
-            width: 30.width,
-            color: const Color.fromARGB(255, 255, 17, 0),
-            padding: EdgeInsets.all(10.sp),
-            onPressed: () async {
-              onTap();
-              // Get.back();
-            },
-          ),
-          Gap(2.height),
+          if (showCloseButton) ...[
+            MyElevatedButton(
+              text: buttonText ?? ('Continue'),
+              width: 30.width,
+              color: const Color.fromARGB(255, 255, 17, 0),
+              padding: EdgeInsets.all(10.sp),
+              onPressed: () async {
+                onTap();
+                // Get.back();
+              },
+            ),
+            Gap(2.height),
+          ],
         ],
       ),
     );

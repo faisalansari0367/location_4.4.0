@@ -89,46 +89,6 @@ class LogbookDetails extends StatelessWidget {
   //   return list;
   // }
 
-  List<TableRow> _tableChildrens(dynamic form) {
-    final textStyle = TextStyle(
-      color: Colors.grey.shade700,
-      fontSize: 19.w,
-      fontWeight: FontWeight.w900,
-    );
-    final list = <TableRow>[];
-    if (form == null) return list;
-    if (form is! Map) list;
-    if (form is Map) {
-      // list.add(Divider());
-      // list.add(_headerRow());
-      // list.add(Divider());
-      form.forEach((key, value) {
-        final row = TableRow(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-          ),
-          children: [
-            Text(
-              key,
-              style: textStyle.copyWith(
-                fontSize: 16.w,
-              ),
-              // textAlign: TextAlign.center,
-            ),
-            Text(
-              value.toString(),
-              textAlign: TextAlign.center,
-              style: textStyle,
-            ),
-          ],
-        );
-        list.add(row);
-        // list.add(_radioButton(key, value));
-        // list.add(Divider());
-      });
-    }
-    return list;
-  }
 
   Widget getWidget(LogbookFormField field) {
     switch (field.field!.toLowerCase()) {
@@ -290,42 +250,5 @@ class LogbookDetails extends StatelessWidget {
           ? true
           : null;
 
-  Widget _table(form) {
-    final textStyle = TextStyle(
-      color: Colors.grey.shade900,
-      fontSize: 19.w,
-      fontWeight: FontWeight.w900,
-    );
-    return Table(
-      // columnWidths: {1, TableColumnWidth()},
 
-      border: TableBorder.all(
-        color: Colors.grey.shade400,
-      ),
-      children: [
-        _tableHead(textStyle),
-        ..._tableChildrens(form),
-      ],
-    );
-  }
-
-  TableRow _tableHead(TextStyle textStyle) {
-    return TableRow(
-      decoration: BoxDecoration(
-        border: Border.all(),
-      ),
-      children: [
-        Text(
-          'Question',
-          style: textStyle,
-          // textAlign: TextAlign.center,
-        ),
-        Text(
-          'Ans',
-          textAlign: TextAlign.center,
-          style: textStyle,
-        ),
-      ],
-    );
-  }
 }

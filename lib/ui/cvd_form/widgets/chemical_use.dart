@@ -242,12 +242,6 @@ class _ChemicalUseState extends State<ChemicalUse> {
   }
 
   // datarow
-  Widget _dataCell(String text) {
-    return Text(
-      text,
-      style: TextStyle(),
-    );
-  }
 
   void _enterTextPopup(ValueChanged<String> onChanged, String hint) {
     DialogService.showDialog(

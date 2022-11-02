@@ -1,4 +1,3 @@
-import 'package:api_repo/api_repo.dart';
 
 class SelectRoleModel {
   final String role;

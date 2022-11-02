@@ -9,8 +9,6 @@ import 'package:background_location/ui/cvd_form/widgets/custom_steppar.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../widgets/product_integrity.dart';
@@ -123,50 +121,5 @@ class _CvdFormViewState extends State<CvdFormView> {
     return Column();
   }
 
-  Row _actions(CvdState state, int index) {
-    return Row(
-      children: [
-        const Spacer(),
-        OutlinedButton(
-          onPressed: (state.formStepper.length - 1) == index
-              ? null
-              : () {
-                  _changePage(index + 1);
-                },
-          child: Text(
-            'Continue',
-            style: TextStyle(
-              fontSize: 18.w,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Gap(10.w),
-        OutlinedButton(
-          onPressed: index != 0
-              ? () {
-                  _changePage(index - 1);
-                }
-              : null,
-          child: Text(
-            'Back',
-            style: TextStyle(
-              fontSize: 18.w,
-              // color: Colors.black.withOpacity(0.7),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
-  void _changePage(int value) {
-    cubit.changeCurrent(value);
-    controller.animateToPage(
-      value,
-      curve: Curves.fastOutSlowIn,
-      duration: 500.milliseconds,
-    );
-  }
 }

@@ -46,23 +46,6 @@ class _MyDateFieldState extends State<MyDateField> {
     );
   }
 
-  void _timePicker() async {
-    final pickedDate = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedDate != null) {
-      pickedDateTime = DateTime(
-        pickedDateTime!.year,
-        pickedDateTime!.month,
-        pickedDateTime!.day,
-        pickedDate.hour,
-        pickedDate.minute,
-      );
-      controller.text = formatDate(pickedDateTime!);
-      widget.onChanged!(pickedDateTime.toString());
-    }
-  }
 
   _showDatePicker() async {
     final pickedDate = await showDatePicker(

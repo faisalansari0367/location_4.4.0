@@ -57,7 +57,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
           style: context.textTheme.headline6?.copyWith(
             color: Colors.red,
             fontWeight: FontWeight.bold,
-            fontSize: 32.sp,
+            fontSize: 28.sp,
           ),
         ),
         centreTitle: true,
@@ -81,7 +81,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                     'Send Notification',
                     style: context.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 32.sp,
+                      fontSize: 28.sp,
                       color: Colors.white,
                     ),
                   ),

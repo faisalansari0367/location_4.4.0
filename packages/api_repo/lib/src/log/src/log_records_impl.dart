@@ -7,6 +7,7 @@ import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/log/log_records.dart';
 import 'package:api_repo/src/user/src/models/logbook_entry_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../configs/endpoint.dart';
@@ -112,29 +113,29 @@ class LogRecordsImpl implements LogRecordsRepo {
     }
   }
 
-  Future<ApiResult<LogbookEntry>> _updateLogRecord(int logId, String geofenceId, {String? form}) async {
-    try {
-      final data = {'geofenceID': geofenceId};
-      if (form != null) data['form'] = form;
-      final result = await client.patch('${Endpoints.logRecords}/$logId', data: data);
-      final json = Map<String, dynamic>.from(result.data['data']);
-      final logbookEntry = LogbookEntry.fromJson(json);
-      storage.updateLogRecord(geofenceId, logbookEntry);
-      return ApiResult.success(data: logbookEntry);
-    } on DioError catch (e) {
-      final response = e.response?.data as Map;
-      if (response['message'] == "Log Record does not exist") {
-        return createLogRecord(geofenceId, form: form);
-      }
+  // Future<ApiResult<LogbookEntry>> _updateLogRecord(int logId, String geofenceId, {String? form}) async {
+  //   try {
+  //     final data = {'geofenceID': geofenceId};
+  //     if (form != null) data['form'] = form;
+  //     final result = await client.patch('${Endpoints.logRecords}/$logId', data: data);
+  //     final json = Map<String, dynamic>.from(result.data['data']);
+  //     final logbookEntry = LogbookEntry.fromJson(json);
+  //     storage.updateLogRecord(geofenceId, logbookEntry);
+  //     return ApiResult.success(data: logbookEntry);
+  //   } on DioError catch (e) {
+  //     final response = e.response?.data as Map;
+  //     if (response['message'] == "Log Record does not exist") {
+  //       return createLogRecord(geofenceId, form: form);
+  //     }
 
-      if (response['message'] == "You already exited this geofence") {
-        final entry = getLogRecord(geofenceId);
-      }
-      final hasData = response.containsKey(['data']);
-      if (!hasData) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-    }
-  }
+  //     if (response['message'] == "You already exited this geofence") {
+  //       final entry = getLogRecord(geofenceId);
+  //     }
+  //     final hasData = response.containsKey(['data']);
+  //     if (!hasData) return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+  //     return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+  //   }
+  // }
 
   @override
   Future<ApiResult<LogbookEntry>> logBookEntry(
@@ -265,12 +266,16 @@ class LogRecordsImpl implements LogRecordsRepo {
 
     /// if user has more than one record for the same geofence
 
-    print('records length: ${record.length}');
+    if (kDebugMode) {
+      print('records length: ${record.length}');
+    }
 
     // records created by the current user for the geofence id
     final recordsByUser = record.where((element) => element.user?.id == userId);
-    final _records = (recordsByUser.toList());
-    print('recordsByUser length: ${recordsByUser.length}');
+    // final _records = (recordsByUser.toList());
+    if (kDebugMode) {
+      print('recordsByUser length: ${recordsByUser.length}');
+    }
 
     // find the latest record
 
@@ -295,7 +300,9 @@ class LogRecordsImpl implements LogRecordsRepo {
       return DateTime.now().difference(element.enterDate!).inMinutes <= 30;
     });
 
-    print('records in last 15 minutes: ${recordsPast15Minutes.length}');
+    if (kDebugMode) {
+      print('records in last 15 minutes: ${recordsPast15Minutes.length}');
+    }
     if (recordsPast15Minutes.isNotEmpty) {
       // if (recordsPast15Minutes.first != currentLogRecordEntry) {
       //   currentLogRecordEntry = recordsPast15Minutes.first;

@@ -48,15 +48,16 @@ class FunctionsRepoImpl implements FunctionsRepo {
     };
     final result = await client.build().post(envdUrl + '/connect/token', data: data);
     final accessToken = result.data['access_token'];
+    // ignore: avoid_print
     print(accessToken);
   }
 
-  @override
-  Future<void> getEnvdForms() async {
-    final result = await client.build().post(
-          envdUrl + '/graphql',
-        );
-  }
+  // @override
+  // Future<void> getEnvdForms() async {
+  //   final result = await client.build().post(
+  //         envdUrl + '/graphql',
+  //       );
+  // }
 
   /// envd
   ///

@@ -62,6 +62,12 @@ class UserData {
   DateTime? startDate;
   DateTime? endDate;
   String? edec;
+  String? lpaPassword;
+  String? lpaUsername;
+  String? nlisPassword;
+  String? nlisUsername;
+  String? msaNumber;
+  String? nfasAccreditationNumber;
 
   List<String> allowedRoles = const [];
 
@@ -118,6 +124,12 @@ class UserData {
     this.registrationToken,
     this.updatedAt,
     this.status,
+    this.lpaUsername,
+    this.lpaPassword,
+    this.nlisUsername,
+    this.nlisPassword,
+    this.msaNumber,
+    this.nfasAccreditationNumber,
   });
 
   static UserStatus getStatus(String? status) {
@@ -180,12 +192,22 @@ class UserData {
     startDate = json['startDate'] == null ? null : DateTime.tryParse(json['startDate'])?.toLocal();
     endDate = json['endDate'] == null ? null : DateTime.tryParse(json['endDate'])?.toLocal();
     edec = json['edec'];
-  }
 
-  DateTime? _parseDate(String? data) {
-    if (data == null) return null;
-    final date = DateTime.tryParse(data)?.toLocal();
-    return date;
+    lpaUsername = json['lpaUsername'];
+    lpaPassword = json['lpaPassword'];
+    nlisUsername = json['nlisUsername'];
+    nlisPassword = json['nlisPassword'];
+    msaNumber = json['msaNumber'];
+    nfasAccreditationNumber = json['nfasAccreditationNumber'];
+    businessName = json['businessName'];
+    sector = json['sector'];
+    contactName = json['contactName'];
+    eventName = json['eventName'];
+    contactEmail = json['contactEmail'];
+    contactNumber = json['contactNumber'];
+    startDate = json['startDate'] == null ? null : DateTime.tryParse(json['startDate'])?.toLocal();
+    endDate = json['endDate'] == null ? null : DateTime.tryParse(json['endDate'])?.toLocal();
+    edec = json['edec'];
   }
 
   Map<String, dynamic> updateStatus() {
@@ -245,6 +267,26 @@ class UserData {
     data['createdAt'] = createdAt?.toIso8601String();
     data['updatedAt'] = updatedAt?.toIso8601String();
     data['ngr'] = ngr;
+
+    data['lpaUsername'] = lpaUsername;
+    data['lpaPassword'] = lpaPassword;
+
+    data['nlisUsername'] = nlisUsername;
+    data['nlisPassword'] = nlisPassword;
+
+    data['msaNumber'] = msaNumber;
+    data['nfasAccreditationNumber'] = nfasAccreditationNumber;
+
+    data['businessName'] = businessName;
+    data['sector'] = sector;
+    data['contactName'] = contactName;
+    data['eventName'] = eventName;
+    data['contactEmail'] = contactEmail;
+    data['contactNumber'] = contactNumber;
+    data['startDate'] = startDate?.toIso8601String();
+    data['endDate'] = endDate?.toIso8601String();
+    data['edec'] = edec;
+
     return data;
   }
 }

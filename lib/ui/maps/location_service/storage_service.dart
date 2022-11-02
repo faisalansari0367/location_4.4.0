@@ -81,7 +81,6 @@ class MapsStorageService implements MapsRepo {
 
   @override
   void cancel() {
-    // TODO: implement cancel
   }
 
   @override
@@ -101,7 +100,6 @@ class MapsStorageService implements MapsRepo {
 
   @override
   Future<ApiResult> deletePolygon(PolygonModel model) {
-    // TODO: implement deletePolygon
     throw UnimplementedError();
   }
 

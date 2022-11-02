@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 import 'dart:io';
 
 // import 'package:auth_repo/src/auth_repo_impl.dart';
@@ -9,7 +8,7 @@ import 'package:dio/dio.dart';
 // import '../repositories/auth/auth_repository.dart';
 import 'api_logger.dart';
 
-export 'package:dio/dio.dart' show DioError, Response, Dio;
+export 'package:dio/dio.dart' show DioError, Response, Dio, Options;
 
 
 class Client {
@@ -221,7 +220,7 @@ InterceptorsWrapper dioInterceptor = InterceptorsWrapper(
     return handler.next(options); //continue
   },
   onResponse: (response, handler) {
-    print("RESPONSE 00 :- " + response.data.length.toString());
+    // print("RESPONSE 00 :- " + response.data.length.toString());
     // _firebasePerformanceService.stopHttpTracking(response.statusCode ?? 400);
     return handler.next(response); // continue
   },
@@ -232,7 +231,7 @@ InterceptorsWrapper dioInterceptor = InterceptorsWrapper(
       int? statusCode = _response.statusCode;
 
       if (statusCode != null) {
-        print("RESPONSE 11 :- " + _response.data.toString());
+        // print("RESPONSE 11 :- " + _response.data.toString());
 
         // _firebasePerformanceService.stopHttpTrackingWithError(
         //     responseCode: statusCode);

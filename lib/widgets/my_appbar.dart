@@ -1,4 +1,3 @@
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/view/widgets/drawer_menu_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -115,15 +114,6 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   PreferredSizeWidget _bottom() {
-    final divider = Container(
-      // indent: 5.width,
-      width: 90.width,
-      // endIndent: 5.width,
-      // height: 1.height,
-      color: Colors.grey.shade300,
-      height: 0.2.height,
-    );
-
     return showDivider
         ? PreferredSize(
             child: Container(

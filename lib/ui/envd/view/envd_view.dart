@@ -1,11 +1,12 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/envd/models/envd_model.dart';
 import 'package:background_location/ui/envd/view/envd_list_item.dart';
+import 'package:background_location/widgets/dialogs/error.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../cubit/graphql_query_strings.dart';
+import '../models/envd_model.dart';
 
 class EnvdView extends StatelessWidget {
   const EnvdView({Key? key}) : super(key: key);
@@ -42,10 +43,11 @@ class EnvdView extends StatelessWidget {
 
       body: Query(
         options: QueryOptions(
-          document: gql(GraphQlQueryStrings.envdQuery),
-          // this is the query string you just created
-          // pollInterval: const Duration(seconds: 10),
-        ),
+            document: gql(GraphQlQueryStrings.envdQuery),
+            parserFn: (map) {
+              final consignments = Consignments.fromJson(map['consignments']);
+              return consignments;
+            }),
         builder: _builder,
       ),
     );
@@ -54,7 +56,14 @@ class EnvdView extends StatelessWidget {
   Widget _builder(QueryResult<Object?> result, {FetchMore<Object?>? fetchMore, Refetch<Object?>? refetch}) {
     if (result.hasException) {
       return SingleChildScrollView(
-        child: Text(result.exception.toString()),
+        child: Padding(
+          padding: kPadding,
+          child: ErrorDialog(
+            message: result.exception.toString(),
+            showCloseButton: false,
+            onTap: () {},
+          ),
+        ),
       );
     }
     print(result.exception);
@@ -79,7 +88,7 @@ class EnvdView extends StatelessWidget {
 
     return ListView.separated(
       padding: kPadding,
-      separatorBuilder: (context, index) => const SizedBox(height: 10),
+      separatorBuilder: (context, index) => const SizedBox(height: 20),
       itemCount: list.length,
       itemBuilder: (context, index) {
         return EnvdListItem(items: list.elementAt(index));

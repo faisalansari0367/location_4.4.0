@@ -219,7 +219,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
   }
 
   Future<void> submitFormData(String json) async {
-    final api = context.read<Api>();
     final result = await context.read<Api>().udpateForm(
           widget.zoneId.toString(),
           json,

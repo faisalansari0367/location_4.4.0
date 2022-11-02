@@ -19,7 +19,6 @@ class VisitorCheckInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<VisitorCheckInCubit>();
     return Scaffold(
       appBar: MyAppBar(
         title: Text(Strings.visitorCheckIn),
@@ -104,28 +103,28 @@ class VisitorCheckInView extends StatelessWidget {
     // return QrImage(QrCode.fromData(data: 'App store link and playstore link is coming soon...', errorCorrectLevel: 1));
   }
 
-  Column _errorWidget(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          child: Icon(
-            Icons.error,
-            color: Colors.red,
-            size: 40.w,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Text(
-            'Something went wrong',
-            textAlign: TextAlign.center,
-            style: context.textTheme.headline6,
-          ),
-        )
-      ],
-    );
-  }
+  // Column _errorWidget(BuildContext context) {
+  //   return Column(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: [
+  //       Flexible(
+  //         child: Icon(
+  //           Icons.error,
+  //           color: Colors.red,
+  //           size: 40.w,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //         child: Text(
+  //           'Something went wrong',
+  //           textAlign: TextAlign.center,
+  //           style: context.textTheme.headline6,
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
 
   Container _infoCard(BuildContext context) {
     return Container(

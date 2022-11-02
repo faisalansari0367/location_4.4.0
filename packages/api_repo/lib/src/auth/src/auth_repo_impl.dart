@@ -118,8 +118,6 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final json = userData.updateAllowedRoles();
       final result = await client.patch('${Endpoints.users}/me', data: json);
-
-      // final result = await client.patch('${Endpoints.users}/me/${userData.id}', data: json);
       final model = User.fromJson((result.data));
       final _userData = UserData.fromJson(result.data['data']);
       await storage.setUserData(_userData);
@@ -129,9 +127,16 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
 
-  void _checkAndRemoveKey(Map<String, dynamic> json, String key) {
-    if (json[key] == null) {
-      json.remove(key);
+  @override
+  Future<ApiResult<User>> updateStatus({required UserData userData}) async {
+    try {
+      final result = await client.patch('${Endpoints.users}/${userData.id}', data: userData.updateStatus());
+      final model = User.fromJson((result.data));
+      final _userData = UserData.fromJson(result.data['data']);
+      await storage.setUserData(_userData);
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
 
@@ -161,17 +166,4 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<void> setUserData(UserData userData) async => await storage.setUserData(userData);
-
-  @override
-  Future<ApiResult<User>> updateStatus({required UserData userData}) async {
-    try {
-      final result = await client.patch('${Endpoints.users}/${userData.id}', data: userData.updateStatus());
-      final model = User.fromJson((result.data));
-      final _userData = UserData.fromJson(result.data['data']);
-      await storage.setUserData(_userData);
-      return ApiResult.success(data: model);
-    } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-    }
-  }
 }

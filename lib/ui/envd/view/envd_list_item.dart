@@ -27,60 +27,27 @@ class EnvdListItem extends StatelessWidget {
         ),
         color: Colors.white,
         borderRadius: kBorderRadius,
-        // color: _getColors().withOpacity(0.3),
       ),
-      // decoration: MyDecoration.decoration(
-
-      // ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            // color: _getColors(),
-            // decoration: BoxDecoration(
-            //   border: Border.all(
-            //     // color: _getColors(),
-            //     width: 2,
-            //   ),
-            // ),
-            child: Row(
-              children: [
-                _buildText('Consignment', items.number!),
-                Spacer(),
-                _buildText(
-                    'Created',
-                    items.submittedAt != null || items.updatedAt != null
-                        ? MyDecoration.formatDate(DateTime.parse(items.submittedAt ?? items.updatedAt!))
-                        : ''),
-              ],
-            ),
+          _buildRow(
+            'Consignment',
+            items.number!,
+            'Created',
+            items.submittedAt != null || items.updatedAt != null
+                ? MyDecoration.formatDate(DateTime.parse(items.submittedAt ?? items.updatedAt!))
+                : '',
           ),
           _gap(),
-          // _buildText('Consignee Name', items.consignee!.name!),
-          // _gap(),
-          Row(
-            children: [
-              _buildText('From PIC', items.origin!.pic!),
-              Spacer(),
-              _buildText('To PIC', items.destination!.pic!),
-            ],
-          ),
+          _buildRow('From PIC', items.origin!.pic!, 'To PIC', items.destination!.pic!),
           _gap(),
-          Row(
-            children: [
-              _buildText('Species', items.species!),
-              Spacer(),
-              _buildText('Quantity', _getQuantity()),
-            ],
-          ),
+          _buildRow('Species', items.species!, 'Quantity', _getQuantity()),
           _gap(),
-          _buildText('Accreditations', _isAhsAvailable()),
+          _buildText('Accreditations', _getAccredentials()),
           _gap(),
-          _buildRow('Transporter', '158', 'Mobile', '160'),
+          _buildRow('Transporter', _findById('158')?.value ?? '', 'Mobile', _findById('160')?.value ?? ''),
           _gap(),
-          // _buildText('Owner Name', items.owner!.name!),
-          // _gap(),
-          // _buildTime(),
           Row(
             children: [
               _buildText('Status', items.status!),
@@ -93,7 +60,7 @@ class EnvdListItem extends StatelessWidget {
     );
   }
 
-  String _isAhsAvailable() {
+  String _getAccredentials() {
     List<String> availableTypes = [];
     final ahsType = 'HS${items.species!.characters.first}';
     final msaType = 'MSA${items.species!.characters.first}'; //MSAC1
@@ -105,7 +72,6 @@ class EnvdListItem extends StatelessWidget {
     if (msaResults.isNotEmpty) availableTypes.add('MSA');
     final nfasResults = items.forms!.where((element) => (element.type ?? '').contains(nfasType));
     if (nfasResults.isNotEmpty) availableTypes.add('NFAS');
-
     return availableTypes.join(' , ');
   }
 
@@ -115,27 +81,25 @@ class EnvdListItem extends StatelessWidget {
     return data.first;
   }
 
-  Widget _buildRow(String field1, String id1, String field2, String id2) {
-    final value1 = _findById(id1);
-    final value2 = _findById(id2);
+  Widget _buildRow(String field1, String value1, String field2, String value2) {
     return Row(
       children: [
-        _buildText(field1, value1?.value ?? ''),
+        Expanded(child: _buildText(field1, value1)),
         Spacer(),
-        _buildText(field2, value2?.value ?? ''),
+        Expanded(child: _buildText(field2, value2)),
       ],
     );
   }
 
-  Widget _buildTime() {
-    return Row(
-      children: [
-        _buildText('Updated At', MyDecoration.formatDate(DateTime.parse(items.updatedAt!))),
-        Spacer(),
-        _buildText('Submitted At', MyDecoration.formatDate(DateTime.parse(items.submittedAt!))),
-      ],
-    );
-  }
+  // Widget _buildTime() {
+  //   return Row(
+  //     children: [
+  //       _buildText('Updated At', MyDecoration.formatDate(DateTime.parse(items.updatedAt!))),
+  //       Spacer(),
+  //       _buildText('Submitted At', MyDecoration.formatDate(DateTime.parse(items.submittedAt!))),
+  //     ],
+  //   );
+  // }
 
   Widget _gap() => const Divider();
 
