@@ -36,6 +36,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
   Future<void> _init() async {
     form = widget.chemicalUseDetailsModel;
     tableData = widget.chemicalUseDetailsModel.chemicalTable;
+
     setState(() {});
   }
 
@@ -65,7 +66,8 @@ class _ChemicalUseState extends State<ChemicalUse> {
               if (v ?? false) {
                 BottomSheetService.showSheet(child: AddTableEntries(
                   onChanged: (value) {
-                    tableData.add(value);
+                    // tableData.add(value);
+                    tableData.insert(0, value);
                     widget.chemicalUseDetailsModel.chemicalTable = tableData;
                     setState(() {});
                   },
@@ -73,7 +75,11 @@ class _ChemicalUseState extends State<ChemicalUse> {
               }
             },
             children: [
-              _table(),
+              // _table(),
+              SingleChildScrollView(
+                child: _dataTable(),
+                scrollDirection: Axis.horizontal,
+              ),
               Gap(10.h),
               ElevatedButton(
                 onPressed: () {
@@ -214,6 +220,69 @@ class _ChemicalUseState extends State<ChemicalUse> {
               Text(MyDecoration.formatDate(DateTime.tryParse(e.applicationDate!))),
               Text(e.wHP ?? ''),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _dataTable() {
+    // tableData.sort(_sortByDate);
+    return DataTable(
+      // dataRowHeight: 10.height,
+      columns: [
+        _column('Chemical Applied'),
+        _column('Rate (Tonne/ Ha)'),
+        _column('Application Date'),
+        _column('WHP/ ESI/ EAFI'),
+        _column(''),
+      ],
+      rows: tableData.map((e) => _row(e)).toList(),
+    );
+  }
+
+  int _sortByDate(ChemicalTable a, ChemicalTable b) {
+    final _a = DateTime.tryParse(a.applicationDate!);
+    final _b = DateTime.tryParse(b.applicationDate!);
+
+    return _a!.compareTo(_b!);
+  }
+
+  DataColumn _column(String text) {
+    return DataColumn(
+      label: SizedBox(
+        // width: 25.width,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  DataRow _row(ChemicalTable e) {
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(
+          Text(e.chemicalName ?? ''),
+          // placeholder: true,
+        ),
+        DataCell(
+          Text(e.rate ?? ''),
+        ),
+        DataCell(Text(e.applicationDate ?? '')),
+        DataCell(Text(e.wHP ?? '')),
+        DataCell(
+          IconButton(
+            color: Colors.red,
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              tableData.remove(e);
+              setState(() {});
+            },
           ),
         ),
       ],

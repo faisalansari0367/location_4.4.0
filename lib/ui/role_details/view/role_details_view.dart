@@ -70,38 +70,27 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                               ),
                             )
                             .toList(),
-                        // if (state.fields.contains('species'))
                         if (state.userSpecies != null)
                           SpeciesWidget(
-                            // data: [],
                             data: state.userSpecies!,
                           )
                         else
-                          Container()
+                          Container(),
+                        
                       ],
-                      // children: state.fieldsData.map(
-                      //   (item) {
-                      //     return Padding(
-                      //       padding: EdgeInsets.only(top: 10.h),
-                      //       child: item.fieldWidget,
-                      //     );
-                      //   },
-                      // ).toList(),
                     ),
                   ),
                   gap,
                   gap,
                   if (!state.isLoading && state.fields.isNotEmpty)
                     MyElevatedButton(
-                      // onPressed: cubit.onSubmit,
                       isLoading: state.isLoading,
                       onPressed: () async {
-                        // print(map);
-
                         await cubit.submitFormData(map);
                       },
                       text: 'Submit',
-                    )
+                    ),
+                  gap,
                 ],
               ),
             );
@@ -129,14 +118,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
 
   void textEditingControllerListener(TextEditingController controller, String field) {
     controller.addListener(() {
-      // print(map);
       if (controller.text.isEmpty) return;
-      // if (controller.text == null) return;
 
       map[field] = controller.text;
-      // if (field == FieldType.countryVisiting.name) {
-      //   print(map[field]);
-      // }
     });
   }
 
@@ -151,19 +135,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     }
     textEditingControllerListener(controller, name.toCamelCase);
     switch (name.toCamelCase) {
-      // case FieldType.species:
-      //   return SpeciesWidget(data: data);
-      // case 'species':
-      // if (cubit.state.userSpecies != null)
-      //   return SpeciesWidget(
-      //     // data: [],
-      //     data: cubit.state.userSpecies!,
-      //   );
-      // else
-      //   return Container();
       case 'sector':
         map[name.toCamelCase] = 'Government';
-        //     userData[name.toCamelCase] ?? (state.licenseCategories.isEmpty ? null : state.licenseCategories.first);
+
         return MyDropdownField(
           options: ['Government', 'Water', 'Gas', 'Power', 'Waste'],
           value: map[name.toCamelCase],
@@ -216,49 +190,29 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           maxLength: 8,
         );
       case 'signature':
-        // controller.text = userData['signature'] ?? '';
         return SignatureWidget(
           signature: controller.text,
           onChanged: (value) => controller.text = value,
         );
       case 'address':
         return PropertyAddress(
-          // address: address,
-          onChanged: (value) {
-            // address = value;
-          },
+          onChanged: (value) {},
         );
-      // case FieldType.companyAddress:
-      // case 'company':
-      //   return PropertyAddress(
-      //     title: name,
-      //     address: Address(
 
-      //     ),
-      //     onChanged: (value) {
-      //       // address = value;
-      //     },
-      //   );
       case 'nationalGrowerRegistration(ngr)No:':
         controller.text = userData['ngr'] ?? '';
         return MyTextField(
           controller: controller,
-          // textCapitalization: TextCapitalization.characters,
           inputFormatters: [CapitalizeAllInputFormatter()],
-
           hintText: name,
           onChanged: (s) {
             map['ngr'] = s;
           },
-
-          // validator: Validator.ngr,
-          // maxLength: 8,
         );
 
       case 'licenseExpiryDate':
         return MyDateField(
           label: name,
-          // date: controller.text,
           validator: Validator.none,
           date: map[name.toCamelCase] ?? '',
           onChanged: (value) {
@@ -267,16 +221,13 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           },
         );
 
-      //K case FieldType.date:
       case 'date':
       case 'entryDate':
-      // case 'startDate':
+
       case 'endDate':
       case 'exitDate':
-        // case 'licenseExpiryDate':
         return MyDateField(
           label: name,
-          // date: controller.text,
           date: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             controller.text = value;
@@ -287,16 +238,14 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         map[name.toCamelCase] = userData[name.toCamelCase] ?? DateTime.now().toIso8601String();
         return MyDateField(
           label: name,
-          // date: controller.text,
           date: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             controller.text = value;
             print(map);
           },
         );
-      // case FieldType.driversLicense:
+
       case "edec":
-        // final value = map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '';
         return QuestionCard(
           question: name,
           selectedValue: controller.text,
@@ -305,11 +254,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
             print(map[name.toCamelCase]);
             setState(() {});
           },
-          // hintText: name,
-          // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          // validator: Validator.text,
-          // controller: controller,
-          // onChanged: (value) => controller.text = value,
         );
       case "driver'sLicense":
         controller.text = map["driver'sLicense"] ?? userData['driversLicense'] ?? '';
@@ -318,16 +262,11 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           validator: Validator.text,
           controller: controller,
-          // onChanged: (value) => controller.text = value,
         );
 
-      // case FieldType.countryOfOrigin:
       case 'countryOfOrigin':
-        // final controller = TextEditingController();
-        // controller.text = map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '';
         return CountryField(
           isOriginCountry: true,
-          // isOriginCountry: fieldType.isCountryOfOrigin,
           label: name,
           controller: controller,
           countryName: map[name.toCamelCase] ?? userData[name.toCamelCase],
@@ -336,13 +275,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
             map[name.toCamelCase] = value;
           },
         );
-      // case FieldType.countryVisiting:
+
       case 'countryVisiting':
-        // final controller = TextEditingController();
-
         return CountryField(
-          // isOriginCountry: fieldType.isCountryOfOrigin,
-
           label: name,
           controller: controller,
           countryName: map[name.toCamelCase] ?? userData[name.toCamelCase],
@@ -351,68 +286,45 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
             map[name.toCamelCase] = value;
           },
         );
-      // case FieldType.propertyName:
+
       case 'propertyName':
-        // final controller = TextEditingController();
         return MyTextField(
-          // isOriginCountry: fieldType.isCountryOfOrigin,
           hintText: name,
           controller: controller,
-
           inputFormatters: [CapitalizeAllInputFormatter()],
-          // countryName: controller.text,
-          // onCountryChanged: (value) => controller.text = value,
         );
 
-      // case FieldType.company:
       case 'company':
-        //   return MyTextField(
-        // final controller = TextEditingController();
         if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
         return MyTextField(
-          // isOriginCountry: fieldType.isCountryOfOrigin,
           hintText: name,
           controller: controller,
           validator: Validator.text,
           inputFormatters: [CapitalizeAllInputFormatter()],
-          // countryName: controller.text,
-          // onCountryChanged: (value) => controller.text = value,
         );
-      // case FieldType.city:
+
       case 'city':
       case 'town':
-        // final controller = TextEditingController();
         if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
         return MyTextField(
-          // isOriginCountry: fieldType.isCountryOfOrigin,
           hintText: name,
           controller: controller,
           validator: Validator.text,
           inputFormatters: [CapitalizeAllInputFormatter()],
-          // textCapitalization: TextCapitalization.characters,
-          // countryName: controller.text,
-          // onCountryChanged: (value) => controller.text = value,
         );
       case 'postcode':
-        // final controller = TextEditingController();
         if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
         return MyTextField(
-          // isOriginCountry: fieldType.isCountryOfOrigin,
           maxLength: 4,
           hintText: name,
           controller: controller,
           validator: Validator.postcode,
-
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          // textCapitalization: TextCapitalization.characters,
-          // countryName: controller.text,
-          // onCountryChanged: (value) => controller.text = value,
         );
-      // case FieldType.passport:
+
       case 'passport':
         controller.text = map['passport'] ?? '';
-        // final controller = TextEditingController();
-        // if (controller.text.isNotEmpty) controller.text = controller.text;
+
         return MyTextField(
           hintText: name,
           controller: controller,
@@ -420,30 +332,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           inputFormatters: const [],
         );
       case 'state':
-        // final controller = TextEditingController();
-        // return MyTextField(
-        //   onTap: () => BottomSheetService.showSheet(
-        //     child: States(
-        //       onChanged: (value) => setState(() {
-        //         controller.text = value;
-        //       }),
-        //     ),
-        //   ),
-        //   enabled: true,
-        //   inputFormatters: [CapitalizeAllInputFormatter()],
-        //   hintText: Strings.selectState,
-        //   suffixIcon: Icon(Icons.keyboard_arrow_down),
-        //   controller: controller,
-        //   focusNode: AlwaysDisabledFocusNode(),
-        //   readOnly: false,
-        // );
-        // if (controller.text.isNotEmpty) controller.text = controller.text;
-        // return MyTextField(
-        //   hintText: name,
-        //   controller: controller,
-        //   validator: Validator.text,
-        //   inputFormatters: [],
-        // );
         return StateDropdownField(
           value: controller.text,
           onChanged: (value) => controller.text = value,
@@ -456,11 +344,42 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           controller: controller,
           validator: Validator.text,
         );
+      case 'lpaUsername':
+        return MyTextField(
+          hintText: 'LPA Username',
+          textCapitalization: TextCapitalization.characters,
+          controller: controller,
+          validator: Validator.text,
+        );
+      case 'lpaPassword':
+        return PasswordField(
+          hintText: 'LPA Password',
+          controller: controller,
+        );
+      case 'nlisPassword':
+        return PasswordField(
+          hintText: 'NLIS Password',
+          controller: controller,
+        );
+      case 'msaNumber':
+        return MyTextField(
+          hintText: 'MSA Number',
+          controller: controller,
+        );
+      case 'nfasAccreditationNumber':
+        return MyTextField(
+          hintText: 'NFAS Accreditation Number',
+          controller: controller,
+        );
+
+      case 'nlisUsername':
+        return MyTextField(
+          hintText: 'NLIS Username',
+          controller: controller,
+          validator: Validator.text,
+        );
 
       default:
-        // final controller = TextEditingController();
-        // if (controller.text.isNotEmpty) controller.text = controller.text.capitalizeFirst!;
-        // print(name.capitalize);
         return MyTextField(
           hintText: name.capitalize,
           controller: controller,

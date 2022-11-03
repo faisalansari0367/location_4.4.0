@@ -36,6 +36,7 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   void init(BuildContext context) async {
+    emit(state.copyWith(isLoading: true));
     _box = await Hive.openBox('cvdbox');
     final futures = [
       _fetchVendorDetailsModel(context),
@@ -47,6 +48,7 @@ class CvdCubit extends Cubit<CvdState> {
     ];
     await Future.wait(futures);
     _fromJson();
+    emit(state.copyWith(isLoading: false));
   }
 
   String? signature, organisationName;

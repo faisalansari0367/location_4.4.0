@@ -46,7 +46,7 @@ class _VendorDetailsState extends State<VendorDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) const Center(child: CircularProgressIndicator());
+    if (widget.vendorDetailsModel.name == null) const Center(child: CircularProgressIndicator());
     return Column(
       children: [
         Form(

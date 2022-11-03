@@ -181,12 +181,23 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                         child: NoSignatureFound(
                           message: 'Please sign the declaration',
                           buttonText: 'Ok',
-                          onCancel: Get.back,
+                          onCancel: () async {
+                            // Get.back();
+                            Get.to(
+                              () => CreateSignature(
+                                onDone: (s) {
+                                  cubit.signature = s;
+                                  Get.back();
+                                },
+                              ),
+                            );
+                          },
                         ),
                       );
-                      return;
+                      // return;
+                    } else {
+                      await cubit.getApiData();
                     }
-                    await cubit.getApiData();
                   },
                 );
               },

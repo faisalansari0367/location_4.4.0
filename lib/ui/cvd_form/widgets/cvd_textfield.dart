@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../widgets/text_fields/my_text_field.dart';
 
 class CvdTextField extends StatefulWidget {
-  final String name;
+  final String? name;
   final String? value;
   final ValueChanged<String>? onChanged;
   final TextInputAction? textInputAction;
@@ -17,7 +17,7 @@ class CvdTextField extends StatefulWidget {
   // final TextEditingController controller;
   const CvdTextField({
     Key? key,
-    required this.name,
+    this.name,
     this.value,
     this.onChanged,
     this.textInputAction,

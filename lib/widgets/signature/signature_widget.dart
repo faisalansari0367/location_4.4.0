@@ -53,38 +53,28 @@ class _SignatureWidgetState extends State<SignatureWidget> {
     super.didUpdateWidget(oldWidget);
   }
 
-  void onDone(Uint8List? signature) {
+  void onDone(String? signature) {
     if (signature != null) {
       setState(() {
-        _image = signature;
+        _image = base64Decode(signature);
         showImage = true;
       });
-      final file = base64Encode(signature);
-      widget.onChanged?.call(file);
+      widget.onChanged?.call(signature);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_image?.length);
-    // print((1.sh / 1.sw));/
     if (showImage) {
       return Stack(
         children: [
           Container(
             clipBehavior: Clip.antiAlias,
             width: double.infinity,
-
             decoration: MyDecoration.decoration(),
-            // margin: EdgeInsets.all(10),
             child: Image.memory(
               _image!,
-              // controller: _controller,
-
-              // width: 300,
               height: 300,
-              // frameBuilder: ,
-
               errorBuilder: (context, _, __) => SizedBox(
                 height: 300,
                 child: Column(
@@ -95,10 +85,6 @@ class _SignatureWidgetState extends State<SignatureWidget> {
                       color: context.theme.errorColor,
                       size: (1.sh / 1.sw) * 20,
                     ),
-                    // Lottie.asset(
-                    //   'assets/animations/signature.json',
-                    //   height: 200,
-                    // ),
                     Gap(2.height),
                     Text(
                       'Failed to load signature',
@@ -109,8 +95,6 @@ class _SignatureWidgetState extends State<SignatureWidget> {
                   ],
                 ),
               ),
-              // backgroundColor: Colors.white,
-              // dynamicPressureSupported: true,
             ),
           ),
           Positioned(
@@ -119,7 +103,6 @@ class _SignatureWidgetState extends State<SignatureWidget> {
             child: GestureDetector(
               onTap: _goToSignaturePage,
               child: Container(
-                // padding: kPadding,
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(10),
                 decoration: MyDecoration.decoration(isCircle: true),
@@ -146,7 +129,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
 }
 
 class CreateSignature extends StatefulWidget {
-  final Function(Uint8List? signature) onDone;
+  final Function(String? signature) onDone;
   const CreateSignature({Key? key, required this.onDone}) : super(key: key);
 
   @override
@@ -183,12 +166,14 @@ class _CreateSignatureState extends State<CreateSignature> {
 
   void onDone() async {
     final image = await _controller.toPngBytes();
-    widget.onDone(image);
-    _controller.clear();
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    if (image != null) {
+      widget.onDone(base64Encode(image));
+      _controller.clear();
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    }
   }
 
   @override
@@ -198,7 +183,6 @@ class _CreateSignatureState extends State<CreateSignature> {
         child: const Icon(Icons.check),
         onPressed: () {
           onDone();
-
           Get.back();
         },
       ),

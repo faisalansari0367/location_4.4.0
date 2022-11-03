@@ -4,6 +4,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
+import 'package:background_location/ui/envd/cubit/graphql_client.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/property_address.dart';
@@ -19,10 +20,6 @@ import 'role_details_state.dart';
 
 export 'role_details_state.dart';
 
-// part 'role_details_state.dart';
-// part 'role_details_state.g.dart';
-// import 'package:json_annotation/json_annotation.dart';
-
 class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   final String role;
   final Api api;
@@ -37,14 +34,11 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     apiService = api;
     MyConnectivity().connectionStream.listen((event) {
       apiService = event ? api : localApi;
-      // emit(state.copyWith())
     });
     emit(state.copyWith(fields: fields));
     user = apiService.getUser()!.toJson();
     _init();
   }
-
-  // final fieldsData = <FieldData>[];
 
   void _init() async {
     await 200.milliseconds.delay();
@@ -52,13 +46,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     await getRoleDetails();
     await getSpecies();
     await getLicenceCategories();
-
-    // api.getLicenceCategories();
-    // getLicenceCategories();
-    // await Future.wait([
-    //   _getFields(),
-    //   getRoleDetails(),
-    // ]);
   }
 
   @override
@@ -73,22 +60,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     result.when(
       success: (s) {
         emit(state.copyWith(licenseCategories: s));
-        // final field = state.fieldsData.where((element) => element.fieldType.isLicenceCategory);
-        // if (field.isEmpty) return;
-        // field.first.data['licenseCategories'] = s;
-        // final index = state.fieldsData.indexOf(field.first);
-        // final fieldsData = state.fieldsData;
-        // fieldsData[index] = FieldData(
-        //   name: field.first.name,
-        //   controller: field.first.controller,
-        //   data: {'licenseCategories': s},
-        // );
-        // emit(
-        //   state.copyWith(
-        //     fieldsData: fieldsData,
-        //     licenseCategories: s,
-        //   ),
-        // );
       },
       failure: (failure) {},
     );
@@ -99,7 +70,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   Future<void> getRoleDetails() async {
     emit(state.copyWith(isLoading: true));
     final data = await apiService.getRoleData(role);
-
     data.when(
       success: (data) {
         final userData = api.getUserData();
@@ -111,7 +81,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
             isLoading: false,
           ),
         );
-        // _getFieldsData();
       },
       failure: _failure,
     );
@@ -157,7 +126,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   }
 
   void _getFieldsDataFromFields(Map<String, bool> addressFields, List<FieldData> list) {
-    // emit(state.copyWith(fields: [...state.fields, 'cit]));
     for (final e in state.fields) {
       var hasField = false;
       final isMobile = e.toCamelCase == 'mobile';
@@ -186,12 +154,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         final fieldData = FieldData(name: e, controller: controller);
         list.add(fieldData);
       }
-
-      // if (e == 'National Grower Registration (NGR) No:') {
-      //   final controller = TextEditingController(text: userRoleDetails['ngr']);
-      //   final fieldData = FieldData(name: e, controller: controller);
-      //   list.add(fieldData);
-      // }
     }
 
     final map = <String, dynamic>{};
@@ -242,15 +204,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     if (state.fields.isNotEmpty) {
       _getFieldsData();
     }
-    // emit(state.copyWith(isLoading: state.fields.isEmpty));
-
-    // apiService.userRolesStream.listen((event) {
-    //   // _success(event);
-    //   // emit(state.copyWith(fields: event))
-    // });
-    // final fields = await apiService.(role);
-    // fields.when(success: _success, failure: _failure);
-    // emit(state.copyWith(isLoading: false));
   }
 
   void _failure(NetworkExceptions error) {
@@ -306,13 +259,12 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           return;
         }
       }
-      // Get.to(() => const MapsPage());
 
       final data = <String, dynamic>{};
       for (final field in state.fieldsData) {
         if (field.fieldType.isAddress) {
           final _address = field.address!.toMap();
-          // _address['state'] = 'STATE';
+
           data.addAll(_address);
           return;
         } else if (field.fieldType.isCompanyAddress) {
@@ -320,7 +272,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           data.addAll(_address);
           return;
         } else if (field.fieldType.isSpecies) {
-          // data.addAll( (field.data['species'] as UserSpecies).tojs);
           final species = field.data['species'] as UserSpecies;
           final list = (species.data ?? []).where((element) => element.value == true).map((e) => e.species).toList();
           if (list.isEmpty) return;
@@ -366,22 +317,25 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           return;
         }
       }
-      // final ngrKey = 'nationalGrowerRegistration(ngr)No:';
-      // if (data.containsKey(ngrKey)) {
-      //   final ngrValue = data[ngrKey];
-      //   data.remove(ngrKey);
-      //   data['ngr'] = ngrValue;
-      // }
-      // final role = apiService.getUser()!.role!;
+
       final result = await apiService.updateRole(role, data);
       result.when(
         success: (data) => Get.to(() => const MapsPage()),
         failure: (error) => DialogService.failure(
           error: error,
-          // onCancel: () => Get.to(() => MapsPage()),
           onCancel: Get.back,
         ),
       );
+    }
+  }
+
+  Future<bool> _validateLpaCreds(String userName, String password) async {
+    try {
+      final result = await GraphQlClient().getEnvdToken(userName, password);
+      if (result != null) return true;
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -401,29 +355,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           return;
         }
       }
-      // Get.to(() => const MapsPage());
-
-      // final data = <String, dynamic>{};
-      // state.fieldsData.forEach((field) {
-      //   if (field.fieldType.isAddress) {
-      //     final _address = field.address!.toMap();
-      //     // _address['state'] = 'STATE';
-      //     data.addAll(_address);
-      //     return;
-      //   } else if (field.fieldType.isCompanyAddress) {
-      //     final _address = field.address!.toMap();
-      //     data.addAll(_address);
-      //     return;
-      //   } else if (field.fieldType.isSpecies) {
-      //     // data.addAll( (field.data['species'] as UserSpecies).tojs);
-      //     final UserSpecies species = field.data['species'] as UserSpecies;
-      //     final list = (species.data ?? []).where((element) => element.value == true).map((e) => e.species).toList();
-      //     if (list.isEmpty) return;
-      //     data[field.fieldType.name] = (list);
-      //     return;
-      //   }
-      //   data[field.name.toCamelCase.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();
-      // });
 
       if (data.containsKey(FieldType.countryOfOrigin.name) && data.containsKey(FieldType.countryVisiting.name)) {
         if (data[FieldType.countryOfOrigin.name] == data[FieldType.countryVisiting.name]) {
@@ -487,20 +418,35 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         }
       }
 
+      if (role == 'Producer') {
+        final userName = data['lpaUsername'];
+        final password = data['lpaPassword'];
+        if (userName == null || password == null) {
+          await DialogService.showDialog(
+            child: NetworkErrorDialog(
+              message: 'Please enter LPA credentials',
+              onCancel: Get.back,
+            ),
+          );
+          return;
+        }
+        final isValidated = await _validateLpaCreds(data['lpaUsername'], data['lpaPassword']);
+        if (!isValidated) {
+          await DialogService.showDialog(
+            child: NetworkErrorDialog(
+              message: 'Invalid LPA credentials',
+              onCancel: Get.back,
+            ),
+          );
+          return;
+        }
+      }
+
       if (state.userSpecies != null) {
         final list = state.userSpecies!.data!.where((element) => element.value == true).map((e) => e.species).toList();
         data['species'] = list;
       }
 
-      // final ngrKey = 'nationalGrowerRegistration(ngr)No:';
-      // if (data.containsKey(ngrKey)) {
-      //   final ngrValue = data[ngrKey];
-      //   data.remove(ngrKey);
-      //   data['ngr'] = ngrValue;
-      // }
-      // final role = apiService.getUser()!.role!;
-
-      // change mobile key
       const mobileKey = 'mobile';
 
       if (data.containsKey(mobileKey)) {
@@ -509,7 +455,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         data['phoneNumber'] = mobileValue;
       }
 
-      // change ngr key
       const ngrKey = 'nationalGrowerRegistration(ngr)No:';
       if (data.containsKey(ngrKey)) {
         final ngrValue = data[ngrKey];
@@ -529,7 +474,6 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         success: (data) => Get.to(() => const MapsPage()),
         failure: (error) => DialogService.failure(
           error: error,
-          // onCancel: () => Get.to(() => MapsPage()),
           onCancel: Get.back,
         ),
       );

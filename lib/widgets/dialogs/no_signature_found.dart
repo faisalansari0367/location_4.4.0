@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../my_elevated_button.dart';
+import '../signature/signature_widget.dart';
 
 class NoSignatureFound extends StatelessWidget {
   final String message;
@@ -66,6 +67,11 @@ class NoSignatureFound extends StatelessWidget {
               color: Colors.red,
               onPressed: () async {
                 if (onCancel != null) onCancel!();
+                // if (onCancel == null) {
+                //   // Get.to(() => CreateSignature(onDone: (s) {
+
+                //   // }));
+                // }
                 // Get.back();
               },
             ),

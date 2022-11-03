@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:background_location/constants/index.dart';
-
 class ChemicalUseDetailsModel {
   String? field;
   FieldData? chemicalCheck;
@@ -212,7 +210,7 @@ class ChemicalTable {
   ChemicalTable.fromJson(Map json) {
     chemicalName = json['chemicalName'];
     rate = json['rate'];
-    applicationDate = json['applicationDate'];
+    applicationDate = (json['applicationDate']);
     wHP = json['WHP'];
   }
 
@@ -220,7 +218,7 @@ class ChemicalTable {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['chemicalName'] = this.chemicalName;
     data['rate'] = this.rate;
-    data['applicationDate'] = MyDecoration.formatDate(DateTime.tryParse(this.applicationDate!));
+    data['applicationDate'] = this.applicationDate;
     data['WHP'] = this.wHP;
     return data;
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
               Get.back();
 
               final chemicalTableModel = ChemicalTable(
-                applicationDate: applicationDate.text,
+                applicationDate: MyDecoration.formatDate(DateTime.parse(applicationDate.text)),
                 chemicalName: productName.text,
                 rate: rateController.text,
                 wHP: whpDays.text,

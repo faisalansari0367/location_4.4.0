@@ -4,7 +4,6 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:background_location/ui/envd/cubit/graphql_storage.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -47,7 +46,7 @@ class GraphQlClient {
     token = await _getEnvdToken();
     if (token == null) {
       DialogService.error(
-        "Can't get token from envd, Please try again",
+        "Unable to connect with the MLA server currently. Please try again later.",
       );
       return false;
     }
@@ -68,33 +67,61 @@ class GraphQlClient {
       if (isTokenValid()) {
         return 'Bearer ${storage.getToken()!.accessToken}';
       }
+      final result = await getEnvdToken(_userData.lpaUsername!, _userData.lpaPassword!);
+      // final data = {
+      //   'client_id': 'itrack',
+      //   'client_secret': 'u7euFqDzqZzP2T9SmL7Y',
+      //   'grant_type': 'password',
+      //   'scope': 'lpa_scope',
+      //   'username': _userData.lpaUsername,
+      //   'password': _userData.lpaPassword,
+      // };
+      // final url = 'https://auth-uat.integritysystems.com.au/connect/token';
+      // final result = await dio.post(
+      //   url,
+      //   data: data,
+      //   options: Options(headers: _headers),
+      // );
+      final tokenData = await storage.saveToken(result.data);
+      log(tokenData.accessToken);
+      return 'Bearer ${tokenData.accessToken}';
+    } catch (e) {
+      rethrow;
+    }
+    // return null;
+  }
 
+  Future<dynamic> getEnvdToken(String lpaUsername, String lpaPassword) async {
+    try {
       final data = {
         'client_id': 'itrack',
         'client_secret': 'u7euFqDzqZzP2T9SmL7Y',
         'grant_type': 'password',
         'scope': 'lpa_scope',
-        'username': _userData.lpaUsername,
-        'password': _userData.lpaPassword,
+        'username': lpaUsername,
+        'password': lpaPassword,
       };
       final url = 'https://auth-uat.integritysystems.com.au/connect/token';
       final result = await dio.post(
         url,
         data: data,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        ),
+        options: Options(headers: _headers),
       );
-      final tokenData = await storage.saveToken(result.data);
-      log(tokenData.accessToken);
-      return 'Bearer ${tokenData.accessToken}';
-    } on DioError catch (e) {
-      print(e);
-      return null;
+
+      log(result.toString());
+
+      return result.data;
+    } catch (e) {
+      log(e.toString());
+
+      rethrow;
     }
-    // return null;
+  }
+
+  Map<String, dynamic> get _headers {
+    return {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
   }
 
   AuthLink get authLink => AuthLink(getToken: () => 'Bearer $token');

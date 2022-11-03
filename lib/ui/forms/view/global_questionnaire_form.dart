@@ -9,7 +9,6 @@ import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/no_signature_found.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:background_location/widgets/text_fields/time_field.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 import '../../../widgets/dialogs/dialog_service.dart';
+import '../../../widgets/text_fields/text_formatters/input_formatters.dart';
 import '../models/global_questionnaire_form_model.dart';
 
 class GlobalQuestionnaireForm extends StatefulWidget {
@@ -39,6 +39,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
   @override
   void initState() {
     super.initState();
+    model.signature.value = context.read<Api>().getUserData()?.signature;
   }
 
   @override
@@ -55,21 +56,23 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
             padding: kPadding,
             child: AutoSpacing(
               children: [
-                _card(model.q1),
+                _addList(model.q1),
+                _card(model.q2),
+
                 Container(
                   decoration: MyDecoration.decoration(),
                   child: QuestionCard(
-                    question: model.q2.question,
-                    selectedValue: model.q2.value,
+                    question: model.q3.question,
+                    selectedValue: model.q3.value,
                     onChanged: (s) {
                       if (s.toLowerCase() == 'no') {
                         DialogService.error('Consider the safety of others before you enter this zone.');
                       }
-                      onChanged(model.q2, s);
+                      onChanged(model.q3, s);
                     },
                   ),
                 ),
-                _card(model.q3),
+                // _card(model.q3),
                 Container(
                   decoration: MyDecoration.decoration(),
                   child: QuestionCard(
@@ -83,13 +86,15 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                     },
                   ),
                 ),
-                _addList(model.q5),
+                _card(model.q5),
+                _card(model.q6),
+                // _addList(model.q5),
                 MyTextField(
-                  hintText: model.q6.question,
+                  hintText: model.rego.question,
                   // textCapitalization: TextCapitalization.characters,
                   inputFormatters: [CapitalizeAllInputFormatter()],
                   onChanged: (value) {
-                    model.q6.value = value;
+                    model.rego.value = value;
                     setState(() {});
                   },
                 ),
@@ -119,7 +124,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                   },
                 ),
                 SignatureWidget(
-                  signature: context.read<Api>().getUserData()?.signature,
+                  signature: model.signature.value,
                   onChanged: (s) {
                     model.signature.value = s;
                     setState(() {});
@@ -150,7 +155,18 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                         child: NoSignatureFound(
                           message: 'Please sign the declaration',
                           buttonText: 'OK',
-                          onCancel: Get.back,
+                          onCancel: () async {
+                            Get.back();
+                            Get.to(
+                              () => CreateSignature(
+                                onDone: (s) {
+                                  model.signature.value = s;
+                                  setState(() {});
+                                },
+                              ),
+                            );
+                            // Get.back();
+                          },
                         ),
                       );
                       return;
@@ -163,11 +179,11 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                     if (model.selfDeclaration.value == false || model.selfDeclaration.value == null) {
                       DialogService.error('Please accept the self declaration');
                       return;
-                    } else if (model.q5.value == true && names.isEmpty) {
+                    } else if (model.q1.value == true && names.isEmpty) {
                       DialogService.error('Please add the visitors name');
                       return;
-                    } else if (model.q5.value == 'yes') {
-                      model.q5.value = names;
+                    } else if (model.q1.value == 'yes') {
+                      model.q1.value = names;
                     }
 
                     await submitFormData(jsonEncode(model.toJson()));
@@ -229,9 +245,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
         DialogService.success(
           'Form Submitted',
           onCancel: () {
-            // api.getLogbookRecords();
-            Get.back();
-            Get.back();
+            Get.close(2);
           },
         );
       },

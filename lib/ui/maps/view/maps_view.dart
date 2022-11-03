@@ -300,7 +300,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           ),
           BottomNavbarItem(
             iconData: LineIcons.drawPolygon,
-            title: 'Geofence List',
+            title: 'Locations List',
             onTap: () => BottomSheetService.showSheet(
               child: DraggableScrollableSheet(
                 maxChildSize: 0.9,
