@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:background_location/ui/envd/cubit/graphql_storage.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -45,9 +44,6 @@ class GraphQlClient {
     storage = GrahphQlStorage(box: hiveStore.box);
     token = await _getEnvdToken();
     if (token == null) {
-      DialogService.error(
-        "Unable to connect with the MLA server currently. Please try again later.",
-      );
       return false;
     }
     return true;
@@ -62,27 +58,28 @@ class GraphQlClient {
     return duration < map.expiresIn;
   }
 
+  bool _isNull(String? value) {
+    return value == null || value.isEmpty;
+  }
+
+  bool hasCredentials() {
+    if (_isNull(_userData.lpaUsername) || _isNull(_userData.lpaPassword)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<String?> _getEnvdToken() async {
     try {
       if (isTokenValid()) {
         return 'Bearer ${storage.getToken()!.accessToken}';
       }
+      if (_isNull(_userData.lpaUsername) || _isNull(_userData.lpaPassword)) {
+        return null;
+      }
       final result = await getEnvdToken(_userData.lpaUsername!, _userData.lpaPassword!);
-      // final data = {
-      //   'client_id': 'itrack',
-      //   'client_secret': 'u7euFqDzqZzP2T9SmL7Y',
-      //   'grant_type': 'password',
-      //   'scope': 'lpa_scope',
-      //   'username': _userData.lpaUsername,
-      //   'password': _userData.lpaPassword,
-      // };
-      // final url = 'https://auth-uat.integritysystems.com.au/connect/token';
-      // final result = await dio.post(
-      //   url,
-      //   data: data,
-      //   options: Options(headers: _headers),
-      // );
-      final tokenData = await storage.saveToken(result.data);
+      final tokenData = await storage.saveToken(result);
       log(tokenData.accessToken);
       return 'Bearer ${tokenData.accessToken}';
     } catch (e) {

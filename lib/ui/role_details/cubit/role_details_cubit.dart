@@ -421,24 +421,24 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       if (role == 'Producer') {
         final userName = data['lpaUsername'];
         final password = data['lpaPassword'];
-        if (userName == null || password == null) {
-          await DialogService.showDialog(
-            child: NetworkErrorDialog(
-              message: 'Please enter LPA credentials',
-              onCancel: Get.back,
-            ),
-          );
-          return;
-        }
-        final isValidated = await _validateLpaCreds(data['lpaUsername'], data['lpaPassword']);
-        if (!isValidated) {
-          await DialogService.showDialog(
-            child: NetworkErrorDialog(
-              message: 'Invalid LPA credentials',
-              onCancel: Get.back,
-            ),
-          );
-          return;
+        if (![null, ''].contains(userName) && !['null', ''].contains(password)) {
+          // await DialogService.showDialog(
+          //   child: NetworkErrorDialog(
+          //     message: 'Please enter LPA credentials',
+          //     onCancel: Get.back,
+          //   ),
+          // );
+          // return;
+          final isValidated = await _validateLpaCreds(data['lpaUsername'], data['lpaPassword']);
+          if (!isValidated) {
+            await DialogService.showDialog(
+              child: NetworkErrorDialog(
+                message: 'Invalid LPA credentials',
+                onCancel: Get.back,
+              ),
+            );
+            return;
+          }
         }
       }
 

@@ -76,7 +76,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                           )
                         else
                           Container(),
-                        
                       ],
                     ),
                   ),
@@ -118,7 +117,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
 
   void textEditingControllerListener(TextEditingController controller, String field) {
     controller.addListener(() {
-      if (controller.text.isEmpty) return;
+      // if (controller.text.isEmpty) return;
 
       map[field] = controller.text;
     });
@@ -205,6 +204,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           controller: controller,
           inputFormatters: [CapitalizeAllInputFormatter()],
           hintText: name,
+          validator: Validator.none,
           onChanged: (s) {
             map['ngr'] = s;
           },
@@ -347,36 +347,40 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       case 'lpaUsername':
         return MyTextField(
           hintText: 'LPA Username',
-          textCapitalization: TextCapitalization.characters,
+          // textCapitalization: TextCapitalization.characters,
           controller: controller,
-          validator: Validator.text,
+          validator: Validator.none,
         );
       case 'lpaPassword':
         return PasswordField(
           hintText: 'LPA Password',
           controller: controller,
+          validator: Validator.none,
         );
       case 'nlisPassword':
         return PasswordField(
           hintText: 'NLIS Password',
           controller: controller,
+          validator: Validator.none,
         );
       case 'msaNumber':
         return MyTextField(
           hintText: 'MSA Number',
           controller: controller,
+          validator: Validator.none,
         );
       case 'nfasAccreditationNumber':
         return MyTextField(
           hintText: 'NFAS Accreditation Number',
           controller: controller,
+          validator: Validator.none,
         );
 
       case 'nlisUsername':
         return MyTextField(
           hintText: 'NLIS Username',
           controller: controller,
-          validator: Validator.text,
+          validator: Validator.none,
         );
 
       default:

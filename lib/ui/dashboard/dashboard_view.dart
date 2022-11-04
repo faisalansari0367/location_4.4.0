@@ -11,6 +11,7 @@ import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitors/visitors_page.dart';
 import 'package:background_location/widgets/dialogs/coming_soon.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/dialogs/status_dialog_new.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
@@ -142,9 +143,35 @@ class _DashboardViewState extends State<DashboardView> {
 
                     onTap: () async {
                       // context.read<Api>().getEnvdToken();
-                      final isInit = await GraphQlClient(userData: context.read<Api>().getUserData()!).init();
+                      final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
+                      final isInit = await client.init();
+
+                      if (!client.hasCredentials()) {
+                        final message =
+                            "Please provide valid LPA credentials in your role settings to use this feature.";
+                        Get.dialog(
+                          StatusDialog(
+                            lottieAsset: 'assets/animations/error.json',
+                            message: message,
+                            onContinue: () async {
+                              Get.back();
+                              Get.to(
+                                () => const SelectRolePage(
+                                  showBackArrow: true,
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                        return;
+                      }
+
                       if (isInit) {
                         Get.to(() => const EnvdPage());
+                      } else {
+                        DialogService.error(
+                          "Unable to connect with the ISC server currently. Please try again later.",
+                        );
                       }
                       // DialogService.showDialog(child: const ComingSoonDialog());
                     },

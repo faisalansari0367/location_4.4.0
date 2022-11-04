@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/gen/assets.gen.dart';
+import 'package:background_location/ui/envd/cubit/graphql_client.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
@@ -73,6 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
             MyListTile(
               onTap: () async {
                 context.read<MapsRepo>().cancel();
+                GraphQlClient().hiveStore.reset();
                 await context.read<Api>().logout();
                 await Get.offAll(() => const LoginPage());
               },

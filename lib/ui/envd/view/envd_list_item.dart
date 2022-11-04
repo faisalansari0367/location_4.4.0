@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/envd/models/envd_model.dart';
 import 'package:flutter/material.dart';
@@ -144,16 +145,18 @@ class EnvdListItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        AutoSizeText(
           text,
+          maxLines: 1,
           style: TextStyle(
             // color: _getColors().computeLuminance() >= 0.5 ? Colors.grey.shade600 : Colors.white70,
             color: Colors.grey.shade600,
           ),
         ),
         Gap(5.h),
-        Text(
+        AutoSizeText(
           value,
+          maxLines: 1,
           style: TextStyle(
             // color: _getColors().computeLuminance() >= 0.5 ? Colors.black : Colors.white,
             color: Colors.black,
@@ -165,18 +168,23 @@ class EnvdListItem extends StatelessWidget {
   }
 
   Color _getColors() {
-    switch (items.species!.toLowerCase()) {
-      case 'goat':
-        return Colors.red.shade500;
-      case 'cattle':
-        return Colors.yellow.shade500;
-      case 'sheep_lamb':
-        return Colors.purple.shade500;
-      case 'bobby_calves':
-        return Colors.green.shade800;
-      case 'eucattle':
-        return Colors.lightGreen.shade400;
+    String type = '';
 
+    if (items.forms?.isNotEmpty ?? false) {
+      type = items.forms!.first.type!;
+    }
+    print(type);
+    switch (type) {
+      case 'LPAG2':
+        return Color(0xffDC4233);
+      case 'LPAC1':
+        return Color(0XFFFAE26C);
+      case 'LPASL1':
+        return Color(0xff90519B);
+      case 'LPABC1':
+        return Color(0XFF388068);
+      case 'EUC1':
+        return Color(0xffAACE74);
       default:
         return Colors.transparent;
     }

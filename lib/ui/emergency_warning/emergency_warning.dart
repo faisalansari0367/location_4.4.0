@@ -13,6 +13,7 @@ import '../../widgets/dialogs/dialog_service.dart';
 import '../maps/location_service/maps_repo.dart';
 import '../maps/models/polygon_model.dart';
 import '../maps/widgets/geofences_list/geofence_card.dart';
+import '../maps/widgets/geofences_list/geofences_view.dart';
 
 class EmergencyWarning extends StatefulWidget {
   const EmergencyWarning({Key? key}) : super(key: key);
@@ -24,9 +25,18 @@ class EmergencyWarning extends StatefulWidget {
 class _EmergencyWarningState extends State<EmergencyWarning> {
   final selectedZones = Set<int>();
   late Stream<List<PolygonModel>> _stream;
+  FilterType filterType = FilterType.created_by_me;
+  UserData? userData;
+
+  setFilter() {
+    setState(() {
+      filterType = filterType == FilterType.created_by_me ? FilterType.all : FilterType.created_by_me;
+    });
+  }
 
   @override
   void initState() {
+    userData = context.read<Api>().getUserData();
     _getPolygon();
     // Future.delayed(1.seconds, () {
     //   DialogService.showDialog(child: EmergencyWarningDialog());
@@ -141,6 +151,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                 height: 100,
               ),
             ),
+
             Text(
               'Select A Location',
               style: context.textTheme.headline6?.copyWith(
@@ -148,9 +159,14 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
               ),
             ),
             Gap(20.h),
+            if (userData!.role! == 'Admin') ...[
+              _buildFilters(context),
+              Gap(10.h),
+            ],
+
             Expanded(
               child: StreamBuilder<List<PolygonModel>>(
-                stream: _stream,
+                stream: filterPolygons(),
                 builder: (context, snapshot) {
                   return Scrollbar(
                     child: ListView.separated(
@@ -184,10 +200,66 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
     );
   }
 
+  Row _buildFilters(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'Filter by',
+          style: TextStyle(
+            fontSize: 15.h,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          ),
+        ),
+        ...FilterType.values
+            .map(
+              (e) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: InputChip(
+                  selected: filterType == e,
+                  backgroundColor: Colors.grey.shade200,
+                  selectedColor: context.theme.primaryColor.withOpacity(1),
+                  // elevation: 5,
+                  onPressed: setFilter,
+                  checkmarkColor: filterType == e ? Colors.white : Colors.grey,
+
+                  label: Text(
+                    e.name.replaceAll('_', ' ').capitalize!,
+                    style: TextStyle(
+                      fontSize: 15.h,
+                      color: filterType == e ? Colors.white : Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+              ),
+            )
+            .toList()
+      ],
+    );
+  }
+
+  // Stream<List<PolygonModel>> filterPolygons() {
+  //   return filterType == FilterType.created_by_me
+  //       ? context
+  //           .read<MapsRepo>()
+  //           .polygonStream
+  //           .map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
+  //       : context.read<MapsRepo>().polygonStream;
+  // }
+
   List<PolygonModel> sort(List<PolygonModel>? list) {
     if (list == null) return [];
     if (list.isEmpty) return [];
     return list..sort((a, b) => a.name.compareTo(b.name));
+  }
+
+  Stream<List<PolygonModel>> filterPolygons() {
+    return filterType == FilterType.created_by_me
+        ? context
+            .read<MapsRepo>()
+            .polygonStream
+            .map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
+        : context.read<MapsRepo>().polygonStream;
   }
 
   _warningDialog(BuildContext context) async {
