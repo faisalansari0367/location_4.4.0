@@ -42,6 +42,12 @@ class AuthRepoImpl implements AuthRepo {
       final result = await client.post(Endpoints.signIn, data: data.toMap());
       final model = UserResponse.fromJson((result.data));
       final userData = UserData.fromJson(result.data['data']['user']);
+
+      final oldUser = getUserData();
+      if (oldUser?.id != userData.id) {
+        storage.box.clear();
+      }
+
       await setUserData(userData);
       // if (model.data!.user!.role!.getRole.isAdmin) {
       //   await updateUser(userData: UserData(role: model.data!.user!.role!, id: model.data!.user!.id));
@@ -77,7 +83,7 @@ class AuthRepoImpl implements AuthRepo {
   Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
     try {
       final result = await client.patch(Endpoints.updateMe, data: isUpdate ? user.updateUser() : {});
-      final model = User.fromJson(result.data['data']);
+      final model = User.fromJson(result.data['data']); 
       final userData = UserData.fromJson(result.data['data']);
       await Future.wait([
         storage.setUserData(userData),

@@ -6,6 +6,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
 import 'package:background_location/theme/color_constants.dart';
+import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
@@ -174,26 +175,20 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<LocalApi>.value(value: widget.localApi),
         RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
         RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
+        RepositoryProvider<GeofenceService>(
+          create: (context) => GeofenceService(api: widget.api, mapsRepo: widget.mapsRepo),
+        ),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,
-          // primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Colors.white,
-          colorScheme: Theme.of(context).colorScheme.copyWith(
-                primary: kPrimaryColor,
-              ),
-
+          colorScheme: Theme.of(context).colorScheme.copyWith(primary: kPrimaryColor),
           primaryColor: kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        getPages: [
-          // GetPage(name: '/', page: () => const NewSplashScreen()),
-        ],
-
-        // home: SplashScreen(),
         home: ScreenUtilInit(
           designSize: Get.size,
           builder: (context, child) => const SplashScreen(),

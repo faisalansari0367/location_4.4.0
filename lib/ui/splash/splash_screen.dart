@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
+import 'package:background_location/services/notifications/push_notifications.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
@@ -28,9 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    final isLoggedIn = context.read<Api>().isLoggedIn;
-
-    Future.delayed((kSplashDuration.inMilliseconds - 1000).milliseconds, () async {
+    final api = context.read<Api>();
+    final notificationService = context.read<PushNotificationService>();
+    final isLoggedIn = api.isLoggedIn;
+    final duration = (kSplashDuration.inMilliseconds - 1000).milliseconds;
+    Future.delayed(duration, () async {
       // Get.offAll(() => NewSplashScreen());
       if (!isLoggedIn) return Get.off(() => LoginPage());
       final user = context.read<Api>().getUser()!;
@@ -39,15 +42,14 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!result) {
         await Get.off(() => LoginPage(email: user.email));
       } else {
+        final user = api.getUser()!;
+        user.registerationToken = await notificationService.getFCMtoken();
+        await api.updateMe(user: user);
+        await api.updateMe(user: User(), isUpdate: false);
         await Get.off(() => const DrawerPage());
       }
     });
-    // Future.delayed((kSplashDuration.inSeconds - 0.5).seconds, () {
-    //   if (!mounted) return;
-    //   setState(() {
-    //     showSplash = false;
-    //   });
-    // });
+
     super.initState();
   }
 
@@ -112,35 +114,10 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Column(
                 children: [
                   Gap(10.height),
-                  // RichText(
-                  //   text: TextSpan(
-                  //     // text: Strings.welcomeTo,
-                  //     children: [
-                  //       TextSpan(
-                  //         text: ' BIO',
-                  //         style: TextStyle(
-                  //           color: Color(0xff3B4798),
-                  //           fontWeight: FontWeight.bold,
-                  //           fontSize: 60.w,
-                  //         ),
-                  //       ),
-                  //       TextSpan(
-                  //         text: 'SECURE',
-                  //         style: TextStyle(
-                  //           color: Color(0xff75B950),
-                  //           fontWeight: FontWeight.bold,
-                  //           fontSize: 60.w,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //     style: context.textTheme.headline5,
-                  //   ),
-                  // ),
-                  // BioSecureLogo(),
+
                   const AppName(),
                   Gap(2.height),
 
-                  // Gap(15.height),
                   MyElevatedButton(
                     text: Strings.login,
                     onPressed: () async => Get.off(() => const LoginPage()),

@@ -78,8 +78,7 @@ class SelectRolesRegistrationView extends StatelessWidget {
               ],
             ),
             child: SizedBox(
-              height: 50.h,
-              // width: 80.width,
+              height: 70.h,
               child: Center(
                 child: MyElevatedButton(
                   width: 80.width,
@@ -99,8 +98,6 @@ class SelectRolesRegistrationView extends StatelessWidget {
   Widget itemBuilder(BuildContext context, int index) {
     final cubit = context.read<RolesRegistrationCubit>();
     final role = cubit.state.rolesList[index];
-    return MySwitchTile(
-      model: role,
-    );
+    return MySwitchTile(model: role);
   }
 }

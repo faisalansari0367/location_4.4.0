@@ -18,4 +18,5 @@ abstract class LogRecordsRepo {
   });
 
   Stream<List<LogbookEntry>> get logbookRecordsStream;
+  List<LogbookEntry> get logbookRecords;
 }

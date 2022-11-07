@@ -75,7 +75,7 @@ class GeolocatorService {
     if (Platform.isAndroid) {
       locationSettings = AndroidSettings(
         // distanceFilter: 0,
-        
+
         // forceLocationManager: true,
         intervalDuration: const Duration(),
         // intervalDuration: duration,

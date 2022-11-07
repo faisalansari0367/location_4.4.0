@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:background_location/features/drawer/view/drawer_page.dart';
 import 'package:background_location/provider/base_model.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_roles_registration/cubit/select_roles_registration_state.dart';
 import 'package:background_location/ui/select_roles_registration/models/select_role_model.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,10 @@ class RolesRegistrationCubit extends BaseModel {
     user.allowedRoles = selectedRoles.map((e) => e.role).toList();
     final result = await api.updateUser(userData: user);
     result.when(
-      success: (data) => Get.offAll(() => DrawerPage()),
+      success: (data) {
+        Get.offAll(() => DrawerPage());
+        Get.to(() => MapsPage());
+      },
       failure: (error) => DialogService.failure(error: error),
     );
   }

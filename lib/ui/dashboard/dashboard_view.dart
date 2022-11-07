@@ -39,7 +39,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   void _init() async {
     final api = context.read<Api>();
-    final hasNoLogRecords = await api.logbookRecordsStream.isEmpty;
+    final hasNoLogRecords = api.logbookRecords.isEmpty;
     if (hasNoLogRecords) {
       api.getLogbookRecords();
     }

@@ -1,11 +1,12 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/otp/otp/otp_state.dart';
-import 'package:background_location/ui/select_roles_registration/view/select_roles_registration_page.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../features/drawer/view/drawer_page.dart';
 import '../../../widgets/dialogs/mail_sent_dialog.dart';
 
 class OtpCubit extends Cubit<OtpState> {
@@ -42,8 +43,8 @@ class OtpCubit extends Cubit<OtpState> {
         message: 'Otp verified successfully',
         onContinue: () async {
           Get.back();
-          // await Get.offAll(() => const DrawerPage());
-          await Get.offAll(() => const SelectRolesRegistrationPage());
+          await Get.offAll(() => const DrawerPage());
+          await Get.to(() => MapsPage());
         },
       ),
     );

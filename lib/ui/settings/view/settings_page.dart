@@ -73,10 +73,14 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             MyListTile(
               onTap: () async {
-                context.read<MapsRepo>().cancel();
-                GraphQlClient().hiveStore.reset();
-                await context.read<Api>().logout();
-                await Get.offAll(() => const LoginPage());
+                try {
+                  context.read<MapsRepo>().cancel();
+                  GraphQlClient().hiveStore.reset();
+                  await context.read<Api>().logout();
+                  await Get.offAll(() => const LoginPage());
+                } catch (e) {
+                  print(e);
+                }
               },
               text: Strings.logout,
               trailing: const Icon(Icons.logout),

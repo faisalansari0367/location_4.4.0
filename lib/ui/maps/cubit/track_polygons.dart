@@ -61,7 +61,7 @@ class TrackPolygons {
   //
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
     if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) return;
-    print('calling update function');
+
     _userIsInside(polygonsInCoverage, currentPosition);
     // this.polygonsInCoverage.add(polygonsInCoverage);
 
@@ -155,7 +155,7 @@ class TrackPolygons {
       attemptOfShowingPopUp = 0;
 
       logbookEntryHandler.update(false, currentPolygon!);
-      // currentPolygon = null;
+      currentPolygon = null;
     }
   }
 

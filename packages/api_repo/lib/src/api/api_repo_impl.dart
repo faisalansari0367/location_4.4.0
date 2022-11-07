@@ -31,7 +31,7 @@ class ApiRepo implements Api {
     _authRepo = AuthRepoImpl(client: _client, box: _box);
     _userRepo = UserRepoImpl(client: _client, box: _box);
     _functionsRepo = FunctionsRepoImpl(client: _client);
-    _authRepo.updateMe(user: User(), isUpdate: false);
+   
     // _localesApi = LocalesRepo();
     // await _localesApi.initLocale();
   }
@@ -244,4 +244,8 @@ class ApiRepo implements Api {
   Future<void> getEnvdToken() {
     return _functionsRepo.getEnvdToken();
   }
+
+  @override
+  
+  List<LogbookEntry> get logbookRecords => _logRecordsRepo.logbookRecords;
 }

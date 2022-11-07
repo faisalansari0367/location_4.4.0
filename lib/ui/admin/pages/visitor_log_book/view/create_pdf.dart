@@ -72,7 +72,7 @@ class CreatePDf {
                     pw.SizedBox(height: 10),
                     if (data.geofence?.pic != null)
                       pw.Text(
-                        'Geofence pic: ${data.geofence!.pic}',
+                        'Geofence PIC: ${data.geofence!.pic}',
                         style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
                       ),
                     pw.SizedBox(height: 10),

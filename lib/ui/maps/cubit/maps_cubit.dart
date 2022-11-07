@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/maps/cubit/track_polygons.dart';
+import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
@@ -34,6 +34,7 @@ class MapsCubit extends Cubit<MapsState> {
   final PolygonModel? polygonId;
   final MapsRepo _mapsRepo;
   final PolygonsService _polygonsService;
+  final GeofenceService geofenceService;
   final Api api;
   final MapsRepoLocal mapsRepoLocal;
   late MapsRepo mapsRepo;
@@ -46,6 +47,7 @@ class MapsCubit extends Cubit<MapsState> {
     this._pushNotificationService,
     this.api,
     this.mapsRepoLocal, {
+    required this.geofenceService,
     this.polygonId,
   }) : super(
           const MapsState(
@@ -190,50 +192,32 @@ class MapsCubit extends Cubit<MapsState> {
 
   void changeMapType(MapType type) async {
     emit(state.copyWith(mapType: type));
-    //  final mapController = await controller.future;
-    //  mapController.setMapStyle(type);
   }
 
   Future<void> updateCurrentLocation() async {
-    // print(controller.isCompleted);
-    dev.log('getting current location');
     final result = await GeolocatorService.getLastKnownPosition();
     if (result != null) {
       final _lastPosition = LatLng(result.latitude, result.longitude);
-      await mapController.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(
-            target: _lastPosition,
-            zoom: 20.151926040649414,
-          ),
-        ),
-      );
-      emit(
-        state.copyWith(
-          currentLocation: _lastPosition,
-        ),
-      );
+      animateCamera(_lastPosition);
+      emit(state.copyWith(currentLocation: _lastPosition));
     }
     final currentPosition = await GeolocatorService.getCurrentPosition();
-    dev.log('found current location ${currentPosition.toString()}');
-
     final target = LatLng(currentPosition.latitude, currentPosition.longitude);
+
+    animateCamera(target);
+    emit(state.copyWith(currentLocation: target));
+  }
+
+  void animateCamera(LatLng latLng) async {
+    if (isClosed) return;
     if (!controller.isCompleted) {
       await controller.future;
     }
-    await mapController.animateCamera(
+    mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: target,
+          target: latLng,
           zoom: 20.151926040649414,
-        ),
-      ),
-    );
-    emit(
-      state.copyWith(
-        currentLocation: LatLng(
-          currentPosition.latitude,
-          currentPosition.longitude,
         ),
       ),
     );
@@ -257,42 +241,39 @@ class MapsCubit extends Cubit<MapsState> {
   //   return polygon.first;
   // }
 
-  Future<void> zoom(double zoom) async {
-    emit(state.copyWith(zoom: min(max(1, state.zoom + zoom), 20)));
-    print(state.zoom);
-    await mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: state.currentLocation,
-          zoom: state.zoom,
-        ),
-      ),
-    );
-  }
+  // Future<void> zoom(double zoom) async {
+  //   emit(state.copyWith(zoom: min(max(1, state.zoom + zoom), 20)));
+  //   print(state.zoom);
+  //   await mapController.animateCamera(
+  //     CameraUpdate.newCameraPosition(
+  //       CameraPosition(
+  //         target: state.currentLocation,
+  //         zoom: state.zoom,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   void getLocationUpdates() async {
-    // dev.log('lcoation updates is emitting');
-
-    // final popups = MapsPopups(notifyManager, mapsRepo, this);
-    final locationupdates = await GeolocatorService.getLocationUpdates();
-    // DeepCollection
-    // Set<PolygonModel> _polygons = {};
-    _positionSubscription = locationupdates.listen((event) {
+    geofenceService.getLocationUpdates((event) {
       final position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
-      final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
-        latLng: position,
-        polygons: state.polygons,
-        accuracy: event.accuracy,
-      );
-
-      if (polygonsInCoverage.isNotEmpty) {
-        trackPolygons.update(polygonsInCoverage, position);
-      }
-      // }
-
-      // dev.log('message ${polygonsInCoverage.length}');
+      print(position);
+      if (event.speed > 0) animateCamera(position);
     });
+    // final locationupdates = await GeolocatorService.getLocationUpdates();
+    // _positionSubscription = locationupdates.listen((event) {
+
+    //   final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
+    //     latLng: position,
+    //     polygons: state.polygons,
+    //     accuracy: event.accuracy,
+    //   );
+
+    //   if (polygonsInCoverage.isNotEmpty) {
+    //     trackPolygons.update(polygonsInCoverage, position);
+    //   }
+    // });
   }
 
   void stopLocationUpdates() => _positionSubscription?.cancel();
@@ -302,7 +283,6 @@ class MapsCubit extends Cubit<MapsState> {
     stopLocationUpdates();
     trackPolygons.dispose();
     _polygonsService.clear();
-    // mapsRepo.cancel();
     return super.close();
   }
 }

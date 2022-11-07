@@ -259,4 +259,8 @@ class LocalApi extends Api {
     // TODO: implement getEnvdToken
     throw UnimplementedError();
   }
+
+  @override
+  
+  List<LogbookEntry> get logbookRecords => [];
 }

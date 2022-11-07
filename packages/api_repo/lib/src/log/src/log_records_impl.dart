@@ -252,12 +252,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Stream<List<LogbookEntry>> get logbookRecordsStream => storage.logbookRecordsStream;
-
-  @override
   Future<LogbookEntry?> getLogRecord(String geofenceId) async {
     if (_logRecords.isEmpty) {
-     
       await _completer.future;
     }
     final userId = storageService.getUser()?.id;
@@ -287,7 +283,7 @@ class LogRecordsImpl implements LogRecordsRepo {
     //   }
     // });
 
-    // print(latestRecord.id); 
+    // print(latestRecord.id);
 
     final recordsPast15Minutes = recordsByUser.where((element) {
       if (element.form.isEmpty) {
@@ -328,13 +324,15 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   void _sortById() => _logRecords.sort((a, b) => b.id!.compareTo(a.id!));
+
+  @override
+  Stream<List<LogbookEntry>> get logbookRecordsStream => storage.logbookRecordsStream;
+  
+  @override
+  List<LogbookEntry> get logbookRecords => _logRecords;
 }
 
-
-// Geofence a 
-// entry date 
-
+// Geofence a
+// entry date
 
 // geofence b
-
-

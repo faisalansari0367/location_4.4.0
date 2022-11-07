@@ -16,10 +16,7 @@ class MyConnectivity {
   static var _first = true;
   static bool isConnected = true;
 
-  Stream<bool> get connectionStream {
-    // _checkConnectivity();
-    return _controller.stream;
-  }
+  Stream<bool> get connectionStream => _controller.stream;
 
   MyConnectivity() {
     if (_isInited) return;
@@ -67,36 +64,7 @@ class MyConnectivity {
       _first = false;
       return;
     }
-    // await 1.seconds;
     _debouncer.call(_checkConnectivity);
-
-    // switch (event) {
-    //   case ConnectivityResult.wifi:
-    //   case ConnectivityResult.mobile:
-    //   case ConnectivityResult.ethernet:
-    //     _controller.add(true);
-    //     _show(
-    //       title: 'Internet found',
-    //       msg: 'You can use our services in normal mode',
-    //       bgColor: Colors.green,
-    //       state: true,
-    //     );
-
-    //     break;
-    //   case ConnectivityResult.none:
-    //     // isConnected = false;
-    //     _controller.add(false);
-
-    //     _show(
-    //       title: 'No Internet found',
-    //       msg: 'You can use our services in offline mode',
-    //       bgColor: Colors.red,
-    //       state: false,
-    //     );
-
-    //     break;
-    //   default:
-    // }
   }
 
   void _show({

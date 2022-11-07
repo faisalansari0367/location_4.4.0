@@ -63,7 +63,8 @@ class SelectRoleView extends StatelessWidget {
               children: [
                 // Gap(10.height),
                 Text(
-                  Strings.selectYourRole,
+                  // Strings.selectYourRole,
+                  'Update Your Details\nor Select Additional Roles',
                   style: context.textTheme.headline5,
                 ),
                 Gap(2.height),
