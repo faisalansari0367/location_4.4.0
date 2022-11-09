@@ -7,6 +7,7 @@ abstract class BaseModel extends ChangeNotifier {
   late Api api;
   late LocalApi localApi;
   late Api apiService;
+  bool mounted = true;
 
   BaseModel(BuildContext context) {
     api = context.read<Api>();
@@ -17,7 +18,7 @@ abstract class BaseModel extends ChangeNotifier {
       _emit(baseState.copyWith(isConnected: event));
     });
   }
-  
+
   BaseModelState baseState = BaseModelState();
 
   void setLoading(bool value) {
@@ -27,7 +28,13 @@ abstract class BaseModel extends ChangeNotifier {
 
   void _emit(BaseModelState state) {
     this.baseState = state;
-    notifyListeners();
+    if (mounted) notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    mounted = false;
+    super.dispose();
   }
 }
 

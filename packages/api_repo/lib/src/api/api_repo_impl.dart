@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:api_repo/configs/client.dart';
+import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -19,27 +23,40 @@ class ApiRepo implements Api {
 
   ApiRepo();
 
+  StreamSubscription<BoxEvent>? _onUserChange;
+
   @override
   Future<void> init({required String baseUrl, required Box box}) async {
-    await Hive.initFlutter();
-    _box = await Hive.openBox('storage');
+    _box = box;
     final storage = StorageService(box: _box);
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token);
-    _userStream(_box, storage.userKey);
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
-    _authRepo = AuthRepoImpl(client: _client, box: _box);
+    _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
     _userRepo = UserRepoImpl(client: _client, box: _box);
     _functionsRepo = FunctionsRepoImpl(client: _client);
-   
-    // _localesApi = LocalesRepo();
-    // await _localesApi.initLocale();
+    _userStream(_box, storage.userKey);
+  }
+
+  Future<void> changeUserBox(String email) async {
+    try {
+      _box = await Hive.openBox(email.trim());
+      await init(baseUrl: Endpoints.baseUrl, box: _box);
+    } catch (e) {
+      log('error while opening box for user $email');
+    }
   }
 
   void _userStream(Box box, String key) {
-    box.watch(key: key).listen((event) {
+    _onUserChange?.cancel();
+    _onUserChange = box.watch(key: key).listen((event) {
+      log(event.deleted.toString());
       final storage = StorageService(box: _box);
-      _client.token = storage.getToken();
+      final token = storage.getToken();
+      if (token != null) {
+        _client.token = (token);
+      }
+      log('updating the token ${_client.token}');
     });
   }
 
@@ -129,8 +146,8 @@ class ApiRepo implements Api {
   UserData? getUserData() => _authRepo.getUserData();
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1}) {
-    return _logRecordsRepo.getLogbookRecords(page: page);
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 20}) {
+    return _logRecordsRepo.getLogbookRecords(page: page, limit: limit);
   }
 
   @override
@@ -246,6 +263,5 @@ class ApiRepo implements Api {
   }
 
   @override
-  
   List<LogbookEntry> get logbookRecords => _logRecordsRepo.logbookRecords;
 }

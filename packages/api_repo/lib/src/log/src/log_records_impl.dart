@@ -20,6 +20,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   final _completer = Completer<void>();
 
+  List<LogbookEntry> _logRecords = [];
   // LogbookEntry? currentLogRecordEntry;
 
   /// [LogRecordsImpl] constructor
@@ -27,10 +28,8 @@ class LogRecordsImpl implements LogRecordsRepo {
     storageService = StorageService(box: box);
     storage = LogRecordsLocalService(box: box);
     logbookRecordsStream.listen((event) => _logRecords = event);
-    getLogbookRecords();
+    _logRecords = storage.logRecords;
   }
-
-  List<LogbookEntry> _logRecords = [];
 
   int getDifference(DateTime? date) {
     if (date == null) return 0;
@@ -98,11 +97,29 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1}) async {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 20}) async {
     try {
-      var queryParameters = {'page': page, 'limit': 100};
+      // client.token = storageService.getToken();
+      final queryParameters = {'page': page, 'limit': limit};
       final result = await client.get(Endpoints.logRecords, queryParameters: queryParameters);
       final data = LogbookResponseModel.fromJson(result.data);
+      final ids = <int>{};
+      // final difference = data.data!.toSet().difference(_logRecords.toSet());
+      final records = <LogbookEntry>[..._logRecords, ...data.data!];
+ 
+      for (var item in records) {
+        ids.add(item.id!);
+      }
+
+      // final _filteredRecords = records.toSet().toList();
+      // print(records.length);
+      records.retainWhere((element) {
+        final result = ids.contains(element.id!);
+        if (result) ids.remove(element.id!);
+        return result;
+      });
+
+      data.data = records;
       storage.saveLogbookRecords(data);
       if (!_completer.isCompleted) {
         _completer.complete();
@@ -327,12 +344,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   @override
   Stream<List<LogbookEntry>> get logbookRecordsStream => storage.logbookRecordsStream;
-  
+
   @override
   List<LogbookEntry> get logbookRecords => _logRecords;
 }
-
-// Geofence a
-// entry date
-
-// geofence b

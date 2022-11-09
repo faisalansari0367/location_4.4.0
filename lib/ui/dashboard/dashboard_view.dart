@@ -5,6 +5,7 @@ import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:background_location/ui/emergency_warning/emergency_warning.dart';
 import 'package:background_location/ui/envd/cubit/graphql_client.dart';
 import 'package:background_location/ui/envd/view/evnd_page.dart';
+import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/records/records_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
@@ -39,7 +40,12 @@ class _DashboardViewState extends State<DashboardView> {
 
   void _init() async {
     final api = context.read<Api>();
+    final mapsApi = context.read<MapsRepo>();
+
     final hasNoLogRecords = api.logbookRecords.isEmpty;
+    if (!mapsApi.hasPolygons) {
+      await mapsApi.getAllPolygon();
+    }
     if (hasNoLogRecords) {
       api.getLogbookRecords();
     }

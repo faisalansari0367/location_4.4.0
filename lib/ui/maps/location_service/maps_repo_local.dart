@@ -119,4 +119,7 @@ class MapsRepoLocal implements MapsRepo {
   Future<ApiResult<LogbookEntry>> updateForm(String geofenceId, String form) {
     return storage.updateForm(geofenceId, form);
   }
+
+  @override
+  bool get hasPolygons => _controller.value.isNotEmpty;
 }

@@ -40,7 +40,7 @@ class MapsApi implements MapsRepo {
   Future<void> init() async {
     storage = MapsStorageService();
     await storage.init();
-    await getAllPolygon();
+    // await getAllPolygon();
   }
 
   @override
@@ -108,4 +108,7 @@ class MapsApi implements MapsRepo {
   Future<void> saveAllPolygon(List<PolygonModel> polygons) {
     return storage.saveAllPolygon(polygons);
   }
+
+  @override
+  bool get hasPolygons => _controller.value.isNotEmpty;
 }

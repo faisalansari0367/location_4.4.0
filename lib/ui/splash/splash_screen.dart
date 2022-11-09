@@ -42,15 +42,22 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!result) {
         await Get.off(() => LoginPage(email: user.email));
       } else {
-        final user = api.getUser()!;
-        user.registerationToken = await notificationService.getFCMtoken();
-        await api.updateMe(user: user);
-        await api.updateMe(user: User(), isUpdate: false);
+        await _init();
         await Get.off(() => const DrawerPage());
       }
     });
 
     super.initState();
+  }
+
+  Future<void> _init() async {
+    final api = context.read<Api>();
+    final notificationService = context.read<PushNotificationService>();
+    final user = api.getUser()!;
+    user.registerationToken = await notificationService.getFCMtoken();
+    api.updateMe(user: user);
+    
+    // await api.updateMe(user: User(), isUpdate: false);
   }
 
   @override

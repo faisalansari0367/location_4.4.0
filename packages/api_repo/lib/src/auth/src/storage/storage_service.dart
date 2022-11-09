@@ -8,7 +8,8 @@ import '../../../../api_repo.dart';
 
 class _Keys {
   static const String user = 'user';
-  static const String token = 'token';
+  static const String token = 'token', users = 'users';
+
   static const String userData = 'userData';
   static const String userRoles = 'userRoles';
   static const String signInModel = 'signInModel';
@@ -19,6 +20,8 @@ class _Keys {
 }
 
 abstract class LocalStorage {
+  List<String> get users;
+  Future<void> setUsers(String user);
   User? getUser();
   Future<void> setUser(Map<String, dynamic> user);
   Future<void> setUserForms(UserFormsData forms);
@@ -171,8 +174,8 @@ class StorageService implements LocalStorage {
   }
 
   @override
-  SignInModel? getSignInData() {
-    final data = box.get(_Keys.signInModel);
+  SignInModel? getSignInData({String? key}) {
+    final data = box.get(key ?? _Keys.signInModel);
     if (data == null) return null;
     return SignInModel.fromMap(Map<String, dynamic>.from(data));
   }
@@ -246,4 +249,14 @@ class StorageService implements LocalStorage {
   Future<void> setUserForms(UserFormsData forms) async {
     await box.put(_Keys.forms, forms.toJson());
   }
+
+  @override
+  Future<void> setUsers(String user) {
+    final _users = users.toSet();
+    _users.add(user);
+    return box.put(_Keys.users, _users);
+  }
+
+  @override
+  List<String> get users => box.get(_Keys.users, defaultValue: []);
 }

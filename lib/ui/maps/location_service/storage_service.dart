@@ -80,8 +80,7 @@ class MapsStorageService implements MapsRepo {
   // }
 
   @override
-  void cancel() {
-  }
+  void cancel() {}
 
   @override
   Future<ApiResult> logBookEntry(String pic, String? form, String locationId, {bool isExiting = false}) async {
@@ -119,4 +118,7 @@ class MapsStorageService implements MapsRepo {
       return ApiResult.failure(error: NetworkExceptions.defaultError('Entry not found'));
     }
   }
+
+  @override
+  bool get hasPolygons => _box.get(_Keys._getAllPolygonKey) != null;
 }

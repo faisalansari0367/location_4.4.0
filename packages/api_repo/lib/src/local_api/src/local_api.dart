@@ -33,7 +33,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1}) {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100}) {
     throw UnimplementedError();
   }
 
@@ -100,6 +100,13 @@ class LocalApi extends Api {
 
   @override
   Future<void> init({required String baseUrl, required Box box}) async {
+    const path = "/data/user/0/com.itrakassets.biosecure/app_flutter";
+    // final dir = await Directory(path).list().toList();
+    // for (var item in dir) {
+    //   print(item.path.split('/').last);
+    // }
+    // print(dir);
+
     storage = StorageService(box: box);
   }
 
@@ -116,17 +123,27 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<User>> signIn({required SignInModel data}) async {
     try {
+      final box = await Hive.openBox(data.email.trim());
+      await init(baseUrl: '', box: box);
       final savedModel = storage.getSignInData();
-      if (savedModel != data) return const ApiResult.failure(error: NetworkExceptions.defaultError('User not found'));
+      if (savedModel != data) {
+        return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('User not found'),
+        );
+      }
       final user = storage.getUser();
       if (user != null) {
         storage.setIsLoggedIn(true);
         return ApiResult.success(data: user);
       } else {
-        return const ApiResult.failure(error: NetworkExceptions.defaultError('User not found'));
+        return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('User not found'),
+        );
       }
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('User not found'));
+      return const ApiResult.failure(
+        error: NetworkExceptions.defaultError('User not found'),
+      );
     }
   }
 
@@ -261,6 +278,5 @@ class LocalApi extends Api {
   }
 
   @override
-  
   List<LogbookEntry> get logbookRecords => [];
 }

@@ -76,7 +76,7 @@ class MapsCubit extends Cubit<MapsState> {
     // so that device can determin the connectivity status
     await 200.milliseconds.delay();
     await updateCurrentLocation();
-    if (polygonId != null) moveToSelectedPolygon(polygonId!);
+    // if (polygonId != null) moveToSelectedPolygon(polygonId!);
     getLocationUpdates();
     emit(state.copyWith());
   }
@@ -130,6 +130,7 @@ class MapsCubit extends Cubit<MapsState> {
   UserData? get userData => api.getUserData();
 
   Future<void> _getAllPolygon() async {
+    if (mapsRepo.hasPolygons) return;
     final allPolygon = await mapsRepo.getAllPolygon();
     allPolygon.when(
       success: (allPolygon) {
@@ -276,11 +277,12 @@ class MapsCubit extends Cubit<MapsState> {
     // });
   }
 
-  void stopLocationUpdates() => _positionSubscription?.cancel();
+  // void stopLocationUpdates() => _positionSubscription?.cancel();
 
   @override
   Future<void> close() {
-    stopLocationUpdates();
+    geofenceService.stopTimers();
+    // stopLocationUpdates();
     trackPolygons.dispose();
     _polygonsService.clear();
     return super.close();

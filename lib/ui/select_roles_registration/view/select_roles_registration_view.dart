@@ -38,7 +38,7 @@ class SelectRolesRegistrationView extends StatelessWidget {
               Container(
                 // color: Colors.white,
                 child: Text(
-                  'Select at least one role',
+                  'Choose Service Roles',
                   style: context.textTheme.headline6,
                 ),
               ),

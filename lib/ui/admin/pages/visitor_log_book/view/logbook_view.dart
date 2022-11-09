@@ -38,6 +38,12 @@ class _LogbookViewState extends State<LogbookView> {
       DeviceOrientation.portraitDown,
     ]);
     super.initState();
+
+    final cubit = context.read<LogBookCubit>();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // cubit.getLogbookRecords();
+      cubit.refreshIndicatorKey.currentState?.show();
+    });
   }
 
   static const list = [if (kDebugMode) 'id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration'];
@@ -59,28 +65,26 @@ class _LogbookViewState extends State<LogbookView> {
                 ),
             ],
           ),
-          body: Padding(
-            padding: EdgeInsets.zero,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
+          body: RefreshIndicator(
+            onRefresh: cubit.getRecords,
+            key: cubit.refreshIndicatorKey,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SingleChildScrollView(
-                  controller: cubit.scrollController,
-                  child: StreamBuilder<List<LogbookEntry>>(
-                    stream: cubit.api.logbookRecordsStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return DataTable(
-                        dataRowHeight: 60,
-                        columns: list.map((e) => _dataColumn(e.capitalize!)).toList(),
-                        rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
-                        columnSpacing: 31,
-                      );
-                    },
-                  ),
+                controller: cubit.scrollController,
+                child: StreamBuilder<List<LogbookEntry>>(
+                  stream: cubit.api.logbookRecordsStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return DataTable(
+                      dataRowHeight: 60,
+                      columns: list.map((e) => _dataColumn(e.capitalize!)).toList(),
+                      rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
+                      columnSpacing: 31,
+                    );
+                  },
                 ),
               ),
             ),

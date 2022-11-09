@@ -2,6 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/envd/cubit/graphql_client.dart';
+import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
@@ -75,7 +76,10 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () async {
                 try {
                   context.read<MapsRepo>().cancel();
-                  GraphQlClient().hiveStore.reset();
+                  context.read<GeofenceService>().cancel();
+
+                  final client = GraphQlClient();
+                  await client.clearStorage();
                   await context.read<Api>().logout();
                   await Get.offAll(() => const LoginPage());
                 } catch (e) {

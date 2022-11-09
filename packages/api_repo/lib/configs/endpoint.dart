@@ -1,4 +1,9 @@
 class Endpoints {
+  /// Base url for the api
+  static const baseUrl = 'http://13.55.174.146:3000';
+
+
+
   static const records = '/records';
   static const users = '/users';
   static const auth = '/auth';

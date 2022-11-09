@@ -7,7 +7,8 @@ class AnimatedButton extends StatefulWidget {
   const AnimatedButton({
     Key? key,
     required this.child,
-    this.onTap, this.scale,
+    this.onTap,
+    this.scale,
   }) : super(key: key);
 
   @override
@@ -40,10 +41,11 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   void _onTapUp(TapUpDetails details) => _controller.reverse();
 
   void _onTap() async {
-    if (widget.onTap != null) {}
     await _controller.forward();
     await _controller.reverse();
-    widget.onTap!();
+    if (widget.onTap != null) {
+      widget.onTap!();
+    }
   }
 
   @override

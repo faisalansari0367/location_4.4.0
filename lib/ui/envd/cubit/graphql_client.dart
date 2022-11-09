@@ -38,9 +38,18 @@ class GraphQlClient {
   //   init();/
   // }
 
-  Future<bool> init() async {
+  Future<void> initStorage() async {
     await initHiveForFlutter();
     hiveStore = await HiveStore.open();
+  }
+
+  Future<void> clearStorage() async {
+    await initStorage();
+    await hiveStore.reset();
+  }
+
+  Future<bool> init() async {
+    await initStorage();
     storage = GrahphQlStorage(box: hiveStore.box);
     token = await _getEnvdToken();
     if (token == null) {

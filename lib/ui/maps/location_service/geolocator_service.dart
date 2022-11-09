@@ -64,12 +64,12 @@ class GeolocatorService {
     return latLng;
   }
 
-  static Future<Stream<Position>> getLocationUpdates() async {
+  static Stream<Position> getLocationUpdates() {
     return instance.getPositionStream(locationSettings: _getLocationSettings);
   }
 
   static LocationSettings get _getLocationSettings {
-    const duration = Duration(seconds: 1);
+    // const duration = Duration(seconds: 1);
     late LocationSettings locationSettings;
 
     if (Platform.isAndroid) {

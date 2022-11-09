@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/widgets/empty_screen.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,9 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
   final selectedZones = Set<int>();
   late Stream<List<PolygonModel>> _stream;
   FilterType filterType = FilterType.created_by_me;
+  bool hasPolygon = false;
   UserData? userData;
+  late MapsRepo _mapsRepo;
 
   setFilter() {
     setState(() {
@@ -37,25 +40,16 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
   @override
   void initState() {
     userData = context.read<Api>().getUserData();
+    _mapsRepo = context.read<MapsRepo>();
+    _stream = _mapsRepo.polygonStream;
     _getPolygon();
-    // Future.delayed(1.seconds, () {
-    //   DialogService.showDialog(child: EmergencyWarningDialog());
-    // });
-    _stream = context.read<MapsRepo>().polygonStream.map(
-          (event) => event
-              .where(
-                (element) => element.createdBy?.id == context.read<Api>().getUserData()?.id,
-              )
-              .toList(),
-        );
     super.initState();
   }
 
   Future<void> _getPolygon() async {
-    final repo = context.read<MapsRepo>();
-    final hasData = await repo.polygonStream.isEmpty;
-    repo.getAllPolygon();
-    if (hasData) {}
+    if (!_mapsRepo.hasPolygons) {
+      _mapsRepo.getAllPolygon();
+    }
   }
 
   @override
@@ -72,129 +66,101 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
         ),
         centreTitle: true,
       ),
-      bottomNavigationBar: Container(
-        height: 100,
-        decoration: MyDecoration.decoration(),
-        child: SizedBox(
-          child: Center(
-            child: MyElevatedButton(
-              onPressed: () async {
-                await _warningDialog(context);
-              },
-              width: 90.width,
-              color: Colors.red,
-              height: 60.h,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Send Notification',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Gap(20.w),
-                  Icon(
-                    Icons.send,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        // child: Container(
-        //   decoration: MyDecoration.decoration(
-        //     color: Color.fromARGB(255, 255, 23, 23),
-        //     // color: Colors.grey,
-        //   ),
-        //   height: 100.h,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Text(
-        //         'Send Notification',
-        //         style: context.textTheme.bodyMedium?.copyWith(
-        //           fontWeight: FontWeight.bold,
-        //           fontSize: 32.sp,
-        //           color: Colors.white,
-        //         ),
-        //       ),
-        //       Gap(20.w),
-        //       Icon(
-        //         Icons.send,
-        //         color: Colors.white,
-        //         size: 40,
-        //       ),
-        //     ],
-        //   ),
-        // ),
-      ),
+      bottomNavigationBar: true ? _bottomNavbar(context) : null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            // Text(
-            //   'Emergency Warning',
-            //   style: context.textTheme.headline6?.copyWith(
-            //     color: Colors.red,
-            //     fontWeight: FontWeight.bold,
-            //     fontSize: 32.sp,
-            //   ),
-            // ),
-            Center(
-              child: Image.asset(
-                'assets/icons/warning_icon.png',
-                height: 100,
-              ),
-            ),
-
-            Text(
-              'Select A Location',
-              style: context.textTheme.headline6?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Gap(20.h),
-            if (userData!.role! == 'Admin') ...[
-              _buildFilters(context),
-              Gap(10.h),
-            ],
-
-            Expanded(
-              child: StreamBuilder<List<PolygonModel>>(
-                stream: filterPolygons(),
-                builder: (context, snapshot) {
-                  return Scrollbar(
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => Gap(10.h),
-                      itemCount: sort(snapshot.data ?? []).length,
-                      itemBuilder: (context, index) {
-                        final fence = snapshot.data![index];
-                        return GeofenceCard(
-                          onTap: () {
-                            final ids = selectedZones.where((element) => element == int.parse(fence.id!));
-                            if (ids.isEmpty) {
-                              selectedZones.add(int.parse(fence.id!));
-                            } else {
-                              selectedZones.remove(int.parse(fence.id!));
-                            }
-                            setState(() {});
-                          },
-                          isSelected: selectedZones.contains(int.parse(fence.id!)),
-                          item: fence,
+        child: true
+            ? Column(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/icons/warning_icon.png',
+                      height: 100,
+                    ),
+                  ),
+                  Text(
+                    'Select A Location',
+                    style: context.textTheme.headline6?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Gap(20.h),
+                  if (userData?.role == 'Admin') ...[
+                    _buildFilters(context),
+                    Gap(10.h),
+                  ],
+                  Expanded(
+                    child: StreamBuilder<List<PolygonModel>>(
+                      stream: filterPolygons(),
+                      builder: (context, snapshot) {
+                        return Scrollbar(
+                          child: ListView.separated(
+                            separatorBuilder: (context, index) => Gap(10.h),
+                            itemCount: sort(snapshot.data ?? []).length,
+                            itemBuilder: (context, index) {
+                              final fence = snapshot.data![index];
+                              return GeofenceCard(
+                                onTap: () {
+                                  final ids = selectedZones.where((element) => element == int.parse(fence.id!));
+                                  if (ids.isEmpty) {
+                                    selectedZones.add(int.parse(fence.id!));
+                                  } else {
+                                    selectedZones.remove(int.parse(fence.id!));
+                                  }
+                                  setState(() {});
+                                },
+                                isSelected: selectedZones.contains(int.parse(fence.id!)),
+                                item: fence,
+                              );
+                            },
+                          ),
                         );
                       },
+                      // ),
                     ),
-                  );
-                },
-                // ),
+                  ),
+                ],
+              )
+            : Center(
+                child: EmptyScreen(),
               ),
+      ),
+    );
+  }
+
+  Widget _bottomNavbar(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: MyDecoration.decoration(),
+      child: SizedBox(
+        child: Center(
+          child: MyElevatedButton(
+            onPressed: () async {
+              await _warningDialog(context);
+            },
+            width: 90.width,
+            color: Colors.red,
+            height: 60.h,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Send Notification',
+                  style: context.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28.sp,
+                    color: Colors.white,
+                  ),
+                ),
+                Gap(20.w),
+                Icon(
+                  Icons.send,
+                  color: Colors.white,
+                  size: 40,
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -238,15 +204,6 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
     );
   }
 
-  // Stream<List<PolygonModel>> filterPolygons() {
-  //   return filterType == FilterType.created_by_me
-  //       ? context
-  //           .read<MapsRepo>()
-  //           .polygonStream
-  //           .map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
-  //       : context.read<MapsRepo>().polygonStream;
-  // }
-
   List<PolygonModel> sort(List<PolygonModel>? list) {
     if (list == null) return [];
     if (list.isEmpty) return [];
@@ -254,15 +211,15 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
   }
 
   Stream<List<PolygonModel>> filterPolygons() {
-    return filterType == FilterType.created_by_me
-        ? context
-            .read<MapsRepo>()
-            .polygonStream
-            .map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
-        : context.read<MapsRepo>().polygonStream;
+    final filter = filterType == FilterType.created_by_me;
+    final stream = filter
+        ? _stream.map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
+        : _stream;
+    stream.isEmpty.then((value) => setState(() => hasPolygon = value));
+    return stream;
   }
 
-  _warningDialog(BuildContext context) async {
+  Future<void> _warningDialog(BuildContext context) async {
     DialogService.showDialog(
       child: DialogLayout(
         child: Padding(
@@ -285,14 +242,9 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                 ),
               ),
 
-              // yes no buttons
               Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Spacer(),
-                  // yes button
                   Gap(20.w),
-
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {

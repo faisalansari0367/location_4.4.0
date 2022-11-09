@@ -43,8 +43,8 @@ class OtpCubit extends Cubit<OtpState> {
         message: 'Otp verified successfully',
         onContinue: () async {
           Get.back();
-          await Get.offAll(() => const DrawerPage());
-          await Get.to(() => MapsPage());
+          Get.offAll(() => const DrawerPage());
+          Get.to(() => const MapsPage());
         },
       ),
     );

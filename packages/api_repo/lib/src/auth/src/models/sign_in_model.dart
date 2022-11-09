@@ -18,8 +18,8 @@ class SignInModel {
 
   factory SignInModel.fromMap(Map<String, dynamic> map) {
     return SignInModel(
-      email: map['email'] as String,
-      password: map['password'] as String,
+      email: map['email'].toString().trim(),
+      password: map['password'].toString().trim(),
     );
   }
 
@@ -30,10 +30,8 @@ class SignInModel {
   @override
   bool operator ==(covariant SignInModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.email == email &&
-      other.password == password;
+
+    return other.email.trim() == email.trim() && other.password.trim() == password.trim();
   }
 
   @override

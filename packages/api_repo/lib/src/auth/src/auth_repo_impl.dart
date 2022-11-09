@@ -16,7 +16,10 @@ class AuthRepoImpl implements AuthRepo {
   final Box box;
   final StorageService storage;
 
+  final Function(String userId) onUserChange;
+
   AuthRepoImpl({
+    required this.onUserChange,
     required this.client,
     required this.box,
   }) : storage = StorageService(box: box) {
@@ -43,23 +46,20 @@ class AuthRepoImpl implements AuthRepo {
       final model = UserResponse.fromJson((result.data));
       final userData = UserData.fromJson(result.data['data']['user']);
 
-      final oldUser = getUserData();
-      if (oldUser?.id != userData.id) {
-        storage.box.clear();
+      final oldUser = getUser();
+      if (oldUser?.id != model.data!.user!.id) {
+        storage.box.deleteAll(storage.box.keys);
       }
+      client.token = model.token!;
 
-      await setUserData(userData);
-      // if (model.data!.user!.role!.getRole.isAdmin) {
-      //   await updateUser(userData: UserData(role: model.data!.user!.role!, id: model.data!.user!.id));
-      // } else {
-      //   await updateMe(user: model.data!.user!);
-      // }
-      Future.wait([
+      await Future.wait([
+        setUserData(userData),
         storage.setToken(model.token!),
         storage.setUser(model.data!.user!.toJson()),
         storage.setIsLoggedIn(true),
         storage.setSignInData(data.toMap()),
       ]);
+
       return ApiResult.success(data: model.data!.user!);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -83,7 +83,7 @@ class AuthRepoImpl implements AuthRepo {
   Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
     try {
       final result = await client.patch(Endpoints.updateMe, data: isUpdate ? user.updateUser() : {});
-      final model = User.fromJson(result.data['data']); 
+      final model = User.fromJson(result.data['data']);
       final userData = UserData.fromJson(result.data['data']);
       await Future.wait([
         storage.setUserData(userData),
@@ -123,7 +123,11 @@ class AuthRepoImpl implements AuthRepo {
   Future<ApiResult<User>> updateUser({required UserData userData}) async {
     try {
       final json = userData.updateAllowedRoles();
-      final result = await client.patch('${Endpoints.users}/me', data: json);
+      final result = await client.patch(
+        '${Endpoints.users}/me',
+        options: Options(headers: {"Content-Type": "application/json"}),
+        data: json,
+      );
       final model = User.fromJson((result.data));
       final _userData = UserData.fromJson(result.data['data']);
       await storage.setUserData(_userData);

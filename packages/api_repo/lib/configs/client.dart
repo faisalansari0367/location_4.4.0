@@ -10,7 +10,6 @@ import 'api_logger.dart';
 
 export 'package:dio/dio.dart' show DioError, Response, Dio, Options;
 
-
 class Client {
   // String baseUrl = '';
   // String apiKey = '';
@@ -35,6 +34,10 @@ class Client {
   });
 
   // Client({this.token, this.baseUrl});
+
+  void setToken(String token) {
+    this.token = token;
+  }
 
   Client builder() {
     header = <String, Object>{};

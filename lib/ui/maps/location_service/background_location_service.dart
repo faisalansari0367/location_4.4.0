@@ -12,7 +12,7 @@ import 'geolocator_service.dart';
 import 'map_toolkit_utils.dart';
 
 class GeofenceService {
-  late StreamSubscription<Position>? _positionSubscription;
+  StreamSubscription<Position>? _positionSubscription;
   late TrackPolygons trackPolygons;
   Set<PolygonModel> polygons = {};
   ValueChanged<Position>? onLocationChanged;
@@ -26,7 +26,6 @@ class GeofenceService {
   }
 
   Future<void> getLocationUpdates(ValueChanged<Position>? onLocationChanged) async {
-    
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
       final position = LatLng(event.latitude, event.longitude);
@@ -42,7 +41,7 @@ class GeofenceService {
     });
   }
 
-  void cancel() {
-    _positionSubscription?.cancel();
-  }
+  void stopTimers() => trackPolygons.dispose();
+
+  void cancel() => _positionSubscription?.cancel();
 }

@@ -21,7 +21,7 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
   SelectRoleCubit(this.api, this.localApi, this.pushNotificationService)
       : super(
           SelectRoleState(
-            user: api.getUser()!,
+            user: api.getUser() ?? User(),
           ),
         ) {
     // api.userRolesStream.listen((event) {

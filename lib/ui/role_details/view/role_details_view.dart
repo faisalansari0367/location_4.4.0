@@ -286,6 +286,16 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
             map[name.toCamelCase] = value;
           },
         );
+      case 'countryOfResidency':
+        return CountryField(
+          label: name,
+          controller: controller,
+          countryName: map[name.toCamelCase] ?? userData[name.toCamelCase],
+          onCountryChanged: (value) {
+            controller.text = value;
+            map[name.toCamelCase] = value;
+          },
+        );
 
       case 'propertyName':
         return MyTextField(

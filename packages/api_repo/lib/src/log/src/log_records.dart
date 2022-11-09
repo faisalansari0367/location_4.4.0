@@ -3,7 +3,7 @@ import 'package:api_repo/api_result/api_result.dart';
 import '../../user/src/models/logbook_entry_model.dart';
 
 abstract class LogRecordsRepo {
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1});
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100});
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form});
   // Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId);
   Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId});

@@ -76,7 +76,7 @@ class MyConnectivity {
     if (isConnected == state) return;
     isConnected = state;
 
-    if (Get.isSnackbarOpen) await Get.closeCurrentSnackbar();
+    if (Get.isSnackbarOpen) Get.closeAllSnackbars();
     Get.showSnackbar(
       GetSnackBar(
         title: title,

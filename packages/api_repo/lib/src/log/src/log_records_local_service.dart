@@ -75,6 +75,7 @@ class LogRecordsLocalService {
 
   Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(LogbookResponseModel logbookResponseModel) async {
     try {
+      
       await box.put(_Keys.logRecords, logbookResponseModel.toJson());
       return ApiResult.success(data: logbookResponseModel);
     } catch (e) {
@@ -96,5 +97,6 @@ class LogRecordsLocalService {
     }
   }
 
+  List<LogbookEntry> get logRecords => _controller.value;
   Stream<List<LogbookEntry>> get logbookRecordsStream => _controller.stream;
 }
