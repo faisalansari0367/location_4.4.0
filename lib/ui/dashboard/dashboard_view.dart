@@ -21,6 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import '../../services/notifications/push_notifications.dart';
 import '../links_page/links_page.dart';
 
 class DashboardView extends StatefulWidget {
@@ -32,6 +33,7 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  static bool isInit = false;
   @override
   void initState() {
     _init();
@@ -39,9 +41,17 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   void _init() async {
+    if (isInit) {
+      return;
+    }
+    isInit = true;
     final api = context.read<Api>();
     final mapsApi = context.read<MapsRepo>();
-
+    final notificationService = context.read<PushNotificationService>();
+    final user = api.getUser()!;
+    user.registerationToken = await notificationService.getFCMtoken();
+    api.updateMe(user: user);
+    // await api.updateMe(user: User(), isUpdate: false);
     final hasNoLogRecords = api.logbookRecords.isEmpty;
     if (!mapsApi.hasPolygons) {
       await mapsApi.getAllPolygon();

@@ -4,6 +4,7 @@ import 'package:background_location/ui/admin/pages/visitor_log_book/cubit/logboo
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/create_pdf.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,7 +23,9 @@ class LogBookCubit extends Cubit<LogBookState> {
     // refreshIndicatorKey.currentState?.show();
 
     scrollController.addListener(() {
+      print(_isScrollingDown);
       if (isAtEnd) {
+        if (!_isScrollingDown) return;
         _debouncer.call(() {
           final page = state.entries.length / state.limit;
           final currentPage = page.round() + 1;
@@ -37,6 +40,14 @@ class LogBookCubit extends Cubit<LogBookState> {
   bool get isAtEnd {
     // add delta
     return scrollController.position.pixels >= scrollController.position.maxScrollExtent - 100;
+  }
+
+  // bool get _isScrolldingDown {
+  //   return scrollController.position.userScrollDirection == ScrollDirection.forward;
+  // }
+
+  bool get _isScrollingDown {
+    return scrollController.position.userScrollDirection == ScrollDirection.reverse;
   }
 
   Future<void> generatePDf() async {

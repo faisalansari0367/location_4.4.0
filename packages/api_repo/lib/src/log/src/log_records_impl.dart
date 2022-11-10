@@ -105,7 +105,8 @@ class LogRecordsImpl implements LogRecordsRepo {
       final data = LogbookResponseModel.fromJson(result.data);
       final ids = <int>{};
       // final difference = data.data!.toSet().difference(_logRecords.toSet());
-      final records = <LogbookEntry>[..._logRecords, ...data.data!];
+      // _logRecords.removeRange(0, 19);
+      final records = <LogbookEntry>[...data.data!, ..._logRecords];
 
       for (var item in records) {
         ids.add(item.id!);
@@ -126,10 +127,15 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (!_completer.isCompleted) {
         _completer.complete();
       }
+
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
+  }
+
+  void removeEntry(int id) {
+    _logRecords.removeWhere((element) => element.id == id);
   }
 
   // Future<ApiResult<LogbookEntry>> _updateLogRecord(int logId, String geofenceId, {String? form}) async {

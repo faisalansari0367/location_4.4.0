@@ -51,12 +51,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _init() async {
-    final api = context.read<Api>();
-    final notificationService = context.read<PushNotificationService>();
-    final user = api.getUser()!;
-    user.registerationToken = await notificationService.getFCMtoken();
-    api.updateMe(user: user);
-    
+    // final api = context.read<Api>();
+    // final notificationService = context.read<PushNotificationService>();
+    // final user = api.getUser()!;
+    // user.registerationToken = await notificationService.getFCMtoken();
+    // api.updateMe(user: user);
     // await api.updateMe(user: User(), isUpdate: false);
   }
 
