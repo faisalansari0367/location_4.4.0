@@ -2290,5 +2290,117 @@
         "APVMA registered product name": "UTOZYME FOAMING PESSARIES",
         "WHP (days)": "14",
         "ESI (days)": "14"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Actellic",
+        "Rate": "4.5",
+        "unit": "ml",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Reldan",
+        "Rate": "6",
+        "unit": "ml",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Fenitrothion",
+        "Rate": "10",
+        "unit": "ml",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "IGR",
+        "Rate": "5",
+        "unit": "ml",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Diacon",
+        "Rate": "20",
+        "unit": "ml",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Diacon S",
+        "Rate": "20",
+        "unit": "ml",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Amorphous silica (g,s)",
+        "Rate": "800",
+        "unit": "g/kg",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Azamethiphos",
+        "Rate": "500",
+        "unit": "g/l",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Carbaryl (g)",
+        "Rate": "500",
+        "unit": "g/l",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Chlorpyriphos- methyl (g)",
+        "Rate": "500",
+        "unit": "g/l",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Diatomaceous earth (g, s)",
+        "Rate": "500",
+        "unit": "g/l",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Methoprene (g)",
+        "Rate": "50",
+        "unit": "g/l",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Phosphine (f)",
+        "Rate": "1",
+        "unit": "g",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
+    },
+    {
+        "Product number": "Insecticide",
+        "APVMA registered product name": "Pirimiphos- methyl (g)",
+        "Rate": "900",
+        "unit": "g/l",
+        "WHP (days)": "0",
+        "ESI (days)": "0"
     }
 ]

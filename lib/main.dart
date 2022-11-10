@@ -23,6 +23,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:local_notification/local_notification.dart';
 
+import 'firebase_options.dart';
 import 'services/notifications/push_notifications.dart';
 import 'ui/maps/location_service/maps_api.dart';
 import 'ui/maps/location_service/maps_repo_local.dart';
@@ -65,7 +66,9 @@ Future<void> main() async {
   ]);
 
   await runZonedGuarded(() async {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await Hive.initFlutter();
     final _box = await Hive.openBox('storage');
     final notifications = AwesomeNotifications();

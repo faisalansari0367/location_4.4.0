@@ -3,6 +3,8 @@ class WitholdingPeriodModel {
   String? aPVMARegisteredProductName;
   String? wHPDays;
   String? eSIDays;
+  String? rate;
+  String? unit;
 
   WitholdingPeriodModel({
     this.productNumber,
@@ -16,6 +18,8 @@ class WitholdingPeriodModel {
     aPVMARegisteredProductName = json['APVMA registered product name'];
     wHPDays = json['WHP (days)'];
     eSIDays = json['ESI (days)'];
+    rate = json['Rate'];
+    unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {

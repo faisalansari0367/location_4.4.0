@@ -232,7 +232,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
       // dataRowHeight: 10.height,
       columns: [
         _column('Chemical Applied'),
-        _column('Rate (Tonne/ Ha)'),
+        _column('Rate'),
         _column('Application Date'),
         _column('WHP/ ESI/ EAFI'),
         _column(''),

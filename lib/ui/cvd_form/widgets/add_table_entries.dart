@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
   final whpDays = TextEditingController();
   final rateController = TextEditingController();
   final applicationDate = TextEditingController(text: DateTime.now().toIso8601String());
+  late TextEditingController unitController = TextEditingController();
 
   @override
   void initState() {
@@ -69,13 +71,38 @@ class _AddTableEntriesState extends State<AddTableEntries> {
             ),
           ),
           Gap(10.h),
-          MyTextField(
-            hintText: 'Rate (Tonne/ Ha)',
-            controller: rateController,
-            textInputType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Rate (Tonne/ Ha)',
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: MyTextField(
+                  // hintText: 'Rate (Tonne/ Ha)',
+                  controller: rateController,
+                  textInputType: TextInputType.number,
+                  validator: Validator.none,
+
+                  decoration: InputDecoration(
+                    labelText: 'Rate',
+                  ),
+                ),
+              ),
+              Gap(20.w),
+              Expanded(
+                child: MyTextField(
+                  // hintText: 'Rate (Tonne/ Ha)',
+                  // controller: rateController,
+                  // textInputType: TextInputType.number,
+                  onChanged: (s) {},
+                  controller: unitController,
+                  // value: '',
+                  // options: ['ml', 'g/kg', 'g/l', 'g'],
+                  validator: Validator.none,
+                  decoration: InputDecoration(
+                    labelText: 'Unit',
+                    hintText: "ml , g/kg , g/l , g",
+                  ),
+                ),
+              ),
+            ],
           ),
           Gap(10.h),
           MyDateField(
@@ -94,7 +121,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
             hintText: 'WHP/ ESI/ EAFI',
             controller: whpDays,
             decoration: InputDecoration(
-              labelText: 'WHP/ ESI/ EAFI',
+              labelText: 'WHP / ESI / EAFI',
             ),
           ),
           Gap(10.h),
@@ -107,7 +134,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
               final chemicalTableModel = ChemicalTable(
                 applicationDate: MyDecoration.formatDate(DateTime.parse(applicationDate.text)),
                 chemicalName: productName.text,
-                rate: rateController.text,
+                rate: rateController.text + ' ' + unitController.text,
                 wHP: whpDays.text,
               );
 
@@ -132,9 +159,9 @@ class _AddTableEntriesState extends State<AddTableEntries> {
       return const Iterable.empty();
     }
     return list.where(
-      (element) => element.aPVMARegisteredProductName!.toLowerCase().contains(
-            textEditingValue.text.toLowerCase(),
-          ),
+      (element) =>
+          element.aPVMARegisteredProductName!.toLowerCase().contains(textEditingValue.text.toLowerCase()) ||
+          element.productNumber!.toLowerCase().contains(textEditingValue.text.toLowerCase()),
     );
   }
 
@@ -203,6 +230,9 @@ class _AddTableEntriesState extends State<AddTableEntries> {
     setState(() {
       selected = option;
       productName.text = option.aPVMARegisteredProductName!;
+      unitController.text = option.unit ?? '';
+      rateController.text = option.rate ?? '';
+
       whpDays.text = '${option.wHPDays!} / ${option.eSIDays} / ';
     });
   }

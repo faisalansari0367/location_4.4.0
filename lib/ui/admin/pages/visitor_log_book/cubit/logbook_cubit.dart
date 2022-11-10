@@ -24,10 +24,9 @@ class LogBookCubit extends Cubit<LogBookState> {
     scrollController.addListener(() {
       if (isAtEnd) {
         _debouncer.call(() {
-          final page = state.entries.length / 20;
-          final _page = (page.floorToDouble().toInt());
-          emit(state.copyWith(page: _page + 1));
-          // getRecords();
+          final page = state.entries.length / state.limit;
+          final currentPage = page.round() + 1;
+          emit(state.copyWith(page: currentPage));
           refreshIndicatorKey.currentState?.show();
         });
       }

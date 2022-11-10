@@ -29,17 +29,17 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>BIOSECURE needs camera access to scan QR codes</string>
+	<string>BIOPLUS needs camera access to scan QR codes</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>BIOSECURE uses Face Id to authenticate user </string>
+	<string>BIOPLUS uses Face Id to authenticate user </string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>BIOSECURE uses your location to find nearby fields</string>
+	<string>BIOPLUS uses your location to find nearby fields</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>BIOSECURE uses your location to find nearby fields</string>
+	<string>BIOPLUS uses your location to find nearby fields</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>BIOSECURE uses your location to find nearby fields</string>
+	<string>BIOPLUS uses your location to find nearby fields</string>
 	<key>NSMotionUsageDescription</key>
-	<string>BIOSECURE uses location to show nearby fields</string>
+	<string>BIOPLUS uses location to show nearby fields</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

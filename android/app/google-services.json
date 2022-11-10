@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:646027499696:android:8e3189167729c4a1368375",
+        "android_client_info": {
+          "package_name": "com.itrakassets.bioplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646027499696-m8ci0vh4abchuikesvtes93gft6nccj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ-m43ElGFbIPRO5bDHjlOuy5i0vBAKYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646027499696-m8ci0vh4abchuikesvtes93gft6nccj1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "646027499696-9df8orh5npjkn0jfstd1soct1or0b783.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itrakassets.biosecure"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:646027499696:android:836c0b3edfe9e92b368375",
         "android_client_info": {
           "package_name": "com.itrakassets.biosecure"
@@ -31,10 +67,10 @@
               "client_type": 3
             },
             {
-              "client_id": "646027499696-fp2hpjffbt9h8p017sreacj30riqmfif.apps.googleusercontent.com",
+              "client_id": "646027499696-9df8orh5npjkn0jfstd1soct1or0b783.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.itrakassets.itrak"
+                "bundle_id": "com.itrakassets.biosecure"
               }
             }
           ]
@@ -67,10 +103,10 @@
               "client_type": 3
             },
             {
-              "client_id": "646027499696-fp2hpjffbt9h8p017sreacj30riqmfif.apps.googleusercontent.com",
+              "client_id": "646027499696-9df8orh5npjkn0jfstd1soct1or0b783.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.itrakassets.itrak"
+                "bundle_id": "com.itrakassets.biosecure"
               }
             }
           ]

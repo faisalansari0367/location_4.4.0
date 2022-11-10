@@ -106,18 +106,20 @@ class LogRecordsImpl implements LogRecordsRepo {
       final ids = <int>{};
       // final difference = data.data!.toSet().difference(_logRecords.toSet());
       final records = <LogbookEntry>[..._logRecords, ...data.data!];
- 
+
       for (var item in records) {
         ids.add(item.id!);
       }
 
       // final _filteredRecords = records.toSet().toList();
       // print(records.length);
-      records.retainWhere((element) {
-        final result = ids.contains(element.id!);
-        if (result) ids.remove(element.id!);
-        return result;
-      });
+      records
+        ..retainWhere((element) {
+          final result = ids.contains(element.id!);
+          if (result) ids.remove(element.id!);
+          return result;
+        })
+        ..sort((a, b) => b.id!.compareTo(a.id!));
 
       data.data = records;
       storage.saveLogbookRecords(data);
