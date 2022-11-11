@@ -29,13 +29,6 @@ class PushNotificationService {
   Future<void> initmessaging() async {
     await FirebaseMessaging.instance.requestPermission();
     await FirebaseMessaging.instance.getInitialMessage().then((message) {});
-    // instance.onBackgroundMessage((RemoteMessage message) async {
-    //   await localNotificationService.showNotification(
-    //     title: message.data['title'],
-    //     message: message.data['body'],
-    //   );
-    // });
-
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
         if (message.notification?.title == 'WARNING!') {

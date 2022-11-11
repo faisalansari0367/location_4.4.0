@@ -50,7 +50,8 @@ class _DashboardViewState extends State<DashboardView> {
     final notificationService = context.read<PushNotificationService>();
     final user = api.getUser()!;
     user.registerationToken = await notificationService.getFCMtoken();
-    api.updateMe(user: user);
+    
+    await api.updateMe(user: user, );
     // await api.updateMe(user: User(), isUpdate: false);
     final hasNoLogRecords = api.logbookRecords.isEmpty;
     if (!mapsApi.hasPolygons) {

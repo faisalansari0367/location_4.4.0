@@ -58,7 +58,9 @@ class User {
     // data[UserKeys.lastName] = lastName;
     // data[UserKeys.email] = email;
     // data[UserKeys.phoneNumber] = phoneNumber;
-    data[UserKeys.role] = role;
+    if (role != 'Admin') {
+      data[UserKeys.role] = role;
+    }
     data['registrationToken'] = registerationToken;
 
     return data;

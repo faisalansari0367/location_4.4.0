@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!result) {
         await Get.off(() => LoginPage(email: user.email));
       } else {
-        await _init();
+        // await _init();
         await Get.off(() => const DrawerPage());
       }
     });
@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // user.registerationToken = await notificationService.getFCMtoken();
     // api.updateMe(user: user);
     // await api.updateMe(user: User(), isUpdate: false);
-  }
+    }
 
   @override
   Widget build(BuildContext context) {
