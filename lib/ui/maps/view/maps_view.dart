@@ -274,12 +274,12 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     } else if (state.isEditingFence) {
       result = _showEditSheet();
     } else {
-      result = _defaultNavbar();
+      result = _defaultNavbar(state);
     }
     return result;
   }
 
-  Row _defaultNavbar() {
+  Row _defaultNavbar(MapsState state) {
     final allowedRoles = [Roles.producer, Roles.agent, Roles.consignee, Roles.admin];
     final isAllowed = allowedRoles.contains(cubit.userData?.role?.camelCase?.getRole);
     return Row(
@@ -302,6 +302,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             iconData: LineIcons.drawPolygon,
             title: 'Locations List',
             onTap: () => BottomSheetService.showSheet(
+              padding: EdgeInsets.zero,
               child: DraggableScrollableSheet(
                 maxChildSize: 0.9,
                 expand: false,
@@ -320,6 +321,13 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             ),
           ),
         ],
+        BottomNavbarItem(
+          iconData: (Icons.directions_walk_rounded),
+          isSelected: state.isTracking,
+          color: state.isTracking ? context.theme.primaryColor : null,
+          onTap: cubit.toggleTracking,
+          title: 'Live Tracking',
+        ),
         // Spacer(),
       ],
     );

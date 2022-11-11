@@ -100,29 +100,28 @@ class LogRecordsImpl implements LogRecordsRepo {
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 20}) async {
     try {
       // client.token = storageService.getToken();
-      final queryParameters = {'page': page, 'limit': limit};
+      final queryParameters = {'page': 1, 'limit': 100};
       final result = await client.get(Endpoints.logRecords, queryParameters: queryParameters);
       final data = LogbookResponseModel.fromJson(result.data);
-      final ids = <int>{};
+      // final ids = <int>{};
       // final difference = data.data!.toSet().difference(_logRecords.toSet());
       // _logRecords.removeRange(0, 19);
-      final records = <LogbookEntry>[...data.data!, ..._logRecords];
+      // final records = <LogbookEntry>[...data.data!, ..._logRecords];
 
-      for (var item in records) {
-        ids.add(item.id!);
-      }
+      // final elementsBetweenPage = records.sublist(data.data!.indexOf(data.data!.first), data.data!.length - 1);
 
-      // final _filteredRecords = records.toSet().toList();
-      // print(records.length);
-      records
-        ..retainWhere((element) {
-          final result = ids.contains(element.id!);
-          if (result) ids.remove(element.id!);
-          return result;
-        })
-        ..sort((a, b) => b.id!.compareTo(a.id!));
+      // for (final dbEntry in data.data!) {
+      // for (final localEntry in _logRecords) {
+      //   final hasElement = dbEntry.id == localEntry.id;
+      //   if (hasElement) {
+      //     records.remove(dbEntry);
+      //     records.add(localEntry);
+      //   }
+      // }
+      // }
 
-      data.data = records;
+      // records.sort((a, b) => b.id!.compareTo(a.id!));
+      // data.data = records;
       storage.saveLogbookRecords(data);
       if (!_completer.isCompleted) {
         _completer.complete();

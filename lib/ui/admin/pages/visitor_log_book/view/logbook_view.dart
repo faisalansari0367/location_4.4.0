@@ -3,6 +3,7 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:background_location/widgets/listview/infinite_table.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
@@ -68,24 +69,22 @@ class _LogbookViewState extends State<LogbookView> {
           body: RefreshIndicator(
             onRefresh: cubit.getRecords,
             key: cubit.refreshIndicatorKey,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                controller: cubit.scrollController,
-                child: StreamBuilder<List<LogbookEntry>>(
-                  stream: cubit.api.logbookRecordsStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return DataTable(
-                      dataRowHeight: 60,
-                      columns: list.map((e) => _dataColumn(e.capitalize!)).toList(),
-                      rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
-                      columnSpacing: 31,
-                    );
-                  },
-                ),
+            child: InfiniteTable(
+              hasReachedMax: state.hasReachedMax,
+              onRefresh: cubit.onRefresh,
+              table: StreamBuilder<List<LogbookEntry>>(
+                stream: cubit.api.logbookRecordsStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return DataTable(
+                    dataRowHeight: 60,
+                    columns: list.map((e) => _dataColumn(e.capitalize!)).toList(),
+                    rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
+                    columnSpacing: 31,
+                  );
+                },
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/widgets/empty_screen.dart';
 import 'package:background_location/widgets/my_appbar.dart';
@@ -56,8 +57,9 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: Text(
+        title: AutoSizeText(
           'Emergency Warning',
+          maxLines: 1,
           style: context.textTheme.headline6?.copyWith(
             color: Colors.red,
             fontWeight: FontWeight.bold,
@@ -68,7 +70,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
       ),
       bottomNavigationBar: true ? _bottomNavbar(context) : null,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        padding: EdgeInsets.symmetric(horizontal: 0.w),
         child: true
             ? Column(
                 children: [
@@ -86,8 +88,15 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                   ),
                   Gap(20.h),
                   if (userData?.role == 'Admin') ...[
-                    _buildFilters(context),
-                    Gap(10.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Row(
+                        children: [
+                          _buildFilters(context),
+                          Gap(10.h),
+                        ],
+                      ),
+                    ),
                   ],
                   Expanded(
                     child: StreamBuilder<List<PolygonModel>>(
@@ -96,6 +105,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                         return Scrollbar(
                           child: ListView.separated(
                             separatorBuilder: (context, index) => Gap(10.h),
+                            padding: kPadding,
                             itemCount: sort(snapshot.data ?? []).length,
                             itemBuilder: (context, index) {
                               final fence = snapshot.data![index];

@@ -12,7 +12,6 @@ import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -70,7 +69,7 @@ class MapsCubit extends Cubit<MapsState> {
 
   final Completer<GoogleMapController> controller = Completer();
   late GoogleMapController mapController;
-  StreamSubscription<Position>? _positionSubscription;
+  // StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
     // so that device can determin the connectivity status
@@ -92,6 +91,10 @@ class MapsCubit extends Cubit<MapsState> {
     final id2 = api.getUserData()?.id;
     // final roles = [Roles.producer, Roles.agent, Roles.consignee].contains(userData?.role?.camelCase?.getRole);
     return id2 == id;
+  }
+
+  void toggleTracking() {
+    emit(state.copyWith(isTracking: !state.isTracking));
   }
 
   Future<void> doneEditing() async {
@@ -259,8 +262,9 @@ class MapsCubit extends Cubit<MapsState> {
     geofenceService.getLocationUpdates((event) {
       final position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
-      print(position);
-      if (event.speed > 0) animateCamera(position);
+      if (state.isTracking) {
+        if (event.speed > 0) animateCamera(position);
+      }
     });
     // final locationupdates = await GeolocatorService.getLocationUpdates();
     // _positionSubscription = locationupdates.listen((event) {

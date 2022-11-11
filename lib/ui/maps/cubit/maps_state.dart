@@ -17,8 +17,10 @@ class MapsState extends Equatable {
   final PolygonModel? currentPolygon;
   final Color selectedColor;
   final bool isConnected;
+  final bool isTracking;
 
   const MapsState({
+    this.isTracking = true,
     this.isConnected = true,
     this.selectedColor = Colors.blue,
     this.currentPolygon,
@@ -48,8 +50,10 @@ class MapsState extends Equatable {
     double? zoom,
     PolygonModel? currentPolygon,
     Color? selectedColor,
+    bool? isTracking,
   }) {
     return MapsState(
+      isTracking: isTracking ?? this.isTracking,
       isConnected: isConnected ?? this.isConnected,
       insideFence: insideFence ?? this.insideFence,
       currentLocation: currentLocation ?? this.currentLocation,
@@ -72,10 +76,11 @@ class MapsState extends Equatable {
         currentLocation,
         mapType,
         // latLngs,
-        polygons,
+        polygons, isTracking,
         isEditingFence,
         circles,
         addingGeofence,
+
         fieldAsset,
         zoom,
         if (currentPolygon != null) currentPolygon!,

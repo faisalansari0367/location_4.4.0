@@ -9,7 +9,10 @@ class LogBookState extends Equatable {
   final bool isLoading;
   final int limit;
   final int page;
+  final bool hasReachedMax;
+
   const LogBookState({
+    this.hasReachedMax = false,
     this.entries = const [],
     this.headers = const [],
     this.isLoading = false,
@@ -18,7 +21,7 @@ class LogBookState extends Equatable {
   });
 
   @override
-  List<Object?> get props => [entries, isLoading, headers, page, limit];
+  List<Object?> get props => [entries, isLoading, headers, page, limit, hasReachedMax];
 
   LogBookState copyWith({
     List<LogbookEntry>? entries,
@@ -26,8 +29,10 @@ class LogBookState extends Equatable {
     bool? isLoading,
     int? limit,
     int? page,
+    bool? hasReachedMax,
   }) {
     return LogBookState(
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       entries: entries ?? this.entries,
       headers: headers ?? this.headers,
       isLoading: isLoading ?? this.isLoading,

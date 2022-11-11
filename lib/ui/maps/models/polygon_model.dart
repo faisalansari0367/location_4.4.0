@@ -64,9 +64,9 @@ class PolygonModel {
     // if (coordinates is List && coordinates.isNotEmpty) {
     //   polygons = coordinates[0];
     // }
-    if (!(json['createdBy'] is Map)) {
-      print(json['createdBy']);
-    }
+    // if (!(json['createdBy'] is Map)) {
+    //   print(json['createdBy']);
+    // }
 
     return PolygonModel(
       createdBy: UserData.fromJson(Map<String, dynamic>.from(json['createdBy'])),
@@ -84,6 +84,7 @@ class PolygonModel {
     var polygons = <dynamic>[];
     final points = json['points'];
     final coordinates = points['coordinates'];
+
     if (coordinates is List && coordinates.isNotEmpty) {
       polygons = coordinates[0];
     }

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BottomSheetService {
-  static void showSheet({required Widget child}) {
+  static void showSheet({required Widget child, EdgeInsets? padding}) {
     Get.bottomSheet(
       Container(
         decoration: MyDecoration.bottomSheetDecoration(),
-        padding: kPadding,
+        padding: padding?? kPadding,
         child: child,
       ),
       enterBottomSheetDuration: 175.milliseconds,

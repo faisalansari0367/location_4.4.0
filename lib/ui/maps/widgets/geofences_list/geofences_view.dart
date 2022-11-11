@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/ui/maps/widgets/geofences_list/geofence_card.dart';
@@ -57,67 +58,16 @@ class _GeofencesListState extends State<GeofencesList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              'Select A Location',
-              style: context.textTheme.headline6?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Spacer(),
-            AnimatedButton(
-              scale: 0.8,
-              onTap: Get.back,
-              child: Container(
-                padding: EdgeInsets.all(5.r),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.clear),
-              ),
-            ),
-          ],
+        Padding(
+          padding: kPadding,
+          child: Column(
+            children: [
+              _selectLocationHeader(context),
+              // filter
+              _filterBy(context),
+            ],
+          ),
         ),
-        // filter
-        Row(
-          children: [
-            Text(
-              'Filter by',
-              style: TextStyle(
-                fontSize: 15.h,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey,
-              ),
-            ),
-            ...FilterType.values
-                .map(
-                  (e) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    child: InputChip(
-                      selected: filterType == e,
-                      backgroundColor: Colors.grey.shade200,
-                      selectedColor: context.theme.primaryColor.withOpacity(1),
-                      // elevation: 5,
-                      onPressed: setFilter,
-                      checkmarkColor: filterType == e ? Colors.white : Colors.grey,
-
-                      label: Text(
-                        e.name.replaceAll('_', ' ').capitalize!,
-                        style: TextStyle(
-                          fontSize: 15.h,
-                          color: filterType == e ? Colors.white : Colors.grey.shade700,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                .toList()
-          ],
-        ),
-
-        Gap(30.h),
         Expanded(
           child: StreamBuilder<List<PolygonModel>>(
             stream: filterPolygons(),
@@ -125,7 +75,8 @@ class _GeofencesListState extends State<GeofencesList> {
               return Scrollbar(
                 controller: widget.controller,
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => Gap(10.h),
+                  separatorBuilder: (context, index) => Gap(15.h),
+                  padding: EdgeInsets.symmetric(horizontal: kPadding.left),
                   controller: widget.controller,
                   itemCount: sort(snapshot.data ?? []).length,
                   itemBuilder: (context, index) {
@@ -139,6 +90,70 @@ class _GeofencesListState extends State<GeofencesList> {
               );
             },
             // ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _filterBy(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'Filter by',
+          style: TextStyle(
+            fontSize: 15.h,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey,
+          ),
+        ),
+        ...FilterType.values
+            .map(
+              (e) => Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: InputChip(
+                  selected: filterType == e,
+                  backgroundColor: Colors.grey.shade200,
+                  selectedColor: context.theme.primaryColor.withOpacity(1),
+                  // elevation: 5,
+                  onPressed: setFilter,
+                  checkmarkColor: filterType == e ? Colors.white : Colors.grey,
+
+                  label: Text(
+                    e.name.replaceAll('_', ' ').capitalize!,
+                    style: TextStyle(
+                      fontSize: 15.h,
+                      color: filterType == e ? Colors.white : Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+              ),
+            )
+            .toList()
+      ],
+    );
+  }
+
+  Row _selectLocationHeader(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'Select A Location',
+          style: context.textTheme.headline6?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Spacer(),
+        AnimatedButton(
+          scale: 0.8,
+          onTap: Get.back,
+          child: Container(
+            padding: EdgeInsets.all(5.r),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.clear),
           ),
         ),
       ],
