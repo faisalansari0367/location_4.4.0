@@ -31,6 +31,7 @@ class LogbookEntryHandler {
 
   void cancel() {
     markExitHandler?.cancel();
+    isExiting = null;
   }
 
   void _logbookEntry([bool isExiting = false]) async {

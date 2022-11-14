@@ -41,7 +41,7 @@ class _LogbookViewState extends State<LogbookView> {
     super.initState();
 
     final cubit = context.read<LogBookCubit>();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // cubit.getLogbookRecords();
       cubit.refreshIndicatorKey.currentState?.show();
     });

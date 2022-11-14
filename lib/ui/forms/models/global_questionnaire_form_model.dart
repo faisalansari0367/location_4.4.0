@@ -20,7 +20,7 @@ class GlobalQuestionnaireFormModel {
 
   final q1 = QuestionData(question: '1. Are other people travelling onto the property with you?');
   final q2 = QuestionData(question: '2. Have all visitors had a Q Fever vaccination?');
-  final q3 = QuestionData(question: '3. Are you Covid free?');
+  final q3 = QuestionData(question: '3. Do you have cold or flu symptoms?');
   final q4 = QuestionData(question: '4. Have any visitors been overseas in the last 7 days?');
   final q5 = QuestionData(
       question:

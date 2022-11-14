@@ -3,8 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/gen/assets.gen.dart';
-import 'package:background_location/services/notifications/push_notifications.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     final api = context.read<Api>();
-    final notificationService = context.read<PushNotificationService>();
+    // final notificationService = context.read<PushNotificationService>();
     final isLoggedIn = api.isLoggedIn;
     final duration = (kSplashDuration.inMilliseconds - 1000).milliseconds;
     Future.delayed(duration, () async {
@@ -40,24 +40,17 @@ class _SplashScreenState extends State<SplashScreen> {
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
       if (!result) {
-        await Get.off(() => LoginPage(email: user.email));
+        await Get.offAll(() => LoginPage(email: user.email));
       } else {
         // await _init();
-        await Get.off(() => const DrawerPage());
+        Get.offAll(() => const DrawerPage());
+        Get.to(() => MapsPage());
       }
     });
 
     super.initState();
   }
 
-  Future<void> _init() async {
-    // final api = context.read<Api>();
-    // final notificationService = context.read<PushNotificationService>();
-    // final user = api.getUser()!;
-    // user.registerationToken = await notificationService.getFCMtoken();
-    // api.updateMe(user: user);
-    // await api.updateMe(user: User(), isUpdate: false);
-    }
 
   @override
   Widget build(BuildContext context) {

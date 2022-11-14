@@ -39,7 +39,7 @@ class Client {
     this.token = token;
   }
 
-  Client builder() {
+  Client builder({bool logging = true}) {
     header = <String, Object>{};
     header!.putIfAbsent('Accept', () => 'application/json');
     if (apiKey != null) {
@@ -47,7 +47,11 @@ class Client {
     }
     header!.putIfAbsent('Content-Type', () => 'application/json');
     _dio = Dio(options);
-    _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true));
+    if (logging) {
+      _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true));
+    } else {
+      _dio!.interceptors.clear();
+    }
     // _dio!.interceptors.add(ApiInterceptors());
 
     _dio!.options.baseUrl = baseUrl;
@@ -69,7 +73,7 @@ class Client {
     return this;
   }
 
-  Client simpleBuilder() {
+  Client simpleBuilder({bool logging = false}) {
     header = <String, Object>{};
     header!.putIfAbsent('Accept', () => 'application/json');
     if (apiKey != null) {
@@ -77,8 +81,11 @@ class Client {
     }
     header!.putIfAbsent('Content-Type', () => 'application/json');
     _dio = Dio(options);
-    _dio!.interceptors.add(dioInterceptor);
-    _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: false, responseHeader: true));
+    if (!logging) {
+      // final logger = PrettyDioLogger(requestHeader: true, requestBody: false, responseHeader: true);
+      // _dio!.interceptors.remove(logger);
+      _dio!.interceptors.clear(); // _dio!.interceptors.add(dioInterceptor);
+    }
 
     _dio!.options.baseUrl = "";
     _dio!.options.headers = header;
@@ -130,12 +137,13 @@ class Client {
 
   Future<Response<T>> get<T>(
     String path, {
+    bool logging = true,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
     void Function(int, int)? onReceiveProgress,
   }) async {
-    final headers = builder().setProtectedApiHeader();
+    final headers = builder(logging: logging).setProtectedApiHeader();
     final dio = headers.setUrlEncoded().build();
     // log('$baseUrl$path');
 

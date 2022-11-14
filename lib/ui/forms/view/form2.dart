@@ -39,7 +39,7 @@ class _Form2State extends State<Form2> {
   @override
   void initState() {
     final api = context.read<Api>();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       api.getUserRoles().then((value) {
         value.when(
           success: (s) {

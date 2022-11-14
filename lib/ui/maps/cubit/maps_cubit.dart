@@ -262,6 +262,7 @@ class MapsCubit extends Cubit<MapsState> {
     geofenceService.getLocationUpdates((event) {
       final position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
+      print(event.speed);
       if (state.isTracking) {
         if (event.speed > 0) animateCamera(position);
       }

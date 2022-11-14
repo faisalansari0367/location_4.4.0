@@ -77,7 +77,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 try {
                   context.read<MapsRepo>().cancel();
                   context.read<GeofenceService>().cancel();
-
                   final client = GraphQlClient();
                   await client.clearStorage();
                   await context.read<Api>().logout();

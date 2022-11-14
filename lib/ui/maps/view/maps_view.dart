@@ -76,8 +76,8 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   @override
   void initState() {
     cubit = context.read<MapsCubit>();
-    WidgetsBinding.instance?.addObserver(this);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final api = context.read<Api>();
       final userData = api.getUserData();
       if (userData == null) {
@@ -169,7 +169,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   void dispose() {
     // context.read<MapsRepo>().cancel();
     dev.log('maps view is disposed');
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

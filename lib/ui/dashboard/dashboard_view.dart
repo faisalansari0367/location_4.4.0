@@ -33,7 +33,7 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  static bool isInit = false;
+  bool isInit = false;
   @override
   void initState() {
     _init();
@@ -44,15 +44,20 @@ class _DashboardViewState extends State<DashboardView> {
     if (isInit) {
       return;
     }
+    // api.userStream.listen((event) {
+    //   if (!api.isLoggedIn) {
+    //     log('user is logged in ${api.isLoggedIn}');
+    //     isInit = false;
+    //   }
+    // });
     isInit = true;
     final api = context.read<Api>();
     final mapsApi = context.read<MapsRepo>();
     final notificationService = context.read<PushNotificationService>();
     final user = api.getUser()!;
     user.registerationToken = await notificationService.getFCMtoken();
-    
-    await api.updateMe(user: user, );
-    // await api.updateMe(user: User(), isUpdate: false);
+
+    await api.updateMe(user: user);
     final hasNoLogRecords = api.logbookRecords.isEmpty;
     if (!mapsApi.hasPolygons) {
       await mapsApi.getAllPolygon();

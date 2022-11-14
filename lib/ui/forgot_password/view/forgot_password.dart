@@ -30,7 +30,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   void initState() {
     final email = context.read<Api>().getUser()?.email ?? '';
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.text = email;
       setState(() {});
     });

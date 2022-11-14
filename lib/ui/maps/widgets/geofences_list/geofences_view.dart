@@ -4,10 +4,11 @@ import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/ui/maps/widgets/geofences_list/geofence_card.dart';
 import 'package:background_location/widgets/animations/animations.dart';
+import 'package:background_location/widgets/empty_screen.dart';
+import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 enum FilterType { created_by_me, all }
@@ -64,7 +65,7 @@ class _GeofencesListState extends State<GeofencesList> {
             children: [
               _selectLocationHeader(context),
               // filter
-              _filterBy(context),
+              if (context.read<Api>().getUser()?.role == 'Admin') _filterBy(context),
             ],
           ),
         ),
@@ -74,11 +75,17 @@ class _GeofencesListState extends State<GeofencesList> {
             builder: (context, snapshot) {
               return Scrollbar(
                 controller: widget.controller,
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Gap(15.h),
+                child: MyListview(
+                  data: snapshot.data ?? [],
+                  emptyWidget: Center(
+                    child: EmptyScreen(
+                      message: 'You have not created any geofences',
+                      messsageOnTop: true,
+                    ),
+                  ),
                   padding: EdgeInsets.symmetric(horizontal: kPadding.left),
                   controller: widget.controller,
-                  itemCount: sort(snapshot.data ?? []).length,
+                  // itemCount: sort(snapshot.data ?? []).length,
                   itemBuilder: (context, index) {
                     final fence = snapshot.data![index];
                     return GeofenceCard(

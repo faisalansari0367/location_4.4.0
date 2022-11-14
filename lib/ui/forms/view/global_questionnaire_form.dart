@@ -65,7 +65,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                     question: model.q3.question,
                     selectedValue: model.q3.value,
                     onChanged: (s) {
-                      if (s.toLowerCase() == 'no') {
+                      if (s.toLowerCase() == 'yes') {
                         DialogService.error('Consider the safety of others before you enter this zone.');
                       }
                       onChanged(model.q3, s);

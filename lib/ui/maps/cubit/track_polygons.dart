@@ -166,9 +166,9 @@ class TrackPolygons {
   void _stopTimers() {
     attemptOfShowingPopUp = 0;
     hidePopUpTimer.cancel();
-    // notifyManager.cancel();
+    notifyManager.cancel();
     dontShowAgain.cancel();
-    // logbookEntryHandler.cancel();
+    logbookEntryHandler.cancel();
   }
 }
 

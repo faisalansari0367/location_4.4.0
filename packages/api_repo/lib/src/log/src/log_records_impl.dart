@@ -101,8 +101,14 @@ class LogRecordsImpl implements LogRecordsRepo {
     try {
       // client.token = storageService.getToken();
       final queryParameters = {'page': 1, 'limit': 100};
-      final result = await client.get(Endpoints.logRecords, queryParameters: queryParameters);
+      // final result = await client
+      //     .simpleBuilder()
+      //     .setProtectedApiHeader()
+      //     .get(Endpoints.logRecords, queryParameters: queryParameters);
+      final result = await client.get(Endpoints.logRecords, queryParameters: queryParameters, logging: false);
       final data = LogbookResponseModel.fromJson(result.data);
+      // data.data
+      data.data!.sort((a, b) => b.id!.compareTo(a.id!));
       // final ids = <int>{};
       // final difference = data.data!.toSet().difference(_logRecords.toSet());
       // _logRecords.removeRange(0, 19);
