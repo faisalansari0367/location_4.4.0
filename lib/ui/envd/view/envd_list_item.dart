@@ -1,17 +1,12 @@
-import 'dart:io';
-
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/services/notifications/forms_storage_service.dart';
 import 'package:background_location/ui/envd/models/envd_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-
-import '../../../widgets/dialogs/dialog_service.dart';
 
 class EnvdListItem extends StatelessWidget {
   final Items items;
@@ -92,16 +87,6 @@ class EnvdListItem extends StatelessWidget {
     );
   }
 
-  // Widget _buildTime() {
-  //   return Row(
-  //     children: [
-  //       _buildText('Updated At', MyDecoration.formatDate(DateTime.parse(items.updatedAt!))),
-  //       Spacer(),
-  //       _buildText('Submitted At', MyDecoration.formatDate(DateTime.parse(items.submittedAt!))),
-  //     ],
-  //   );
-  // }
-
   Widget _gap() => const Divider();
 
   Widget _buildPdfButton(BuildContext context) {
@@ -129,16 +114,17 @@ class EnvdListItem extends StatelessWidget {
 
   Future<void> openPdf(BuildContext context, String url) async {
     final api = context.read<Api>();
-    final result = await api.openPdf(url);
-    result.when(
-      success: (s) async {
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
-        await file.writeAsBytes(s);
-        await OpenFile.open(file.path);
-      },
-      failure: (e) => DialogService.failure(error: e),
-    );
+    final formsService = FormsStorageService(api);
+    final result = await formsService.saveEnvdPdf(url, items.number!);
+    // result.when(
+    //   success: (s) async {
+    //     final directory = await getApplicationDocumentsDirectory();
+    //     final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
+    //     await file.writeAsBytes(s);
+    //     await OpenFile.open(file.path);
+    //   },
+    //   failure: (e) => DialogService.failure(error: e),
+    // );
   }
 
   Widget _buildText(String text, String value) {
@@ -158,7 +144,6 @@ class EnvdListItem extends StatelessWidget {
           value,
           maxLines: 1,
           style: TextStyle(
-            // color: _getColors().computeLuminance() >= 0.5 ? Colors.black : Colors.white,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),

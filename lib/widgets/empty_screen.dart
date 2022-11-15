@@ -8,12 +8,14 @@ import 'package:lottie/lottie.dart';
 class EmptyScreen extends StatelessWidget {
   final bool messsageOnTop;
   final String? message;
-  const EmptyScreen({Key? key, this.message, this.messsageOnTop = false}) : super(key: key);
+  final Widget? subWidget;
+  const EmptyScreen({Key? key, this.message, this.messsageOnTop = false, this.subWidget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final messageWidget = Text(
       message ?? ' No data found',
+      textAlign: TextAlign.center,
       style: context.textTheme.headline6?.copyWith(
         fontWeight: FontWeight.bold,
       ),
@@ -28,6 +30,10 @@ class EmptyScreen extends StatelessWidget {
         ),
         Gap(20.h),
         if (!messsageOnTop) messageWidget,
+        if (subWidget != null) ...[
+          Gap(10.h),
+          subWidget!,
+        ]
       ],
     );
   }

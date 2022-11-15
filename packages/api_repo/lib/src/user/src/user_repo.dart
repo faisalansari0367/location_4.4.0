@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
@@ -6,7 +7,6 @@ import '../../../api_result/api_result.dart';
 import '../../../api_result/network_exceptions/network_exceptions.dart';
 import '../../../configs/client.dart';
 import '../../../configs/endpoint.dart';
-import 'models/models.dart';
 
 abstract class UserRepo {
   Future<ApiResult<List<UserRoles>>> getUserRoles();
@@ -65,7 +65,9 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data) async {
     try {
-      await client.patch(Endpoints.updateMe, data: data);
+      final result = await client.patch(Endpoints.updateMe, data: data);
+      final model = UserData.fromJson(result.data['data']);
+      await storage.setUserData(model);
       // storage.setRoleData(role, data);
       // ignore: void_checks
 

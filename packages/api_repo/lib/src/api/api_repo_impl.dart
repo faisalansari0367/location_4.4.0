@@ -1,15 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/functions/functions_repo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
 import '../../api_result/api_result.dart';
 import '../auth/src/storage/storage_service.dart';
 import '../log/log_records.dart';
+
+export '../functions/models/notifications_model.dart';
 
 class ApiRepo implements Api {
   late Client _client;
@@ -258,10 +262,28 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<void> getEnvdToken() {
-    return _functionsRepo.getEnvdToken();
+  List<LogbookEntry> get logbookRecords => _logRecordsRepo.logbookRecords;
+
+  @override
+  bool get isInit => _authRepo.isInit;
+
+  @override
+  bool setIsInit(bool isInit) {
+    return _authRepo.setIsInit(isInit);
   }
 
   @override
-  List<LogbookEntry> get logbookRecords => _logRecordsRepo.logbookRecords;
+  Future<Uint8List> downloadPdf(String url) {
+    return _functionsRepo.downloadPdf(url);
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> markExitById(String logRecordId) {
+    return _logRecordsRepo.markExitById(logRecordId);
+  }
+
+  @override
+  Future<ApiResult<NotificationResponseModel>> getSentNotifications() {
+    return _functionsRepo.getSentNotifications();
+  }
 }

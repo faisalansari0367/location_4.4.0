@@ -122,4 +122,8 @@ class MapsRepoLocal implements MapsRepo {
 
   @override
   bool get hasPolygons => _controller.value.isNotEmpty;
+  
+  @override
+  // TODO: implement polygonsCompleter
+  Future<List<PolygonModel>> get polygonsCompleter => storage.getAllPolygon().then((value) => value.when(success: (s) => s, failure: (f) => []));
 }

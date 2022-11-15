@@ -83,8 +83,10 @@ class GeolocatorService {
     } else if (Platform.isIOS) {
       locationSettings = AppleSettings(
         // timeLimit: duration,
-        pauseLocationUpdatesAutomatically: true,
+        pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
+        accuracy: LocationAccuracy.best,
+        // activityType: Acti
       );
     } else {
       locationSettings = const LocationSettings(

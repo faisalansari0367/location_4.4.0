@@ -23,32 +23,19 @@ class CommonButtons extends StatelessWidget {
       builder: (context, state) {
         return Row(
           children: [
-            // const Spacer(),
-
-            // Gap(10.w),
-
             Expanded(
               child: ElevatedButton(
                 onPressed: state.currentStep == 0
                     ? null
                     : () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         context.read<CvdCubit>().changeCurrent(state.currentStep - 1);
                       },
                 style: OutlinedButton.styleFrom(
                   shape: const StadiumBorder(),
-                  // primary: Colors.black
-                  // ,
-                  // backgroundColor: Color.fromARGB(200, 0, 0, 0),
                   minimumSize: Size(50.w, 50.h),
                 ),
-                child: Text(
-                  'Back',
-                  // style: TextStyle(
-                  //   fontSize: 18.w,
-                  //   // color: Colors.black.withOpacity(0.7),
-                  //   fontWeight: FontWeight.bold,
-                  // ),
-                ),
+                child: Text('Back'),
               ),
             ),
             Gap(20.w),
@@ -60,7 +47,10 @@ class CommonButtons extends StatelessWidget {
                   minimumSize: Size(50.w, 50.h),
                 ),
 
-                onPressed: onContinue,
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  onContinue();
+                },
                 child: Text(
                   'Continue',
                   // style: TextStyle(

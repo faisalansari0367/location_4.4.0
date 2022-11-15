@@ -54,7 +54,11 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                     ),
-                    const Center(child: AppName()),
+                    Center(
+                      child: AppName(
+                        fontSize: constraints.maxHeight * 0.1,
+                      ),
+                    ),
                     Gap(4.height),
 
                     Text(

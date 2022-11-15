@@ -158,7 +158,7 @@ class UserData {
     state = json['state'];
     street = json['street'];
     town = json['town'];
-    postcode = json['postcode'];
+    postcode = int.tryParse(json['postcode'].toString());
     signature = json['signature'];
     logOn = json['logOn'];
     employeeNumber = json['employeeNumber'];
@@ -227,8 +227,9 @@ class UserData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['allowedRoles'] = allowedRoles;
-    data['status'] =
-        status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
+    data['status'] = status == null
+        ? null
+        : status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['email'] = email;
@@ -288,5 +289,58 @@ class UserData {
     data['edec'] = edec;
 
     return data;
+  }
+
+  // create a merge constructor
+  UserData merge(UserData other) {
+    return UserData(
+      firstName: other.firstName ?? firstName,
+      lastName: other.lastName ?? lastName,
+      email: other.email ?? email,
+      phoneNumber: other.phoneNumber ?? phoneNumber,
+      countryCode: other.countryCode ?? countryCode,
+      role: other.role ?? role,
+      pic: other.pic ?? pic,
+      propertyName: other.propertyName ?? propertyName,
+      state: other.state ?? state,
+      street: other.street ?? street,
+      town: other.town ?? town,
+      postcode: other.postcode ?? postcode,
+      id: other.id ?? id,
+      signature: other.signature ?? signature,
+      logOn: other.logOn ?? logOn,
+      employeeNumber: other.employeeNumber ?? employeeNumber,
+      driversLicense: other.driversLicense ?? driversLicense,
+      ddt: other.ddt ?? ddt,
+      persons: other.persons ?? persons,
+      contactDetails: other.contactDetails ?? contactDetails,
+      reasonForVisit: other.reasonForVisit ?? reasonForVisit,
+      serviceRole: other.serviceRole ?? serviceRole,
+      ohsRequirements: other.ohsRequirements ?? ohsRequirements,
+      questionnaire: other.questionnaire ?? questionnaire,
+      region: other.region ?? region,
+      company: other.company ?? company,
+      picVisiting: other.picVisiting ?? picVisiting,
+      reason: other.reason ?? reason,
+      worksafeQuestionsForm: other.worksafeQuestionsForm ?? worksafeQuestionsForm,
+      countryOfOrigin: other.countryOfOrigin ?? countryOfOrigin,
+      countryVisiting: other.countryVisiting ?? countryVisiting,
+      entryDate: other.entryDate ?? entryDate,
+      exitDate: other.exitDate ?? exitDate,
+      passport: other.passport ?? passport,
+      ngr: other.ngr ?? ngr,
+      businessName: other.businessName ?? businessName,
+      sector: other.sector ?? sector,
+      contactName: other.contactName ?? contactName,
+      eventName: other.eventName ?? eventName,
+      contactEmail: other.contactEmail ?? contactEmail,
+      contactNumber: other.contactNumber ?? contactNumber,
+      startDate: other.startDate ?? startDate,
+      endDate: other.endDate ?? endDate,
+      edec: other.edec ?? edec,
+      lpaPassword: other.lpaPassword ?? lpaPassword,
+      lpaUsername: other.lpaUsername ?? lpaUsername,
+      nlisPassword: other.nlisPassword ?? nlisPassword,
+    );
   }
 }

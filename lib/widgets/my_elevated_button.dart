@@ -41,7 +41,9 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
 
   void onTap() async {
     if (widget.onPressed != null) {
+      FocusScope.of(context).requestFocus(FocusNode());
       setLoading(true);
+
       await widget.onPressed!();
       setLoading(false);
     }

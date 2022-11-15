@@ -3,6 +3,7 @@ import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class LocalApi extends Api {
@@ -279,4 +280,33 @@ class LocalApi extends Api {
 
   @override
   List<LogbookEntry> get logbookRecords => [];
+
+  @override
+  // TODO: implement getEnvdToken
+  bool get isInit => true;
+
+  @override
+  // TODO: implement getEnvdToken
+  bool setIsInit(bool isInit) {
+    // isInit = isInit;
+    return isInit;
+  }
+
+  @override
+  Future<Uint8List> downloadPdf(String url) {
+    // TODO: implement downloadPdf
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<LogbookEntry>> markExitById(String logRecordId) {
+    // TODO: implement markExitById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<NotificationResponseModel>> getSentNotifications() {
+    // TODO: implement getSentNotifications
+    throw UnimplementedError();
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/widgets/empty_screen.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -44,6 +45,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
     _mapsRepo = context.read<MapsRepo>();
     _stream = _mapsRepo.polygonStream;
     _getPolygon();
+    filterPolygons();
     super.initState();
   }
 
@@ -68,10 +70,10 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
         ),
         centreTitle: true,
       ),
-      bottomNavigationBar: true ? _bottomNavbar(context) : null,
+      bottomNavigationBar: hasPolygon ? _bottomNavbar(context) : null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0.w),
-        child: true
+        child: hasPolygon
             ? Column(
                 children: [
                   Center(
@@ -126,13 +128,26 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                           ),
                         );
                       },
-                      // ),
                     ),
                   ),
                 ],
               )
             : Center(
-                child: EmptyScreen(),
+                child: EmptyScreen(
+                  message: 'You have not created any geofences.\nPlease contact the owner',
+                  subWidget: MyElevatedButton(
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        fontSize: 24.w,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    width: 50.width,
+                    onPressed: () async => Get.to(() => MapsPage()),
+                  ),
+                ),
               ),
       ),
     );
@@ -225,8 +240,20 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
     final stream = filter
         ? _stream.map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
         : _stream;
-    stream.isEmpty.then((value) => setState(() => hasPolygon = value));
+    _hasPolygons(stream);
+    // stream.isEmpty.then(
+    //   (value) => setState(() {
+    //     hasPolygon = value;
+    //   }),
+    // );
     return stream;
+  }
+
+  Future<void> _hasPolygons(Stream<List<PolygonModel>> stream) async {
+    final _isEmpty = await stream.isEmpty;
+    setState(() {
+      hasPolygon = !_isEmpty;
+    });
   }
 
   Future<void> _warningDialog(BuildContext context) async {
@@ -273,6 +300,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: data.isEmpty
                                         ? [
+                                            
                                             Gap(20.h),
                                             Text(
                                               'No one is on the property to notify.',

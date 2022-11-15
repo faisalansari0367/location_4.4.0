@@ -2,6 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/features/drawer/view/drawer_page.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
 import 'package:equatable/equatable.dart';
@@ -48,17 +49,21 @@ class LoginCubit extends Cubit<LoginState> {
       final model = SignInModel(email: emailController.text, password: state.password);
       final result = await (state.isConnected ? auth.signIn(data: model) : localApi.signIn(data: model));
 
-      result.when(success: (data) {
-        Get.offAll(() => const DrawerPage());
-      }, failure: (error) {
-        DialogService.showDialog(
-          child: NetworkErrorDialog(
-            message: NetworkExceptions.getErrorMessage(error),
-            buttonText: Strings.retry,
-            onCancel: Get.back,
-          ),
-        );
-      },);
+      result.when(
+        success: (data) {
+          Get.offAll(() => const DrawerPage());
+          Get.to(() => const MapsPage());
+        },
+        failure: (error) {
+          DialogService.showDialog(
+            child: NetworkErrorDialog(
+              message: NetworkExceptions.getErrorMessage(error),
+              buttonText: Strings.retry,
+              onCancel: Get.back,
+            ),
+          );
+        },
+      );
       emit(state.copyWith(isLoading: false));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));

@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/emergency_warning.dart';
+import 'package:background_location/widgets/dialogs/emergency_warning_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:local_notification/local_notification.dart';

@@ -19,17 +19,21 @@ class MapsApi implements MapsRepo {
   late MapsStorageService storage;
   MapsApi({required this.client}) {}
 
-  Completer? completer;
+  var completer = Completer<List<PolygonModel>>();
 
   final _controller = BehaviorSubject<List<PolygonModel>>.seeded([]);
 
   @override
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     try {
+      completer = Completer<List<PolygonModel>>();
       final result = await client.get(_Endpoints.geofences);
       final data = (result.data['data'] as List<dynamic>).map((e) => PolygonModel.fromJson(e)).toList();
       _controller.add(data);
       await storage.saveAllPolygon(data);
+      if (!completer.isCompleted) {
+        completer.complete(data);
+      }
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -111,4 +115,7 @@ class MapsApi implements MapsRepo {
 
   @override
   bool get hasPolygons => _controller.value.isNotEmpty;
+
+  @override
+  Future<List<PolygonModel>> get polygonsCompleter => completer.future;
 }

@@ -201,12 +201,11 @@ class CvdCubit extends Cubit<CvdState> {
         DialogService.error('${result.data['message']} \n ${error.values.first}');
         return;
       }
-      final formsService = FormsStorageService();
+      final formsService = FormsStorageService(api);
       final bytes = base64Decode(result.data['data']);
-      final file = await formsService.saveCvdForm(bytes);
+      final file = await formsService.saveCvdForm(bytes, buyerDetailsModel.name?.value ?? '');
       await OpenFile.open(file.path);
-      Get.back();
-      Get.back();
+      Get.close(2);
     } catch (e) {
       print(e);
     }

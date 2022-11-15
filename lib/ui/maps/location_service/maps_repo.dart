@@ -11,6 +11,8 @@ abstract class MapsRepo {
   Future<ApiResult<dynamic>> updatePolygon(PolygonModel model);
   Future<ApiResult<dynamic>> deletePolygon(PolygonModel model);
   Future<void> saveAllPolygon(List<PolygonModel> polygons);
+  Future<List<PolygonModel>> get polygonsCompleter;
+
   bool get hasPolygons => false;
   void cancel();
 }

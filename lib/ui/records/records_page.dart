@@ -1,5 +1,6 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/cvd_forms/view/cvd_forms.dart';
+import 'package:background_location/ui/view_notifications/view_notifications_page.dart';
 import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,6 +45,16 @@ class _RecordsPageState extends State<RecordsPage> {
             ),
             onTap: () async {
               Get.to(() => LogbookPage());
+            },
+          ),
+          Gap(20.h),
+          MyListTile(
+            text: 'Emergency Notifications',
+            style: TextStyle(
+              fontSize: 18.sp,
+            ),
+            onTap: () async {
+              Get.to(() => ViewSentNotifications());
             },
           )
         ],

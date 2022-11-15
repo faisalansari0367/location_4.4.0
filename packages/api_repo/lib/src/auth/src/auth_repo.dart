@@ -9,7 +9,6 @@ abstract class AuthRepo {
   Future<ApiResult<User>> updateUser({required UserData userData});
   Future<ApiResult<User>> updateStatus({required UserData userData});
 
-
   Future<ApiResult<ResponseModel>> forgotPassword({required String email});
   Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model});
   User? getUser();
@@ -17,6 +16,9 @@ abstract class AuthRepo {
 
   Future<void> setUserData(UserData userData);
   bool get isLoggedIn;
+  bool get isInit;
+
+  bool setIsInit(bool isInit);
 
   Future<void> logout();
   String? getToken();

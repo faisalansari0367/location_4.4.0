@@ -17,37 +17,10 @@ class EnvdView extends StatelessWidget {
       appBar: MyAppBar(
         title: Text('eNVDs'),
       ),
-      // backgroundColor: Colors.grey.shade100,
-      // body: Consumer<EnvdCubit>(
-      //   builder: (context, cubit, child) {
-      //     if (cubit.baseState.isLoading) {
-      //       return const Center(
-      //         child: CircularProgressIndicator.adaptive(),
-      //       );
-      //     }
-      //     // return cubit.state.when(
-      //     //   loading: () => const Center(child: CircularProgressIndicator()),
-      //     //   data: (data) => _buildBody(data),
-      //     //   error: (error) => Center(child: Text(error)),
-      //     // );
-      //     return ListView.separated(
-      //       padding: kPadding,
-      //       separatorBuilder: (context, index) => const SizedBox(height: 10),
-      //       itemCount: cubit.items.length,
-      //       itemBuilder: (context, index) {
-      //         return EnvdListItem(items: cubit.items.elementAt(index));
-      //       },
-      //     );
-      //   },
-      // ),
-
       body: Query(
         options: QueryOptions(
-            document: gql(GraphQlQueryStrings.envdQuery),
-            parserFn: (map) {
-              final consignments = Consignments.fromJson(map['consignments']);
-              return consignments;
-            }),
+          document: gql(GraphQlQueryStrings.envdQuery),
+        ),
         builder: _builder,
       ),
     );
@@ -78,6 +51,7 @@ class EnvdView extends StatelessWidget {
     }
     var list = <Items>[];
     if (result.data != null) {
+      
       try {
         final consignments = Consignments.fromJson(result.data!['consignments']);
         list = consignments.items ?? [];
@@ -90,9 +64,7 @@ class EnvdView extends StatelessWidget {
       padding: kPadding,
       separatorBuilder: (context, index) => const SizedBox(height: 20),
       itemCount: list.length,
-      itemBuilder: (context, index) {
-        return EnvdListItem(items: list.elementAt(index));
-      },
+      itemBuilder: (context, index) => EnvdListItem(items: list[index]),
     );
   }
 }

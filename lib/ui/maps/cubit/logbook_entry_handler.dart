@@ -30,7 +30,7 @@ class LogbookEntryHandler {
   }
 
   void cancel() {
-    markExitHandler?.cancel();
+    // markExitHandler?.cancel();
     isExiting = null;
   }
 

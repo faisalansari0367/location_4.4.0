@@ -57,9 +57,13 @@ class UsersCubit extends Cubit<UsersState> {
   }
 
   void getRoles() async {
-    final result = await api.getUserRoles();
+    final result = await api.getRoles();
+
     result.when(
-      success: (data) => emit(state.copyWith(roles: data)),
+      success: (data) {
+        // UserRoles()
+        emit(state.copyWith(roles: data.data.map((e) => UserRoles(fields: [], role: e)).toList()));
+      },
       failure: (e) => DialogService.failure(error: e),
     );
   }

@@ -87,7 +87,10 @@ class LogRecordsImpl implements LogRecordsRepo {
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId) async {
     try {
       LogbookEntry? hasEntry = await getLogRecord(geofenceId);
-      final result = await client.patch('${Endpoints.markExit}/${hasEntry!.id}');
+      if (hasEntry == null) {
+        return const ApiResult.failure(error: NetworkExceptions.defaultError('No log record found'));
+      }
+      final result = await client.patch('${Endpoints.markExit}/${hasEntry.id}');
       final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
       _updateEntry(logbookEntry);
       return ApiResult.success(data: logbookEntry);
@@ -200,7 +203,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       if (hasExitDate) {
         // final exitDate = hasEntry.exitDate?.add(const Duration(minutes: 30));
-        final entryExitDifference = DateTime.now().difference(hasEntry.exitDate!).inMinutes;
+        final entryExitDifference = DateTime.now().difference(hasEntry.exitDate!).inMinutes.abs();
         // print('difference between enter and exit date is $entryExitDifference in minutes');
 
         // final canCreateNew = exitDate?.isAfter(DateTime.now().toLocal()) ?? false;
@@ -360,4 +363,16 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   @override
   List<LogbookEntry> get logbookRecords => _logRecords;
+
+  @override
+  Future<ApiResult<LogbookEntry>> markExitById(String logRecordId) async {
+    try {
+      final result = await client.patch('${Endpoints.markExit}/$logRecordId');
+      final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+      _updateEntry(logbookEntry);
+      return ApiResult.success(data: logbookEntry);
+    } on DioError catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
 }

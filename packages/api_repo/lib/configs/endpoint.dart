@@ -36,6 +36,7 @@ class Endpoints {
 
   static const qrCode = '$functions/qrcode';
   static const sendEmergencyNotification = '$functions/send-emergency-notification';
+  static const getSentNotifications = '$functions/getNotificationRecord';
 
   // static String user(int id) => '/user/$id';
 }

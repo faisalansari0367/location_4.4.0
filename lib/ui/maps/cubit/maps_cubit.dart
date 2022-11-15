@@ -73,8 +73,8 @@ class MapsCubit extends Cubit<MapsState> {
 
   Future<void> init() async {
     // so that device can determin the connectivity status
+    updateCurrentLocation();
     await 200.milliseconds.delay();
-    await updateCurrentLocation();
     // if (polygonId != null) moveToSelectedPolygon(polygonId!);
     getLocationUpdates();
     emit(state.copyWith());
@@ -258,11 +258,12 @@ class MapsCubit extends Cubit<MapsState> {
   //   );
   // }
 
-  void getLocationUpdates() async {
+  Future<void> getLocationUpdates() async {
+    await mapsRepo.polygonsCompleter;
+    print('polygons loaded');
     geofenceService.getLocationUpdates((event) {
       final position = LatLng(event.latitude, event.longitude);
       emit(state.copyWith(currentLocation: position));
-      print(event.speed);
       if (state.isTracking) {
         if (event.speed > 0) animateCamera(position);
       }

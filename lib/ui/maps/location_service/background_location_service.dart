@@ -26,6 +26,7 @@ class GeofenceService {
   }
 
   Future<void> getLocationUpdates(ValueChanged<Position>? onLocationChanged) async {
+    _positionSubscription?.cancel();
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
       final position = LatLng(event.latitude, event.longitude);
@@ -38,6 +39,8 @@ class GeofenceService {
         trackPolygons.update(polygonsInCoverage, position);
       }
       onLocationChanged?.call(event);
+    }, onError: (e) {
+      print(e);
     });
   }
 

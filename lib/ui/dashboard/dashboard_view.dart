@@ -33,7 +33,6 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  bool isInit = false;
   @override
   void initState() {
     _init();
@@ -41,30 +40,25 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   void _init() async {
-    if (isInit) {
+    final api = context.read<Api>();
+    if (api.isInit) {
       return;
     }
-    // api.userStream.listen((event) {
-    //   if (!api.isLoggedIn) {
-    //     log('user is logged in ${api.isLoggedIn}');
-    //     isInit = false;
-    //   }
-    // });
-    isInit = true;
-    final api = context.read<Api>();
+    api.setIsInit(true);
+
     final mapsApi = context.read<MapsRepo>();
     final notificationService = context.read<PushNotificationService>();
     final user = api.getUser()!;
     user.registerationToken = await notificationService.getFCMtoken();
 
     await api.updateMe(user: user);
-    final hasNoLogRecords = api.logbookRecords.isEmpty;
+
     if (!mapsApi.hasPolygons) {
       await mapsApi.getAllPolygon();
     }
-    if (hasNoLogRecords) {
-      api.getLogbookRecords();
-    }
+    api.getLogbookRecords();
+    // if (api.logbookRecords.isEmpty) {
+    // }
   }
 
   @override
@@ -234,7 +228,7 @@ class _DashboardViewState extends State<DashboardView> {
                   //   onTap: () => Get.to(() => const LogbookPage()),
                   // ),
                   DashboardCard(
-                    text: Strings.settings.capitalize!,
+                    text: ('Service role settings').capitalize!,
                     // iconData: Icons.settings,
                     image: 'assets/icons/settings.png',
                     onTap: () => Get.to(

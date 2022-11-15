@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/cubit/admin_cubit.dart';
 import 'package:background_location/ui/admin/pages/users_list/view/users_page.dart';
@@ -45,13 +46,13 @@ class AdminView extends StatelessWidget {
                   onTap: () async => Get.to(() => const LogbookPage()),
                 ),
                 MyListTile(
-                  text: 'Geofences',
+                  text: 'Locations',
                   onTap: () async {
-                    await Get.to(() => const MapsPage());
+                    Get.to(() => MapsPage());
                   },
                 ),
                 MyListTile(
-                  text: 'Settings',
+                  text: 'Service Roles',
                   onTap: () async {
                     await Get.to(
                       () => const SelectRolePage(
@@ -64,22 +65,41 @@ class AdminView extends StatelessWidget {
                   text: 'Transporters',
                   onTap: () async {},
                 ),
-                MyListTile(
-                  text: 'Consignee',
-                  onTap: () async {},
-                ),
-                MyListTile(
-                  text: 'eNVD',
-                  onTap: () async {},
-                ),
-                MyListTile(
-                  text: 'Mapping',
-                  onTap: () async {},
-                ),
+                // MyListTile(
+                //   text: 'Consignee',
+                //   onTap: () async {},
+                // ),
+                // MyListTile(
+                //   text: 'eNVD',
+                //   onTap: () async {
+                //     // Get.to
+                //   },
+                // ),
+                // MyListTile(
+                //   text: 'Mapping',
+                //   onTap: () async {},
+                // ),
                 MyListTile(
                   text: 'Global Declaration Form',
                   onTap: () async {
                     Get.to(() => GlobalQuestionnaireForm(zoneId: '85'));
+                  },
+                ),
+
+                MyListTile(
+                  text: 'Exit All Zones',
+                  onTap: () async {
+                    try {
+                      final api = context.read<Api>();
+                      final userId = api.getUserData()!.id;
+                      final recordsCreatedByCurrentUser =
+                          api.logbookRecords.where((element) => element.user!.id == userId);
+                      final loggedInZones = recordsCreatedByCurrentUser.where((element) => element.exitDate == null);
+                      final futures = loggedInZones.map((e) => api.markExitById(e.id.toString()));
+                      await Future.wait(futures);
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                 ),
               ],

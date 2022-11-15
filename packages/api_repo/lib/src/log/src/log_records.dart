@@ -8,6 +8,8 @@ abstract class LogRecordsRepo {
   // Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId);
   Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId});
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId);
+  Future<ApiResult<LogbookEntry>> markExitById(String logRecordId);
+
   Future<LogbookEntry?> getLogRecord(String geofenceId);
 
   Future<ApiResult<LogbookEntry>> logBookEntry(

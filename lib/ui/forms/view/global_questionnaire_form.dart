@@ -39,7 +39,8 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
   @override
   void initState() {
     super.initState();
-    model.signature.value = context.read<Api>().getUserData()?.signature;
+    final _userData = context.read<Api>().getUserData();
+    model.signature.value = _userData?.signature;
   }
 
   @override

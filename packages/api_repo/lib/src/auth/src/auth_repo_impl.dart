@@ -26,7 +26,10 @@ class AuthRepoImpl implements AuthRepo {
     client.token = storage.getToken();
   }
 
-  // final userController = StreamController();
+  /// to get data from the server for the first time
+  ///
+  @override
+  bool isInit = false;
 
   @override
   Future<ApiResult<ResponseModel>> signUp({required SignUpModel data}) async {
@@ -52,13 +55,15 @@ class AuthRepoImpl implements AuthRepo {
       }
       client.token = model.token!;
 
-      await Future.wait([
-        setUserData(userData),
-        storage.setToken(model.token!),
-        storage.setUser(model.data!.user!.toJson()),
-        storage.setIsLoggedIn(true),
-        storage.setSignInData(data.toMap()),
-      ]);
+      await Future.wait(
+        [
+          storage.setUserData(userData),
+          storage.setToken(model.token!),
+          storage.setUser(model.data!.user!.toJson()),
+          storage.setIsLoggedIn(true),
+          storage.setSignInData(data.toMap()),
+        ],
+      );
 
       return ApiResult.success(data: model.data!.user!);
     } catch (e) {
@@ -84,13 +89,13 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final result = await client.patch(Endpoints.updateMe, data: isUpdate ? user.updateUser() : {});
       final model = User.fromJson(result.data['data']);
-      final userData = UserData.fromJson(result.data['data']);
-      await Future.wait([
-        storage.setUserData(userData),
-        storage.setUser(model.toJson()),
-      ]);
-      // storage.setUserData(userData);
-      // storage.setUser(user.toJson());
+      UserData userData = UserData.fromJson(result.data['data']);
+      await Future.wait(
+        [
+          storage.setUserData(userData),
+          storage.setUser(model.toJson()),
+        ],
+      );
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -154,7 +159,10 @@ class AuthRepoImpl implements AuthRepo {
   User? getUser() => storage.getUser();
 
   @override
-  Future<void> logout() async => await storage.setIsLoggedIn(false);
+  Future<void> logout() async {
+    isInit = false;
+    await storage.setIsLoggedIn(false);
+  }
 
   @override
   String? getToken() => storage.getToken();
@@ -176,4 +184,10 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<void> setUserData(UserData userData) async => await storage.setUserData(userData);
+
+  @override
+  bool setIsInit(bool isInit) {
+    this.isInit = isInit;
+    return isInit;
+  }
 }

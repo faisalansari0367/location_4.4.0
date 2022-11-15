@@ -121,4 +121,8 @@ class MapsStorageService implements MapsRepo {
 
   @override
   bool get hasPolygons => _box.get(_Keys._getAllPolygonKey) != null;
+  
+  @override
+  // TODO: implement polygonsCompleter
+  Future<List<PolygonModel>> get polygonsCompleter => throw UnimplementedError();
 }
