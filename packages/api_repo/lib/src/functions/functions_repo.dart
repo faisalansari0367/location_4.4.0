@@ -11,7 +11,7 @@ import 'package:flutter/foundation.dart';
 
 abstract class FunctionsRepo {
   Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids});
-  Future<Uint8List> downloadPdf(String url);
+  Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress});
   Future<ApiResult<NotificationResponseModel>> getSentNotifications();
   // Future<void> getEnvdForms();
 }
@@ -68,9 +68,13 @@ class FunctionsRepoImpl implements FunctionsRepo {
   // downloadFile
 
   @override
-  Future<Uint8List> downloadPdf(String url) async {
+  Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress}) async {
     try {
-      final response = await client.build().get(url, options: Options(responseType: ResponseType.bytes));
+      final response = await client.build().get(
+            url,
+            options: Options(responseType: ResponseType.bytes),
+            onReceiveProgress: onReceiveProgress,
+          );
       return response.data;
     } catch (e) {
       return Future.error(NetworkExceptions.getDioException(e));

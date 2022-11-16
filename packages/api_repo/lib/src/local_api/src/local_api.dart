@@ -293,7 +293,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<Uint8List> downloadPdf(String url) {
+  Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress}) {
     // TODO: implement downloadPdf
     throw UnimplementedError();
   }

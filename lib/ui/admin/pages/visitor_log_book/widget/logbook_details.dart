@@ -89,14 +89,11 @@ class LogbookDetails extends StatelessWidget {
   //   return list;
   // }
 
-
   Widget getWidget(LogbookFormField field) {
     switch (field.field!.toLowerCase()) {
       case 'signature:':
       case 'signature':
-        return SignatureWidget(
-          signature: field.value,
-        );
+        return SignatureWidget(signature: field.value);
 
       case 'day/date/time':
         return _qna(field.field!, MyDecoration.formatDateTime(DateTime.tryParse(field.value!)));
@@ -225,7 +222,6 @@ class LogbookDetails extends StatelessWidget {
               ),
               Gap(5.h),
 
-             
               Text(
                 answer.trim().toUpperCase(),
                 style: TextStyle(
@@ -249,6 +245,4 @@ class LogbookDetails extends StatelessWidget {
       : value.toLowerCase() == 'yes'
           ? true
           : null;
-
-
 }

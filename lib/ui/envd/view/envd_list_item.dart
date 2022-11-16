@@ -3,6 +3,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/services/notifications/forms_storage_service.dart';
 import 'package:background_location/ui/envd/models/envd_model.dart';
+import 'package:background_location/widgets/download_button/download_button.dart';
+import 'package:background_location/widgets/download_button/envd_download_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,7 +61,7 @@ class EnvdListItem extends StatelessWidget {
   String _getAccredentials() {
     List<String> availableTypes = [];
     final ahsType = 'HS${items.species!.characters.first}';
-    final msaType = 'MSA${items.species!.characters.first}'; //MSAC1
+    final msaType = 'MSA${items.species!.characters.first}';
     final nfasType = 'NFAS${items.species!.characters.first}';
 
     final ahsResults = items.forms!.where((element) => (element.type ?? '').contains(ahsType));
@@ -80,9 +82,15 @@ class EnvdListItem extends StatelessWidget {
   Widget _buildRow(String field1, String value1, String field2, String value2) {
     return Row(
       children: [
-        Expanded(child: _buildText(field1, value1)),
+        Expanded(
+          flex: 2,
+          child: _buildText(field1, value1),
+        ),
         Spacer(),
-        Expanded(child: _buildText(field2, value2)),
+        Expanded(
+          flex: 2,
+          child: _buildText(field2, value2),
+        ),
       ],
     );
   }
@@ -90,24 +98,15 @@ class EnvdListItem extends StatelessWidget {
   Widget _gap() => const Divider();
 
   Widget _buildPdfButton(BuildContext context) {
-    return Align(
-      // alignment: Alignment.centerRight,
-      child: OutlinedButton.icon(
-        icon: Icon(Icons.picture_as_pdf),
-        label: Text('View PDF'),
-        style: ElevatedButton.styleFrom(
-          // primary: Color.fromARGB(255, 244, 54, 54),
-          // onPrimary: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(32.0),
-          ),
+    return Flexible(
+      child: DownloadButton(
+        buttonText: 'Download PDF',
+        controller: EnvdDownloadController(
+          api: context.read<Api>(),
+          consignmentNo: items.number!,
+          downloadUrl: items.pdfUrl!,
+          onOpenDownload: () {},
         ),
-        // text: 'View PDf',
-        // width: 10.width,
-        // padding: EdgeInsets.all(0),
-        onPressed: () {
-          if (items.pdfUrl != null) openPdf(context, items.pdfUrl!);
-        },
       ),
     );
   }
@@ -115,16 +114,7 @@ class EnvdListItem extends StatelessWidget {
   Future<void> openPdf(BuildContext context, String url) async {
     final api = context.read<Api>();
     final formsService = FormsStorageService(api);
-    final result = await formsService.saveEnvdPdf(url, items.number!);
-    // result.when(
-    //   success: (s) async {
-    //     final directory = await getApplicationDocumentsDirectory();
-    //     final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
-    //     await file.writeAsBytes(s);
-    //     await OpenFile.open(file.path);
-    //   },
-    //   failure: (e) => DialogService.failure(error: e),
-    // );
+    await formsService.saveEnvdPdf(url, items.number!);
   }
 
   Widget _buildText(String text, String value) {
@@ -135,7 +125,6 @@ class EnvdListItem extends StatelessWidget {
           text,
           maxLines: 1,
           style: TextStyle(
-            // color: _getColors().computeLuminance() >= 0.5 ? Colors.grey.shade600 : Colors.white70,
             color: Colors.grey.shade600,
           ),
         ),
@@ -158,7 +147,6 @@ class EnvdListItem extends StatelessWidget {
     if (items.forms?.isNotEmpty ?? false) {
       type = items.forms!.first.type!;
     }
-    print(type);
     switch (type) {
       case 'LPAG2':
         return Color(0xffDC4233);

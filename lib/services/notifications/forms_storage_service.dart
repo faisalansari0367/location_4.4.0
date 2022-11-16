@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../constants/my_decoration.dart';
@@ -69,18 +68,23 @@ class FormsStorageService {
     return _file;
   }
 
-  Future<void> saveEnvdPdf(String url, String consignmentNo) async {
+  Future<File?> checkEnvdInCache(String consignmentNo) async {
+    return _checkEnvdExist(consignmentNo);
+  }
+
+  Future<File> saveEnvdPdf(String url, String consignmentNo, {void Function(int, int)? onReceiveProgress}) async {
     final envdDir = await _createEnvdsDir();
     final _checkEnvd = await _checkEnvdExist(consignmentNo);
     if (_checkEnvd != null) {
-      OpenFile.open(_checkEnvd.path);
-      return;
+      // OpenFile.open(_checkEnvd.path);
+      return _checkEnvd;
     }
     final date = MyDecoration.formatDate(DateTime.now());
     final file = File('${envdDir.path}/${consignmentNo} ${date}.pdf');
-    final result = await api.downloadPdf(url);
+    final result = await api.downloadPdf(url, onReceiveProgress: onReceiveProgress);
     await file.writeAsBytes(result);
-    OpenFile.open(file.path);
+    return file;
+    // OpenFile.open(file.path);
   }
 
   Future<String> createCvdFileName() async {

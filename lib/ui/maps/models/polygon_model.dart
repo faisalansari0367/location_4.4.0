@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
@@ -45,7 +46,7 @@ class PolygonModel {
       'color': colorToHex(color),
       'points': points.map(_latLngToJson).toList(),
       'name': name,
-      // 'createdAt': createdBy.toJson(),
+      
     };
   }
 
@@ -53,8 +54,13 @@ class PolygonModel {
     return [latLng.longitude, latLng.latitude];
   }
 
-  static LatLng _latLngFromJson(List<dynamic> latLng) {
-    return LatLng(latLng.last, latLng.first);
+  static LatLng _latLngFromJson(List latLng) {
+    
+    try {
+      return LatLng(latLng.last, latLng.first);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   factory PolygonModel.fromLocalJson(Map<String, dynamic> json) {
@@ -64,20 +70,25 @@ class PolygonModel {
     // if (coordinates is List && coordinates.isNotEmpty) {
     //   polygons = coordinates[0];
     // }
+    // print(polygons);
     // if (!(json['createdBy'] is Map)) {
     //   print(json['createdBy']);
     // }
-
-    return PolygonModel(
-      createdBy: UserData.fromJson(Map<String, dynamic>.from(json['createdBy'])),
-      pic: json['pic'],
-      id: json['id'].toString(),
-      color: _colorFromHex(json['color']),
-      points: List<LatLng>.from(polygons.map(_latLngFromJson).toList()),
-      name: json['name'],
-      updatedAt: parseDateTime(json['updatedAt']),
-      createdAt: parseDateTime(json['createdAt']),
-    );
+    try {
+      return PolygonModel(
+        createdBy: UserData.fromJson(Map<String, dynamic>.from(json['createdBy'])),
+        pic: json['pic'],
+        id: json['id'].toString(),
+        color: _colorFromHex(json['color']),
+        points: List<LatLng>.from(polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),
+        name: json['name'],
+        updatedAt: parseDateTime(json['updatedAt']),
+        createdAt: parseDateTime(json['createdAt']),
+      );
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   factory PolygonModel.fromJson(Map<String, dynamic> json) {

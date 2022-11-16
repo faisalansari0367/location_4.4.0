@@ -273,8 +273,8 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<Uint8List> downloadPdf(String url) {
-    return _functionsRepo.downloadPdf(url);
+  Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress}) {
+    return _functionsRepo.downloadPdf(url, onReceiveProgress: onReceiveProgress);
   }
 
   @override
