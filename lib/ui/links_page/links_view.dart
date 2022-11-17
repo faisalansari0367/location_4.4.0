@@ -98,7 +98,7 @@ class LinksView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 // width: 100.w,
                 child: Image.asset(
-                  'assets/images/iTRAK_link_logo.jpeg',
+                  'assets/icons/itrak_assets_logo.webp',
                   height: 50.w,
                 ),
               ),
@@ -116,7 +116,6 @@ class LinksView extends StatelessWidget {
   }
 
   Future<void> openPdf(BuildContext context, String url) async {
-    
     final api = context.read<Api>();
     final result = await api.openPdf(url);
     result.when(

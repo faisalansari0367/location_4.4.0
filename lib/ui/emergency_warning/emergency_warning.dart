@@ -29,7 +29,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
   final selectedZones = Set<int>();
   late Stream<List<PolygonModel>> _stream;
   FilterType filterType = FilterType.created_by_me;
-  bool hasPolygon = false;
+  bool hasPolygon = true;
   UserData? userData;
   late MapsRepo _mapsRepo;
 
@@ -74,64 +74,7 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0.w),
         child: hasPolygon
-            ? Column(
-                children: [
-                  Center(
-                    child: Image.asset(
-                      'assets/icons/warning_icon.png',
-                      height: 100,
-                    ),
-                  ),
-                  Text(
-                    'Select A Location',
-                    style: context.textTheme.headline6?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gap(20.h),
-                  if (userData?.role == 'Admin') ...[
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Row(
-                        children: [
-                          _buildFilters(context),
-                          Gap(10.h),
-                        ],
-                      ),
-                    ),
-                  ],
-                  Expanded(
-                    child: StreamBuilder<List<PolygonModel>>(
-                      stream: filterPolygons(),
-                      builder: (context, snapshot) {
-                        return Scrollbar(
-                          child: ListView.separated(
-                            separatorBuilder: (context, index) => Gap(10.h),
-                            padding: kPadding,
-                            itemCount: sort(snapshot.data ?? []).length,
-                            itemBuilder: (context, index) {
-                              final fence = snapshot.data![index];
-                              return GeofenceCard(
-                                onTap: () {
-                                  final ids = selectedZones.where((element) => element == int.parse(fence.id!));
-                                  if (ids.isEmpty) {
-                                    selectedZones.add(int.parse(fence.id!));
-                                  } else {
-                                    selectedZones.remove(int.parse(fence.id!));
-                                  }
-                                  setState(() {});
-                                },
-                                isSelected: selectedZones.contains(int.parse(fence.id!)),
-                                item: fence,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              )
+            ? _buildBody(context)
             : Center(
                 child: EmptyScreen(
                   message: 'You have not created any geofences.\nPlease contact the owner',
@@ -151,6 +94,69 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
               ),
       ),
     );
+  }
+
+  Column _buildBody(BuildContext context) {
+    return Column(
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/icons/warning_icon.png',
+                    height: 100,
+                  ),
+                ),
+                Text(
+                  'Select A Location',
+                  style: context.textTheme.headline6?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gap(20.h),
+                if (userData?.role == 'Admin') ...[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Row(
+                      children: [
+                        _buildFilters(context),
+                        Gap(10.h),
+                      ],
+                    ),
+                  ),
+                ],
+                Expanded(
+                  child: StreamBuilder<List<PolygonModel>>(
+                    stream: filterPolygons(),
+                    builder: (context, snapshot) {
+                      // hasPolygon = snapshot.hasData && snapshot.data!.isNotEmpty;
+                      // setState(() {});
+                      return Scrollbar(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => Gap(10.h),
+                          padding: kPadding,
+                          itemCount: sort(snapshot.data ?? []).length,
+                          itemBuilder: (context, index) {
+                            final fence = snapshot.data![index];
+                            return GeofenceCard(
+                              onTap: () {
+                                final ids = selectedZones.where((element) => element == int.parse(fence.id!));
+                                if (ids.isEmpty) {
+                                  selectedZones.add(int.parse(fence.id!));
+                                } else {
+                                  selectedZones.remove(int.parse(fence.id!));
+                                }
+                                setState(() {});
+                              },
+                              isSelected: selectedZones.contains(int.parse(fence.id!)),
+                              item: fence,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
   }
 
   Widget _bottomNavbar(BuildContext context) {
@@ -241,19 +247,15 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
         ? _stream.map((event) => event.where((element) => element.createdBy?.id == userData?.id).toList())
         : _stream;
     _hasPolygons(stream);
-    // stream.isEmpty.then(
-    //   (value) => setState(() {
-    //     hasPolygon = value;
-    //   }),
-    // );
     return stream;
   }
 
   Future<void> _hasPolygons(Stream<List<PolygonModel>> stream) async {
-    final _isEmpty = await stream.isEmpty;
-    setState(() {
-      hasPolygon = !_isEmpty;
-    });
+    // final _isEmpty = await stream.isEmpty;
+    // print(await stream.length);
+    // setState(() {
+    //   hasPolygon = !_isEmpty;
+    // });
   }
 
   Future<void> _warningDialog(BuildContext context) async {
@@ -300,7 +302,6 @@ class _EmergencyWarningState extends State<EmergencyWarning> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: data.isEmpty
                                         ? [
-                                            
                                             Gap(20.h),
                                             Text(
                                               'No one is on the property to notify.',

@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+
+import '../../../constants/my_decoration.dart';
+
 class EnvdResponseModel {
   EnvdData? data;
 
@@ -162,6 +166,43 @@ class Items {
     }
     return data;
   }
+
+  String getAccredentials() {
+    List<String> availableTypes = [];
+    final ahsType = 'HS${species!.characters.first}';
+    final msaType = 'MSA${species!.characters.first}';
+    final nfasType = 'NFAS${species!.characters.first}';
+
+    final ahsResults = forms!.where((element) => (element.type ?? '').contains(ahsType));
+    if (ahsResults.isNotEmpty) availableTypes.add('AHS');
+    final msaResults = forms!.where((element) => (element.type ?? '').contains(msaType));
+    if (msaResults.isNotEmpty) availableTypes.add('MSA');
+    final nfasResults = forms!.where((element) => (element.type ?? '').contains(nfasType));
+    if (nfasResults.isNotEmpty) availableTypes.add('NFAS');
+    return availableTypes.join(' , ');
+  }
+
+  String getQuantity() {
+    final data = (answers ?? []).where((element) => element.questionId == '3');
+    if (data.isEmpty) return '';
+    return data.first.value!;
+  }
+
+  String createdAt() {
+    return submittedAt != null || updatedAt != null
+        ? MyDecoration.formatDate(DateTime.parse(submittedAt ?? updatedAt!))
+        : '';
+  }
+
+  Answers? _findById(String id) {
+    final data = (answers ?? []).where((element) => element.questionId == id);
+    if (data.isEmpty) return null;
+    return data.first;
+  }
+
+  String get fromPIC => origin?.pic ?? '';
+  String get transporter => _findById('158')?.value ?? '';
+  String get toPIC => destination?.pic ?? '';
 }
 
 class Forms {

@@ -2,7 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/dashboard/dashboard_card.dart';
 import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
-import 'package:background_location/ui/emergency_warning/emergency_warning.dart';
+import 'package:background_location/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
 import 'package:background_location/ui/envd/cubit/graphql_client.dart';
 import 'package:background_location/ui/envd/view/evnd_page.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
@@ -10,7 +10,6 @@ import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/records/records_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitors/visitors_page.dart';
-import 'package:background_location/widgets/dialogs/coming_soon.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/status_dialog_new.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
@@ -21,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import '../../features/webview/flutter_webview.dart';
 import '../../services/notifications/push_notifications.dart';
 import '../links_page/links_page.dart';
 
@@ -53,9 +53,9 @@ class _DashboardViewState extends State<DashboardView> {
 
     await api.updateMe(user: user);
 
-    if (!mapsApi.hasPolygons) {
-      await mapsApi.getAllPolygon();
-    }
+    // if (!mapsApi.hasPolygons) {
+    await mapsApi.getAllPolygon();
+    // } d
     api.getLogbookRecords();
     // if (api.logbookRecords.isEmpty) {
     // }
@@ -63,6 +63,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
+    final isVisitor = context.read<Api>().getUser()?.role == 'Visitor';
     return LayoutBuilder(
       builder: (context, constraints) => Scaffold(
         // floatingActionButton: FloatingActionButton(
@@ -113,18 +114,11 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/Check In.png',
                     onTap: () => Get.to(() => const VisitorsPage()),
                   ),
-                  // DashboardCard(
-                  //   text: 'Visitor Check-Ins',
-                  //   // iconData: Icons.qr_code,
-                  //   image: 'assets/icons/Check In.png',
-                  //   onTap: () => Get.to(() => const VisitorCheckInPage()),
-                  // ),
                   DashboardCard(
                     text: 'Work Safety',
-                    // iconData: Icons.work_outline,
                     image: 'assets/icons/Work Safety.png',
                     onTap: () {
-                      DialogService.showDialog(child: const ComingSoonDialog());
+                      Get.to(() => const Webview(url: 'https://itrakassets.com/', title: 'iTRAKassets'));
                     },
                   ),
                   DashboardCard(
@@ -142,7 +136,7 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/warning_icon.png',
                     onTap: () {
                       // _warningDialog(context);
-                      Get.to(() => EmergencyWarning());
+                      Get.to(() => EmergencyWarningPagePage());
                     },
                   ),
                   DashboardCard(
@@ -151,47 +145,48 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/Geofences (1).png',
                     onTap: () => Get.to(() => const MapsPage()),
                   ),
-                  DashboardCard(
-                    text: Strings.envds,
-                    // iconData: Icons.person,
-                    image: 'assets/icons/eNVD.jpg',
-                    size: 65.w,
+                  if (!isVisitor)
+                    DashboardCard(
+                      text: Strings.envds,
+                      // iconData: Icons.person,
+                      image: 'assets/icons/eNVD.jpg',
+                      size: 65.w,
 
-                    onTap: () async {
-                      // context.read<Api>().getEnvdToken();
-                      final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
-                      final isInit = await client.init();
+                      onTap: () async {
+                        // context.read<Api>().getEnvdToken();
+                        final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
+                        final isInit = await client.init();
 
-                      if (!client.hasCredentials()) {
-                        final message =
-                            "Please provide valid LPA credentials in your role settings to use this feature.";
-                        Get.dialog(
-                          StatusDialog(
-                            lottieAsset: 'assets/animations/error.json',
-                            message: message,
-                            onContinue: () async {
-                              Get.back();
-                              Get.to(
-                                () => const SelectRolePage(
-                                  showBackArrow: true,
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                        return;
-                      }
+                        if (!client.hasCredentials()) {
+                          final message =
+                              "Please provide valid LPA credentials in your role settings to use this feature.";
+                          Get.dialog(
+                            StatusDialog(
+                              lottieAsset: 'assets/animations/error.json',
+                              message: message,
+                              onContinue: () async {
+                                Get.back();
+                                Get.to(
+                                  () => const SelectRolePage(
+                                    showBackArrow: true,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                          return;
+                        }
 
-                      if (isInit) {
-                        Get.to(() => const EnvdPage());
-                      } else {
-                        DialogService.error(
-                          "Unable to connect with the ISC server currently. Please try again later.",
-                        );
-                      }
-                      // DialogService.showDialog(child: const ComingSoonDialog());
-                    },
-                  ),
+                        if (isInit) {
+                          Get.to(() => const EnvdPage());
+                        } else {
+                          DialogService.error(
+                            "Unable to connect with the ISC server currently. Please try again later.",
+                          );
+                        }
+                        // DialogService.showDialog(child: const ComingSoonDialog());
+                      },
+                    ),
 
                   DashboardCard(
                     text: Strings.records,
@@ -211,16 +206,16 @@ class _DashboardViewState extends State<DashboardView> {
                   //   iconData: Icons.person,
                   //   onTap: () => Get.to(() => const SelectRolesRegistrationPage()),
                   // ),
-
-                  DashboardCard(
-                    text: 'eDEC Forms',
-                    // iconData: Icons.format_list_bulleted_sharp,
-                    image: 'assets/icons/eDEC forms.png',
-                    onTap: () {
-                      Get.to(() => EdecFormsPage());
-                    },
-                    // onTap: () => Get.to(() => VisitorCheckInPage()),
-                  ),
+                  if (!isVisitor)
+                    DashboardCard(
+                      text: 'eDEC Forms',
+                      // iconData: Icons.format_list_bulleted_sharp,
+                      image: 'assets/icons/eDEC forms.png',
+                      onTap: () {
+                        Get.to(() => EdecFormsPage());
+                      },
+                      // onTap: () => Get.to(() => VisitorCheckInPage()),
+                    ),
                   // DashboardCard(
                   //   text: Strings.visitorLogBook.capitalize!,
                   //   // iconData: Icons.book,

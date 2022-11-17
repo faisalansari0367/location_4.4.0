@@ -41,7 +41,7 @@ class SentNotification {
   SentNotification.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     user = json['user'].cast<String>();
-    notificationDate = DateTime.tryParse(json['notificationDate']);
+    notificationDate = DateTime.tryParse(json['notificationDate'])?.toLocal();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     geofence = json['geofence'] != null ? Geofence.fromJson(json['geofence']) : null;

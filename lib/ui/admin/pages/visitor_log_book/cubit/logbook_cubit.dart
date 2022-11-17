@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/cubit/logbook_state.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/create_pdf.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../../constants/index.dart';
 
@@ -13,6 +18,8 @@ class LogBookCubit extends Cubit<LogBookState> {
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   LogBookCubit({required this.api}) : super(const LogBookState());
+
+  static const headers = ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration'];
 
   Future<void> generatePDf() async {
     await Permission.storage.request();
@@ -26,7 +33,7 @@ class LogBookCubit extends Cubit<LogBookState> {
             ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
             (item.geofence?.name ?? ''),
             (item.geofence?.pic ?? ''),
-            item.form.isNotEmpty ? 'View'.toUpperCase() : 'Trespasser'.toUpperCase()
+            item.form.isNotEmpty ? 'Registered'.toUpperCase() : 'Unregistered'.toUpperCase()
           ],
         )
         .toList();
@@ -55,5 +62,33 @@ class LogBookCubit extends Cubit<LogBookState> {
       },
       failure: (failure) => DialogService.failure(error: failure),
     );
+  }
+
+  Future<void> generateCsv() async {
+    final headers = ['id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration'];
+    final newHeaders = headers.map((e) => e.toUpperCase()).toList();
+    final rows = state.entries
+        .map(
+          (item) => [
+            (item.id.toString()),
+            ('${item.user!.firstName!} ${item.user!.lastName}'),
+            ('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
+            ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
+            (item.geofence?.name ?? ''),
+            (item.geofence?.pic ?? ''),
+            item.form.isNotEmpty ? 'Registered'.toUpperCase() : 'Unregistered'.toUpperCase()
+          ],
+        )
+        .toList();
+    rows.insert(0, newHeaders);
+    final data = await ListToCsvConverter().convert(rows);
+    final String directory = (await getApplicationSupportDirectory()).path;
+    final path = "$directory/csv-${DateTime.now()}.csv";
+    print(path);
+    final File file = File(path);
+    await file.writeAsString(data);
+
+    await Share.shareFiles([(file.path)]);
+    // exportCSV.myCSV(newHeaders, rows);
   }
 }

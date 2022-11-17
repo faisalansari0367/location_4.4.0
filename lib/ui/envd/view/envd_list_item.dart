@@ -16,6 +16,8 @@ class EnvdListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final breeds = ((items.answers ?? []).where((element) => element.questionId == '1')).toList().toList();
+    print(breeds);
     return Container(
       padding: kPadding,
       decoration: BoxDecoration(

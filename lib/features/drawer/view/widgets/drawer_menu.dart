@@ -27,16 +27,15 @@ class DrawerMenu extends StatefulWidget {
 class _DrawerMenuState extends State<DrawerMenu> {
   PackageInfo? packageInfo;
   late DrawerItems _drawerItems;
+  User? user;
 
   @override
   void initState() {
     _init();
     final api = context.read<Api>();
+    user = api.getUser();
     final drawer = context.read<DrawerCubit>();
     _drawerItems = DrawerItems(api, drawer: drawer);
-    // api.userDataStream.listen((event) {
-    //   _drawerItems = DrawerItems(api);
-    // });
     super.initState();
   }
 
@@ -52,7 +51,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Gap(30.height),
+          Gap(20.height),
           // Padding(
           //   padding: EdgeInsets.only(
           //     left: 40.w,
@@ -62,6 +61,46 @@ class _DrawerMenuState extends State<DrawerMenu> {
           //     height: 14.height,
           //   ),
           // ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome\n${user?.firstName ?? ''} ${user?.lastName ?? ''}',
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 25.h,
+                      ),
+                ),
+                Gap(25.h),
+                // Divider(
+                //     // color: Colors.white,
+                //     ),
+                Row(
+                  children: [
+                    Gap(5.w),
+                    Icon(
+                      Icons.account_box_outlined,
+                      color: Colors.white,
+                      size: 25.h,
+                    ),
+                    Gap(10.w),
+                    Text(
+                      '${user?.role ?? ''}',
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20.h,
+                          ),
+                    ),
+                  ],
+                ),
+                Gap(10.h),
+              ],
+            ),
+          ),
 
           ..._drawerItems.items.map(_customTile).toList(),
           // Spacer(),
@@ -73,14 +112,15 @@ class _DrawerMenuState extends State<DrawerMenu> {
                 children: [
                   const Icon(
                     Icons.build,
-                    color: Color.fromARGB(255, 211, 211, 211),
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                   Gap(10.w),
                   Text(
                     'Version ${packageInfo?.version}',
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 211, 211, 211),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
                       fontWeight: FontWeight.w600,
+                      fontSize: 20.sp,
                     ),
                   ),
                 ],
@@ -106,7 +146,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
 
   Widget _customTile(DrawerItem item) {
     final isSelected = widget.selectedIndex == _drawerItems.items.indexOf(item);
-    final color = isSelected ? Colors.black : Colors.white70;
+    final color = isSelected ? Colors.black : Colors.white;
     final image = item.image;
     final iconData = item.iconData;
     return GestureDetector(
@@ -138,7 +178,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
               duration: 100.milliseconds,
               style: TextStyle(
                 color: color,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w600,
+                fontSize: 20.sp,
               ),
               child: Text(item.text),
             )

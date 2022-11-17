@@ -142,8 +142,9 @@ class VisitorCheckInView extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
             ),
             child: AutoSizeText(
-              '${Strings.visitor}s',
-              maxLines: 1,
+              'Visitors',
+              // maxLines: 1,
+              textAlign: TextAlign.center,
               style: context.textTheme.headline6?.copyWith(
                 color: const Color.fromARGB(255, 255, 255, 255),
                 fontSize: 40.w,
@@ -214,6 +215,17 @@ class VisitorCheckInView extends StatelessWidget {
             style: context.textTheme.bodyText2?.copyWith(
               color: const Color.fromARGB(158, 255, 0, 0),
               fontWeight: FontWeight.w600,
+            ),
+          ),
+          Gap(20.h),
+          AutoSizeText(
+            'Automated BioSecurity Compliance\nPowered by iTRAKassets',
+            // maxLines: 1,
+            textAlign: TextAlign.center,
+            style: context.textTheme.headline6?.copyWith(
+              color: context.theme.primaryColor,
+              fontSize: 16.w,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

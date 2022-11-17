@@ -61,8 +61,20 @@ class _LogbookViewState extends State<LogbookView> {
             actions: [
               if (!state.isLoading)
                 IconButton(
-                  icon: const Icon(Icons.picture_as_pdf),
+                  icon: const Icon(
+                    Icons.picture_as_pdf,
+                    size: 30,
+                  ),
                   onPressed: context.read<LogBookCubit>().generatePDf,
+                ),
+              Gap(10),
+              if (!state.isLoading)
+                IconButton(
+                  icon: Image.asset(
+                    'assets/icons/export.png',
+                    width: 30,
+                  ),
+                  onPressed: context.read<LogBookCubit>().generateCsv,
                 ),
             ],
           ),
