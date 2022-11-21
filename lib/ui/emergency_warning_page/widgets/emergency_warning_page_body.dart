@@ -1,10 +1,12 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../constants/index.dart';
 import '../../../widgets/dialogs/dialog_layout.dart';
@@ -306,7 +308,44 @@ class EmergencyWarningPageBody extends StatelessWidget {
                             );
                           },
                           failure: (error) {
-                            DialogService.error('Failed to send Alert');
+                            // DialogService.error(
+                            //   NetworkExceptions.getErrorMessage(error).capitalizeFirst!,
+                            // );
+                            DialogService.showDialog(
+                              child: DialogLayout(
+                                child: Padding(
+                                  padding: kPadding,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      AspectRatio(
+                                        aspectRatio: 4 / 3,
+                                        child: Lottie.asset(
+                                          'assets/animations/orange_alert.json',
+                                        ),
+                                      ),
+                                      Gap(20.h),
+                                      Text(
+                                        NetworkExceptions.getErrorMessage(error).capitalizeFirst!,
+                                        textAlign: TextAlign.center,
+                                        style: context.textTheme.headline6?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 28.sp,
+                                          // color: context.theme.primaryColor,
+                                        ),
+                                      ),
+                                      Gap(20.h),
+                                      MyElevatedButton(
+                                        text: Strings.continue_,
+                                        onPressed: () async => Get.back(),
+                                        width: 25.width,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                            // DialogService.failure(error: error);
                           },
                         );
                         // await DialogService.showDialog(child: const ComingSoonDialog());

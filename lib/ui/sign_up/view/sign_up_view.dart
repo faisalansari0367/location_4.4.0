@@ -3,7 +3,9 @@ import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/sign_up/cubit/sign_up_cubit.dart';
 import 'package:background_location/widgets/my_appbar.dart';
+import 'package:background_location/widgets/pdf_viewer.dart';
 import 'package:background_location/widgets/widgets.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -83,11 +85,55 @@ class _SignUpViewState extends State<SignUpView> {
                       },
                     ),
                     Expanded(
-                      child: Text(
-                        // 'I Agree to accept Terms And Conditions',
-                        Strings.privacyPolicyMessage,
-
-                        style: context.textTheme.bodyText2,
+                      // child: Text(
+                      //   'By signing up, you agree to our Terms of Service and Privacy Policy.',
+                      //   style: context.textTheme.bodyText2,
+                      // ),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'By signing up, you agree to our ',
+                              style: context.textTheme.bodyText2,
+                            ),
+                            TextSpan(
+                              text: Strings.termsAndConditions,
+                              recognizer: _onTap(
+                                PdfViewer(
+                                    title: Strings.termsAndConditions,
+                                    path:
+                                        'assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf'),
+                              ),
+                              style: context.textTheme.bodyText2?.copyWith(
+                                color: context.theme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            TextSpan(
+                              text: ' and ',
+                              style: context.textTheme.bodyText2,
+                            ),
+                            TextSpan(
+                              text: Strings.privacyPolicy,
+                              recognizer: _onTap(
+                                PdfViewer(
+                                  path: 'assets/terms_and_conditions/privacy_policy.pdf',
+                                  title: Strings.privacyPolicy,
+                                ),
+                              ),
+                              style: context.textTheme.bodyText2?.copyWith(
+                                color: context.theme.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '.',
+                              style: context.textTheme.bodyText2,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -110,4 +156,6 @@ class _SignUpViewState extends State<SignUpView> {
       ),
     );
   }
+
+  GestureRecognizer _onTap(Widget page) => TapGestureRecognizer()..onTap = () => Get.to(() => page);
 }

@@ -13,7 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:very_good_analysis/very_good_analysis.dart';
 
+import '../../../widgets/pdf_viewer.dart';
 import '../../login/view/login_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -55,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
             // Gap(50.h),
             MyListTile(
               text: 'About',
-              onTap: () => DialogService.showDialog(
+              onTap: () async => unawaited(DialogService.showDialog(
                 child: AboutDialog(
                   applicationIcon: ClipRRect(
                     borderRadius: kBorderRadius,
@@ -69,6 +71,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   applicationName: packageInfo?.appName,
                   applicationVersion: packageInfo?.version,
+                ),
+              )),
+            ),
+            MyListTile(
+              text: Strings.privacyPolicy,
+              onTap: () async => Get.to(
+                () => PdfViewer(
+                  path: 'assets/terms_and_conditions/privacy_policy.pdf',
+                  title: Strings.privacyPolicy,
+                ),
+              ),
+            ),
+            MyListTile( 
+              text: Strings.termsAndConditions,
+              onTap: () async => Get.to(
+                () => PdfViewer(
+                  path:
+                      'assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf',
+                  title: Strings.termsAndConditions,
                 ),
               ),
             ),
@@ -87,8 +108,6 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               text: Strings.logout,
               trailing: const Icon(Icons.logout),
-              // iconData: Icons.logout,
-              // page: LoginPage(),
             ),
           ],
         ),

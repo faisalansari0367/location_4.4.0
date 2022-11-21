@@ -67,9 +67,14 @@ class Strings {
       no = 'No',
       ok = 'Ok',
       cancel = 'Cancel',
+      terms = 'Terms',
+      and = 'And',
+      conditions = 'Conditions',
       dashboard = 'Dashboard',
       visitor = 'Visitor',
       log = 'Log',
+      privacy = 'Privacy',
+      policy = 'Policy',
       book = 'Book',
       geofence = 'Geofence',
       envds = 'eNVD',
@@ -117,6 +122,11 @@ class Strings {
   // Errors
   // something went wrong
   static String somethingWentWrong = '$something $went $wrong'.capitalizeFirst!;
+
+  static String get privacyPolicy => '$privacy $policy';
+
+  // terms and conditions
+  static String get termsAndConditions => '$terms & $conditions';
 
   // privacy policy message
   static String get privacyPolicyMessage => 'By signing up, you agree to our Terms of Service and Privacy Policy.';

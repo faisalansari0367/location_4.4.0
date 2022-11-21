@@ -143,7 +143,7 @@ class VisitorCheckInView extends StatelessWidget {
             ),
             child: AutoSizeText(
               'Visitors',
-              // maxLines: 1,
+              maxLines: 1,
               textAlign: TextAlign.center,
               style: context.textTheme.headline6?.copyWith(
                 color: const Color.fromARGB(255, 255, 255, 255),
