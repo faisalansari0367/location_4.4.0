@@ -34,7 +34,12 @@ class _SignUpViewState extends State<SignUpView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Assets.images.signup.image(),
+              Center(
+                child: Assets.icons.appIcon.image(
+                  fit: BoxFit.cover,
+                  // width: 100.width,
+                ),
+              ),
               Text(
                 Strings.signUp,
                 style: context.textTheme.headline4?.copyWith(
@@ -100,9 +105,10 @@ class _SignUpViewState extends State<SignUpView> {
                               text: Strings.termsAndConditions,
                               recognizer: _onTap(
                                 PdfViewer(
-                                    title: Strings.termsAndConditions,
-                                    path:
-                                        'assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf'),
+                                  title: Strings.termsAndConditions,
+                                  path:
+                                      'assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf',
+                                ),
                               ),
                               style: context.textTheme.bodyText2?.copyWith(
                                 color: context.theme.primaryColor,

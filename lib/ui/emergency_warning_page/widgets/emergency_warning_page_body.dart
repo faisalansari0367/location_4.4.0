@@ -109,8 +109,6 @@ class EmergencyWarningPageBody extends StatelessWidget {
           child: StreamBuilder<List<PolygonModel>>(
             stream: provider.stream,
             builder: (context, snapshot) {
-              // hasPolygon = snapshot.hasData && snapshot.data!.isNotEmpty;
-              // setState(() {});
               return Scrollbar(
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Gap(10.h),

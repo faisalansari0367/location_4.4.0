@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -148,15 +149,18 @@ class ButtonShapeWidget extends StatelessWidget {
       curve: Curves.ease,
       width: double.infinity,
       decoration: shape,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Container(
+        // margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
+
         child: AnimatedOpacity(
           duration: transitionDuration,
           opacity: isDownloading || isFetching ? 0.0 : 1.0,
           curve: Curves.ease,
-          child: Text(
+          child: AutoSizeText(
             isDownloaded ? 'Open' : buttonTitle ?? 'Download',
             textAlign: TextAlign.center,
+            maxLines: 1,
             style: Theme.of(context).textTheme.button?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: context.theme.primaryColor,

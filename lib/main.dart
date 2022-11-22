@@ -183,7 +183,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: kDebugMode,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,

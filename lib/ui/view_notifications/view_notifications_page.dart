@@ -14,6 +14,7 @@ class ViewSentNotifications extends StatefulWidget {
 }
 
 class _ViewSentNotificationsState extends State<ViewSentNotifications> {
+  
   @override
   void initState() {
     context.read<Api>().getSentNotifications();

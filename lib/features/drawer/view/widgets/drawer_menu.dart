@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/features/drawer/models/drawer_items.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 25.h,
+                        fontSize: 24.sp,
                       ),
                 ),
                 Gap(25.h),
@@ -181,7 +182,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w600,
                 fontSize: 20.sp,
               ),
-              child: Text(item.text),
+              child: Flexible(
+                child: AutoSizeText(
+                  item.text,
+                  maxLines: 1,
+                ),
+              ),
             )
           ],
         ),

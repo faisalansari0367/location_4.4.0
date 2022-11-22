@@ -101,6 +101,7 @@ class EnvdListItem extends StatelessWidget {
 
   Widget _buildPdfButton(BuildContext context) {
     return Flexible(
+      flex: 2,
       child: DownloadButton(
         buttonText: 'Download PDF',
         controller: EnvdDownloadController(

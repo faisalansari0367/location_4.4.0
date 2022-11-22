@@ -30,8 +30,8 @@ class SentNotification {
   int? id;
   List<String>? user;
   DateTime? notificationDate;
-  String? createdAt;
-  String? updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
   Geofence? geofence;
   UserData? createdBy;
 
@@ -42,11 +42,13 @@ class SentNotification {
     id = json['id'];
     user = json['user'].cast<String>();
     notificationDate = DateTime.tryParse(json['notificationDate'])?.toLocal();
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    createdAt = _toDate(json['createdAt']);
+    updatedAt = _toDate(json['updatedAt']);
     geofence = json['geofence'] != null ? Geofence.fromJson(json['geofence']) : null;
     createdBy = json['createdBy'] != null ? UserData.fromJson(json['createdBy']) : null;
   }
+
+  DateTime? _toDate(String? date) => date != null ? DateTime.tryParse(date)?.toLocal() : null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

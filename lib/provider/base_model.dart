@@ -8,6 +8,15 @@ abstract class BaseModel extends ChangeNotifier {
   late LocalApi localApi;
   late Api apiService;
   bool mounted = true;
+  bool _isLoading = true;
+
+  // bool get isLoading => _isLoading;
+
+  // void setLoading(bool value) {
+  //   _isLoading = value;
+  //   notifyListeners();
+  // }
+
 
   BaseModel(BuildContext context) {
     api = context.read<Api>();

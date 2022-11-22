@@ -120,20 +120,22 @@ class Client {
   }
 
   Client setProtectedApiHeader() {
-    // final authRepository = AuthRepoImpl(_client);
-    // final token = StorageService(box: ).getToken();
     if (token == null) return this;
     header!.putIfAbsent('Authorization', () => 'Bearer $token');
     return this;
   }
 
-  Dio build() {
-    // print("DIO IS CALLING");
+  Dio build({bool logging = true}) {
 
     (_dio!.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
       client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       return client;
     };
+
+    if (!logging) {
+      _dio!.interceptors.clear();
+    }
+
     return _dio!;
   }
 

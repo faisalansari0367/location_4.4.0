@@ -1,10 +1,7 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/gen/assets.gen.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
-import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -16,6 +13,7 @@ import 'package:local_auth_repo/local_auth.dart';
 
 import '../../constants/constans.dart';
 import '../../features/drawer/view/drawer_page.dart';
+import '../maps/view/maps_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -51,7 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final size = 13.width;
@@ -64,10 +61,10 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Gap(10.height),
+            Gap(15.height),
             Center(
               child: Image.asset(
-                Assets.icons.appIcon.path,
+                'assets/icons/BIOPLUS LOGO - Blue & White 2.png',
                 fit: BoxFit.fitHeight,
                 // alignment: Alignment.center,
                 height: 70.width,
@@ -80,33 +77,33 @@ class _SplashScreenState extends State<SplashScreen> {
             // AppName(
 
             // ),
-            Center(
-              child: AutoSizeText.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'BIO',
-                      style: TextStyle(
-                        color: const Color(0xff3B4798),
-                        fontWeight: FontWeight.bold,
-                        fontSize: size,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'PLUS',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        // fontWeight: FontWeight.w500,
-                        fontSize: size,
-                      ),
-                    ),
-                  ],
-                  style: context.textTheme.headline5,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-              ),
-            ),
+            // Center(
+            //   child: AutoSizeText.rich(
+            //     TextSpan(
+            //       children: [
+            //         TextSpan(
+            //           text: 'BIO',
+            //           style: TextStyle(
+            //             color: const Color(0xff3B4798),
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: size,
+            //           ),
+            //         ),
+            //         TextSpan(
+            //           text: 'PLUS',
+            //           style: TextStyle(
+            //             color: Color.fromARGB(255, 255, 255, 255),
+            //             // fontWeight: FontWeight.w500,
+            //             fontSize: size,
+            //           ),
+            //         ),
+            //       ],
+            //       style: context.textTheme.headline5,
+            //     ),
+            //     textAlign: TextAlign.center,
+            //     maxLines: 1,
+            //   ),
+            // ),
             AnimatedOpacity(
               opacity: showSplash ? 0 : 1,
               duration: 375.milliseconds,

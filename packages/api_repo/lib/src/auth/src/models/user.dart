@@ -65,6 +65,8 @@ class User {
 
     return data;
   }
+
+  String get fullName => '$firstName $lastName';
 }
 
 class UserKeys {

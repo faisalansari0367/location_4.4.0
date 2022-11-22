@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../constants/my_decoration.dart';
@@ -10,6 +11,7 @@ import '../../constants/my_decoration.dart';
 class FormsStorageService {
   static const _cvdFolder = 'cvd_folder';
   static const _envd = 'envds';
+  static const _csvs = 'csvs';
 
   static Directory? _appDir;
   late User user;
@@ -87,19 +89,6 @@ class FormsStorageService {
     // OpenFile.open(file.path);
   }
 
-  Future<String> createCvdFileName() async {
-    var count = 1;
-    final cvdDir = await _createOrCheckCvdFolder();
-    final files = await getCvdForms();
-
-    if (files.isNotEmpty) {
-      count = files.length + 1;
-    }
-
-    final path = '${cvdDir.path}/${user.email}/${'CVD Form $count.pdf'}';
-    return path;
-  }
-
   Future<File> _createCvdFile(String path, String date, String buyerName, {int? count}) async {
     var _count = count ?? 0;
     final file = File('${path}/${'$date $buyerName ${_count == 0 ? '' : _count}.pdf'}');
@@ -112,12 +101,23 @@ class FormsStorageService {
     }
   }
 
+  Future<File> _createCsvFile(String path, String date, String fileName, {int? count}) async {
+    var _count = count ?? 0;
+    final file = File('${path}/${'$fileName $date ${_count == 0 ? '' : _count}.csv'}');
+    if (await file.exists()) {
+      // final _newpath = '${path}/${'$date $buyerName ${_count == 0 ? '' : _count}.pdf'}';
+      return _createCsvFile(path, date, fileName, count: _count + 1);
+    } else {
+      // await file.create();
+      return file;
+    }
+  }
+
   Future<File> saveCvdForm(Uint8List bytes, String buyerName) async {
     final userDir = await _getUserDir();
     final cvdDir = Directory(userDir.path + '/$_cvdFolder');
     if (!(await cvdDir.exists())) cvdDir.create();
     final date = MyDecoration.formatDate(DateTime.now());
-    // final path = '${cvdDir.path}/${'$date $buyerName.pdf'}';
     final file = await _createCvdFile(cvdDir.path, date, buyerName);
     await file.writeAsBytes(bytes);
     return file;
@@ -126,5 +126,17 @@ class FormsStorageService {
   Future<List<FileSystemEntity>> getCvdForms() async {
     final cvdDir = await _createOrCheckCvdFolder();
     return cvdDir.list().toList();
+  }
+
+  Future<File> generateCsv(List<String> headers, List<List<String>> rows, {String? fileName}) async {
+    rows.insert(0, headers);
+    final data = await ListToCsvConverter().convert(rows);
+    final String directory = (await _getUserDir()).path;
+    final csvDir = Directory('$directory/$_csvs');
+    if (!(await csvDir.exists())) csvDir.create();
+    final date = MyDecoration.formatDate(DateTime.now());
+    final File file = await _createCsvFile(csvDir.path, date, fileName ?? 'csv');
+    await file.writeAsString(data);
+    return file;
   }
 }

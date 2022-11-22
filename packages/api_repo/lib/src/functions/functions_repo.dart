@@ -70,7 +70,7 @@ class FunctionsRepoImpl implements FunctionsRepo {
   @override
   Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress}) async {
     try {
-      final response = await client.build().get(
+      final response = await client.build(logging: false).get(
             url,
             options: Options(responseType: ResponseType.bytes),
             onReceiveProgress: onReceiveProgress,
