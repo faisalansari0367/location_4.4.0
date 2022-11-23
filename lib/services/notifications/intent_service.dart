@@ -9,8 +9,12 @@ class IntentService {
     Fluttertoast.showToast(msg: msg ?? 'No app available to open this link');
   }
 
-  static Future<bool> emailIntent(String? email) async {
-    final emailLaunchUri = Uri(scheme: 'mailto', path: email);
+  static Future<bool> emailIntent(String? email, {String? subject, String? body}) async {
+    var q = '';
+    if (subject != null) q += 'subject=$subject';
+    if (body != null) q += '&body=$body';
+
+    final emailLaunchUri = Uri(scheme: 'mailto', path: email, query: q);
     final _email = emailLaunchUri.toString();
     final result = await canLaunchUrlString(_email);
     try {

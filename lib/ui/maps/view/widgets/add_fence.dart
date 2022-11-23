@@ -6,9 +6,9 @@ import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dar
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../constants/constans.dart';
 import '../../../../constants/strings.dart';
@@ -31,19 +31,21 @@ class AddFence extends StatelessWidget {
 
   List<Widget> getItems(BuildContext context) {
     return [
-      BlocBuilder<MapsCubit, MapsState>(
-        builder: (context, state) => BottomNavbarItem(
+      Selector<MapsCubit, Color>(
+        selector: (_, cubit) => cubit.state.selectedColor,
+        builder: (context, color, child) => BottomNavbarItem(
           title: 'Select Color',
-          color: state.selectedColor,
-          onTap: () {
-            BottomSheetService.showSheet(child: SelectColor(cubit: cubit));
-          },
+          color: color,
+          onTap: () => BottomSheetService.showSheet(
+            child: SelectColor(onColorSelected: cubit.setAssetColor),
+          ),
           icon: Assets.icons.bottomNavbar.colorPicker.path,
         ),
       ),
-      BlocBuilder<MapsCubit, MapsState>(
-        builder: (context, state) {
-          return state.isEditingFence
+      Selector<MapsCubit, bool>(
+        selector: (context, cubit) => cubit.state.isEditingFence,
+        builder: (context, isEditingFence, child) {
+          return isEditingFence
               ? const SizedBox.shrink()
               : BottomNavbarItem(
                   title: 'Undo',

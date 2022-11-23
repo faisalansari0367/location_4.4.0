@@ -57,7 +57,14 @@ class MapsRepoLocal implements MapsRepo {
   }
 
   @override
-  Stream<List<PolygonModel>> get polygonStream => _controller.stream;
+  Stream<List<PolygonModel>> get polygonStream => _controller.stream.map(
+        (event) => event
+          ..sort(
+            (a, b) => a.name.toLowerCase().compareTo(
+                  b.name.toLowerCase(),
+                ),
+          ),
+      );
 
   @override
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
@@ -122,8 +129,9 @@ class MapsRepoLocal implements MapsRepo {
 
   @override
   bool get hasPolygons => _controller.value.isNotEmpty;
-  
+
   @override
   // TODO: implement polygonsCompleter
-  Future<List<PolygonModel>> get polygonsCompleter => storage.getAllPolygon().then((value) => value.when(success: (s) => s, failure: (f) => []));
+  Future<List<PolygonModel>> get polygonsCompleter =>
+      storage.getAllPolygon().then((value) => value.when(success: (s) => s, failure: (f) => []));
 }

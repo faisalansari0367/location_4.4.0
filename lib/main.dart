@@ -48,7 +48,6 @@ Future<void> showNotification({
 }
 
 Future<void> bgHandler(RemoteMessage message) async {
-  // dev.log(message.toMap().toString());
   await showNotification(
     title: message.notification?.title ?? '',
     body: message.notification?.body ?? '',
@@ -59,7 +58,6 @@ Future<void> bgHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // set portrait orientation
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -78,7 +76,7 @@ Future<void> main() async {
     await repo.init(baseUrl: ApiConstants.baseUrl, box: _box);
 
     final mapsRepo = MapsApi(client: repo.client);
-    // final mapsRepo = MapsRepoLocal();
+
     await mapsRepo.init();
     await notifications.initialize(
       'resource://drawable/itrak_logo_transparent',
@@ -104,11 +102,7 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(bgHandler);
 
     await pushNotification.initmessaging();
-    // pushNotification.setBgHandler();
 
-    // final storage = await HydratedStorage.build(
-    //   storageDirectory: await getApplicationDocumentsDirectory(),
-    // );
     runApp(
       MyApp(
         localApi: localApi,
@@ -119,15 +113,8 @@ Future<void> main() async {
       ),
     );
 
-    // HydratedBlocOverrides.runZoned(
-    //   storage: storage,
-    // );
-
-    // runApp(MyApp(api: repo, notificationService: localNotification));
-    // runApp(MyApp());
     if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }, (error, stackTrace) {
-    // print(stackTrace);
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }
@@ -157,12 +144,10 @@ class _MyAppState extends State<MyApp> {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enableCrashlytics);
   }
 
-  // late MapsRepoLocal mapsRepoLocal;
   @override
   void initState() {
     MyConnectivity();
-    // mapsRepoLocal = MapsRepoLocal();
-    // mapsRepoLocal.init();
+
     _initializeFlutterFire();
     super.initState();
   }

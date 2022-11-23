@@ -2,6 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
+import 'package:background_location/ui/maps/widgets/geofences_list/geofences_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -9,15 +10,13 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../constants/index.dart';
+import '../../../models/enum/filter_type.dart';
 import '../../../widgets/dialogs/dialog_layout.dart';
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../../../widgets/empty_screen.dart';
 import '../../../widgets/my_appbar.dart';
 import '../../../widgets/my_elevated_button.dart';
-import '../../maps/models/polygon_model.dart';
 import '../../maps/view/maps_page.dart';
-import '../../maps/widgets/geofences_list/geofence_card.dart';
-import '../../maps/widgets/geofences_list/geofences_view.dart';
 
 /// {@template emergency_warning_page_body}
 /// Body of the EmergencyWarningPagePage.
@@ -43,13 +42,15 @@ class EmergencyWarningPageBody extends StatelessWidget {
         ),
         centreTitle: true,
       ),
-      bottomNavigationBar: Selector<EmergencyWarningPageNotifier, bool>(
-        selector: (p0, p1) => p1.hasPolygon,
-        builder: (context, value, child) => value ? _bottomNavbar(context) : const SizedBox(),
-      ),
+      // bottomNavigationBar: Selector<EmergencyWarningPageNotifier, bool>(
+      //   selector: (p0, p1) => p1.hasPolygon,
+      //   builder: (context, value, child) => value ? _bottomNavbar(context) : const SizedBox(),
+      // ),
+      bottomNavigationBar: _bottomNavbar(context),
       body: Consumer<EmergencyWarningPageNotifier>(
         builder: (context, state, child) {
-          return state.hasPolygon ? _buildBody(context) : _noGeofences();
+          // return state.hasPolygon ? _buildBody(context) : _noGeofences();
+          return _buildBody(context);
         },
       ),
     );
@@ -87,46 +88,54 @@ class EmergencyWarningPageBody extends StatelessWidget {
             height: 100,
           ),
         ),
-        Text(
-          'Select A Location',
-          style: context.textTheme.headline6?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Gap(20.h),
-        if (provider.userData?.role == 'Admin') ...[
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Row(
-              children: [
-                _buildFilters(context),
-                Gap(10.h),
-              ],
-            ),
-          ),
-        ],
         Expanded(
-          child: StreamBuilder<List<PolygonModel>>(
-            stream: provider.stream,
-            builder: (context, snapshot) {
-              return Scrollbar(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Gap(10.h),
-                  padding: kPadding,
-                  itemCount: (snapshot.data ?? []).length,
-                  itemBuilder: (context, index) {
-                    final fence = snapshot.data![index];
-                    return GeofenceCard(
-                      onTap: () => provider.addOrRemovePolygons(fence.id!),
-                      isSelected: provider.isZoneSelected(fence.id!),
-                      item: fence,
-                    );
-                  },
-                ),
-              );
-            },
+          child: GeofencesList(
+            emptyScreen: _noGeofences(),
+            showCloseButton: false,
+            onSelected: (value) => provider.addOrRemovePolygons(value.id!),
+            isSelected: (model) => provider.isZoneSelected(model.id!),
           ),
         ),
+        // Text(
+        //   'Select A Location',
+        //   style: context.textTheme.headline6?.copyWith(
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
+        // Gap(20.h),
+        // if (provider.userData?.role == 'Admin') ...[
+        //   Padding(
+        //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+        //     child: Row(
+        //       children: [
+        //         _buildFilters(context),
+        //         Gap(10.h),
+        //       ],
+        //     ),
+        //   ),
+        // ],
+        // Expanded(
+        //   child: StreamBuilder<List<PolygonModel>>(
+        //     stream: provider.stream,
+        //     builder: (context, snapshot) {
+        //       return Scrollbar(
+        //         child: ListView.separated(
+        //           separatorBuilder: (context, index) => Gap(10.h),
+        //           padding: kPadding,
+        //           itemCount: (snapshot.data ?? []).length,
+        //           itemBuilder: (context, index) {
+        //             final fence = snapshot.data![index];
+        //             return GeofenceCard(
+        //               onTap: () => provider.addOrRemovePolygons(fence.id!),
+        //               isSelected: provider.isZoneSelected(fence.id!),
+        //               item: fence,
+        //             );
+        //           },
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
       ],
     );
   }

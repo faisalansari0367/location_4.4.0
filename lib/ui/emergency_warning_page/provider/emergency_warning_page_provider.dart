@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/provider/base_model.dart';
 
+import '../../../models/enum/filter_type.dart';
 import '../../maps/location_service/maps_repo.dart';
 import '../../maps/models/polygon_model.dart';
 import '../../maps/widgets/geofences_list/geofences_view.dart';

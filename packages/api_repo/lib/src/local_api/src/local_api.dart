@@ -101,7 +101,7 @@ class LocalApi extends Api {
 
   @override
   Future<void> init({required String baseUrl, required Box box}) async {
-    const path = "/data/user/0/com.itrakassets.biosecure/app_flutter";
+    // const path = "/data/user/0/com.itrakassets.biosecure/app_flutter";
     // final dir = await Directory(path).list().toList();
     // for (var item in dir) {
     //   print(item.path.split('/').last);
@@ -124,12 +124,14 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<User>> signIn({required SignInModel data}) async {
     try {
-      final box = await Hive.openBox(data.email.trim());
-      await init(baseUrl: '', box: box);
+      // final box = await Hive.openBox(data.email.trim());
+      // await init(baseUrl: '', box: box);
       final savedModel = storage.getSignInData();
       if (savedModel != data) {
         return const ApiResult.failure(
-          error: NetworkExceptions.defaultError('User not found'),
+          error: NetworkExceptions.defaultError(
+            'You are in offline mode only the last user can login',
+          ),
         );
       }
       final user = storage.getUser();

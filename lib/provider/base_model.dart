@@ -1,14 +1,34 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
+import 'package:background_location/services/notifications/push_notifications.dart';
+import 'package:background_location/ui/maps/location_service/maps_repo.dart';
+import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_notification/local_notification.dart';
 
 abstract class BaseModel extends ChangeNotifier {
   late Api api;
   late LocalApi localApi;
+
   late Api apiService;
   bool mounted = true;
-  bool _isLoading = true;
+  late NotificationService service;
+  late MapsRepo mapsRepo;
+  late MapsRepoLocal _mapsRepoLocal;
+  late PushNotificationService pushNotificationService;
+
+
+  //
+  //  context.read<NotificationService>(),
+  //       context.read<MapsRepo>(),
+  //       context.read<PolygonsService>(),
+  //       context.read<PushNotificationService>(),
+  //       context.read<Api>(),
+  //       context.read<MapsRepoLocal>(),
+  //       geofenceService: context.read<GeofenceService>(),
+
+  // bool _isLoading = true;
 
   // bool get isLoading => _isLoading;
 
@@ -21,9 +41,14 @@ abstract class BaseModel extends ChangeNotifier {
   BaseModel(BuildContext context) {
     api = context.read<Api>();
     localApi = context.read<LocalApi>();
+    mapsRepo = context.read<MapsRepo>();
+    _mapsRepoLocal = context.read<MapsRepoLocal>();
+    pushNotificationService = context.read<PushNotificationService>();
+
     apiService = api;
     MyConnectivity().connectionStream.listen((event) {
       apiService = event ? api : localApi;
+      mapsRepo = event ? mapsRepo : _mapsRepoLocal;
       _emit(baseState.copyWith(isConnected: event));
     });
   }

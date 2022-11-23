@@ -47,7 +47,16 @@ class _LogbookViewState extends State<LogbookView> {
     });
   }
 
-  static const list = [if (kDebugMode) 'id', 'Full Name', 'entry date', 'exit date', 'Zone', 'pic', 'Declaration'];
+  // static const list = [
+  //   if (kDebugMode) 'id',
+  //   'Full Name',
+  //   'entry date',
+  //   'exit date',
+  //   'Zone',
+  //   'PIC/NGR',
+  //   'Post Code',
+  //   'Declaration'
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +101,7 @@ class _LogbookViewState extends State<LogbookView> {
                   }
                   return DataTable(
                     dataRowHeight: 60,
-                    columns: list.map((e) => _dataColumn(e.capitalize!)).toList(),
+                    columns: cubit.list.map((e) => _dataColumn(e.toUpperCase())).toList(),
                     rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
                     columnSpacing: 31,
                   );
@@ -117,31 +126,37 @@ class _LogbookViewState extends State<LogbookView> {
         _dataCell('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
         _dataCell('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
         _dataCell(item.geofence?.name ?? ''),
-        _dataCell(item.geofence?.pic ?? '', color: item.geofence?.color, isPic: true),
-        DataCell(
-          (item.form.isNotEmpty)
-              ? TextButton(
-                  onPressed: () => Get.to(() => LogbookDetails(item: item)),
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  child: const Text('View'),
-                )
-              : GestureDetector(
-                  onTap: !(_user?.id == item.user!.id) ? null : () => _completeDeclarationDialog(item),
-                  child: Text(
-                    'Unregistered'.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-        ),
+        _dataCell(item.geofence?.pic ?? item.user?.ngr ?? '',
+            color: item.geofence?.color, isPic: item.geofence?.pic != null),
+        _dataCell(item.user?.postcode.toString() ?? '', color: item.geofence?.color, isPic: false),
+        _buildFormButton(item),
       ],
+    );
+  }
+
+  DataCell _buildFormButton(LogbookEntry item) {
+    return DataCell(
+      (item.form.isNotEmpty)
+          ? TextButton(
+              onPressed: () => Get.to(() => LogbookDetails(item: item)),
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              child: const Text('View'),
+            )
+          : GestureDetector(
+              onTap: !(_user?.id == item.user!.id) ? null : () => _completeDeclarationDialog(item),
+              child: Text(
+                'Unregistered'.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.red,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
     );
   }
 

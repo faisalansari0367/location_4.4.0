@@ -10,6 +10,7 @@ import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/records/records_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/ui/visitors/visitors_page.dart';
+import 'package:background_location/ui/work_safety/view/work_safety_page.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/status_dialog_new.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
@@ -20,7 +21,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../features/webview/flutter_webview.dart';
 import '../../services/notifications/push_notifications.dart';
 import '../links_page/links_page.dart';
 
@@ -118,7 +118,45 @@ class _DashboardViewState extends State<DashboardView> {
                     text: 'Work Safety',
                     image: 'assets/icons/Work Safety.png',
                     onTap: () {
-                      Get.to(() => const Webview(url: 'https://itrakassets.com/', title: 'iTRAKassets'));
+                      Get.to(() => WorkSafetyPage());
+                      // Get.to(() => const Webview(url: 'https://itrakassets.com/', title: 'iTRAKassets'));
+                      // Get.to(
+                      //   () => Scaffold(
+                      //     appBar: MyAppBar(
+                      //       title: Text('Work Safety'),
+                      //     ),
+                      //     body: Column(
+                      //       children: [
+                      //         Image.asset('assets/images/WorSAFETY Image.jpg'),
+                      //         Gap(50.h),
+                      //         MyElevatedButton(
+                      //           width: 70.width,
+                      //           child: Text(
+                      //             'Register Now',
+                      //             style: TextStyle(
+                      //               color: Colors.white,
+                      //               fontWeight: FontWeight.bold,
+                      //               fontSize: 30.sp,
+                      //             ),
+                      //           ),
+                      //           onPressed: (() async => IntentService.emailIntent(
+                      //                 'stewart@itrakassets.com',
+                      //                 subject: 'Work Safety Program Registration',
+                      //                 body: '${}',
+                      //               )),
+                      //           // text: TextSpan(
+                      //           //   text: 'Register now',
+                      //           //   style: TextStyle(
+                      //           //     color: context.theme.primaryColor,
+                      //           //     decoration: TextDecoration.underline,
+                      //           //     fontSize: 30.sp,
+                      //           //   ),
+                      //           // ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // );
                     },
                   ),
                   DashboardCard(

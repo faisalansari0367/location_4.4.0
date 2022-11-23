@@ -207,7 +207,7 @@ class LogRecordsImpl implements LogRecordsRepo {
         // print('difference between enter and exit date is $entryExitDifference in minutes');
 
         // final canCreateNew = exitDate?.isAfter(DateTime.now().toLocal()) ?? false;
-        if (entryExitDifference > 15) {
+        if (entryExitDifference > 30) {
           // delete old record from storage
           // await storage.removeLogRecord(geofenceId);
           // create new record

@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
 import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
@@ -20,18 +21,17 @@ class MapsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return ChangeNotifierProvider(
+
       create: (context) => MapsCubit(
+        context,
         context.read<NotificationService>(),
-        context.read<MapsRepo>(),
+        // context.read<MapsRepo>(),
         context.read<PolygonsService>(),
         context.read<PushNotificationService>(),
         context.read<Api>(),
         context.read<MapsRepoLocal>(),
-
-        polygonId: polygonId,
         geofenceService: context.read<GeofenceService>(),
-        // context.read<MapsRepoLocal>(),
       ),
       child: MapsView(fromDrawer: fromDrawer),
     );

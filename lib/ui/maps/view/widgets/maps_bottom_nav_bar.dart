@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/gen/assets.gen.dart';
+import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar.dart';
@@ -35,11 +36,12 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
         color: Colors.white,
         borderRadius: kBorderRadius,
       ),
-      child: BlocProvider.value(
+      child: ChangeNotifierProvider.value(
         value: widget.cubit,
-        child: BlocBuilder<MapsCubit, MapsState>(
-          buildWhen: (previous, current) => previous.addingGeofence != current.addingGeofence,
-          builder: (context, state) {
+        child: Consumer<MapsCubit>(
+          // buildWhen: (previous, current) => previous.addingGeofence != current.addingGeofence,
+          builder: (context, provider, child) {
+            final state = provider.state;
             return SizedBox(
               // constraints: BoxConstraints(maxHeight: 110.h),
               height: height,

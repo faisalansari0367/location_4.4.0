@@ -48,7 +48,12 @@ class MapsApi implements MapsRepo {
   }
 
   @override
-  Stream<List<PolygonModel>> get polygonStream => _controller.stream;
+  Stream<List<PolygonModel>> get polygonStream => _controller.stream.map((event) => event
+    ..sort(
+      (a, b) => a.name.toLowerCase().compareTo(
+            b.name.toLowerCase(),
+          ),
+    ));
 
   @override
   Future<ApiResult<void>> savePolygon(PolygonModel model) async {

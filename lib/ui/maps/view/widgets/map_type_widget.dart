@@ -1,6 +1,6 @@
+import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -16,10 +16,11 @@ class MapTypeWidget extends StatelessWidget {
   }
 
   Widget _child(BuildContext context) {
-    return BlocProvider.value(
+    return ChangeNotifierProvider.value(
       value: cubit,
-      child: BlocBuilder<MapsCubit, MapsState>(
-        builder: (context, state) {
+      child: Consumer<MapsCubit>(
+        builder: (context, provider, child) {
+          final state = provider.state;
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: MapType.values

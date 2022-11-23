@@ -8,7 +8,7 @@ class MapsState extends Equatable {
   final bool isEditingFence;
   final LatLng currentLocation;
   final MapType mapType;
-  // final List<LatLng> latLngs;
+  final List<LatLng> polylines;
   final Set<PolygonModel> polygons;
   final Set<Circle> circles;
   final bool addingGeofence;
@@ -28,7 +28,7 @@ class MapsState extends Equatable {
     this.isEditingFence = false,
     required this.currentLocation,
     this.mapType = MapType.hybrid,
-    // this.latLngs = const <LatLng>[],
+    this.polylines = const <LatLng>[],
     this.polygons = const <PolygonModel>{},
     this.circles = const <Circle>{},
     this.addingGeofence = false,
@@ -41,7 +41,7 @@ class MapsState extends Equatable {
     bool? isConnected,
     LatLng? currentLocation,
     MapType? mapType,
-    List<LatLng>? latLngs,
+    List<LatLng>? polylines,
     Set<PolygonModel>? polygons,
     Set<Circle>? circles,
     bool? addingGeofence,
@@ -58,7 +58,7 @@ class MapsState extends Equatable {
       insideFence: insideFence ?? this.insideFence,
       currentLocation: currentLocation ?? this.currentLocation,
       mapType: mapType ?? this.mapType,
-      // latLngs: latLngs ?? this.latLngs,
+      polylines: polylines ?? this.polylines,
       isEditingFence: isEditingFence ?? this.isEditingFence,
       polygons: polygons ?? this.polygons,
       circles: circles ?? this.circles,

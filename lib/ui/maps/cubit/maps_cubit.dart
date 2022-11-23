@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/maps/cubit/track_polygons.dart';
+import 'package:background_location/provider/base_model.dart';
 import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
@@ -11,77 +11,86 @@ import 'package:background_location/ui/maps/models/enums/filed_assets.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:local_notification/local_notification.dart';
 
-import '../../../services/notifications/connectivity/connectivity_service.dart';
 import '../../../services/notifications/push_notifications.dart';
-import '../location_service/maps_repo.dart';
 import '../location_service/maps_repo_local.dart';
 import '../models/polygon_model.dart';
 
 part 'maps_state.dart';
 
-class MapsCubit extends Cubit<MapsState> {
+class MapsCubit extends BaseModel {
   // ignore: unused_field
   final NotificationService _notificationService;
   // ignore: unused_field
   final PushNotificationService _pushNotificationService;
   final PolygonModel? polygonId;
-  final MapsRepo _mapsRepo;
+  // final MapsRepo _mapsRepo;
   final PolygonsService _polygonsService;
   final GeofenceService geofenceService;
   final Api api;
   final MapsRepoLocal mapsRepoLocal;
-  late MapsRepo mapsRepo;
-  late TrackPolygons trackPolygons;
+  // late MapsRepo mapsRepo;
+  // late TrackPolygons trackPolygons;
 
   MapsCubit(
+    BuildContext context,
     this._notificationService,
-    this._mapsRepo,
+    // this._mapsRepo,
     this._polygonsService,
     this._pushNotificationService,
     this.api,
     this.mapsRepoLocal, {
     required this.geofenceService,
     this.polygonId,
-  }) : super(
-          const MapsState(
-            currentLocation: LatLng(
-              -25.185575842417077,
-              134.68900724218238,
-            ),
-          ),
-        ) {
-    mapsRepo = _mapsRepo;
-    trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
-    MyConnectivity().connectionStream.listen((event) {
-      mapsRepo = event ? _mapsRepo : mapsRepoLocal;
-      emit(state.copyWith(isConnected: event));
-      if (state.polygons.isEmpty) {
-        _getAllPolygon();
-      }
-    });
+  }) : super(context) {
+    // mapsRepo = _mapsRepo;
+    // trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
+    // MyConnectivity().connectionStream.listen((event) {
+    //   mapsRepo = event ? _mapsRepo : mapsRepoLocal;
+    //   emit(state.copyWith(isConnected: event));
+    // });
+
+    init();
   }
 
+  MapsState state = const MapsState(
+    currentLocation: LatLng(-25.185575842417077, 134.68900724218238),
+  );
+
   final Completer<GoogleMapController> controller = Completer();
-  late GoogleMapController mapController;
+  Future<GoogleMapController> get mapController async => await controller.future;
   // StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
-    // so that device can determin the connectivity status
     updateCurrentLocation();
-    await 200.milliseconds.delay();
-    // if (polygonId != null) moveToSelectedPolygon(polygonId!);
+    // so that device can determine the connectivity status
+    await 100.milliseconds.delay();
+    if (state.polygons.isEmpty) {
+      _getAllPolygon();
+    }
     getLocationUpdates();
-    emit(state.copyWith());
+    polygonsStream();
+    polylinesStream();
   }
 
-  void moveToSelectedPolygon(PolygonModel model) {
-    mapController.animateCamera(
+  void polygonsStream() {
+    mapsRepo.polygonStream.listen((event) {
+      emit(state.copyWith(polygons: event.toSet()));
+    });
+  }
+
+  void polylinesStream() {
+    _polygonsService.stream.listen((event) {
+      emit(state.copyWith(polylines: event));
+    });
+  }
+
+  void moveToSelectedPolygon(PolygonModel model) async {
+    (await mapController).animateCamera(
       MapsToolkitService.boundsFromLatLngList(model.points),
     );
   }
@@ -106,11 +115,11 @@ class MapsCubit extends Cubit<MapsState> {
     if (state.currentPolygon != null) {
       result.when(
         success: (s) {
-          emit(state.copyWith(isEditingFence: false, latLngs: []));
+          emit(state.copyWith(isEditingFence: false, polylines: []));
           _polygonsService.clear();
         },
         failure: (failure) {
-          emit(state.copyWith(isEditingFence: false, latLngs: []));
+          emit(state.copyWith(isEditingFence: false, polylines: []));
           _polygonsService.clear();
           DialogService.failure(error: failure);
         },
@@ -118,22 +127,22 @@ class MapsCubit extends Cubit<MapsState> {
     }
   }
 
-  @override
+  // @override
   void emit(MapsState state) {
-    if (isClosed) return;
-    super.emit(state);
+    if (!mounted) return;
+    this.state = state;
+    notifyListeners();
   }
 
   void startEditPolygon(PolygonModel polygon) {
-    emit(state.copyWith(isEditingFence: true, latLngs: polygon.points, currentPolygon: polygon));
-    // state.copyWith(latLngs: )
+    emit(state.copyWith(isEditingFence: true, polylines: polygon.points, currentPolygon: polygon));
     _polygonsService.addPolygon(polygon.points);
   }
 
   UserData? get userData => api.getUserData();
 
   Future<void> _getAllPolygon() async {
-    if (mapsRepo.hasPolygons) return;
+    if (mapsRepo.hasPolygons && state.polygons.isNotEmpty) return;
     final allPolygon = await mapsRepo.getAllPolygon();
     allPolygon.when(
       success: (allPolygon) {
@@ -184,7 +193,7 @@ class MapsCubit extends Cubit<MapsState> {
             color: state.selectedColor,
           )
         },
-        latLngs: [],
+        polylines: [],
       ),
     );
   }
@@ -213,11 +222,8 @@ class MapsCubit extends Cubit<MapsState> {
   }
 
   void animateCamera(LatLng latLng) async {
-    if (isClosed) return;
-    if (!controller.isCompleted) {
-      await controller.future;
-    }
-    mapController.animateCamera(
+    if (!mounted) return;
+    (await controller.future).animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: latLng,
@@ -227,10 +233,11 @@ class MapsCubit extends Cubit<MapsState> {
     );
   }
 
-  void onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    mapController.setMapStyle('[]');
-    if (this.controller.isCompleted) return;
+  Future<void> onMapCreated(GoogleMapController controller) async {
+    if (this.controller.isCompleted) {
+      (await mapController).setMapStyle('[]');
+      return;
+    }
     this.controller.complete(controller);
   }
 
@@ -260,9 +267,11 @@ class MapsCubit extends Cubit<MapsState> {
 
   Future<void> getLocationUpdates() async {
     await mapsRepo.polygonsCompleter;
-    print('polygons loaded');
+
     geofenceService.getLocationUpdates((event) {
       final position = LatLng(event.latitude, event.longitude);
+      // print(position);
+
       emit(state.copyWith(currentLocation: position));
       if (state.isTracking) {
         if (event.speed > 0) animateCamera(position);
@@ -284,13 +293,10 @@ class MapsCubit extends Cubit<MapsState> {
   }
 
   // void stopLocationUpdates() => _positionSubscription?.cancel();
-
   @override
-  Future<void> close() {
+  Future<void> dispose() async {
     geofenceService.stopTimers();
-    // stopLocationUpdates();
-    trackPolygons.dispose();
     _polygonsService.clear();
-    return super.close();
+    super.dispose();
   }
 }
