@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
@@ -110,18 +108,18 @@ class MapsStorageService implements MapsRepo {
 
   @override
   Future<ApiResult<LogbookEntry>> updateForm(String geofenceId, String form) async {
-    final entry = getLogbookEntry(geofenceId);
-    if (entry != null) {
-      entry.form = jsonDecode(form).map((field) => LogbookFormField.fromJson(field)).toList();
-      return _box.put(geofenceId, entry.toJson()).then((value) => ApiResult.success(data: entry));
-    } else {
-      return ApiResult.failure(error: NetworkExceptions.defaultError('Entry not found'));
-    }
+    // final entry = getLogbookEntry(geofenceId);
+    // if (entry != null) {
+    //   entry.form = jsonDecode(form).map((field) => LogbookFormField.fromJson(field)).toList();
+    //   return _box.put(geofenceId, entry.toJson()).then((value) => ApiResult.success(data: entry));
+    // } else {
+    return ApiResult.failure(error: NetworkExceptions.defaultError('Entry not found'));
+    // }
   }
 
   @override
   bool get hasPolygons => _box.get(_Keys._getAllPolygonKey) != null;
-  
+
   @override
   // TODO: implement polygonsCompleter
   Future<List<PolygonModel>> get polygonsCompleter => throw UnimplementedError();

@@ -248,9 +248,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       case "edec":
         return QuestionCard(
           question: name,
-          selectedValue: controller.text,
+          selectedValue: controller.text.toLowerCase() == 'Yes'.toLowerCase(),
           onChanged: (s) {
-            controller.text = s;
+            controller.text = s ? 'Yes' : 'No';
             print(map[name.toCamelCase]);
             setState(() {});
           },

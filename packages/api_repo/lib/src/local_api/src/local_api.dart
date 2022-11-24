@@ -236,7 +236,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId}) {
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId}) {
     // TODO: implement udpateForm
     throw UnimplementedError();
   }

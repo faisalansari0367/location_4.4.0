@@ -6,7 +6,7 @@ import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/log/log_records.dart';
-import 'package:api_repo/src/user/src/models/logbook_entry_model.dart';
+import 'package:api_repo/src/log/models/logbook_entry_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -102,40 +102,14 @@ class LogRecordsImpl implements LogRecordsRepo {
   @override
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 20}) async {
     try {
-      // client.token = storageService.getToken();
-      final queryParameters = {'page': 1, 'limit': 100};
-      // final result = await client
-      //     .simpleBuilder()
-      //     .setProtectedApiHeader()
-      //     .get(Endpoints.logRecords, queryParameters: queryParameters);
+      final queryParameters = {'skip': 0, 'limit': 100};
       final result = await client.get(Endpoints.logRecords, queryParameters: queryParameters, logging: false);
       final data = LogbookResponseModel.fromJson(result.data);
-      // data.data
       data.data!.sort((a, b) => b.id!.compareTo(a.id!));
-      // final ids = <int>{};
-      // final difference = data.data!.toSet().difference(_logRecords.toSet());
-      // _logRecords.removeRange(0, 19);
-      // final records = <LogbookEntry>[...data.data!, ..._logRecords];
-
-      // final elementsBetweenPage = records.sublist(data.data!.indexOf(data.data!.first), data.data!.length - 1);
-
-      // for (final dbEntry in data.data!) {
-      // for (final localEntry in _logRecords) {
-      //   final hasElement = dbEntry.id == localEntry.id;
-      //   if (hasElement) {
-      //     records.remove(dbEntry);
-      //     records.add(localEntry);
-      //   }
-      // }
-      // }
-
-      // records.sort((a, b) => b.id!.compareTo(a.id!));
-      // data.data = records;
       storage.saveLogbookRecords(data);
       if (!_completer.isCompleted) {
         _completer.complete();
       }
-
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -239,7 +213,7 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, String form, {int? logId}) async {
+  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId}) async {
     final logRecord = await getLogRecord(geofenceId);
 
     try {
@@ -269,11 +243,12 @@ class LogRecordsImpl implements LogRecordsRepo {
     }
   }
 
-  Future<ApiResult<LogbookEntry>> _patchForm(String geofenceId, String form, int logRecordId) async {
+  Future<ApiResult<LogbookEntry>> _patchForm(String geofenceId, Map<String, dynamic> form, int logRecordId) async {
     try {
       final result = await client.patch(
         '${Endpoints.logRecords}/$logRecordId',
-        data: {'form': form, 'geofenceID': geofenceId},
+        // data: {'form': form, 'geofenceID': geofenceId},
+        data: form,
       );
       final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
       _updateEntry(logbookEntry);

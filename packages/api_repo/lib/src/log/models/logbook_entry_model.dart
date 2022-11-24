@@ -94,18 +94,18 @@ class LogbookEntry {
   int? id;
   DateTime? enterDate;
   DateTime? exitDate;
-  List<LogbookFormField> form = const [];
   DateTime? createdAt;
   DateTime? updatedAt;
   Geofence? geofence;
-  
+  late LogbookFormModel form;
+
   UserData? user;
 
   LogbookEntry({
     this.id,
     this.enterDate,
     this.exitDate,
-    this.form = const [],
+    required this.form,
     this.createdAt,
     this.updatedAt,
     this.geofence,
@@ -115,23 +115,19 @@ class LogbookEntry {
     id = json['id'];
     enterDate = _getDateTime(json['enterDate']);
     exitDate = _getDateTime(json['exitDate']);
-    if (json['form'] != null) {
-      form = <LogbookFormField>[];
-      json['form'].forEach((v) {
-        form.add(LogbookFormField.fromJson(_fromMap(v)));
-      });
-    }
+
+    form = LogbookFormModel.fromJson(json);
     createdAt = _getDateTime(json['createdAt']);
     updatedAt = _getDateTime(json['updatedAt']);
     user = json['user'] != null ? UserData.fromJson(Map<String, dynamic>.from(json['user'])) : null;
     geofence = json['geofence'] != null ? Geofence.fromJson(Map<String, dynamic>.from(json['geofence'])) : null;
   }
 
-  Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
+  // Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
 
-  LogbookEntry.getId(Map<String, dynamic> json) {
-    id = json['id'];
-  }
+  // LogbookEntry.getId(Map<String, dynamic> json) {
+  //   id = json['id'];
+  // }
 
   DateTime? _getDateTime(String? date) => date != null ? DateTime.tryParse(date)?.toLocal() : null;
 
@@ -146,9 +142,9 @@ class LogbookEntry {
     data['id'] = id;
     data['enterDate'] = enterDate?.toIso8601String();
     data['exitDate'] = exitDate?.toIso8601String();
-    data['form'] = form.map((v) => v.toJson()).toList();
     data['createdAt'] = createdAt?.toIso8601String();
     data['updatedAt'] = updatedAt?.toIso8601String();
+    data.addAll(form.toJson());
     if (user != null) {
       data['user'] = user!.toJson();
     }
@@ -160,24 +156,96 @@ class LogbookEntry {
   }
 }
 
-class LogbookFormField {
-  String? field;
-  dynamic value;
+class LogbookFormModel {
+  final bool isPeopleTravelingWith;
+  final List<String> usersTravellingAlong;
+  final bool isQfeverVaccinated;
+  final bool isFluSymptoms;
+  final bool isOverSeaVisit;
+  final bool isAllMeasureTaken;
+  final bool isOwnerNotified;
+  final String rego;
+  final String riskRating;
+  final DateTime expectedDepartureTime;
+  final DateTime expectedDepartureDate;
+  final String signature;
 
-  LogbookFormField({this.field, this.value});
-
-  LogbookFormField.fromJson(Map<String, dynamic> json) {
-    field = json['field'];
-    value = json['value'];
-  }
+  LogbookFormModel({
+    required this.isPeopleTravelingWith,
+    this.usersTravellingAlong = const [],
+    required this.isQfeverVaccinated,
+    required this.isFluSymptoms,
+    required this.isOverSeaVisit,
+    required this.isAllMeasureTaken,
+    required this.isOwnerNotified,
+    required this.rego,
+    required this.riskRating,
+    required this.expectedDepartureTime,
+    required this.expectedDepartureDate,
+    required this.signature,
+  });
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['field'] = field;
-    data['value'] = value;
-    return data;
+    final map = {
+      'isPeopleTravelingWith': isPeopleTravelingWith,
+      'userTravelingAlong': usersTravellingAlong,
+      'isQfeverVaccinated': isQfeverVaccinated,
+      'isFluSymptoms': isFluSymptoms,
+      'isOverSeaVisit': isOverSeaVisit,
+      'isAllMeasureTaken': isAllMeasureTaken,
+      'isOwnerNotified': isOwnerNotified,
+      'rego': rego,
+      'riskRating': riskRating,
+      'expectedDepartureTime': expectedDepartureTime.toIso8601String(),
+      'expectedDepartureDate': expectedDepartureDate.toIso8601String(),
+      'signature': signature,
+    };
+    return map;
   }
+
+  // fromJson
+  LogbookFormModel.fromJson(Map<String, dynamic> json)
+      : isPeopleTravelingWith = json['isPeopleTravelingWith'] ?? false,
+        usersTravellingAlong = List<String>.from(json['userTravelingAlong'] ?? []),
+        isQfeverVaccinated = json['isQfeverVaccinated'] ?? false,
+        isFluSymptoms = json['isFluSymptoms'] ?? false,
+        isOverSeaVisit = json['isOverSeaVisit'] ?? false,
+        isAllMeasureTaken = json['isAllMeasureTaken'] ?? false,
+        isOwnerNotified = json['isOwnerNotified'] ?? false,
+        rego = json['rego'] ?? '',
+        riskRating = json['riskRating'] ?? '',
+        expectedDepartureTime = DateTime.parse(json['expectedDepartureTime'] ?? DateTime.now().toIso8601String()),
+        expectedDepartureDate = DateTime.parse(json['expectedDepartureDate'] ?? DateTime.now().toIso8601String()),
+        signature = json['signature'] ?? '';
+
+  final _model = GlobalDeclarationFormKeys();
+
+  GlobalDeclarationFormKeys get keys => _model;
+  String question(key) => _model.question(key);
+
+  bool get isEmpty => signature.isEmpty;
+
+  bool get isNotEmpty => !isEmpty;
 }
+
+// class LogbookFormField {
+//   String? field;
+//   dynamic value;
+
+//   LogbookFormField({this.field, this.value});
+
+//   LogbookFormField.fromJson(Map<String, dynamic> json) {
+//     field = json['field'];
+//     value = json['value'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['field'] = field;
+//     data['value'] = value;
+//     return data;
+//   }
+// }
 
 class Geofence {
   int? id;
@@ -278,4 +346,55 @@ class Origin {
     data['coordinates'] = coordinates;
     return data;
   }
+}
+
+class GlobalDeclarationFormKeys {
+  GlobalDeclarationFormKeys();
+  final isPeopleTravelingWith = 'isPeopleTravelingWith',
+      userTravelingAlong = 'userTravelingAlong',
+      isQfeverVaccinated = 'isQfeverVaccinated',
+      isFluSymptoms = 'isFluSymptoms',
+      isOverSeaVisit = 'isOverSeaVisit',
+      isAllMeasureTaken = 'isAllMeasureTaken',
+      isOwnerNotified = 'isOwnerNotified',
+      rego = 'rego',
+      riskRating = 'riskRating',
+      expectedDepartureTime = 'expectedDepartureTime',
+      expectedDepartureDate = 'expectedDepartureDate',
+      signature = 'signature';
+
+  Map<String, dynamic> get _questions => {
+        isPeopleTravelingWith: '1. Are other people travelling onto the property with you?',
+        isQfeverVaccinated: '2. Have all visitors had a Q Fever vaccination?',
+        isFluSymptoms: '3. Do you have cold or flu symptoms?',
+        isOverSeaVisit: '4. Have any visitors been overseas in the last 7 days?',
+        isAllMeasureTaken:
+            '5. Have you taken all reasonable measures to ensure that shoes, clothing and equipment are free from potential weed and disease contaminants:',
+        isOwnerNotified:
+            '6. Have you made reasonable attempts to notify the owner/manager of the property that you are visiting today?',
+        rego: 'Rego',
+        // 'selfDeclaration':
+        //     'I declare that any animals/products I am transporting are accompanied by correct movement documentation.',
+        riskRating: 'Risk Rating',
+        expectedDepartureTime: 'Expected Departure Time',
+        expectedDepartureDate: 'Expected Departure Date',
+        signature: 'Signature',
+      };
+
+  String question(String key) => _questions[key] ?? '';
+
+  List<String> get all => [
+        isPeopleTravelingWith,
+        userTravelingAlong,
+        isQfeverVaccinated,
+        isFluSymptoms,
+        isOverSeaVisit,
+        isAllMeasureTaken,
+        isOwnerNotified,
+        rego,
+        riskRating,
+        expectedDepartureTime,
+        expectedDepartureDate,
+        signature,
+      ];
 }

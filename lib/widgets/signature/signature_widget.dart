@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/widgets/widgets.dart';
@@ -12,8 +11,9 @@ import 'package:signature/signature.dart';
 
 class SignatureWidget extends StatefulWidget {
   final ValueChanged<String>? onChanged;
+  final bool isEditable;
   final String? signature;
-  const SignatureWidget({Key? key, this.onChanged, this.signature}) : super(key: key);
+  const SignatureWidget({Key? key, this.onChanged, this.signature, this.isEditable = true}) : super(key: key);
 
   @override
   State<SignatureWidget> createState() => _SignatureWidgetState();
@@ -97,22 +97,23 @@ class _SignatureWidgetState extends State<SignatureWidget> {
               ),
             ),
           ),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: GestureDetector(
-              onTap: _goToSignaturePage,
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                decoration: MyDecoration.decoration(isCircle: true),
-                child: Icon(
-                  Icons.edit,
-                  color: context.theme.primaryColor,
+          if (widget.isEditable)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: GestureDetector(
+                onTap: _goToSignaturePage,
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: MyDecoration.decoration(isCircle: true),
+                  child: Icon(
+                    Icons.edit,
+                    color: context.theme.primaryColor,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       );
     }

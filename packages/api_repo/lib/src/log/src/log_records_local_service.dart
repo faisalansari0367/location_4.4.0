@@ -1,6 +1,6 @@
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/src/user/src/models/logbook_entry_model.dart';
+import 'package:api_repo/src/log/models/logbook_entry_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -75,8 +75,8 @@ class LogRecordsLocalService {
 
   Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(LogbookResponseModel logbookResponseModel) async {
     try {
-      
-      await box.put(_Keys.logRecords, logbookResponseModel.toJson());
+      final json = logbookResponseModel.toJson();
+      await box.put(_Keys.logRecords, json);
       return ApiResult.success(data: logbookResponseModel);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.defaultError(e.toString()));

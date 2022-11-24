@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
+import 'package:background_location/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/listview/infinite_table.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../../../forms/view/global_questionnaire_form.dart';
 import '../cubit/logbook_cubit.dart';
 import '../cubit/logbook_state.dart';
 
@@ -122,19 +122,21 @@ class _LogbookViewState extends State<LogbookView> {
       ),
       cells: [
         if (kDebugMode) _dataCell(item.id.toString()),
-        _dataCell('${item.user!.firstName!} ${item.user!.lastName}'),
+        _dataCell('${item.user?.firstName} ${item.user?.lastName}'),
         _dataCell('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
         _dataCell('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
         _dataCell(item.geofence?.name ?? ''),
         _dataCell(item.geofence?.pic ?? item.user?.ngr ?? '',
             color: item.geofence?.color, isPic: item.geofence?.pic != null),
-        _dataCell(item.user?.postcode.toString() ?? '', color: item.geofence?.color, isPic: false),
+        _dataCell((item.user?.postcode == null ? '' : (item.user?.postcode).toString()),
+            color: item.geofence?.color, isPic: false),
         _buildFormButton(item),
       ],
     );
   }
 
   DataCell _buildFormButton(LogbookEntry item) {
+    print(item.form.signature);
     return DataCell(
       (item.form.isNotEmpty)
           ? TextButton(
@@ -183,9 +185,7 @@ class _LogbookViewState extends State<LogbookView> {
                 children: [
                   Expanded(
                     child: MyElevatedButton(
-                      onPressed: () async {
-                        Get.back();
-                      },
+                      onPressed: () async => Get.back(),
                       // child: const Text('No'),
                       child: Text(
                         'No',
@@ -204,7 +204,7 @@ class _LogbookViewState extends State<LogbookView> {
                       onPressed: () async {
                         Get.back();
                         Get.to(
-                          () => GlobalQuestionnaireForm(
+                          () => GlobalQuestionnaireFormPage(
                             zoneId: item.geofence!.id!.toString(),
                             logrecordId: item.id,
                           ),
@@ -231,9 +231,7 @@ class _LogbookViewState extends State<LogbookView> {
     );
   }
 
-  bool isCurrentUser(context, int? id) {
-    return id == context.read<LogBookCubit>().state.user.id;
-  }
+  bool isCurrentUser(context, int? id) => id == context.read<LogBookCubit>().state.user.id;
 
   // _datacell
   DataCell _dataCell(String data, {Color? color = Colors.black, bool isPic = false}) {

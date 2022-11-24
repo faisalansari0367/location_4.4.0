@@ -7,8 +7,8 @@ import '../../../constants/index.dart';
 
 class QuestionCard extends StatelessWidget {
   final String question;
-  final String? selectedValue;
-  final ValueChanged<String>? onChanged;
+  final bool? selectedValue;
+  final ValueChanged<bool>? onChanged;
 
   const QuestionCard({
     Key? key,
@@ -62,12 +62,13 @@ class QuestionCard extends StatelessWidget {
     );
   }
 
-  bool? get groupValue => selectedValue == null ? null : selectedValue?.toLowerCase() == 'yes';
-  bool? value(String value) => selectedValue == null ? null : selectedValue?.toLowerCase() == value;
+  bool? get groupValue => selectedValue;
+  // bool? value(String value) => selectedValue == null ? null : selectedValue?.toLowerCase() == value;
+  bool? get value => selectedValue;
 
   void _onChanged(bool? value) {
     if (value == null) return;
     final data = value ? 'yes' : 'no';
-    onChanged?.call(data);
+    onChanged?.call(value);
   }
 }

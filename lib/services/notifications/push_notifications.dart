@@ -8,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:local_notification/local_notification.dart';
 
+import '../../constants/my_decoration.dart';
+
 // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   await showNotification(
 //     message.data['title'],
@@ -38,7 +40,14 @@ class PushNotificationService {
           DialogService.showDialog(child: EmergencyWarningDialog(message: message.notification?.body ?? ''));
           return;
         }
-
+        if (message.notification?.title == 'USER ENTERED') {
+          await _userEnteredInAZone(message);
+          return;
+        }
+        if (message.notification?.title == 'USER EXITED') {
+          await _userExitedFromZone(message);
+          return;
+        }
         final result = await localNotificationService.showNotification(
           title: message.notification?.title ?? '',
           message: message.notification?.body ?? '',
@@ -55,6 +64,30 @@ class PushNotificationService {
           // image: message.data['image'],
         );
       },
+    );
+  }
+
+  Future<void> _userEnteredInAZone(RemoteMessage message) async {
+    log(message.toString());
+    final data = message.data;
+    final geofenceName = data['geofenceName'];
+    final date = DateTime.parse(data['date']).toLocal();
+    final userName = data['userName'];
+    await localNotificationService.showNotification(
+      title: message.notification?.title ?? '',
+      message: '$userName entered zone $geofenceName at ${MyDecoration.formatTime(date)}',
+    );
+  }
+
+  Future<void> _userExitedFromZone(RemoteMessage message) async {
+    log(message.toString());
+    final data = message.data;
+    final geofenceName = data['geofenceName'];
+    final date = DateTime.parse(data['date']).toLocal();
+    final userName = data['userName'];
+    await localNotificationService.showNotification(
+      title: message.notification?.title ?? '',
+      message: '$userName exited zone $geofenceName at ${MyDecoration.formatTime(date)}',
     );
   }
 

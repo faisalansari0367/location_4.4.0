@@ -1,28 +1,32 @@
-import 'package:flutter/material.dart';
 import 'package:background_location/ui/forms/global_questionnaire_form/provider/provider.dart';
 import 'package:background_location/ui/forms/global_questionnaire_form/widgets/global_questionnaire_form_body.dart';
+import 'package:background_location/widgets/my_appbar.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// {@template global_questionnaire_form_page}
 /// A description for GlobalQuestionnaireFormPage
 /// {@endtemplate}
 class GlobalQuestionnaireFormPage extends StatelessWidget {
   /// {@macro global_questionnaire_form_page}
-  const GlobalQuestionnaireFormPage({super.key});
+  final String zoneId;
+  final int? logrecordId;
+  const GlobalQuestionnaireFormPage({super.key, required this.zoneId, this.logrecordId});
 
-  /// The static route for GlobalQuestionnaireFormPage
-  static Route<dynamic> route() {
-    return MaterialPageRoute<dynamic>(builder: (_) => const GlobalQuestionnaireFormPage());
-  }
- 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GlobalQuestionnaireFormNotifier(),
-      child: const Scaffold(
+      create: (context) => GlobalQuestionnaireFormNotifier(context, zoneId: zoneId, logrecordId: logrecordId),
+      child: Scaffold(
+        appBar: MyAppBar(
+          title: Text('Declaration'),
+          elevation: 3,
+          backgroundColor: context.theme.primaryColor,
+        ),
         body: GlobalQuestionnaireFormView(),
       ),
     );
-  }   
+  }
 }
 
 /// {@template global_questionnaire_form_view}
@@ -34,6 +38,8 @@ class GlobalQuestionnaireFormView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GlobalQuestionnaireFormBody();
+    return LayoutBuilder(builder: (context, constrains) {
+      return const GlobalQuestionnaireFormBody();
+    });
   }
 }

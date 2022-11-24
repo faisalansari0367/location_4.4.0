@@ -95,8 +95,8 @@ class Client {
   }
 
   Client setUrlEncoded() {
-    header!.remove('Content-Type');
-    header!.putIfAbsent('Content-Type', () => 'application/x-www-form-urlencoded');
+    // header!.remove('Content-Type');
+    // header!.putIfAbsent('Content-Type', () => 'application/x-www-form-urlencoded');
     _dio!.options.headers = header;
     return this;
   }

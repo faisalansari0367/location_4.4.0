@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -90,7 +89,7 @@ class CreatePDf {
 
               // visitors name
 
-              for (final item in data.form) getWidget(item),
+              // for (final item in data.form) getWidget(item),
             ],
           ); // Center
         },
@@ -109,30 +108,30 @@ class CreatePDf {
     }
   }
 
-  static pw.Widget getWidget(LogbookFormField field) {
-    switch (field.field!.toLowerCase()) {
-      case 'signature:':
-      case 'signature':
-        final image = pw.MemoryImage(
-          base64Decode(field.value),
-        );
-        return pw.Image(image, height: 100, width: 100);
+  // static pw.Widget getWidget(LogbookFormField field) {
+  //   switch (field.field!.toLowerCase()) {
+  //     case 'signature:':
+  //     case 'signature':
+  //       final image = pw.MemoryImage(
+  //         base64Decode(field.value),
+  //       );
+  //       return pw.Image(image, height: 100, width: 100);
 
-      case 'day/date/time':
-        return _field(field.field!, MyDecoration.formatDateTime(DateTime.tryParse(field.value!)));
-      case 'time':
-      case 'expected departure time':
-        return _field(field.field!, MyDecoration.formatTime(DateTime.tryParse(field.value!)));
-      case 'date':
-      case 'expected departure date':
-        return _field(field.field!, MyDecoration.formatDate(DateTime.tryParse(field.value!)));
-      default:
-        if (field.value is List) {
-          return _field(field.field!, field.value.join(', '));
-        }
-        return _field(field.field!, field.value!);
-    }
-  }
+  //     case 'day/date/time':
+  //       return _field(field.field!, MyDecoration.formatDateTime(DateTime.tryParse(field.value!)));
+  //     case 'time':
+  //     case 'expected departure time':
+  //       return _field(field.field!, MyDecoration.formatTime(DateTime.tryParse(field.value!)));
+  //     case 'date':
+  //     case 'expected departure date':
+  //       return _field(field.field!, MyDecoration.formatDate(DateTime.tryParse(field.value!)));
+  //     default:
+  //       if (field.value is List) {
+  //         return _field(field.field!, field.value.join(', '));
+  //       }
+  //       return _field(field.field!, field.value!);
+  //   }
+  // }
 
   static pw.Widget _field(String key, String value) {
     return pw.Column(

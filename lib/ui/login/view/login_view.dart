@@ -3,7 +3,6 @@ import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/forgot_password/view/forgot_password.dart';
 import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
 import 'package:background_location/widgets/logo/app_name_widget.dart';
-import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -27,11 +26,11 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
     return Scaffold(
-      appBar: const MyAppBar(
-        showBackButton: false,
-        // title: Text('Login'),
-        leading: SizedBox.shrink(),
-      ),
+      // appBar: const MyAppBar(
+      //   showBackButton: false,
+      //   // title: Text('Login'),
+      //   leading: SizedBox.shrink(),
+      // ),
       body: Padding(
         padding: kPadding.copyWith(top: 0),
         child: Form(
@@ -42,6 +41,8 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Spacer(),
+                    Gap(10.height),
                     AnimatedContainer(
                       duration: 500.milliseconds,
                       curve: Curves.decelerate,

@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/forms/view/global_questionnaire_form.dart';
+import 'package:background_location/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -120,9 +120,7 @@ class TrackPolygons {
         onTap: (s) {
           _stopTimers();
 
-          Get.to(() => GlobalQuestionnaireForm(
-                zoneId: s.id!,
-              ));
+          Get.to(() => GlobalQuestionnaireFormPage(zoneId: s.id!));
         },
         onNO: () {},
       ),

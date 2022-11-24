@@ -2,9 +2,9 @@ import 'dart:async';
 
 // import 'package:location_repo/src/maps/src/storage_service.dart';
 
+import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/src/user/src/models/logbook_entry_model.dart';
 import 'package:background_location/ui/maps/location_service/storage_service.dart';
 import 'package:rxdart/subjects.dart';
 

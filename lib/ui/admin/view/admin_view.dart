@@ -3,7 +3,7 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/cubit/admin_cubit.dart';
 import 'package:background_location/ui/admin/pages/users_list/view/users_page.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
-import 'package:background_location/ui/forms/view/global_questionnaire_form.dart';
+import 'package:background_location/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
@@ -82,7 +82,7 @@ class AdminView extends StatelessWidget {
                 MyListTile(
                   text: 'Global Declaration Form',
                   onTap: () async {
-                    Get.to(() => GlobalQuestionnaireForm(zoneId: '85'));
+                    Get.to(() => GlobalQuestionnaireFormPage(zoneId: '85'));
                   },
                 ),
 
