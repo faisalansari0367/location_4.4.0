@@ -92,7 +92,6 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
                 // _addList(model.q5),
                 MyTextField(
                   hintText: model.rego.question,
-                  // textCapitalization: TextCapitalization.characters,
                   inputFormatters: [CapitalizeAllInputFormatter()],
                   onChanged: (value) {
                     model.rego.value = value;
@@ -200,6 +199,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
 
   Widget _addList(QuestionData data) {
     return AnimatedSize(
+      alignment: Alignment.topCenter,
       duration: 500.milliseconds,
       curve: Curves.easeInOut,
       child: Container(
@@ -207,27 +207,22 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
         // padding: EdgeInsets.only(bottom: 10.h),
         child: Column(
           children: [
-            Container(
-              // decoration: MyDecoration.decoration(),
-              child: QuestionCard(
-                question: data.question,
-                selectedValue: data.value is List<String> ? 'yes' : data.value,
-                onChanged: (s) async {
-                  if (s.toLowerCase() == 'yes') {
-                  } else {
-                    names = [];
-                    setState(() {});
-                  }
-                  data.value = s;
+            QuestionCard(
+              question: data.question,
+              selectedValue: data.value is List<String> ? 'yes' : data.value,
+              onChanged: (s) async {
+                if (s.toLowerCase() == 'yes') {
+                } else {
+                  names = [];
                   setState(() {});
-                },
-              ),
+                }
+                data.value = s;
+                setState(() {});
+              },
             ),
             if (data.value == 'yes') ...[
               Gap(10.h),
-              AddList(
-                onChanged: (value) => names = value,
-              ),
+              AddList(onChanged: (value) => names = value),
             ]
           ],
         ),
@@ -243,12 +238,7 @@ class _GlobalQuestionnaireFormState extends State<GlobalQuestionnaireForm> {
         );
     result.when(
       success: (data) {
-        DialogService.success(
-          'Form Submitted',
-          onCancel: () {
-            Get.close(2);
-          },
-        );
+        DialogService.success('Form Submitted', onCancel: () => Get.close(2));
       },
       failure: (e) => DialogService.failure(error: e),
     );
