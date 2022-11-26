@@ -3,13 +3,15 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/cubit/admin_cubit.dart';
 import 'package:background_location/ui/admin/pages/users_list/view/users_page.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
-import 'package:background_location/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
+import 'package:background_location/ui/forms/forms_page.dart';
+import 'package:background_location/ui/forms/warakirri_entry_form/view/warakirri_entry_form_page.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/biosecure_logo.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_listTile.dart';
+import 'package:background_location/widgets/pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -62,8 +64,15 @@ class AdminView extends StatelessWidget {
                   },
                 ),
                 MyListTile(
-                  text: 'Transporters',
-                  onTap: () async {},
+                  text: 'Price List',
+                  onTap: () async {
+                    await Get.to(
+                      () => const PdfViewer(
+                        path: 'assets/terms_and_conditions/BIOPLUS Price List 24112022.pdf',
+                        title: 'Price List',
+                      ),
+                    );
+                  },
                 ),
                 // MyListTile(
                 //   text: 'Consignee',
@@ -82,7 +91,23 @@ class AdminView extends StatelessWidget {
                 MyListTile(
                   text: 'Global Declaration Form',
                   onTap: () async {
-                    Get.to(() => GlobalQuestionnaireFormPage(zoneId: '85'));
+                    Get.to(
+                      () {
+                        final api = context.read<Api>();
+                        final id = api.logbookRecords.isNotEmpty ? api.logbookRecords.first.id : 0;
+                        return FormsPage(zoneId: id.toString());
+                      },
+                    );
+                  },
+                ),
+                MyListTile(
+                  text: 'Warakirri Declaration Form',
+                  onTap: () async {
+                    Get.to(
+                      () => WarakirriEntryFormPage(
+                        zoneId: '88',
+                      ),
+                    );
                   },
                 ),
 

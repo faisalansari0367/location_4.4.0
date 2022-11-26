@@ -14,8 +14,7 @@ import '../../../../widgets/text_fields/date_field.dart';
 import '../../../../widgets/text_fields/my_dropdown_field.dart';
 import '../../../../widgets/text_fields/my_text_field.dart';
 import '../../../../widgets/text_fields/text_formatters/input_formatters.dart';
-import '../../../../widgets/text_fields/time_field.dart';
-import '../../cubit/forms_cubit_state.dart';
+import '../../models/global_form_model.dart';
 import '../../widget/add_list.dart';
 import '../../widget/form_card.dart';
 
@@ -78,20 +77,27 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                     value: state.model.riskRating.value,
                     options: ['Low', 'Medium', 'High'].map((e) => e.toUpperCase()).toList(),
                   ),
-                  MyDateField(
-                    label: state.model.expectedDepartureDate.question,
-                    date: state.model.expectedDepartureDate.value,
-                    onChanged: (s) {
-                      state.onChanged(state.model.expectedDepartureDate, s);
-                    },
+                  GestureDetector(
+                    onTap: () => state.pickDateTime(state.model.expectedDepartureDate, context),
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: MyDateField(
+                        label: state.model.expectedDepartureDate.question,
+                        date: state.model.expectedDepartureDate.value,
+                        showTime: true,
+                        // onChanged: (s) {
+                        //   state.pickDateTime(state.model.expectedDepartureDate, context);
+                        // },
+                      ),
+                    ),
                   ),
-                  MyTimeField(
-                    label: state.model.expectedDepartureTime.question,
-                    date: state.model.expectedDepartureTime.value,
-                    onChanged: (s) {
-                      state.onChanged(state.model.expectedDepartureTime, s);
-                    },
-                  ),
+                  // MyTimeField(
+                  //   label: state.model.expectedDepartureTime.question,
+                  //   date: state.model.expectedDepartureTime.value,
+                  //   onChanged: (s) {
+                  //     state.onChanged(state.model.expectedDepartureTime, s);
+                  //   },
+                  // ),
                   SignatureWidget(
                     signature: state.model.signature.value,
                     onChanged: (s) {

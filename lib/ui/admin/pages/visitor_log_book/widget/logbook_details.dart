@@ -16,7 +16,7 @@ class LogbookDetails extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
         elevation: 5,
-        title: Text('Declaration Form'),
+        title: Text(item.form.isWarakirriFarm ? 'Warakirri Entry Form' : 'Declaration Form'),
         actions: [
           // IconButton(
           //   onPressed: () {
@@ -31,34 +31,66 @@ class LogbookDetails extends StatelessWidget {
       ),
       body: ListView(
         padding: kPadding,
-        children: _buildChildrens(),
+        children: item.form.isWarakirriFarm ? _buildWarakirriForm() : _buildChildrens(),
       ),
     );
+  }
+
+  List<Widget> _buildWarakirriForm() {
+    return [
+      _card(item.form.warakirriKeys.isPeopleTravelingWith, getNames()),
+      _card(item.form.warakirriKeys.isFluSymptoms, getValue(item.form.isFluSymptoms)),
+      _card(item.form.warakirriKeys.isOverSeaVisit, getValue(item.form.isOverSeaVisit)),
+      _card(item.form.warakirriKeys.additionalInfo, getValue(item.form.additionalInfo)),
+      _card(item.form.warakirriKeys.hasBeenInducted, getValue(item.form.hasBeenInducted)),
+      _card(item.form.warakirriKeys.isConfinedSpace, getValue(item.form.isConfinedSpace)),
+      _card(item.form.warakirriKeys.warakirriFarm, item.form.warakirriFarm),
+    ];
+  }
+
+  String getNames() {
+    return (item.form.usersTravellingAlong?.isEmpty ?? true) ? 'No' : item.form.usersTravellingAlong!.join(', ');
   }
 
   _buildChildrens() {
     final form = item.form;
     return [
-      _card(form.keys.isPeopleTravelingWith, form.isPeopleTravelingWith,
-          value2: form.usersTravellingAlong.isEmpty ? 'No' : form.usersTravellingAlong.join(', ')),
-      _card(form.keys.isQfeverVaccinated, form.isQfeverVaccinated),
-      _card(form.keys.isOverSeaVisit, form.isOverSeaVisit),
-      _card(form.keys.isFluSymptoms, form.isFluSymptoms),
-      _card(form.keys.isOwnerNotified, form.isOwnerNotified),
-      _card(form.keys.expectedDepartureDate, false, value2: MyDecoration.formatDate(form.expectedDepartureDate)),
-      _card(form.keys.expectedDepartureTime, false, value2: MyDecoration.formatTime(form.expectedDepartureTime)),
-      _card(form.keys.rego, false, value2: form.rego),
-      _card(form.keys.riskRating, false, value2: form.riskRating),
-      Gap(10.h),
-      SignatureWidget(
-        signature: form.signature,
-        isEditable: false,
+      _card(
+        form.keys.isPeopleTravelingWith,
+        (form.usersTravellingAlong?.isEmpty ?? true) ? 'No' : form.usersTravellingAlong!.join(', '),
       ),
+      // if(form.isQfeverVaccinated != null)
+      _card(form.keys.isQfeverVaccinated, getValue(form.isQfeverVaccinated!)),
+      _card(form.keys.isOverSeaVisit, getValue(form.isOverSeaVisit)),
+      _card(form.keys.isFluSymptoms, getValue(form.isFluSymptoms)),
+      _card(form.keys.isOwnerNotified, getValue(form.isOwnerNotified)),
+      _card(
+        form.keys.expectedDepartureDate,
+        MyDecoration.formatDate(form.expectedDepartureDate) + ' ' + MyDecoration.formatTime(form.expectedDepartureDate),
+      ),
+      _card(form.keys.rego, form.rego),
+      _card(form.keys.riskRating, form.riskRating),
+      Gap(10.h),
+      if (form.signature != null)
+        SignatureWidget(
+          signature: form.signature,
+          isEditable: false,
+        ),
       Gap(20.h),
     ];
   }
 
-  Container _card(String key, bool value, {String? value2}) {
+  String? getValue(bool? value) {
+    return value == null
+        ? null
+        : value
+            ? 'Yes'
+            : 'No';
+  }
+
+  Container _card(String key, String? value2) {
+    if (value2 == null) return Container();
+    // if (value == false && value2 == null) return Container();
     return Container(
       decoration: MyDecoration.decoration(shadow: false, color: Colors.grey.shade100),
       padding: kPadding,
@@ -76,7 +108,7 @@ class LogbookDetails extends StatelessWidget {
           ),
           TextFormField(
             enabled: false,
-            initialValue: value2 ?? (value ? 'Yes' : 'No'),
+            initialValue: value2,
           ),
         ],
       ),

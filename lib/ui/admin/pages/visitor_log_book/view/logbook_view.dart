@@ -1,7 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
-import 'package:background_location/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
+import 'package:background_location/ui/forms/forms_page.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/listview/infinite_table.dart';
@@ -93,6 +93,12 @@ class _LogbookViewState extends State<LogbookView> {
             child: InfiniteTable(
               hasReachedMax: state.hasReachedMax,
               onRefresh: cubit.onRefresh,
+              // table: DataTable(
+              //   dataRowHeight: 60,
+              //   columns: cubit.list.map((e) => _dataColumn(e.toUpperCase())).toList(),
+              //   rows: _buildRows(state.entries, state),
+              //   columnSpacing: 31,
+              // ),
               table: StreamBuilder<List<LogbookEntry>>(
                 stream: cubit.api.logbookRecordsStream,
                 builder: (context, snapshot) {
@@ -102,7 +108,7 @@ class _LogbookViewState extends State<LogbookView> {
                   return DataTable(
                     dataRowHeight: 60,
                     columns: cubit.list.map((e) => _dataColumn(e.toUpperCase())).toList(),
-                    rows: (snapshot.data ?? []).map((e) => _dataRow(e, snapshot.data!.indexOf(e), state)).toList(),
+                    rows: _buildRows(snapshot.data ?? [], state),
                     columnSpacing: 31,
                   );
                 },
@@ -112,6 +118,14 @@ class _LogbookViewState extends State<LogbookView> {
         );
       },
     );
+  }
+
+  List<DataRow> _buildRows(List<LogbookEntry> data, LogBookState state) {
+    List<DataRow> rows = [];
+    for (var i = 0; i < data.length; i++) {
+      rows.add(_dataRow(data[i], i, state));
+    }
+    return rows;
   }
 
   // DataRow _tableRow(data) {
@@ -136,7 +150,6 @@ class _LogbookViewState extends State<LogbookView> {
   }
 
   DataCell _buildFormButton(LogbookEntry item) {
-    print(item.form.signature);
     return DataCell(
       (item.form.isNotEmpty)
           ? TextButton(
@@ -204,9 +217,10 @@ class _LogbookViewState extends State<LogbookView> {
                       onPressed: () async {
                         Get.back();
                         Get.to(
-                          () => GlobalQuestionnaireFormPage(
+                          () => FormsPage(
                             zoneId: item.geofence!.id!.toString(),
-                            logrecordId: item.id,
+                            logRecordId: item.id,
+                            logRecord: item,
                           ),
                         );
                       },

@@ -24,7 +24,8 @@ class GeofencesList extends StatefulWidget {
     this.controller,
     required this.onSelected,
     this.isSelected,
-    this.showCloseButton = true, this.emptyScreen,
+    this.showCloseButton = true,
+    this.emptyScreen,
   }) : super(key: key);
 
   @override
@@ -41,7 +42,7 @@ class _GeofencesListState extends State<GeofencesList> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: kPadding,
+              padding: kPadding.copyWith(bottom: 0),
               child: Column(
                 children: [
                   _selectLocationHeader(context),
@@ -68,7 +69,7 @@ class _GeofencesListState extends State<GeofencesList> {
                     child: MyListview(
                       data: snapshot.data ?? [],
                       emptyWidget: widget.emptyScreen ?? _emptyWidget(),
-                      padding: EdgeInsets.symmetric(horizontal: kPadding.left),
+                      padding: EdgeInsets.symmetric(horizontal: kPadding.left, vertical: 5.h),
                       controller: widget.controller,
                       itemBuilder: (context, index) {
                         final fence = snapshot.data![index];
@@ -83,6 +84,7 @@ class _GeofencesListState extends State<GeofencesList> {
                 },
               ),
             ),
+            // Gap(10.h),
           ],
         ),
       ),

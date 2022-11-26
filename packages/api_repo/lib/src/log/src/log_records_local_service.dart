@@ -15,18 +15,21 @@ class LogRecordsLocalService {
   }
 
   void _init() async {
-    final data = await getLogbookRecords();
-    data.when(
-      success: (s) => _controller.add(s.data ?? []),
-      failure: (f) {},
-    );
-    box.watch(key: _Keys.logRecords).listen((event) {
-      if (event.value == null) {
-        return;
-      }
-      final data = LogbookResponseModel.fromJson(_parseData(event.value)!).data;
-      _controller.add(data!);
-    });
+    getLogbookRecords();
+    // _controller.listen((value) {
+    //   log('we have ${value.length} log records');
+    // });
+    // data.when(
+    //   success: (s) => _controller.add(s.data ?? []),
+    //   failure: (f) {},
+    // );
+    // box.watch(key: _Keys.logRecords).listen((event) {
+    //   if (event.value == null) {
+    //     return;
+    //   }
+    //   final data = LogbookResponseModel.fromJson(_parseData(event.value)!).data;
+    //   _controller.add(data!);
+    // });
   }
 
   final _controller = BehaviorSubject<List<LogbookEntry>>.seeded([]);
@@ -67,16 +70,18 @@ class LogRecordsLocalService {
   }
 
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
-    final data = _parseData(box.get(_Keys.logRecords));
+    final data = (box.get(_Keys.logRecords));
     if (data == null) return ApiResult.success(data: LogbookResponseModel(data: []));
-    final responseModel = LogbookResponseModel.fromJson(_parseData(data)!);
+    final responseModel = LogbookResponseModel.fromJson(_parseData((data))!);
+    _controller.add(responseModel.data!);
     return ApiResult.success(data: responseModel);
   }
 
   Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(LogbookResponseModel logbookResponseModel) async {
     try {
       final json = logbookResponseModel.toJson();
-      await box.put(_Keys.logRecords, json);
+      await box.put(_Keys.logRecords, (json));
+      _controller.add(logbookResponseModel.data!);
       return ApiResult.success(data: logbookResponseModel);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.defaultError(e.toString()));

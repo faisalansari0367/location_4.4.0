@@ -33,7 +33,7 @@ class BottomNavbarItem extends StatelessWidget {
         onTap: onTap,
         borderRadius: kBorderRadius,
         child: AnimatedContainer(
-          width: 100.w,
+          // width: 100.w,
           // margin: EdgeInsets.symmetric(vertical: 10.h),
           padding: const EdgeInsets.only(
               // top: 10.sp,
@@ -50,16 +50,19 @@ class BottomNavbarItem extends StatelessWidget {
                 child: _image(iconColor),
               ),
               SizedBox(height: 2.h),
-              Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: context.textTheme.subtitle2?.copyWith(
-                  fontSize: 13.w,
-                  fontWeight: FontWeight.w600,
-                  color: iconColor,
+              SizedBox(
+                width: 90,
+                child: Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: context.textTheme.subtitle2?.copyWith(
+                    fontSize: 13.w,
+                    fontWeight: FontWeight.w600,
+                    color: iconColor,
+                  ),
                 ),
               ),
               // Spacer(),

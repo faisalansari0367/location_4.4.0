@@ -176,6 +176,13 @@ class _MyAppState extends State<MyApp> {
           colorScheme: Theme.of(context).colorScheme.copyWith(primary: kPrimaryColor),
           primaryColor: kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          checkboxTheme: CheckboxThemeData(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            checkColor: MaterialStateProperty.all(Colors.white),
+            fillColor: MaterialStateProperty.all(kPrimaryColor),
+          ),
         ),
         home: ScreenUtilInit(
           designSize: Get.size,

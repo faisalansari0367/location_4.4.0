@@ -142,7 +142,7 @@ class MapsCubit extends BaseModel {
   UserData? get userData => api.getUserData();
 
   Future<void> _getAllPolygon() async {
-    if (mapsRepo.hasPolygons && state.polygons.isNotEmpty) return;
+    if (mapsRepo.hasPolygons) return;
     final allPolygon = await mapsRepo.getAllPolygon();
     allPolygon.when(
       success: (allPolygon) {

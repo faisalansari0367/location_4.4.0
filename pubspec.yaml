@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.1
+version: 1.1.2
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -79,16 +79,16 @@ dependencies:
   #   path: packages/location_repo
   local_notification:
     path: packages/local_notification
-  geolocator: ^8.2.1
-  fluttertoast: ^8.0.9
-  provider: ^6.0.3
-  animations: ^2.0.2
-  rxdart: ^0.27.5
+  geolocator: ^9.0.2
+  fluttertoast: ^8.1.1
+  provider: ^6.0.4
+  animations: ^2.0.7
+  rxdart: ^0.27.7
   rename: ^2.0.1
   # flutter_local_notifications: ^9.8.0+1
   firebase_messaging: ^12.0.3
   package_info_plus:
-  very_good_infinite_list:
+  very_good_infinite_list: ^0.6.0+1
   cached_network_image: ^3.2.0
   shimmer: ^2.0.0
   url_launcher: ^6.1.5
@@ -103,7 +103,7 @@ dependencies:
   connectivity_plus: ^2.3.6+1
   # cupertino_stepper: ^0.2.1
   # status_change: ^2.0.0
-  editable: ^2.0.0
+  # editable: ^2.0.0
   http: ^0.13.5
   # dio: ^4.0.6
   auto_size_text: ^3.0.0
@@ -114,12 +114,12 @@ dependencies:
   open_file: ^3.2.1
   flutter_cached_pdfview: ^0.4.1
   location: ^4.4.0
-  very_good_analysis: ^2.4.0
-  lint: ^1.9.0
+  # very_good_analysis: ^2.4.0
+  # lint: ^1.9.0
   graphql_flutter: ^5.1.0
-  dio_cache_interceptor: ^3.3.1
+  # dio_cache_interceptor: ^3.3.1
   mason_cli: ^0.1.0-dev.39
-  to_csv: ^1.1.1
+  # to_csv: ^1.1.1
   csv: ^5.0.1
   share_plus: ^4.5.3
 

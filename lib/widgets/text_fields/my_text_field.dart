@@ -8,7 +8,7 @@ class MyTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final VoidCallback? onTap;
   final TextEditingController? controller;
-  final String? hintText;
+  final String? hintText, initialValue;
   final Widget? prefixIcon;
   final Color? fillColor;
   final TextInputAction? textInputAction;
@@ -35,6 +35,7 @@ class MyTextField extends StatelessWidget {
     Key? key,
     this.onChanged,
     this.readOnly = false,
+    this.initialValue,
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
     this.enabled = true,
     this.autoFocus = false,
@@ -66,6 +67,7 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextFormField(
+      initialValue: initialValue,
       maxLength: maxLength,
       textCapitalization: textCapitalization,
       inputFormatters: inputFormatters,
@@ -122,7 +124,12 @@ class MyTextField extends StatelessWidget {
                 color: theme.primaryColor,
               ),
             ),
-            disabledBorder: MyDecoration.inputBorder,
+            disabledBorder: MyDecoration.inputBorder.copyWith(
+              borderSide: BorderSide(
+                width: 2.w,
+                color: Colors.grey.shade200,
+              ),
+            ),
             border: MyDecoration.inputBorder,
             // enabled: false,
 

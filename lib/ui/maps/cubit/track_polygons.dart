@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
+import 'package:background_location/ui/forms/forms_page.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -60,9 +60,12 @@ class TrackPolygons {
 
   //
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
-    if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) return;
-
+    if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) {
+      // log('returning', error: 'returning and not doing anything');
+      return;
+    }
     _userIsInside(polygonsInCoverage, currentPosition);
+
     // this.polygonsInCoverage.add(polygonsInCoverage);
 
     // show popup if polygons are in coverage
@@ -116,11 +119,15 @@ class TrackPolygons {
     await DialogService.showDialog(
       child: EnterProperty(
         stream: polygonsInCoverage.stream,
-        // onTap: (s) => Get.to(() => EntryForm(polygonModel: s)),
-        onTap: (s) {
+        onTap: (s) async {
           _stopTimers();
-
-          Get.to(() => GlobalQuestionnaireFormPage(zoneId: s.id!));
+          final logRecord = await api.getLogRecord(s.id!);
+          Get.to(
+            () => FormsPage(
+              zoneId: s.id!,
+              logRecord: logRecord,
+            ),
+          );
         },
         onNO: () {},
       ),

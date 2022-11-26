@@ -19,7 +19,11 @@ class LogBookCubit extends Cubit<LogBookState> {
   final Api api;
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
-  LogBookCubit({required this.api}) : super(const LogBookState());
+  LogBookCubit({required this.api}) : super(const LogBookState()) {
+    api.logbookRecordsStream.listen((event) {
+      emit(state.copyWith(entries: event));
+    });
+  }
 
   final list = [
     if (kDebugMode) 'id',

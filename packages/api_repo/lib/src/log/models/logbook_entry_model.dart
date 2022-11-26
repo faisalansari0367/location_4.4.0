@@ -15,6 +15,7 @@ class LogbookResponseModel {
     if (json['data'] != null) {
       data = <LogbookEntry>[];
       json['data'].forEach((v) {
+        // print(v['id']);
         data!.add(LogbookEntry.fromJson(_fromMap(v)));
       });
     }
@@ -157,18 +158,27 @@ class LogbookEntry {
 }
 
 class LogbookFormModel {
-  final bool isPeopleTravelingWith;
-  final List<String> usersTravellingAlong;
-  final bool isQfeverVaccinated;
-  final bool isFluSymptoms;
-  final bool isOverSeaVisit;
-  final bool isAllMeasureTaken;
-  final bool isOwnerNotified;
-  final String rego;
-  final String riskRating;
-  final DateTime expectedDepartureTime;
-  final DateTime expectedDepartureDate;
-  final String signature;
+  final bool? isPeopleTravelingWith;
+  final List<String>? usersTravellingAlong;
+  final bool? isQfeverVaccinated;
+  final bool? isFluSymptoms;
+  final bool? isOverSeaVisit;
+  final bool? isAllMeasureTaken;
+  final bool? isOwnerNotified;
+  final String? rego;
+  final String? riskRating;
+  final DateTime? expectedDepartureTime;
+  final DateTime? expectedDepartureDate;
+  final String? signature;
+  final String? warakirriFarm;
+  final bool? hasBeenInducted;
+  final bool? isConfinedSpace;
+  final bool? additionalInfo;
+
+  //  hasBeenInducted = 'hasBeenInducted',
+  //     isConfinedSpace = 'isConfinedSpace',
+  //     warakirriFarm = 'warakirriFarm',
+  //     additionalInfo = 'additionalInfo';
 
   LogbookFormModel({
     required this.isPeopleTravelingWith,
@@ -182,7 +192,11 @@ class LogbookFormModel {
     required this.riskRating,
     required this.expectedDepartureTime,
     required this.expectedDepartureDate,
-    required this.signature,
+    this.signature,
+    this.warakirriFarm,
+    this.hasBeenInducted,
+    this.isConfinedSpace,
+    this.additionalInfo,
   });
 
   Map<String, dynamic> toJson() {
@@ -196,34 +210,48 @@ class LogbookFormModel {
       'isOwnerNotified': isOwnerNotified,
       'rego': rego,
       'riskRating': riskRating,
-      'expectedDepartureTime': expectedDepartureTime.toIso8601String(),
-      'expectedDepartureDate': expectedDepartureDate.toIso8601String(),
+      'expectedDepartureTime': expectedDepartureTime?.toIso8601String(),
+      'expectedDepartureDate': expectedDepartureDate?.toIso8601String(),
       'signature': signature,
+      'warakirriFarm': warakirriFarm,
+      'hasBeenInducted': hasBeenInducted,
+      'isConfinedSpace': isConfinedSpace,
+      'additionalInfo': additionalInfo,
     };
     return map;
   }
 
+  bool get isWarakirriFarm => signature == null;
+
   // fromJson
   LogbookFormModel.fromJson(Map<String, dynamic> json)
-      : isPeopleTravelingWith = json['isPeopleTravelingWith'] ?? false,
+      : isPeopleTravelingWith = json['isPeopleTravelingWith'],
         usersTravellingAlong = List<String>.from(json['userTravelingAlong'] ?? []),
         isQfeverVaccinated = json['isQfeverVaccinated'] ?? false,
         isFluSymptoms = json['isFluSymptoms'] ?? false,
         isOverSeaVisit = json['isOverSeaVisit'] ?? false,
         isAllMeasureTaken = json['isAllMeasureTaken'] ?? false,
         isOwnerNotified = json['isOwnerNotified'] ?? false,
-        rego = json['rego'] ?? '',
-        riskRating = json['riskRating'] ?? '',
-        expectedDepartureTime = DateTime.parse(json['expectedDepartureTime'] ?? DateTime.now().toIso8601String()),
-        expectedDepartureDate = DateTime.parse(json['expectedDepartureDate'] ?? DateTime.now().toIso8601String()),
-        signature = json['signature'] ?? '';
+        rego = json['rego'],
+        riskRating = json['riskRating'],
+        expectedDepartureTime = tryParse(json['expectedDepartureTime']),
+        expectedDepartureDate = tryParse(json['expectedDepartureDate']),
+        warakirriFarm = json['warakirriFarm'],
+        hasBeenInducted = json['hasBeenInducted'],
+        isConfinedSpace = json['isConfinedSpace'],
+        additionalInfo = json['additionalInfo'],
+        signature = json['signature'];
+
+  static DateTime? tryParse(String? date) => date != null ? DateTime.tryParse(date)?.toLocal() : null;
 
   final _model = GlobalDeclarationFormKeys();
+  final _warakirriModel = WarakirriQuestionFormModel();
 
   GlobalDeclarationFormKeys get keys => _model;
-  String question(key) => _model.question(key);
+  WarakirriQuestionFormModel get warakirriKeys => _warakirriModel;
+  String question(key) => warakirriFarm != null ? _warakirriModel.question(key) : _model.question(key);
 
-  bool get isEmpty => signature.isEmpty;
+  bool get isEmpty => isPeopleTravelingWith == null;
 
   bool get isNotEmpty => !isEmpty;
 }
@@ -331,13 +359,13 @@ class Coordinates {
 
 class Origin {
   String? type;
-  List<int>? coordinates;
+  List<num>? coordinates;
 
   Origin({this.type, this.coordinates});
 
   Origin.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    coordinates = json['coordinates'].cast<int>();
+    coordinates = List<num>.from(json['coordinates']);
   }
 
   Map<String, dynamic> toJson() {
@@ -346,55 +374,4 @@ class Origin {
     data['coordinates'] = coordinates;
     return data;
   }
-}
-
-class GlobalDeclarationFormKeys {
-  GlobalDeclarationFormKeys();
-  final isPeopleTravelingWith = 'isPeopleTravelingWith',
-      userTravelingAlong = 'userTravelingAlong',
-      isQfeverVaccinated = 'isQfeverVaccinated',
-      isFluSymptoms = 'isFluSymptoms',
-      isOverSeaVisit = 'isOverSeaVisit',
-      isAllMeasureTaken = 'isAllMeasureTaken',
-      isOwnerNotified = 'isOwnerNotified',
-      rego = 'rego',
-      riskRating = 'riskRating',
-      expectedDepartureTime = 'expectedDepartureTime',
-      expectedDepartureDate = 'expectedDepartureDate',
-      signature = 'signature';
-
-  Map<String, dynamic> get _questions => {
-        isPeopleTravelingWith: '1. Are other people travelling onto the property with you?',
-        isQfeverVaccinated: '2. Have all visitors had a Q Fever vaccination?',
-        isFluSymptoms: '3. Do you have cold or flu symptoms?',
-        isOverSeaVisit: '4. Have any visitors been overseas in the last 7 days?',
-        isAllMeasureTaken:
-            '5. Have you taken all reasonable measures to ensure that shoes, clothing and equipment are free from potential weed and disease contaminants:',
-        isOwnerNotified:
-            '6. Have you made reasonable attempts to notify the owner/manager of the property that you are visiting today?',
-        rego: 'Rego',
-        // 'selfDeclaration':
-        //     'I declare that any animals/products I am transporting are accompanied by correct movement documentation.',
-        riskRating: 'Risk Rating',
-        expectedDepartureTime: 'Expected Departure Time',
-        expectedDepartureDate: 'Expected Departure Date',
-        signature: 'Signature',
-      };
-
-  String question(String key) => _questions[key] ?? '';
-
-  List<String> get all => [
-        isPeopleTravelingWith,
-        userTravelingAlong,
-        isQfeverVaccinated,
-        isFluSymptoms,
-        isOverSeaVisit,
-        isAllMeasureTaken,
-        isOwnerNotified,
-        rego,
-        riskRating,
-        expectedDepartureTime,
-        expectedDepartureDate,
-        signature,
-      ];
 }

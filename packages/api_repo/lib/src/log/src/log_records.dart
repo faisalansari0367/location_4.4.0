@@ -1,6 +1,7 @@
 import 'package:api_repo/api_result/api_result.dart';
 
-import '../models/logbook_entry_model.dart';
+import '../models/models.dart';
+
 
 abstract class LogRecordsRepo {
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100});

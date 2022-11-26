@@ -18,6 +18,7 @@ import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -82,7 +83,13 @@ class _DashboardViewState extends State<DashboardView> {
           // backgroundColor: Colors.red,
           title: SizedBox(
             height: 50.h,
-            child: _logo(),
+            child: AnimationConfiguration.synchronized(
+              child: ScaleAnimation(
+                scale: 0.7,
+                curve: Curves.easeIn,
+                child: _logo(),
+              ),
+            ),
           ),
         ),
         body: SingleChildScrollView(

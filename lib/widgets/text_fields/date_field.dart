@@ -1,18 +1,26 @@
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class MyDateField extends StatefulWidget {
   final String label;
   final ValueChanged<String>? onChanged;
   final InputDecoration? decoration;
+  final bool showTime;
   final String? date;
   final String? Function(String?)? validator;
 
-  const MyDateField({Key? key, this.onChanged, required this.label, this.date, this.decoration, this.validator})
-      : super(key: key);
+  const MyDateField({
+    Key? key,
+    this.onChanged,
+    required this.label,
+    this.date,
+    this.decoration,
+    this.validator,
+    this.showTime = false,
+  }) : super(key: key);
 
   @override
   State<MyDateField> createState() => _MyDateFieldState();
@@ -24,12 +32,22 @@ class _MyDateFieldState extends State<MyDateField> {
 
   @override
   void initState() {
+    _init();
+    super.initState();
+  }
+
+  void _init() {
     if (![null, ''].contains(widget.date)) {
       final dt = DateTime.parse(widget.date!);
       pickedDateTime = dt;
       controller.text = formatDate(dt);
     }
-    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyDateField oldWidget) {
+    _init();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -45,7 +63,6 @@ class _MyDateFieldState extends State<MyDateField> {
       validator: widget.validator ?? (s) => Validator.date(pickedDateTime),
     );
   }
-
 
   _showDatePicker() async {
     final pickedDate = await showDatePicker(
@@ -64,5 +81,7 @@ class _MyDateFieldState extends State<MyDateField> {
   }
 
   // create a function to format date
-  String formatDate(DateTime date) => DateFormat('dd-MM-yyyy').format(date);
+  String formatDate(DateTime date) => widget.showTime
+      ? MyDecoration.formatDate(date) + '  :  ' + MyDecoration.formatTime(date)
+      : MyDecoration.formatDate(date);
 }

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../../../widgets/dialogs/dialog_service.dart';
 import '../../../../widgets/dialogs/no_signature_found.dart';
 import '../../../../widgets/signature/signature_widget.dart';
-import '../../cubit/forms_cubit_state.dart';
+import '../../models/global_form_model.dart';
 
 class GlobalQuestionnaireFormNotifier extends BaseModel {
   late FormQuestionDataModel model;
@@ -20,6 +20,35 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
     model = FormQuestionDataModel.fromLocal();
   }
   final formKey = GlobalKey<FormState>();
+
+  void pickDateTime(QuestionData questionData, BuildContext context) async {
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      // Navigator.pop(context);
+      final time = await _timePicker(context);
+      if (time != null) {
+        final dt = DateTime(pickedDate.year, pickedDate.month, pickedDate.day, time.hour, time.minute);
+        questionData.value = dt.toIso8601String();
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<TimeOfDay?> _timePicker(BuildContext context) async {
+    final pickedDate = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (pickedDate != null) {
+      return pickedDate;
+    }
+    return null;
+  }
 
   void onChangeDecalration(bool value) {
     selfDeclaration = value;
@@ -110,7 +139,7 @@ class FormQuestionDataModel {
   final QuestionData isOwnerNotified;
   final QuestionData rego;
   final QuestionData riskRating;
-  final QuestionData expectedDepartureTime;
+  // final QuestionData expectedDepartureTime;
   final QuestionData expectedDepartureDate;
   final QuestionData signature;
   final _model = GlobalDeclarationFormKeys();
@@ -125,7 +154,7 @@ class FormQuestionDataModel {
     required this.isOwnerNotified,
     required this.rego,
     required this.riskRating,
-    required this.expectedDepartureTime,
+    // required this.expectedDepartureTime,
     required this.expectedDepartureDate,
     required this.signature,
   });
@@ -171,13 +200,14 @@ class FormQuestionDataModel {
         key: model.riskRating,
         value: 'LOW',
       ),
-      expectedDepartureTime: QuestionData<String>(
-        question: question(model.expectedDepartureTime),
-        key: model.expectedDepartureTime,
-      ),
+      // expectedDepartureTime: QuestionData<String>(
+      //   question: question(model.expectedDepartureTime),
+      //   key: model.expectedDepartureTime,
+      // ),
       expectedDepartureDate: QuestionData<String>(
         question: question(model.expectedDepartureDate),
         key: model.expectedDepartureDate,
+        value: DateTime.now().toIso8601String(),
       ),
       signature: QuestionData<String>(
         question: question(model.signature),
@@ -200,7 +230,7 @@ class FormQuestionDataModel {
     map[isOwnerNotified.key] = isOwnerNotified.value;
     map[rego.key] = rego.value;
     map[riskRating.key] = riskRating.value;
-    map[expectedDepartureTime.key] = expectedDepartureTime.value;
+    // map[expectedDepartureTime.key] = expectedDepartureTime.value;
     map[expectedDepartureDate.key] = expectedDepartureDate.value;
     map[signature.key] = signature.value;
     return Map<String, dynamic>.from(map);

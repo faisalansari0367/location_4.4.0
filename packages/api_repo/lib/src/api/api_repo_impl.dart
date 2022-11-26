@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/configs/endpoint.dart';
@@ -11,7 +10,8 @@ import 'package:hive_flutter/adapters.dart';
 import '../../api_repo.dart';
 import '../../api_result/api_result.dart';
 import '../auth/src/storage/storage_service.dart';
-import '../log/log_records.dart';
+
+// import '../log/log_records.dart';
 
 export '../functions/models/notifications_model.dart';
 
