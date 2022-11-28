@@ -1,14 +1,10 @@
 import 'package:background_location/ui/forms/warakirri_entry_form/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../../../constants/index.dart';
 import '../../../../widgets/auto_spacing.dart';
 import '../../../../widgets/dialogs/dialog_service.dart';
-import '../../../../widgets/my_elevated_button.dart';
-import '../../../../widgets/text_fields/text_fields.dart';
 import '../../models/global_form_model.dart';
 import '../../widget/add_list.dart';
 import '../../widget/form_card.dart';
@@ -61,7 +57,7 @@ class WarakirriEntryFormBody extends StatelessWidget {
                 _card(state, state.model.isInducted),
                 _card(state, state.model.isConfinedSpace),
                 _dateField(state, context),
-                _buildDropdown(state),
+                _buildZoneName(state),
                 _buildTextField('Full Name', state.userData?.fullName),
                 _buildTextField(
                     'Phone Number', (state.userData?.countryCode ?? '') + '' + (state.userData?.phoneNumber ?? '')),
@@ -110,12 +106,11 @@ class WarakirriEntryFormBody extends StatelessWidget {
     );
   }
 
-  MyDropdownField _buildDropdown(WarakirriEntryFormNotifier state) {
-    return MyDropdownField(
-      onChanged: (v) => state.onChanged(state.model.warakirriFarm, v),
-      options: state.warakirriFarms,
+  Widget _buildZoneName(WarakirriEntryFormNotifier state) {
+    return MyTextField(
+      enabled: false,
       hintText: state.model.warakirriFarm.question,
-      value: state.model.warakirriFarm.value ?? state.warakirriFarms.last,
+      initialValue: state.model.warakirriFarm.value ?? state.warakirriFarms.last,
     );
   }
 

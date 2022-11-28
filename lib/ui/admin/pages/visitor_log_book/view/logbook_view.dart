@@ -6,14 +6,11 @@ import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/listview/infinite_table.dart';
 import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../cubit/logbook_cubit.dart';
 import '../cubit/logbook_state.dart';

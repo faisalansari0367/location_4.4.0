@@ -2,6 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:background_location/provider/base_model.dart';
 import 'package:background_location/ui/forms/warakirri_entry_form/models/warakirri_form_model.dart';
+import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,12 +11,19 @@ import '../../models/global_form_model.dart';
 
 class WarakirriEntryFormNotifier extends BaseModel {
   final String zoneId;
+  final PolygonModel? polygon;
   final int? logrecordId;
   late UserData? userData;
   late WarakirriFormModel model;
-  WarakirriEntryFormNotifier(super.context, {required this.zoneId, this.logrecordId}) {
+  WarakirriEntryFormNotifier(
+    super.context, {
+    this.polygon,
+    required this.zoneId,
+    this.logrecordId,
+  }) {
     model = WarakirriFormModel.fromLocal();
     userData = api.getUserData();
+    getFarmName();
   }
   bool _selfDeclaration = false;
   final formKey = GlobalKey<FormState>();
@@ -45,6 +53,15 @@ class WarakirriEntryFormNotifier extends BaseModel {
   void onChanged(QuestionData questionData, dynamic value) {
     questionData.value = value;
     notifyListeners();
+  }
+
+  Future<void> getFarmName() async {
+    // final result = await apiService.getLogRecord(zoneId);
+    // final name = result?.geofence?.name;
+    // if (name != null) {
+    model.warakirriFarm.value = polygon?.name ?? '';
+    notifyListeners();
+    // }
   }
 
   void pickDateTime(QuestionData questionData, BuildContext context) async {

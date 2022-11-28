@@ -4,15 +4,23 @@ import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../maps/models/polygon_model.dart';
+
 /// {@template warakirri_entry_form_page}
 /// A description for WarakirriEntryFormPage
 /// {@endtemplate}
 class WarakirriEntryFormPage extends StatelessWidget {
   final String zoneId;
   final int? logrecordId;
+  final PolygonModel? polygon;
 
   /// {@macro warakirri_entry_form_page}
-  const WarakirriEntryFormPage({super.key, required this.zoneId, this.logrecordId});
+  const WarakirriEntryFormPage({
+    super.key,
+    required this.zoneId,
+    this.logrecordId,
+    this.polygon,
+  });
 
   /// The static route for WarakirriEntryFormPage
   // static Route<dynamic> route() {
@@ -31,6 +39,7 @@ class WarakirriEntryFormPage extends StatelessWidget {
         context,
         zoneId: zoneId,
         logrecordId: logrecordId,
+        polygon: polygon,
       ),
       child: Scaffold(
         appBar: MyAppBar(

@@ -9,8 +9,6 @@ import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -73,6 +71,23 @@ class LinksView extends StatelessWidget {
               onTap: () async => await openPdf(
                 context,
                 'https://agriculture.vic.gov.au/__data/assets/pdf_file/0010/578719/Cents-of-Carbon.pdf',
+              ),
+            ),
+            MyListTile(
+              text: 'AGCARE'.toUpperCase(),
+              title: Align(
+                alignment: Alignment.centerLeft,
+                // width: 100.w,
+                child: Image.asset(
+                  'assets/icons/agcare.png',
+                  height: 50.w,
+                ),
+              ),
+              onTap: () async => Get.to(
+                () => Webview(
+                  url: 'https://www.agcare.org.au/',
+                  title: 'AGCARE'.toUpperCase(),
+                ),
               ),
             ),
             MyListTile(

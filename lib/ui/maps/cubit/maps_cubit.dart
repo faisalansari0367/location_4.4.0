@@ -127,6 +127,12 @@ class MapsCubit extends BaseModel {
     }
   }
 
+  void updatePolygon(PolygonModel polygon) {
+    emit(state.copyWith(
+      currentPolygon: polygon,
+    ));
+  }
+
   // @override
   void emit(MapsState state) {
     if (!mounted) return;
@@ -164,12 +170,13 @@ class MapsCubit extends BaseModel {
     emit(state.copyWith(selectedColor: color));
   }
 
-  void addPolygon(String name) async {
+  void addPolygon(String name, {String? companyOwner}) async {
     final model = PolygonModel(
       name: name,
       color: state.selectedColor,
       points: _polygonsService.latLngs,
       id: Random().nextInt(10000000).toString(),
+      companyOwner: companyOwner,
     );
     // final userData = await api.getUserData();
     final result = await mapsRepo.savePolygon(model);

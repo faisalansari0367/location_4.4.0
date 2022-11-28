@@ -9,6 +9,7 @@ import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
 import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
+import 'package:background_location/ui/maps/view/widgets/add_polygon_details.dart';
 import 'package:background_location/ui/maps/view/widgets/current_location.dart';
 import 'package:background_location/ui/maps/view/widgets/dialog/polygon_details.dart';
 import 'package:background_location/ui/maps/view/widgets/map_type_widget.dart';
@@ -22,7 +23,6 @@ import 'package:background_location/widgets/dialogs/error.dart';
 import 'package:background_location/widgets/dialogs/location_permission_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -170,7 +170,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     if (state.addingGeofence) {
       result = AddFence(cubit: cubit);
     } else if (state.isEditingFence) {
-      result = _showEditSheet();
+      result = _showEditSheet(state);
     } else {
       result = _defaultNavbar(state);
     }
@@ -230,7 +230,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     );
   }
 
-  Widget _showEditSheet() {
+  Widget _showEditSheet(MapsState state) {
     return Container(
       color: const Color.fromARGB(255, 255, 255, 255),
       child: Row(
@@ -246,7 +246,21 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           BottomNavbarItem(
             title: 'Done',
             iconData: Icons.done,
-            onTap: () => cubit.doneEditing(),
+            onTap: () {
+              BottomSheetService.showSheet(
+                child: UpdatePolygonDetails(
+                  companyOwner: state.currentPolygon?.companyOwner,
+                  name: state.currentPolygon?.name,
+                  onDone: (name, companyOwnerName) {
+                    final polygon = state.currentPolygon!;
+                    final updatePolygon = polygon.copyWith(companyOwner: companyOwnerName, name: name);
+                    cubit.updatePolygon(updatePolygon);
+                    cubit.toggleIsEditingFence();
+                    cubit.doneEditing();
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -348,13 +362,14 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     return points.map(
       (e) {
         final isPolygonClosed = isClosedPolygon(points);
-        final onTap = isPolygonClosed ? null : () => context.read<PolygonsService>().addLatLng(e);
+        final polygonService = context.read<PolygonsService>();
+        final onTap = isPolygonClosed ? null : () => polygonService.addLatLng(e);
         return Marker(
           markerId: MarkerId(e.toString()),
           flat: false,
           draggable: true,
           onTap: onTap,
-          onDragEnd: (p) => context.read<PolygonsService>().updateMarkers(p, points.indexOf(e)),
+          onDragEnd: (p) => polygonService.updateMarkers(p, points.indexOf(e)),
           position: e,
           consumeTapEvents: isPolygonClosed,
         );
@@ -411,7 +426,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     };
   }
 
-  void _listener(BuildContext context, MapsState state) {}
+  // void _listener(BuildContext context, MapsState state) {}
 
   Widget _buildBackButton() {
     return Container(

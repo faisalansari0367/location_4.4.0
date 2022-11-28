@@ -284,8 +284,19 @@ class Geofence {
   String? pic;
   String? createdAt;
   String? updatedAt;
+  String? companyOwner;
 
-  Geofence({this.id, this.name, this.color, this.points, this.center, this.pic, this.createdAt, this.updatedAt});
+  Geofence({
+    this.id,
+    this.name,
+    this.color,
+    this.points,
+    this.center,
+    this.pic,
+    this.createdAt,
+    this.updatedAt,
+    this.companyOwner,
+  });
 
   Geofence.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -296,6 +307,7 @@ class Geofence {
     pic = json['pic'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    companyOwner = json['companyOwner'];
   }
 
   Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
@@ -314,6 +326,7 @@ class Geofence {
     data['pic'] = pic;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['companyOwner'] = companyOwner;
 
     return data;
   }

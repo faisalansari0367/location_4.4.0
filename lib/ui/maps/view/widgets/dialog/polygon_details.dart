@@ -47,74 +47,26 @@ class PolygonDetails extends StatelessWidget {
             'Field Name',
             value: polygonModel.name,
           ),
-          // Row(
-          //   // mainAxisSize: MainAxisSize.min,
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     // Text(
-          //     //   'Field Name',
-          //     //   style: context.textTheme.subtitle2?.copyWith(
-          //     //     // fontWeight: FontWeight.w600,
-          //     //     fontSize: 16.sp,
-          //     //   ),
-          //     // ),
-          //     // Text(
-          //     //   polygonModel.name,
-          //     //   style: context.textTheme.subtitle2?.copyWith(
-          //     //     fontWeight: FontWeight.w600,
-          //     //     fontSize: 16.sp,
-          //     //   ),
-          //     // ),
-          //   ],
-          // ),
-          // const Divider(),
+          _customTile(
+            'Created By',
+            value: polygonModel.createdBy?.fullName,
+          ),
+          if (polygonModel.companyOwner != null)
+            _customTile(
+              'Company Owner Name',
+              value: polygonModel.companyOwner ?? '',
+            ),
           _customTile(
             'Field Area',
             value: '${getPolygonArea(polygonModel.points).toStringAsFixed(2)} m2',
           ),
 
-          // Row(
-          //   // mainAxisSize: MainAxisSize.min,
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(
-          //       'Field Area',
-          //       style: context.textTheme.subtitle2?.copyWith(
-          //         // fontWeight: FontWeight.w600,
-          //         fontSize: 16.sp,
-          //       ),
-          //     ),
-          //     Text(
-          //       '${getPolygonArea(polygonModel.points).toStringAsFixed(2)} m2',
-          //       style: context.textTheme.subtitle2?.copyWith(
-          //         fontWeight: FontWeight.w600,
-          //         fontSize: 16.sp,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // const Divider(),
           if (canEdit)
             _customTile(
               'Edit Field Area',
               icon: (Icons.edit),
               onTap: onTap,
             ),
-          // InkWell(
-          //   onTap: onTap,
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Text(
-          //         'Edit Field Area',
-          //         style: context.textTheme.subtitle2?.copyWith(
-          //           fontSize: 16.sp,
-          //         ),
-          //       ),
-          //       const Icon(Icons.edit),
-          //     ],
-          //   ),
-          // ),
           if (canEdit)
             _customTile(
               'Delete Geofence',

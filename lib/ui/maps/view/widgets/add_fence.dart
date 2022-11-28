@@ -1,22 +1,13 @@
-import 'package:background_location/extensions/size_config.dart';
 import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
+import 'package:background_location/ui/maps/view/widgets/add_polygon_details.dart';
 import 'package:background_location/ui/maps/view/widgets/select_color.dart';
 import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../constants/constans.dart';
-import '../../../../constants/strings.dart';
 import '../../../../gen/assets.gen.dart';
-import '../../../../helpers/validator.dart';
-import '../../../../widgets/dialogs/dialog_service.dart';
-import '../../../../widgets/my_elevated_button.dart';
-import '../../../../widgets/text_fields/my_text_field.dart';
 
 class AddFence extends StatelessWidget {
   final MapsCubit cubit;
@@ -61,103 +52,121 @@ class AddFence extends StatelessWidget {
             cubit.setIsAddingGeofence();
             return;
           }
-          final form = GlobalKey<FormState>();
-          final controller = TextEditingController();
-          DialogService.showDialog(
-            child: DialogLayout(
-              child: Padding(
-                padding: kPadding,
-                child: Form(
-                  key: form,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Name
-                      MyTextField(
-                        hintText: Strings.fieldNameMsg,
-                        validator: Validator.text,
-                        controller: controller,
-                      ),
-                      Gap(2.height),
-                      MyElevatedButton(
-                        onPressed: () async {
-                          if (form.currentState?.validate() ?? false) {
-                            Get.back();
-                            cubit.setIsAddingGeofence();
-                            cubit.addPolygon(controller.text);
-                          }
-                        },
-                        text: 'Done',
-                      )
-                    ],
-                  ),
-                ),
-              ),
+
+          BottomSheetService.showSheet(
+            child: UpdatePolygonDetails(
+              onDone: (name, companyOwnerName) {
+                cubit.setIsAddingGeofence();
+                cubit.addPolygon(name, companyOwner: companyOwnerName);
+              },
             ),
           );
+
+          // final form = GlobalKey<FormState>();
+          // final controller = TextEditingController();
+          // DialogService.showDialog(
+          //   child: DialogLayout(
+          //     child: Padding(
+          //       padding: kPadding,
+          //       child: Form(
+          //         key: form,
+          //         child: Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: [
+          //             MyTextField(
+          //               hintText: Strings.fieldNameMsg,
+          //               validator: Validator.text,
+          //               controller: controller,
+          //             ),
+          //             Gap(2.height),
+          //             MyElevatedButton(
+          //               onPressed: () async {
+          //                 if (form.currentState?.validate() ?? false) {
+          //                   Get.back();
+          //                   cubit.setIsAddingGeofence();
+          //                   cubit.addPolygon(controller.text);
+          //                 }
+          //               },
+          //               text: 'Done',
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // );
         },
         iconData: Icons.done,
       ),
     ];
   }
-
-  // return Padding(
-  //   padding: const EdgeInsets.all(8.0),
-  //   child: Row(
-  //     // mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //     children: [
-  //       // Expanded(
-  //       //   flex: 3,
-  //       //   child: Center(
-  //       //     child: Text(
-  //       //       'Tap on the screen to draw fence',
-  //       //       style: context.textTheme.subtitle2,
-  //       //     ),
-  //       //   ),
-  //       // ),
-  //       Expanded(child: _selectColorWidget()),
-  //       // clear icon button
-  //       Expanded(
-  //         child: Material(
-  //           child: InkWell(
-  //             onTap: widget.cubit.clearLastMarker,
-  //             child: Column(
-  //               children: [
-  //                 Icon(Icons.clear),
-  //                 // clear text
-  //                 Text(
-  //                   'Clear',
-  //                   style: context.textTheme.subtitle2,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //       // Divider(),
-  //       // Container(
-  //       //   width: 0.5.width,
-  //       //   height: 7.height,
-  //       //   color: Color.fromARGB(58, 0, 0, 0),
-  //       // ),
-  //       Expanded(
-  //         child: Material(
-  //           child: InkWell(
-  //             onTap: widget.cubit.setIsAddingGeofence,
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Icon(Icons.check),
-  //                 Text(
-  //                   'done',
-  //                   style: context.textTheme.subtitle2,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  //   // );x
 }
+
+// class _AddPolygonDetails extends StatefulWidget {
+//   final MapsCubit cubit;
+//   const _AddPolygonDetails({required this.cubit});
+
+//   @override
+//   State<_AddPolygonDetails> createState() => _AddPolygonDetailsState();
+// }
+
+// class _AddPolygonDetailsState extends State<_AddPolygonDetails> {
+//   final form = GlobalKey<FormState>();
+//   final controller = TextEditingController();
+//   final _cw = TextEditingController();
+
+//   @override
+//   void dispose() {
+//     controller.dispose();
+//     _cw.dispose();
+
+//     super.dispose();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: EdgeInsets.zero,
+//       child: Form(
+//         key: form,
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Text(
+//               'Enter zone details',
+//               style: context.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+//             ),
+//             Gap(3.height),
+//             MyTextField(
+//               hintText: 'Please enter the zone name',
+//               validator: Validator.text,
+//               controller: controller,
+//             ),
+//             Gap(2.height),
+//             MyTextField(
+//               hintText: 'Company Owner Name',
+//               validator: Validator.none,
+
+//               controller: _cw,
+//             ),
+//             Gap(2.height),
+//             MyElevatedButton(
+//               onPressed: () async {
+//                 if (form.currentState?.validate() ?? false) {
+//                   Get.back();
+//                   widget.cubit.setIsAddingGeofence();
+//                   widget.cubit.addPolygon(
+//                     controller.text,
+//                     companyOwner: _cw.text.isEmpty ? null : _cw.text,
+//                   );
+//                 }
+//               },
+//               text: 'Done',
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

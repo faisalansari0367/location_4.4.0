@@ -4,3 +4,6 @@ export 'api_constants.dart';
 export 'constans.dart';
 export 'my_decoration.dart';
 export 'strings.dart';
+export 'package:gap/gap.dart';
+export 'package:get/get.dart';
+export '../widgets/widgets.dart';

@@ -5,6 +5,7 @@ class Strings {
   static const String appName = 'BIOPLUS';
 
   static const name = 'Name',
+      warakirri = 'Warakirri',
       email = 'Email',
       first = 'First',
       last = 'Last',

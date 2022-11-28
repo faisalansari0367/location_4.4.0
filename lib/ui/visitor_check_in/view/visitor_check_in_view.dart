@@ -8,11 +8,6 @@ import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
-// import 'package:qr_flutter/qr_flutter.dart';
-// import 'package:qr_code_scanner/qr_code_scanner.dart';
-// import 'package:qr_flutter/qr_flutter.dart';
 
 class VisitorCheckInView extends StatelessWidget {
   const VisitorCheckInView({Key? key}) : super(key: key);
@@ -33,9 +28,6 @@ class VisitorCheckInView extends StatelessWidget {
                 _infoCard(context),
                 Gap(20.h),
                 Container(
-                  // color: Colors.black,
-                  // width: 100.width,
-                  // decoration: MyDecoration.decoration(color: Colors.white),
                   child: Column(
                     children: [
                       Gap(20.h),
@@ -52,9 +44,7 @@ class VisitorCheckInView extends StatelessWidget {
                         width: 60.width,
                         height: 60.width,
                         child: Container(
-                          decoration: const BoxDecoration(
-                              // border: Border.all(width: 7.w),
-                              ),
+                          decoration: const BoxDecoration(),
                           child: AnimatedSwitcher(
                             duration: kDuration,
                             child: _qrCode(state),
@@ -90,46 +80,11 @@ class VisitorCheckInView extends StatelessWidget {
     } else {
       return Image.memory(base64Decode(state.qrCode!));
     }
-    // return QrImage(data: data);
-    // QRView(key: key, onQRViewCreated: onQRViewCreated)
-    // drawBarcode(image, Barcode.code128(), 'Test', font: arial_24)
-    // data: 'App store link and playstore link is coming soon...',
-
-    // QrImage(qrCode)
-    // return Image.memory(QrCode.fromData(data: data, errorCorrectLevel: 0).dataCache);
-    // return QrImage(
-    //   QrCode.fromData(data: data, errorCorrectLevel: 0).dataCache,
-    // );
-    // return QrImage(QrCode.fromData(data: 'App store link and playstore link is coming soon...', errorCorrectLevel: 1));
   }
-
-  // Column _errorWidget(BuildContext context) {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.center,
-  //     children: [
-  //       Flexible(
-  //         child: Icon(
-  //           Icons.error,
-  //           color: Colors.red,
-  //           size: 40.w,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-  //         child: Text(
-  //           'Something went wrong',
-  //           textAlign: TextAlign.center,
-  //           style: context.textTheme.headline6,
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
 
   Container _infoCard(BuildContext context) {
     return Container(
       padding: kPadding,
-      // width: double.infinity,
       decoration: MyDecoration.decoration().copyWith(
         border: Border.all(color: Colors.red, width: 1.width),
       ),
@@ -138,7 +93,6 @@ class VisitorCheckInView extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.width, vertical: 5.h),
             decoration: MyDecoration.decoration(color: Colors.red).copyWith(
-              // shape: StadiumBorder(),
               borderRadius: BorderRadius.circular(50),
             ),
             child: AutoSizeText(
@@ -180,9 +134,7 @@ class VisitorCheckInView extends StatelessWidget {
               maxLines: 2,
               textAlign: TextAlign.center,
               style: context.textTheme.subtitle1?.copyWith(
-                // color: Colors.white,
                 fontWeight: FontWeight.w600,
-                // fontSize: 14.w,
               ),
             ),
           ),
@@ -192,8 +144,6 @@ class VisitorCheckInView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Icon(Icons.info, color: Colors.red),
-              // Gap(5.w),
               Expanded(
                 child: AutoSizeText(
                   'Do not enter property without prior consent',
@@ -219,8 +169,7 @@ class VisitorCheckInView extends StatelessWidget {
           ),
           Gap(20.h),
           AutoSizeText(
-            'Automated BioSecurity Compliance\nPowered by iTRAKassets',
-            // maxLines: 1,
+            'Automated BioSecurity Compliance\nPowered by ${Strings.appName}',
             textAlign: TextAlign.center,
             style: context.textTheme.headline6?.copyWith(
               color: context.theme.primaryColor,
@@ -247,15 +196,12 @@ class VisitorCheckInView extends StatelessWidget {
                 Icons.phone,
                 color: Color.fromARGB(255, 80, 106, 255),
               ),
-              // Gap(5.w),
               Text(
                 phoneNumber,
                 style: context.textTheme.subtitle2?.copyWith(
                   fontWeight: FontWeight.w600,
                   decoration: TextDecoration.underline,
-                  // color: Color.fromARGB(255, 33, 65, 243),
                   color: const Color.fromARGB(255, 80, 106, 255),
-
                   fontSize: 17.w,
                 ),
               ),

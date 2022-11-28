@@ -5,6 +5,7 @@ import 'package:background_location/ui/admin/pages/users_list/view/users_page.da
 import 'package:background_location/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:background_location/ui/forms/forms_page.dart';
 import 'package:background_location/ui/forms/warakirri_entry_form/view/warakirri_entry_form_page.dart';
+import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/select_role/view/select_role_page.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
@@ -14,8 +15,6 @@ import 'package:background_location/widgets/my_listTile.dart';
 import 'package:background_location/widgets/pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../cubit/admin_state.dart';
 
@@ -106,6 +105,11 @@ class AdminView extends StatelessWidget {
                     Get.to(
                       () => WarakirriEntryFormPage(
                         zoneId: '88',
+                        polygon: PolygonModel(
+                          color: Colors.red,
+                          name: 'Test zone',
+                          points: [],
+                        ),
                       ),
                     );
                   },

@@ -9,6 +9,7 @@ class PolygonModel {
   final String? id;
   final Color color;
   final String name;
+  final String? companyOwner;
   final String? pic;
   final List<LatLng> points;
   final UserData? createdBy;
@@ -16,6 +17,7 @@ class PolygonModel {
   final DateTime? updatedAt;
 
   PolygonModel({
+    this.companyOwner,
     this.pic,
     this.id,
     this.createdBy,
@@ -36,6 +38,7 @@ class PolygonModel {
       'updatedAt': updatedAt?.toIso8601String(),
       'createdBy': createdBy?.toJson(),
       'pic': pic,
+      'companyOwner': companyOwner,
 
       // 'createdAt': createdBy.toJson(),
     };
@@ -46,7 +49,7 @@ class PolygonModel {
       'color': colorToHex(color),
       'points': points.map(_latLngToJson).toList(),
       'name': name,
-      
+      'companyOwner': companyOwner,
     };
   }
 
@@ -55,7 +58,6 @@ class PolygonModel {
   }
 
   static LatLng _latLngFromJson(List latLng) {
-    
     try {
       return LatLng(latLng.last, latLng.first);
     } catch (e) {
@@ -84,6 +86,7 @@ class PolygonModel {
         name: json['name'],
         updatedAt: parseDateTime(json['updatedAt']),
         createdAt: parseDateTime(json['createdAt']),
+        companyOwner: json['companyOwner'],
       );
     } catch (e) {
       log(e.toString());
@@ -108,6 +111,7 @@ class PolygonModel {
       name: json['name'],
       updatedAt: parseDateTime(json['updatedAt']),
       createdAt: parseDateTime(json['createdAt']),
+      companyOwner: json['companyOwner'],
       pic: json['pic'],
     );
   }
@@ -126,6 +130,8 @@ class PolygonModel {
     String? id,
     Color? color,
     String? name,
+    String? companyOwner,
+    String? pic,
     List<LatLng>? points,
     UserData? createdBy,
     DateTime? createdAt,
@@ -135,6 +141,8 @@ class PolygonModel {
       id: id ?? this.id,
       color: color ?? this.color,
       name: name ?? this.name,
+      companyOwner: companyOwner ?? this.companyOwner,
+      pic: pic ?? this.pic,
       points: points ?? this.points,
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,

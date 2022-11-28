@@ -11,7 +11,7 @@ class WarakirriQuestionFormModel {
       additionalInfo = 'additionalInfo';
 
   Map<String, dynamic> get _questions => {
-        warakirriFarm: 'Name of warrakirri farm',
+        warakirriFarm: 'Location Name',
         isPeopleTravelingWith: '1. Are other people travelling onto the property with you?',
         isFluSymptoms:
             '2. Do you have any of the following symptoms: feeling unwell or displaying any flu-like symptoms, sudden loss of smell or taste, fever, cough, sore throat, fatigue or shortness of breath?',

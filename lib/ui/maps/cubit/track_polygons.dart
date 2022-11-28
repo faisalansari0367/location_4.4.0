@@ -61,7 +61,6 @@ class TrackPolygons {
   //
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
     if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) {
-      // log('returning', error: 'returning and not doing anything');
       return;
     }
     _userIsInside(polygonsInCoverage, currentPosition);
@@ -126,6 +125,7 @@ class TrackPolygons {
             () => FormsPage(
               zoneId: s.id!,
               logRecord: logRecord,
+              polygon: currentPolygon,
             ),
           );
         },

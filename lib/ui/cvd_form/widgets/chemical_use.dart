@@ -1,4 +1,5 @@
 import 'package:background_location/constants/index.dart';
+import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
 import 'package:background_location/ui/cvd_form/widgets/add_fields.dart';
 import 'package:background_location/ui/cvd_form/widgets/add_table_entries.dart';
@@ -146,10 +147,13 @@ class _ChemicalUseState extends State<ChemicalUse> {
             ],
             onChanged: (value) {
               if (form!.riskCheck!.value == '1') {
-                _enterTextPopup((s) {
-                  cubit.riskAssesment = s;
-                  setState(() {});
-                }, 'Enter Risk Assesment');
+                _enterTextPopup(
+                  (s) {
+                    cubit.riskAssesment = s;
+                    setState(() {});
+                  },
+                  'Enter Risk Assesment',
+                );
               }
             },
           ),
@@ -177,14 +181,14 @@ class _ChemicalUseState extends State<ChemicalUse> {
               for (var value in _form.values) {
                 if (value is Map) {
                   // value['key']
+                  print(value['value']);
+                  if (value['value'] == null) {
+                    DialogService.error('Please fill the ${value['field']}');
+                    return;
+                  }
                   if ([form!.cropList?.key, form!.qaProgram?.key, form!.certificateNumber?.key]
                       .contains(value['key'])) {
                     cubit.moveToNext();
-                    return;
-                  }
-
-                  if (value['value'] == null) {
-                    DialogService.error('Please fill the ${value['field']}');
                     return;
                   }
                 }
@@ -315,31 +319,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
   void _enterTextPopup(ValueChanged<String> onChanged, String hint) {
     DialogService.showDialog(
       child: DialogLayout(
-        child: Padding(
-          padding: kPadding,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: hint,
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 10,
-                minLines: 3,
-                onChanged: onChanged,
-              ),
-              Gap(10.h),
-              MyElevatedButton(
-                text: 'Save',
-                onPressed: () async {
-                  Get.back();
-                  setState(() {});
-                },
-              ),
-            ],
-          ),
-        ),
+        child: _EnterResults(hint: hint, onSave: onChanged),
       ),
     );
   }
@@ -425,5 +405,63 @@ class _QuestionWithCheckboxState extends State<_QuestionWithCheckbox> {
         ],
       ),
     );
+  }
+}
+
+class _EnterResults extends StatefulWidget {
+  final String hint;
+  final ValueChanged<String> onSave;
+
+  const _EnterResults({required this.hint, required this.onSave});
+
+  @override
+  State<_EnterResults> createState() => _EnterResultsState();
+}
+
+class _EnterResultsState extends State<_EnterResults> {
+  final _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: kPadding,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: widget.hint,
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 10,
+              minLines: 3,
+              validator: Validator.text,
+              controller: _controller,
+            ),
+            Gap(10.h),
+            MyElevatedButton(
+              text: 'Save',
+              onPressed: _onSave,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onSave() async {
+    if (_formKey.currentState!.validate()) {
+      widget.onSave(_controller.text);
+      Get.back();
+    }
   }
 }
