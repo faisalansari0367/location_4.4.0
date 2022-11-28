@@ -9,8 +9,6 @@ import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class GeofencesList extends StatefulWidget {
@@ -100,7 +98,7 @@ class _GeofencesListState extends State<GeofencesList> {
     );
   }
 
-  Row _selectLocationHeader(BuildContext context) {
+Row _selectLocationHeader(BuildContext context) {
     return Row(
       children: [
         Text(

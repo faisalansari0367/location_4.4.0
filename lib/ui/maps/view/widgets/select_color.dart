@@ -1,8 +1,6 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/widgets/animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 Color fromHex(String hexString) {
   final buffer = StringBuffer();

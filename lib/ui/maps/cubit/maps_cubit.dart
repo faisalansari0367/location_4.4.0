@@ -215,6 +215,10 @@ class MapsCubit extends BaseModel {
   }
 
   Future<void> updateCurrentLocation() async {
+    final permission = await GeolocatorService.locationPermission();
+    if (!permission) {
+      return;
+    }
     final result = await GeolocatorService.getLastKnownPosition();
     if (result != null) {
       final _lastPosition = LatLng(result.latitude, result.longitude);

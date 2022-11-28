@@ -2,7 +2,6 @@ import 'package:api_repo/api_repo.dart';
 import 'package:background_location/view_sent_notification/provider/provider.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../constants/index.dart';
 import '../../widgets/expanded_tile.dart';

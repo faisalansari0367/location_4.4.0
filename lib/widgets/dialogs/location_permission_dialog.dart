@@ -1,11 +1,8 @@
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class LocationPermissionDialog extends StatelessWidget {

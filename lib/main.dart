@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:local_notification/local_notification.dart';
@@ -168,7 +167,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: GetMaterialApp(
-        debugShowCheckedModeBanner: kDebugMode,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,
@@ -186,6 +185,7 @@ class _MyAppState extends State<MyApp> {
         ),
         home: ScreenUtilInit(
           designSize: Get.size,
+          // designSize: Size(1179, 2556),
           builder: (context, child) => const SplashScreen(),
           child: const SplashScreen(),
         ),

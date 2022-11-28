@@ -1,8 +1,6 @@
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 class MyListview<T> extends StatelessWidget {
   final bool isLoading, shrinkWrap, isPrimary, isAnimated;

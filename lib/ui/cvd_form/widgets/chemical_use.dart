@@ -8,12 +8,9 @@ import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../cubit/cvd_cubit.dart';
 import 'common_buttons.dart';

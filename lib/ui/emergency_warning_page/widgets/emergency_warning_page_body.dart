@@ -5,8 +5,6 @@ import 'package:background_location/ui/emergency_warning_page/provider/provider.
 import 'package:background_location/ui/maps/widgets/geofences_list/geofences_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../constants/index.dart';
@@ -15,7 +13,6 @@ import '../../../widgets/dialogs/dialog_layout.dart';
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../../../widgets/empty_screen.dart';
 import '../../../widgets/my_appbar.dart';
-import '../../../widgets/my_elevated_button.dart';
 import '../../maps/view/maps_page.dart';
 
 /// {@template emergency_warning_page_body}

@@ -19,6 +19,7 @@ class AutoSpacing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: crossAxisAlignment,
       children: addSizedBox(),
     );
@@ -37,7 +38,7 @@ class AutoSpacing extends StatelessWidget {
       list.add(item);
       list.add(spacing ?? SizedBox(height: 24.h));
     }
-    if (removeLast) list.remove(list.last);
+    if (removeLast) list.removeLast();
     return list;
   }
 }

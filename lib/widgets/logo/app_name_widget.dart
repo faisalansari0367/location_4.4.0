@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
 class AppName extends StatelessWidget {
   final double? fontSize;

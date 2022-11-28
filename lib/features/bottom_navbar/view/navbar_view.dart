@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 // import 'package:flutter_expense_trackr/constans.dart';
 // import 'package:flutter_expense_trackr/extensions/theme_extension.dart';
 // import 'package:flutter_expense_trackr/widgets/index.dart';

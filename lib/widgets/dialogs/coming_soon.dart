@@ -2,8 +2,6 @@ import 'package:background_location/widgets/animations/my_scale_transition.dart'
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../constants/index.dart';
 import '../../gen/assets.gen.dart';

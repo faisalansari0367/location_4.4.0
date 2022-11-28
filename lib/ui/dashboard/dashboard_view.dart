@@ -19,8 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../services/notifications/push_notifications.dart';
 import '../links_page/links_page.dart';

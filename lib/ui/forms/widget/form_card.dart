@@ -1,7 +1,6 @@
 import 'package:background_location/widgets/my_radio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 import '../../../constants/index.dart';
 

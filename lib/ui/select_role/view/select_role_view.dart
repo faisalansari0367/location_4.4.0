@@ -4,12 +4,9 @@ import 'package:background_location/ui/select_roles_registration/view/select_rol
 import 'package:background_location/widgets/listview/my_listview.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_listTile.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 // import 'package:get/get.dart';
 

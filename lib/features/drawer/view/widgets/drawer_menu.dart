@@ -1,16 +1,12 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/extensions/size_config.dart';
+import 'package:background_location/constants/index.dart';
 import 'package:background_location/features/drawer/models/drawer_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../../../constants/constans.dart';
-import '../../../../constants/strings.dart';
 import '../../cubit/my_drawer_controller.dart';
 import '../../models/drawer_item.dart';
 
@@ -47,101 +43,113 @@ class _DrawerMenuState extends State<DrawerMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: kPadding.copyWith(left: 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Gap(20.height),
-          // Padding(
-          //   padding: EdgeInsets.only(
-          //     left: 40.w,
-          //   ),
-          //   child: Image.asset(
-          //     Assets.icons.appIcon.path,
-          //     height: 14.height,
-          //   ),
-          // ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Gap(15.height),
+        // Spacer(),
+        _buildWelcome(context),
+        Gap(10.height),
+        Gap(2.height),
+        ..._drawerItems.items.map(_customTile).toList(),
+        // Gap(2.height),
+        // Spacer(),
+        // Spacer(),
+        Gap(30.height),
+
+        Padding(
+          padding: kPadding,
+          child: SizedBox(
+            width: 50.width,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'Welcome\n${user?.firstName ?? ''} ${user?.lastName ?? ''}',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 24.sp,
-                      ),
-                ),
-                Gap(25.h),
-                // Divider(
-                //     // color: Colors.white,
-                //     ),
-                Row(
-                  children: [
-                    Gap(5.w),
-                    Icon(
-                      Icons.account_box_outlined,
-                      color: Colors.white,
-                      size: 25.h,
-                    ),
-                    Gap(10.w),
-                    Text(
-                      '${user?.role ?? ''}',
-                      style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20.h,
-                          ),
-                    ),
-                  ],
-                ),
-                Gap(10.h),
+                _buildCopyright(context),
+                if (packageInfo != null) _buildVersion(),
               ],
             ),
           ),
+        ),
+        Spacer(),
+      ],
+    );
+  }
 
-          ..._drawerItems.items.map(_customTile).toList(),
-          // Spacer(),
-          if (packageInfo != null)
-            Padding(
-              padding: EdgeInsets.only(top: 20, left: 20.w),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.build,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  Gap(10.w),
-                  Text(
-                    'Version ${packageInfo?.version}',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                ],
+  Padding _buildWelcome(BuildContext context) {
+    final style = Theme.of(context).textTheme.headline6?.copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          fontSize: 24.sp,
+        );
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Welcome',
+                style: style,
               ),
-            ),
+              Gap(10.w),
+              Container(
+                decoration: MyDecoration.decoration(),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+                child: Text(
+                  user?.role ?? '',
+                  style: context.textTheme.bodyText2?.copyWith(
+                    color: context.theme.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Text(
+            user?.fullName ?? '',
+            style: style,
+          ),
         ],
       ),
     );
   }
 
+  Widget _buildCopyright(BuildContext context) {
+    return Text(
+      'Copyright ${DateTime.now().year}',
+      style: Theme.of(context).textTheme.headline6?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 18.h,
+          ),
+    );
+  }
+
+  Widget _buildVersion() {
+    return Text(
+      'Version ${packageInfo?.version}',
+      style: TextStyle(
+        color: Color.fromARGB(235, 255, 255, 255),
+        fontWeight: FontWeight.w600,
+        fontSize: 16.sp,
+      ),
+    );
+  }
+
   Widget _leading(String? image, Color color, IconData iconData) {
+    final size = 22.0;
     return image != null
         ? Image.asset(
             image,
             color: color,
-            height: 25,
+            height: size,
           )
         : Icon(
             iconData,
             color: color,
+            size: size,
           );
   }
 
@@ -166,8 +174,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
         padding: kPadding.copyWith(bottom: 15.h, top: 15.h),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
-            topRight: Radius.circular(25),
-            bottomRight: Radius.circular(25),
+            topRight: Radius.circular(50),
+            bottomRight: Radius.circular(50),
           ),
           color: isSelected ? Colors.white : Colors.transparent,
         ),
@@ -179,8 +187,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
               duration: 100.milliseconds,
               style: TextStyle(
                 color: color,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w600,
-                fontSize: 20.sp,
+                fontWeight: isSelected ? FontWeight.w500 : FontWeight.w500,
+                fontSize: 18.sp,
               ),
               child: Flexible(
                 child: AutoSizeText(

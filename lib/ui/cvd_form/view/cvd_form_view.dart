@@ -9,7 +9,6 @@ import 'package:background_location/ui/cvd_form/widgets/custom_steppar.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 import '../widgets/product_integrity.dart';
 import '../widgets/self_declaration.dart';

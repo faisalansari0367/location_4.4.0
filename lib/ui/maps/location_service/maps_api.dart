@@ -27,7 +27,7 @@ class MapsApi implements MapsRepo {
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     try {
       completer = Completer<List<PolygonModel>>();
-      final result = await client.get(_Endpoints.geofences);
+      final result = await client.get(_Endpoints.geofences, logging: false);
       final data = (result.data['data'] as List<dynamic>).map((e) => PolygonModel.fromJson(e)).toList();
       _controller.add(data);
       await storage.saveAllPolygon(data);

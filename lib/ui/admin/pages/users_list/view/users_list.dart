@@ -6,12 +6,9 @@ import 'package:background_location/ui/admin/pages/users_list/view/roles_sheet.d
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/expanded_tile.dart';
 import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 import '../../../../../widgets/bottom_sheet/bottom_sheet_service.dart';

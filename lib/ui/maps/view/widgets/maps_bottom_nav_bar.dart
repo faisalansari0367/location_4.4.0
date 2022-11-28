@@ -12,8 +12,6 @@ import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dar
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 import 'map_type_widget.dart';
 

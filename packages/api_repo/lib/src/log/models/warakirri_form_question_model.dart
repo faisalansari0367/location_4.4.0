@@ -8,9 +8,16 @@ class WarakirriQuestionFormModel {
       hasBeenInducted = 'hasBeenInducted',
       isConfinedSpace = 'isConfinedSpace',
       warakirriFarm = 'warakirriFarm',
+      companyName = 'companyName',
+      phoneNumber = 'phoneNumber',
+      fullName = 'fullName',
       additionalInfo = 'additionalInfo';
 
   Map<String, dynamic> get _questions => {
+        fullName: 'Full Name',
+        phoneNumber: 'Phone Number',
+        companyName: 'Company Name',
+        additionalInfo: 'Additional Info',
         warakirriFarm: 'Location Name',
         isPeopleTravelingWith: '1. Are other people travelling onto the property with you?',
         isFluSymptoms:

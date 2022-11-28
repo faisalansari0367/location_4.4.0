@@ -1,10 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/login/view/login_page.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../../constants/index.dart';
 import '../../../gen/assets.gen.dart';

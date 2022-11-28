@@ -5,13 +5,10 @@ import 'package:background_location/ui/role_details/cubit/role_details_cubit.dar
 import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/my_cross_fade.dart';
 import 'package:background_location/widgets/state_dropdown_field.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../../helpers/validator.dart';
 import '../../../widgets/my_appbar.dart';

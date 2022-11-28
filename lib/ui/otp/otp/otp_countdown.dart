@@ -37,7 +37,7 @@ class OtpCountDown extends StatelessWidget {
           child: TextButton(
             onPressed: onRetry,
             style: TextButton.styleFrom(
-              primary: context.theme.primaryColor,
+              foregroundColor: context.theme.primaryColor,
             ),
             child: const Text('Resend otp'),
           ),

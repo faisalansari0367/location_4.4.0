@@ -2,10 +2,8 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/work_safety/cubit/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 import '../../../services/notifications/intent_service.dart';
-import '../../../widgets/my_elevated_button.dart';
 
 /// {@template work_safety_body}
 /// Body of the WorkSafetyPage.

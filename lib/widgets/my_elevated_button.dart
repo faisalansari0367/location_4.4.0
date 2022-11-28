@@ -2,7 +2,6 @@ import 'package:background_location/constants/index.dart';
 import 'package:background_location/widgets/animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class MyElevatedButton extends StatefulWidget {
   final Widget? child;

@@ -4,8 +4,6 @@ import 'package:background_location/view_sent_notification/view_sent_notificatio
 import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../widgets/my_appbar.dart';
 import '../admin/pages/visitor_log_book/view/logbook_page.dart';

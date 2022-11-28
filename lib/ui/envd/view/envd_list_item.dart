@@ -8,7 +8,6 @@ import 'package:background_location/widgets/download_button/envd_download_contro
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 class EnvdListItem extends StatelessWidget {
   final Items items;

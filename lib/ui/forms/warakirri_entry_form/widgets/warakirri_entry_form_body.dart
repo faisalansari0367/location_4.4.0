@@ -62,7 +62,7 @@ class WarakirriEntryFormBody extends StatelessWidget {
                 _buildTextField(
                     'Phone Number', (state.userData?.countryCode ?? '') + '' + (state.userData?.phoneNumber ?? '')),
                 _buildTextField('Company Name', state.userData?.company),
-                _additionalInfo(context),
+                _additionalInfo(context, state),
                 _buildSignOff(context),
                 _buildPoints(state),
                 _selfDeclaration(state),
@@ -124,13 +124,14 @@ class WarakirriEntryFormBody extends StatelessWidget {
     );
   }
 
-  TextFormField _additionalInfo(BuildContext context) {
+  TextFormField _additionalInfo(BuildContext context, WarakirriEntryFormNotifier state) {
     return TextFormField(
       minLines: 3,
       maxLines: 5,
       decoration: MyDecoration.recangularInputDecoration(context).copyWith(
-        labelText: 'Additional Info',
+        labelText: state.model.additionalInfo.question,
       ),
+      onChanged: (value) => state.onChanged(state.model.additionalInfo, value),
     );
   }
 

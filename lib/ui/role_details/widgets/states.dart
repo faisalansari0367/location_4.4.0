@@ -1,6 +1,5 @@
 import 'package:background_location/constants/index.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class States extends StatelessWidget {
   final ValueChanged<String> onChanged;

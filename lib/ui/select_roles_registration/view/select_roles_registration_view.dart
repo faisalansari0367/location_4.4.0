@@ -3,12 +3,9 @@ import 'package:background_location/ui/select_roles_registration/view/switch_til
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
-import '../../../widgets/my_elevated_button.dart';
 import '../cubit/select_roles_registration_cubit.dart';
 
 class SelectRolesRegistrationView extends StatelessWidget {

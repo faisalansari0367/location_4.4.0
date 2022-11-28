@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/maps/cubit/track_polygons.dart';
@@ -21,11 +22,14 @@ class GeofenceService {
     required MapsRepo mapsRepo,
     required Api api,
   }) {
-    mapsRepo.polygonStream.listen((event) => polygons = event.toSet());
+    mapsRepo.polygonStream.listen(
+      (event) => polygons = event.toSet(),
+    );
     trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
   }
 
   Future<void> getLocationUpdates(ValueChanged<Position>? onLocationChanged) async {
+    log('Polygons: ${polygons.length}');
     _positionSubscription?.cancel();
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {

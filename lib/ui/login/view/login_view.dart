@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Spacer(),
-                    Gap(10.height),
+                    Gap(7.height),
                     AnimatedContainer(
                       duration: 500.milliseconds,
                       curve: Curves.decelerate,
@@ -57,10 +57,10 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     Center(
                       child: AppName(
-                        fontSize: constraints.maxHeight * 0.1,
+                        fontSize: constraints.maxHeight / 15,
                       ),
                     ),
-                    Gap(4.height),
+                    Gap(2.height),
 
                     Text(
                       Strings.login,
@@ -101,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
                       },
                     ),
 
-                    Gap(3.height),
+                    Gap(1.height),
                     Align(
                       child: TextButton(
                         onPressed: () => Get.to(() => const SignUpPage()),

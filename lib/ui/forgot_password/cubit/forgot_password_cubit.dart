@@ -5,7 +5,6 @@ import 'package:background_location/ui/forgot_password/cubit/forgot_password_sta
 import 'package:background_location/ui/forgot_password/view/reset_password.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 import '../../../widgets/dialogs/mail_sent_dialog.dart';
 

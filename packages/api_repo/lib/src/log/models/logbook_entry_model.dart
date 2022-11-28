@@ -173,7 +173,7 @@ class LogbookFormModel {
   final String? warakirriFarm;
   final bool? hasBeenInducted;
   final bool? isConfinedSpace;
-  final bool? additionalInfo;
+  final String? additionalInfo;
 
   //  hasBeenInducted = 'hasBeenInducted',
   //     isConfinedSpace = 'isConfinedSpace',

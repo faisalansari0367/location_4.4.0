@@ -5,8 +5,6 @@ import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 import '../../../widgets/dialogs/coming_soon.dart';
 import '../../../widgets/dialogs/dialog_service.dart';

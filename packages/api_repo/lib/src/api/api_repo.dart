@@ -1,6 +1,5 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/functions/functions_repo.dart';
-import 'package:api_repo/src/log/log_records.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../configs/client.dart';

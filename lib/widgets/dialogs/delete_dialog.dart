@@ -1,8 +1,6 @@
 import 'package:background_location/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import 'dialog_layout.dart';
@@ -123,7 +121,7 @@ class DeleteDialog extends StatelessWidget {
       ),
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        primary: color,
+        backgroundColor: color,
         shape: StadiumBorder(),
         side: BorderSide(color: side),
         minimumSize: Size(100.w, 50.h),

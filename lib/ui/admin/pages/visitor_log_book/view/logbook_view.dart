@@ -2,6 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/index.dart';
 import 'package:background_location/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
 import 'package:background_location/ui/forms/forms_page.dart';
+import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/listview/infinite_table.dart';
@@ -212,12 +213,25 @@ class _LogbookViewState extends State<LogbookView> {
                   Expanded(
                     child: MyElevatedButton(
                       onPressed: () async {
+                        // final PolygonModel polygonModel = PolygonModel.fromLocalJson(item.toJson());
                         Get.back();
                         Get.to(
                           () => FormsPage(
                             zoneId: item.geofence!.id!.toString(),
                             logRecordId: item.id,
                             logRecord: item,
+                            polygon: PolygonModel(
+                              id: item.id.toString(),
+                              name: item.geofence!.name!,
+                              color: item.geofence!.color!,
+                              pic: item.geofence!.pic,
+                              companyOwner: item.geofence?.companyOwner ?? '',
+                              createdAt: item.createdAt,
+                              updatedAt: item.updatedAt,
+                              createdBy: item.user,
+                              // TODO: check if this is correct
+                              points: [],
+                            ),
                           ),
                         );
                       },

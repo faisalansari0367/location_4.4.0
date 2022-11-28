@@ -1,12 +1,9 @@
 import 'dart:convert';
 
 import 'package:background_location/constants/index.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:signature/signature.dart';
 
 class SignatureWidget extends StatefulWidget {

@@ -5,10 +5,8 @@ import 'package:background_location/ui/role_details/models/field_types.dart';
 import 'package:background_location/ui/role_details/widgets/species.dart';
 import 'package:background_location/widgets/signature/signature_widget.dart';
 import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
 import '../ui/role_details/widgets/property_address.dart';
 

@@ -10,12 +10,9 @@ import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/my_listTile.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 // import 'package:very_good_analysis/very_good_analysis.dart';
 

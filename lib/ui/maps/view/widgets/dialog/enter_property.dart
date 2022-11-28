@@ -5,8 +5,6 @@ import 'package:background_location/widgets/auto_spacing.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 class EnterProperty extends StatefulWidget {
   final Stream<Set<PolygonModel>> stream;
@@ -88,7 +86,7 @@ class _EnterPropertyState extends State<EnterProperty> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
+                    backgroundColor: Colors.red,
                     // shape: RoundedRectangleBorder(
                     //   borderRadius: BorderRadius.circular(10.r),
                     // ),

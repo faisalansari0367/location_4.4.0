@@ -12,7 +12,6 @@ import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/dialogs/no_signature_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 
 import '../../../widgets/dialogs/network_error_dialog.dart';
 import '../models/field_data.dart';

@@ -4,12 +4,9 @@ import 'package:background_location/helpers/validator.dart';
 import 'package:background_location/ui/sign_up/cubit/sign_up_cubit.dart';
 import 'package:background_location/widgets/my_appbar.dart';
 import 'package:background_location/widgets/pdf_viewer.dart';
-import 'package:background_location/widgets/widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({Key? key}) : super(key: key);

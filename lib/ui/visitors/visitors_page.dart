@@ -4,7 +4,6 @@ import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_pa
 import 'package:background_location/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../widgets/my_appbar.dart';
 
