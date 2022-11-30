@@ -55,11 +55,7 @@ class CreatePDf {
             children: [
               // zone
               pw.Container(
-                // padding: const pw.EdgeInsets.all(10),
-                decoration: pw.BoxDecoration(
-                    // border: pw.Border.all(color: PdfColors.black),
-                    // borderRadius: const pw.BorderRadius.all(pw.Radius.circular(5)),
-                    ),
+                decoration: pw.BoxDecoration(),
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [

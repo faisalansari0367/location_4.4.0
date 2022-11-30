@@ -101,6 +101,13 @@ class LogBookCubit extends Cubit<LogBookState> {
   }
 }
 
+// @override
+// void emit(LogBookState state) {
+
+//   // super.emit(state);
+
+// }
+
 // class TableDataModel {
 //   final List<String> headers;
 //   TableDataModel({

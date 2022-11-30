@@ -33,6 +33,7 @@ class PushNotificationService {
     await FirebaseMessaging.instance.getInitialMessage().then((message) {});
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
+        log(message.toMap().toString());
         if (message.notification?.title == 'WARNING!') {
           if (Get.isDialogOpen ?? false) {
             Get.back();

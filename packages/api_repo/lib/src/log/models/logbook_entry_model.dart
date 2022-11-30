@@ -253,6 +253,18 @@ class LogbookFormModel {
 
   bool get isEmpty => isPeopleTravelingWith == null;
 
+  String? getValue(bool? value) {
+    return value == null
+        ? null
+        : value
+            ? 'Yes'
+            : 'No';
+  }
+
+  String getVisitorsNames() {
+    return (usersTravellingAlong?.isEmpty ?? true) ? 'No' : usersTravellingAlong!.join(', ');
+  }
+
   bool get isNotEmpty => !isEmpty;
 }
 

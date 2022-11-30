@@ -169,7 +169,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         );
       case 'email':
       case 'contactEmail':
+      case 'emergencyEmailContact':
         return EmailField(
+          label: name,
           controller: controller,
         );
       case 'phoneNumber':

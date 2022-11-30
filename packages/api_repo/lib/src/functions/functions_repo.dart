@@ -13,6 +13,7 @@ abstract class FunctionsRepo {
   Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids});
   Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress});
   Future<ApiResult<NotificationResponseModel>> getSentNotifications();
+  Future<ApiResult> sendSos(double lat, double lng);
   // Future<void> getEnvdForms();
 }
 
@@ -78,6 +79,18 @@ class FunctionsRepoImpl implements FunctionsRepo {
       return response.data;
     } catch (e) {
       return Future.error(NetworkExceptions.getDioException(e));
+    }
+  }
+
+  // sendSos
+  @override
+  Future<ApiResult> sendSos(double lat, double lng) async {
+    try {
+      final result =
+          await client.post(Endpoints.sendSos, data: {'latitude': lat.toString(), 'longitude': lng.toString()});
+      return ApiResult.success(data: result.data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
 }

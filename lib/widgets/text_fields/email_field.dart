@@ -7,6 +7,7 @@ import 'text_formatters/input_formatters.dart';
 class EmailField extends StatelessWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final String? label;
   final void Function(String)? onChanged, onSubmitted;
   final InputDecoration? inputDecoration;
   const EmailField({
@@ -16,6 +17,7 @@ class EmailField extends StatelessWidget {
     this.controller,
     this.focusNode,
     this.inputDecoration,
+    this.label,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,7 @@ class EmailField extends StatelessWidget {
       inputFormatters: [LowerCaseTextFormatter()],
       focusNode: focusNode,
       controller: controller,
-      hintText: 'Email ID',
+      hintText: label ?? 'Email ID',
       decoration: inputDecoration,
       onChanged: onChanged,
       validator: Validator.email,

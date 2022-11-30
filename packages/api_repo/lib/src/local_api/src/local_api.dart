@@ -311,4 +311,10 @@ class LocalApi extends Api {
     // TODO: implement getSentNotifications
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResult> sendSos(double lat, double lng) {
+    // TODO: implement sendSos
+    throw UnimplementedError();
+  }
 }

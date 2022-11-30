@@ -55,7 +55,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
         // Gap(2.height),
         // Spacer(),
         // Spacer(),
-        Gap(30.height),
+        Gap(25.height),
 
         Padding(
           padding: kPadding,
@@ -65,7 +65,13 @@ class _DrawerMenuState extends State<DrawerMenu> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildCopyright(context),
-                if (packageInfo != null) _buildVersion(),
+                if (packageInfo != null)
+                  Column(
+                    children: [
+                      Gap(5.h),
+                      _buildVersion(),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -117,13 +123,45 @@ class _DrawerMenuState extends State<DrawerMenu> {
   }
 
   Widget _buildCopyright(BuildContext context) {
-    return Text(
-      'Copyright ${DateTime.now().year}',
-      style: Theme.of(context).textTheme.headline6?.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 18.h,
-          ),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Copyright',
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.h,
+                  ),
+            ),
+            Gap(5.w),
+            Icon(
+              Icons.copyright_outlined,
+              color: Colors.white,
+            ),
+            Gap(5.w),
+            Text(
+              '${DateTime.now().year}',
+              style: Theme.of(context).textTheme.headline6?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.h,
+                  ),
+            ),
+          ],
+        ),
+        AutoSizeText(
+          'FoodFibreTracePtyLtd.',
+          maxLines: 1,
+          style: Theme.of(context).textTheme.headline6?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.h,
+              ),
+        ),
+      ],
     );
   }
 

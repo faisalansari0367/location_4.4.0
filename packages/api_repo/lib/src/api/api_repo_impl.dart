@@ -286,4 +286,9 @@ class ApiRepo implements Api {
   Future<ApiResult<NotificationResponseModel>> getSentNotifications() {
     return _functionsRepo.getSentNotifications();
   }
+
+  @override
+  Future<ApiResult> sendSos(double lat, double lng) {
+    return _functionsRepo.sendSos(lat, lng);
+  }
 }

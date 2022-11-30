@@ -12,6 +12,7 @@ class FormsStorageService {
   static const _cvdFolder = 'cvd_folder';
   static const _envd = 'envds';
   static const _csvs = 'csvs';
+  static const _pdfs = 'pdfs';
 
   static Directory? _appDir;
   late User user;
@@ -137,6 +138,15 @@ class FormsStorageService {
     final date = MyDecoration.formatDate(DateTime.now());
     final File file = await _createCsvFile(csvDir.path, date, fileName ?? 'csv');
     await file.writeAsString(data);
+    return file;
+  }
+
+  Future<File> saveLogbookPdf({String? fileName, required Uint8List bytes, required LogbookEntry entry}) async {
+    final String directory = (await _getUserDir()).path;
+    final pdfDir = Directory('$directory/$_pdfs');
+    if (!(await pdfDir.exists())) pdfDir.create();
+    final file = File('${pdfDir.path}/${MyDecoration.formatDate(entry.createdAt)} ${entry.user!.fullName}.pdf');
+    await file.writeAsBytes(bytes);
     return file;
   }
 }

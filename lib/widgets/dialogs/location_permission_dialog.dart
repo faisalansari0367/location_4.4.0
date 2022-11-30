@@ -22,7 +22,7 @@ class LocationPermissionDialog extends StatelessWidget {
             Gap(40.h),
             // Spacer(),
             Text(
-              'Please allow location permission to use this service.',
+              '${Strings.appName} Needs location permission to confirm what location you are entering. Please allow location permission to use this service.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,

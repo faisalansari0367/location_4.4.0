@@ -20,8 +20,11 @@ class GeofenceCubit extends BaseModel {
 
   void onFilterTypeChange(FilterType filterType) {
     this.filterType = filterType;
+
     notifyListeners();
   }
+
+  
 
   final _cd = CallbackDebouncer(200.milliseconds);
   void onSearch(String value) {

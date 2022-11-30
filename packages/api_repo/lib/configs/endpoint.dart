@@ -2,8 +2,6 @@ class Endpoints {
   /// Base url for the api
   static const baseUrl = 'http://13.55.174.146:3000';
 
-
-
   static const records = '/records';
   static const users = '/users';
   static const auth = '/auth';
@@ -37,6 +35,7 @@ class Endpoints {
   static const qrCode = '$functions/qrcode';
   static const sendEmergencyNotification = '$functions/send-emergency-notification';
   static const getSentNotifications = '$functions/getNotificationRecord';
+  static const sendSos = '$functions/send-sos';
 
   // static String user(int id) => '/user/$id';
 }
