@@ -9,6 +9,7 @@ import 'package:background_location/theme/color_constants.dart';
 import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/location_service/polygons_service.dart';
+import 'package:background_location/ui/maps/view/maps_page.dart';
 import 'package:background_location/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -20,10 +21,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:local_auth_repo/local_auth.dart';
 import 'package:local_notification/local_notification.dart';
 
+import 'features/drawer/view/drawer_page.dart';
 import 'firebase_options.dart';
 import 'services/notifications/push_notifications.dart';
+import 'ui/login/view/login_page.dart';
 import 'ui/maps/location_service/maps_api.dart';
 import 'ui/maps/location_service/maps_repo_local.dart';
 
@@ -146,7 +150,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     MyConnectivity();
-
+    _loggedInStream();
     _initializeFlutterFire();
     super.initState();
   }
@@ -191,5 +195,22 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void _loggedInStream() {
+    widget.api.isLoggedInStream.listen((event) async {
+      final isLoggedIn = event;
+      print('isLoggedIn $isLoggedIn');
+      if (!isLoggedIn) return Get.off(() => LoginPage());
+      final user = context.read<Api>().getUser()!;
+      final localAuth = LocalAuth();
+      final result = await localAuth.authenticate();
+      if (!result) {
+        await Get.offAll(() => LoginPage(email: user.email));
+      } else {
+        Get.offAll(() => const DrawerPage());
+        Get.to(() => MapsPage());
+      }
+    });
   }
 }

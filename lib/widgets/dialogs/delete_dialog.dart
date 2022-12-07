@@ -6,8 +6,9 @@ import 'package:lottie/lottie.dart';
 import 'dialog_layout.dart';
 
 class DeleteDialog extends StatelessWidget {
+  final String? msg;
   final VoidCallback? onConfirm, onCancel;
-  const DeleteDialog({Key? key, this.onConfirm, this.onCancel}) : super(key: key);
+  const DeleteDialog({Key? key, this.onConfirm, this.onCancel, this.msg}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class DeleteDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              Strings.deleteGeofenceMsg,
+              msg ?? Strings.deleteGeofenceMsg,
               textAlign: TextAlign.center,
               style: context.textTheme.headline6?.copyWith(
                 fontWeight: FontWeight.w600,

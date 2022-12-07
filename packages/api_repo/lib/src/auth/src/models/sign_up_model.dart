@@ -30,7 +30,7 @@ class SignUpModel {
     data['firstName'] = firstName?.trim();
     data['lastName'] = lastName?.trim();
     data['email'] = email?.trim();
-    data['phoneNumber'] = phoneNumber;
+    data['phoneNumber'] = phoneNumber.toString();
     data['password'] = password?.trim();
     data['countryCode'] = countryCode?.trim();
     return data;

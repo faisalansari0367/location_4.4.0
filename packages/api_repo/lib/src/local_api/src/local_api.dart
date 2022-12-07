@@ -317,4 +317,12 @@ class LocalApi extends Api {
     // TODO: implement sendSos
     throw UnimplementedError();
   }
+
+  @override
+  Stream<bool> get isLoggedInStream => storage.isLoggedInStream;
+
+  @override
+  Future<ApiResult<String>> deleteUser() async {
+    return const ApiResult.failure(error: NetworkExceptions.defaultError('Not available in offline mode'));
+  }
 }

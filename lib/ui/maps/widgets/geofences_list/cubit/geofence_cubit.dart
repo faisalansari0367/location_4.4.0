@@ -20,18 +20,14 @@ class GeofenceCubit extends BaseModel {
 
   void onFilterTypeChange(FilterType filterType) {
     this.filterType = filterType;
-
     notifyListeners();
   }
-
-  
 
   final _cd = CallbackDebouncer(200.milliseconds);
   void onSearch(String value) {
     _cd.call(() {
       notifyListeners();
     });
-    // notifyListeners();
   }
 
   bool get isAdmin => api.getUser()?.role == 'Admin';
@@ -39,8 +35,9 @@ class GeofenceCubit extends BaseModel {
   Stream<List<PolygonModel>> get polygonStream => filterType.isAll
       ? mapsRepo.polygonStream.map((event) => event.where(_search).toList())
       : mapsRepo.polygonStream.map(
-          (event) => event.where((element) => element.createdBy?.id == user?.id).where(_search).toList(),
+          (event) => event.where(_createdByMe).where(_search).toList(),
         );
 
+  bool _createdByMe(element) => element.createdBy?.id == user?.id;
   bool _search(element) => element.name.toLowerCase().contains(searchController.text.toLowerCase());
 }

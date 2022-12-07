@@ -6,7 +6,7 @@ class BottomSheetService {
     Get.bottomSheet(
       Container(
         decoration: MyDecoration.bottomSheetDecoration(),
-        padding: padding?? kPadding,
+        padding: padding ?? kPadding,
         child: child,
       ),
       enterBottomSheetDuration: 175.milliseconds,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/constants/strings.dart';
 import 'package:background_location/extensions/size_config.dart';
@@ -30,6 +32,21 @@ class _SplashScreenState extends State<SplashScreen> {
     final api = context.read<Api>();
     // final notificationService = context.read<PushNotificationService>();
     final isLoggedIn = api.isLoggedIn;
+    api.isLoggedInStream.listen((event) async {
+      final isLoggedIn = event;
+      log('isLoggedIn $isLoggedIn');
+      if (!isLoggedIn) return Get.off(() => LoginPage());
+      final user = context.read<Api>().getUser()!;
+      final localAuth = LocalAuth();
+      final result = await localAuth.authenticate();
+      if (!result) {
+        await Get.offAll(() => LoginPage(email: user.email));
+      } else {
+        // await _init();
+        Get.offAll(() => const DrawerPage());
+        Get.to(() => MapsPage());
+      }
+    });
     final duration = (kSplashDuration.inMilliseconds - 1000).milliseconds;
     Future.delayed(duration, () async {
       // Get.offAll(() => NewSplashScreen());

@@ -98,7 +98,7 @@ class _GeofencesListState extends State<GeofencesList> {
     );
   }
 
-Row _selectLocationHeader(BuildContext context) {
+  Row _selectLocationHeader(BuildContext context) {
     return Row(
       children: [
         Text(

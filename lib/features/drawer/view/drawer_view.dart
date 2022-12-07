@@ -29,19 +29,13 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
     final drawer = context.read<DrawerCubit>();
     drawerItems = DrawerItems(context.read<Api>(), drawer: drawer);
     _controller = AnimationController(vsync: this, duration: duration);
-    final curvedAnimation = CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
+    final curvedAnimation =
+        CurvedAnimation(parent: _controller, curve: Curves.linearToEaseOut, reverseCurve: Curves.fastOutSlowIn);
     _scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(curvedAnimation);
     _slideAnimation = Tween<Offset>(begin: const Offset(-1, 0), end: const Offset(0, 0)).animate(curvedAnimation);
     _slideTransition = Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0.7, 0)).animate(curvedAnimation);
     _borderRadius = Tween<double>(begin: 0, end: 25).animate(_controller);
-
-    // borderradius tween
-    // _borderRadius = Tween<double>(begin: 0.0, end: 25.0).animate(curvedAnimation);
     drawer.setController(_controller);
-    if (context.read<Api>().getUserData() != null) {
-      // drawer.setSelectedPage(2);
-      
-    }
   }
 
   @override
@@ -164,7 +158,7 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
     );
   }
 
-  Widget _builder(BuildContext context,int value,Widget? child) {
+  Widget _builder(BuildContext context, int value, Widget? child) {
     return PageTransitionSwitcher(
       duration: const Duration(milliseconds: 1000),
       transitionBuilder: (
@@ -182,5 +176,4 @@ class _DrawerViewState extends State<DrawerView> with SingleTickerProviderStateM
       child: drawerItems.items.elementAt(value).page,
     );
   }
-
 }

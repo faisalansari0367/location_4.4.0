@@ -25,6 +25,12 @@ class LogBookCubit extends Cubit<LogBookState> {
     });
   }
 
+  @override
+  void emit(LogBookState state) {
+    if (isClosed) return;
+    super.emit(state);
+  }
+
   final list = [
     if (kDebugMode) 'id',
     'Full Name',

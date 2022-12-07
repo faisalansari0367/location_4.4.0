@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/functions/functions_repo.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -34,7 +35,7 @@ class ApiRepo implements Api {
     _box = box;
     final storage = StorageService(box: _box);
     final token = storage.getToken();
-    _client = Client(baseUrl: baseUrl, token: token);
+    _client = Client(baseUrl: baseUrl, token: token, onError: _onError);
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
     _userRepo = UserRepoImpl(client: _client, box: _box);
@@ -290,5 +291,20 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult> sendSos(double lat, double lng) {
     return _functionsRepo.sendSos(lat, lng);
+  }
+
+  void _onError(DioError dioError, ErrorInterceptorHandler handler) {
+    if (dioError.response?.statusCode == 401) {
+      _authRepo.logout();
+    }
+    handler.next(dioError);
+  }
+
+  @override
+  Stream<bool> get isLoggedInStream => _authRepo.isLoggedInStream;
+
+  @override
+  Future<ApiResult<String>> deleteUser() {
+    return _userRepo.deleteUser();
   }
 }

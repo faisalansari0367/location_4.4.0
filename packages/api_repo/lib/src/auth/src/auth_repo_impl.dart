@@ -190,4 +190,7 @@ class AuthRepoImpl implements AuthRepo {
     this.isInit = isInit;
     return isInit;
   }
+
+  @override
+  Stream<bool> get isLoggedInStream => storage.isLoggedInStream;
 }

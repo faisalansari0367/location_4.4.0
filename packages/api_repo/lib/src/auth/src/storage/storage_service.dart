@@ -48,6 +48,7 @@ abstract class LocalStorage {
   Stream<User?> get userStream;
   Stream<UserData?> get userDataStrem;
   Stream<List<UserRoles>> get userRolesStream;
+  Stream<bool> get isLoggedInStream;
 
   // set signInData
   Future<void> setSignInData(Map<String, dynamic> data);
@@ -259,4 +260,7 @@ class StorageService implements LocalStorage {
 
   @override
   List<String> get users => box.get(_Keys.users, defaultValue: []);
+
+  @override
+  Stream<bool> get isLoggedInStream => box.watch(key: _Keys.isLoggedIn).map((event) => event.value ?? false);
 }

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:background_location/ui/maps/cubit/track_polygons.dart';
+import 'package:background_location/ui/maps/location_service/background_plugin.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +30,12 @@ class GeofenceService {
   }
 
   Future<void> getLocationUpdates(ValueChanged<Position>? onLocationChanged) async {
+    // BackgroundPlugin().init();
     log('Polygons: ${polygons.length}');
-    _positionSubscription?.cancel();
+    await _positionSubscription?.cancel();
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
+      // showNotification(title: 'monitoring', body: '${event.latitude}, ${event.longitude}');
       final position = LatLng(event.latitude, event.longitude);
       final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
         latLng: position,

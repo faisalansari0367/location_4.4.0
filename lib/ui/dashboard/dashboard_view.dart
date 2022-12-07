@@ -68,7 +68,7 @@ class _DashboardViewState extends State<DashboardView> {
           showBackButton: false,
           centreTitle: true,
           title: SizedBox(
-            height: 50.h,
+            height: 50,
             child: AnimationConfiguration.synchronized(
               child: ScaleAnimation(
                 scale: 0.7,
@@ -89,6 +89,7 @@ class _DashboardViewState extends State<DashboardView> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: kPadding.left.h,
+                  // mainAxisSpacing: 20,
                   crossAxisSpacing: kPadding.left.w,
                 ),
                 children: [
@@ -198,18 +199,21 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Row _logo() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset(
-          'assets/icons/BIO_shield1 (1).png',
-          height: 7.height,
-        ),
-        Gap(5.w),
-        AppName(),
-      ],
+  Widget _logo() {
+    return FittedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            'assets/icons/BIO_shield1 (1).png',
+            // height: 7.height,
+            height: 150,
+          ),
+          Gap(5.w),
+          LimitedBox(child: AppName()),
+        ],
+      ),
     );
   }
 }

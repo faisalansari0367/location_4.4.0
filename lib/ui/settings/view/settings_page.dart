@@ -6,6 +6,7 @@ import 'package:background_location/ui/envd/cubit/graphql_client.dart';
 import 'package:background_location/ui/maps/location_service/background_location_service.dart';
 import 'package:background_location/ui/maps/location_service/maps_repo.dart';
 import 'package:background_location/widgets/auto_spacing.dart';
+import 'package:background_location/widgets/dialogs/delete_dialog.dart';
 import 'package:background_location/widgets/dialogs/dialog_layout.dart';
 import 'package:background_location/widgets/dialogs/dialog_service.dart';
 import 'package:background_location/widgets/my_appbar.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 // import 'package:very_good_analysis/very_good_analysis.dart';
 
 import '../../../gen/assets.gen.dart';
@@ -135,6 +137,36 @@ class _SettingsPageState extends State<SettingsPage> {
             MyListTile(
               onTap: () async {
                 try {
+                  DialogService.showDialog(
+                    child: DeleteDialog(
+                      msg: 'Are you sure you want to DELETE your account?',
+                      onCancel: () {},
+                      onConfirm: () async {
+                        _deleteAccount();
+                        // await Future.delayed(50.milliseconds);
+                        // DialogService.success(
+                        //   'Your account is now deleted and data removed from your device.',
+                        //   onCancel: () async {
+                        //     _deleteAccount();
+                        //     await _logout(context);
+                        //     Get.back();
+                        //   },
+                        // );
+                      },
+                    ),
+                  );
+                  // _deleteAccount();
+                  // await _logout(context);
+                } catch (e) {
+                  print(e);
+                }
+              },
+              text: 'Delete Your Account',
+              trailing: const Icon(Icons.delete_forever),
+            ),
+            MyListTile(
+              onTap: () async {
+                try {
                   context.read<MapsRepo>().cancel();
                   context.read<GeofenceService>().cancel();
                   final client = GraphQlClient();
@@ -151,6 +183,32 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    context.read<MapsRepo>().cancel();
+    context.read<GeofenceService>().cancel();
+    final client = GraphQlClient();
+    await client.clearStorage();
+    await context.read<Api>().logout();
+    await Get.offAll(() => const LoginPage());
+  }
+
+  void _deleteAccount() async {
+    final api = context.read<Api>();
+    final deleteUser = await api.deleteUser();
+    deleteUser.when(
+      success: (s) async {
+        DialogService.success(
+          s,
+          onCancel: () async {
+            await _logout(context);
+            Get.back();
+          },
+        );
+      },
+      failure: ((error) => DialogService.failure(error: error)),
     );
   }
 }

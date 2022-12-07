@@ -25,6 +25,7 @@ abstract class UserRepo {
   Future<void> getCvdPDf(Map<String, dynamic> data);
   Future<dynamic> getQrCode(String data);
   Future<ApiResult> openPdf(String url);
+  Future<ApiResult<String>> deleteUser();
 }
 
 class UserRepoImpl extends UserRepo {
@@ -196,6 +197,17 @@ class UserRepoImpl extends UserRepo {
     try {
       final result = await client.get(Endpoints.roles);
       final model = RoleDetailsModel.fromMap(result.data);
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<String>> deleteUser() async {
+    try {
+      final result = await client.delete(Endpoints.deleteUser);
+      final model = result.data['data'];
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

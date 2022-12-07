@@ -20,6 +20,7 @@ class Endpoints {
       fieldsRecords = '$records/fieldsRecord',
       forms = '$records/forms',
       roles = '$records/roles',
+      deleteUser = '$users/me',
 
       // users
       getFields = '$users/fields',

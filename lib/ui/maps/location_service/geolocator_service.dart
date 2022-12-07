@@ -65,6 +65,7 @@ class GeolocatorService {
   }
 
   static Stream<Position> getLocationUpdates() {
+    
     return instance.getPositionStream(locationSettings: _getLocationSettings);
   }
 
@@ -74,6 +75,10 @@ class GeolocatorService {
 
     if (Platform.isAndroid) {
       locationSettings = AndroidSettings(
+        // foregroundNotificationConfig: ForegroundNotificationConfig(
+        //   notificationTitle: 'Monitoring in background',
+        //   notificationText: 'We are monitor ing your entry and exit from locations',
+        // ),
         // distanceFilter: 0,
 
         // forceLocationManager: true,
@@ -84,8 +89,10 @@ class GeolocatorService {
       locationSettings = AppleSettings(
         // timeLimit: duration,
         pauseLocationUpdatesAutomatically: false,
+
         showBackgroundLocationIndicator: true,
         accuracy: LocationAccuracy.best,
+
         // activityType: Acti
       );
     } else {

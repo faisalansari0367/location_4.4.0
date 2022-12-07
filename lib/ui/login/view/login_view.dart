@@ -45,7 +45,7 @@ class _LoginViewState extends State<LoginView> {
                     Gap(7.height),
                     AnimatedContainer(
                       duration: 500.milliseconds,
-                      curve: Curves.decelerate,
+                      curve: Curves.ease,
                       child: Center(
                         // heightFactor: 1.5,
                         child: Image.asset(

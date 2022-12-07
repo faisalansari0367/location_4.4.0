@@ -58,7 +58,7 @@ class LoginCubit extends Cubit<LoginState> {
           DialogService.showDialog(
             child: NetworkErrorDialog(
               message: NetworkExceptions.getErrorMessage(error),
-              buttonText: Strings.retry,
+              buttonText: Strings.ok,
               onCancel: Get.back,
             ),
           );

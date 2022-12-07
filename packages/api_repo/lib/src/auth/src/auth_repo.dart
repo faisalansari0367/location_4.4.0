@@ -25,4 +25,5 @@ abstract class AuthRepo {
   Stream<User?> get userStream;
   Stream<UserData?> get userDataStream;
   Stream<List<UserRoles>?> get userRolesStream;
+  Stream<bool> get isLoggedInStream;
 }

@@ -17,6 +17,7 @@ class Client {
   final String baseUrl;
   String? token;
   final String? apiKey;
+  final void Function(DioError, ErrorInterceptorHandler)? onError;
 
   Dio? _dio;
 
@@ -29,6 +30,7 @@ class Client {
   Map<String, Object>? header;
   Client({
     required this.baseUrl,
+    this.onError,
     this.token,
     this.apiKey,
     this.header,
@@ -48,10 +50,12 @@ class Client {
     }
     header!.putIfAbsent('Content-Type', () => 'application/json');
     _dio = Dio(options);
+    _dio!.interceptors.add(dioInterceptor);
+    // final dioPrinter = PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true);
     if (logging) {
-      _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true));
+      _dio!.interceptors.add(dioPrinter);
     } else {
-      _dio!.interceptors.clear();
+      _dio!.interceptors.remove(dioPrinter);
       // _dio!.interceptors.add(PrettyDioLogger(requestHeader: true, requestBody: false, responseHeader: true));
     }
     // _dio!.interceptors.add(ApiInterceptors());
@@ -61,38 +65,40 @@ class Client {
     return this;
   }
 
-  Client pdfBuilder() {
-    header = <String, Object>{};
-    if (apiKey != null) {
-      header!.putIfAbsent('apikey', () => apiKey!);
-    }
-    header!.putIfAbsent('Content-Type', () => 'application/json');
+  PrettyDioLogger get dioPrinter => PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true);
 
-    _dio = Dio(options);
-    _dio!.interceptors.add(dioInterceptor);
-    _dio!.options.baseUrl = baseUrl;
-    _dio!.options.headers = header;
-    return this;
-  }
+  // Client pdfBuilder() {
+  //   header = <String, Object>{};
+  //   if (apiKey != null) {
+  //     header!.putIfAbsent('apikey', () => apiKey!);
+  //   }
+  //   header!.putIfAbsent('Content-Type', () => 'application/json');
 
-  Client simpleBuilder({bool logging = false}) {
-    header = <String, Object>{};
-    header!.putIfAbsent('Accept', () => 'application/json');
-    if (apiKey != null) {
-      header!.putIfAbsent('apikey', () => apiKey!);
-    }
-    header!.putIfAbsent('Content-Type', () => 'application/json');
-    _dio = Dio(options);
-    if (!logging) {
-      // final logger = PrettyDioLogger(requestHeader: true, requestBody: false, responseHeader: true);
-      // _dio!.interceptors.remove(logger);
-      _dio!.interceptors.clear(); // _dio!.interceptors.add(dioInterceptor);
-    }
+  //   _dio = Dio(options);
+  //   _dio!.interceptors.add(dioInterceptor);
+  //   _dio!.options.baseUrl = baseUrl;
+  //   _dio!.options.headers = header;
+  //   return this;
+  // }
 
-    _dio!.options.baseUrl = "";
-    _dio!.options.headers = header;
-    return this;
-  }
+  // Client simpleBuilder({bool logging = false}) {
+  //   header = <String, Object>{};
+  //   header!.putIfAbsent('Accept', () => 'application/json');
+  //   if (apiKey != null) {
+  //     header!.putIfAbsent('apikey', () => apiKey!);
+  //   }
+  //   header!.putIfAbsent('Content-Type', () => 'application/json');
+  //   _dio = Dio(options);
+  //   if (!logging) {
+  //     // final logger = PrettyDioLogger(requestHeader: true, requestBody: false, responseHeader: true);
+  //     // _dio!.interceptors.remove(logger);
+  //     _dio!.interceptors.clear(); // _dio!.interceptors.add(dioInterceptor);
+  //   }
+
+  //   _dio!.options.baseUrl = "";
+  //   _dio!.options.headers = header;
+  //   return this;
+  // }
 
   Client setUrlEncoded() {
     // header!.remove('Content-Type');
@@ -101,23 +107,23 @@ class Client {
     return this;
   }
 
-  Client removeContentType() {
-    header!.remove('Content-Type');
-    return this;
-  }
+  // Client removeContentType() {
+  //   header!.remove('Content-Type');
+  //   return this;
+  // }
 
-  Client removeAndAddAccept() {
-    header!.remove('Accept');
-    header!.putIfAbsent("Accept", () => "*/*");
-    return this;
-  }
+  // Client removeAndAddAccept() {
+  //   header!.remove('Accept');
+  //   header!.putIfAbsent("Accept", () => "*/*");
+  //   return this;
+  // }
 
-  Client setMultipartFormDataHeader() {
-    header!.remove('Content-Type');
-    header!.putIfAbsent('Content-Type', () => 'multipart/form-data');
-    _dio!.options.headers = header;
-    return this;
-  }
+  // Client setMultipartFormDataHeader() {
+  //   header!.remove('Content-Type');
+  //   header!.putIfAbsent('Content-Type', () => 'multipart/form-data');
+  //   _dio!.options.headers = header;
+  //   return this;
+  // }
 
   Client setProtectedApiHeader() {
     if (token == null) return this;
@@ -126,14 +132,13 @@ class Client {
   }
 
   Dio build({bool logging = true}) {
-
     (_dio!.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
       client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       return client;
     };
 
     if (!logging) {
-      _dio!.interceptors.clear();
+      _dio!.interceptors.remove(dioPrinter);
     }
 
     return _dio!;
@@ -226,22 +231,21 @@ class Client {
     );
     return result;
   }
-}
 
-// FirebasePerformanceService _firebasePerformanceService =
-//     locator<FirebasePerformanceService>();
+  InterceptorsWrapper get dioInterceptor => InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // _firebasePerformanceService.startHttpTracking(options.uri.toString());
+          return handler.next(options); //continue
+        },
+        onResponse: (response, handler) {
+          // print("RESPONSE 00 :- " + response.data.length.toString());
+          // _firebasePerformanceService.stopHttpTracking(response.statusCode ?? 400);
+          return handler.next(response); // continue
+        },
+        onError: onError ?? _onError,
+      );
 
-InterceptorsWrapper dioInterceptor = InterceptorsWrapper(
-  onRequest: (options, handler) {
-    // _firebasePerformanceService.startHttpTracking(options.uri.toString());
-    return handler.next(options); //continue
-  },
-  onResponse: (response, handler) {
-    // print("RESPONSE 00 :- " + response.data.length.toString());
-    // _firebasePerformanceService.stopHttpTracking(response.statusCode ?? 400);
-    return handler.next(response); // continue
-  },
-  onError: (DioError e, handler) async {
+  void _onError(DioError e, handler) async {
     Response? _response = e.response;
 
     if (_response != null) {
@@ -274,5 +278,9 @@ InterceptorsWrapper dioInterceptor = InterceptorsWrapper(
 
     // return DioExceptions(e);
     return handler.next(e); //continue
-  },
-);
+  }
+}
+
+// FirebasePerformanceService _firebasePerformanceService =
+//     locator<FirebasePerformanceService>();
+

@@ -21,6 +21,7 @@ class SuccessDialog extends StatelessWidget {
             Gap(20.h),
             Text(
               message ?? 'Success',
+              textAlign: TextAlign.center,
               style: context.textTheme.headline6?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
