@@ -60,8 +60,8 @@ Future<void> bgHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await _setOrientation();
+  // await initializeService();
 
   await runZonedGuarded(() async {
     await Firebase.initializeApp(

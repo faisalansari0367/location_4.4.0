@@ -2,6 +2,7 @@ import UIKit
 import Flutter
 import GoogleMaps
 
+
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
@@ -9,6 +10,7 @@ import GoogleMaps
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GMSServices.provideAPIKey("AIzaSyBxMIupdGzYQM6yk1ix1xGhgIyPw_42wlI")
+//    SwiftFlutterBackgroundServicePlugin.taskIdentifier = "dev.flutter.background.refresh"
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
