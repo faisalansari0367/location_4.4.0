@@ -1,6 +1,6 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/select_roles_registration/view/switch_tile.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/select_roles_registration/view/switch_tile.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';

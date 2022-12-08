@@ -2,7 +2,7 @@
 
 // import 'package:bloc_test/bloc_test.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:background_location/ui/sos_warning/cubit/cubit.dart';
+// import 'package:bioplus/ui/sos_warning/cubit/cubit.dart';
 
 // void main() {
 //   group('SosWarningCubit', () {

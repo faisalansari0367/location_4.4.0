@@ -1,8 +1,8 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/maps/location_service/map_toolkit_utils.dart';
-import 'package:background_location/ui/maps/models/polygon_model.dart';
-import 'package:background_location/widgets/auto_spacing.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
+import 'package:bioplus/ui/maps/models/polygon_model.dart';
+import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

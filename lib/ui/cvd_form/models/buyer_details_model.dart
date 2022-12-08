@@ -1,5 +1,5 @@
-import 'package:background_location/ui/cvd_form/models/cvd_base_model.dart';
-import 'package:background_location/ui/cvd_form/models/cvd_field_data.dart';
+import 'package:bioplus/ui/cvd_form/models/cvd_base_model.dart';
+import 'package:bioplus/ui/cvd_form/models/cvd_field_data.dart';
 
 class BuyerDetailsModel extends CvdBaseModel {
   CvdFieldData? contractNo;

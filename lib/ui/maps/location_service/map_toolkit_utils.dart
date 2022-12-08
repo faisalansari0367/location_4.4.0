@@ -1,4 +1,4 @@
-import 'package:background_location/ui/maps/models/polygon_model.dart';
+import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mt;
 

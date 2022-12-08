@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/provider/base_model.dart';
-import 'package:background_location/services/notifications/forms_storage_service.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../widgets/dialogs/dialog_service.dart';

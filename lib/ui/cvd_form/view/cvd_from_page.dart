@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/cvd_form/view/cvd_form_view.dart';
+import 'package:bioplus/ui/cvd_form/view/cvd_form_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

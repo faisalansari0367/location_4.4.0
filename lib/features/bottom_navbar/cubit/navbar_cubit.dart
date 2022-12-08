@@ -1,7 +1,7 @@
-import 'package:background_location/ui/dashboard/dashboard_view.dart';
-import 'package:background_location/ui/scan_qr/scan_qr.dart';
-import 'package:background_location/ui/select_role/view/select_role_page.dart';
-import 'package:background_location/ui/settings/view/settings_page.dart';
+import 'package:bioplus/ui/dashboard/dashboard_view.dart';
+import 'package:bioplus/ui/scan_qr/scan_qr.dart';
+import 'package:bioplus/ui/select_role/view/select_role_page.dart';
+import 'package:bioplus/ui/settings/view/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

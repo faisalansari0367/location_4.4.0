@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/location_service/storage_service.dart';
-import 'package:background_location/ui/maps/models/polygon_model.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
+import 'package:bioplus/ui/maps/location_service/storage_service.dart';
+import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:rxdart/subjects.dart';
 
 class _Endpoints {

@@ -1,6 +1,6 @@
-import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
-import 'package:background_location/widgets/text_fields/my_text_field.dart';
-import 'package:background_location/widgets/text_fields/text_formatters/input_formatters.dart';
+import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
+import 'package:bioplus/widgets/text_fields/my_text_field.dart';
+import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/strings.dart';

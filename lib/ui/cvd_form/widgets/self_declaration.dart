@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:background_location/widgets/auto_spacing.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/no_signature_found.dart';
-import 'package:background_location/widgets/signature/signature_widget.dart';
-import 'package:background_location/widgets/widgets.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
+import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/no_signature_found.dart';
+import 'package:bioplus/widgets/signature/signature_widget.dart';
+import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

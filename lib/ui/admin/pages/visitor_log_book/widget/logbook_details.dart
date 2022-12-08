@@ -1,9 +1,9 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/services/notifications/forms_storage_service.dart';
-import 'package:background_location/ui/admin/pages/visitor_log_book/view/create_declaration_form_pdf.dart';
-import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/signature/signature_widget.dart';
+import 'package:bioplus/services/notifications/forms_storage_service.dart';
+import 'package:bioplus/ui/admin/pages/visitor_log_book/view/create_declaration_form_pdf.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

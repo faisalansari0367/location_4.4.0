@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:background_location/ui/maps/view/maps_page.dart';
-import 'package:background_location/ui/otp/otp/otp_state.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/otp/otp/otp_state.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 

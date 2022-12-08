@@ -1,12 +1,12 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:background_location/ui/cvd_form/pages/buyer_details.dart';
-import 'package:background_location/ui/cvd_form/pages/transporter.dart';
-import 'package:background_location/ui/cvd_form/pages/vendor_details.dart';
-import 'package:background_location/ui/cvd_form/widgets/chemical_use.dart';
-import 'package:background_location/ui/cvd_form/widgets/commodity_details.dart';
-import 'package:background_location/ui/cvd_form/widgets/custom_steppar.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
+import 'package:bioplus/ui/cvd_form/pages/buyer_details.dart';
+import 'package:bioplus/ui/cvd_form/pages/transporter.dart';
+import 'package:bioplus/ui/cvd_form/pages/vendor_details.dart';
+import 'package:bioplus/ui/cvd_form/widgets/chemical_use.dart';
+import 'package:bioplus/ui/cvd_form/widgets/commodity_details.dart';
+import 'package:bioplus/ui/cvd_form/widgets/custom_steppar.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -119,6 +119,4 @@ class _CvdFormViewState extends State<CvdFormView> {
   Widget vendorDetails(List<String> fields) {
     return Column();
   }
-
-
 }

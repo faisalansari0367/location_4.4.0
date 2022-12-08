@@ -1,7 +1,7 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/work_safety/cubit/cubit.dart';
-import 'package:background_location/ui/work_safety/widgets/work_safety_body.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/ui/work_safety/cubit/cubit.dart';
+import 'package:bioplus/ui/work_safety/widgets/work_safety_body.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 /// {@template work_safety_page}

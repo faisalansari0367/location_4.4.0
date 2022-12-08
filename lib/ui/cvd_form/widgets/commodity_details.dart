@@ -1,10 +1,10 @@
-import 'package:background_location/helpers/validator.dart';
-import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:background_location/ui/cvd_form/models/cvd_field_data.dart';
-import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
-import 'package:background_location/ui/cvd_form/widgets/cvd_textfield.dart';
-import 'package:background_location/widgets/auto_spacing.dart';
-import 'package:background_location/widgets/widgets.dart';
+import 'package:bioplus/helpers/validator.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
+import 'package:bioplus/ui/cvd_form/models/cvd_field_data.dart';
+import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
+import 'package:bioplus/ui/cvd_form/widgets/cvd_textfield.dart';
+import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

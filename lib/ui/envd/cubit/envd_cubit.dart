@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:background_location/provider/base_model.dart';
-import 'package:background_location/ui/envd/models/envd_model.dart';
+import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/ui/envd/models/envd_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class EnvdCubit extends BaseModel {

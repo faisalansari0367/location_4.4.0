@@ -1,5 +1,5 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/widgets/animations/animations.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/widgets/animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -1,7 +1,7 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/helpers/callback_debouncer.dart';
-import 'package:background_location/ui/admin/pages/users_list/cubit/users_state.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/helpers/callback_debouncer.dart';
+import 'package:bioplus/ui/admin/pages/users_list/cubit/users_state.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

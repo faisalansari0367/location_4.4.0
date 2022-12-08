@@ -1,9 +1,8 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-
 
 class NoSignatureFound extends StatelessWidget {
   final String message;

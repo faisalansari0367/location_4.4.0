@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/login/view/login_page.dart';
-import 'package:background_location/ui/otp/otp/otp_screen.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/mail_sent_dialog.dart';
+import 'package:bioplus/ui/login/view/login_page.dart';
+import 'package:bioplus/ui/otp/otp/otp_screen.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/mail_sent_dialog.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:get/get.dart';

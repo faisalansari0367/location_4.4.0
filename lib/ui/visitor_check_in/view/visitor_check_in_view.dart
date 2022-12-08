@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/services/notifications/intent_service.dart';
-import 'package:background_location/ui/visitor_check_in/cubit/visitor_check_in_cubit.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/intent_service.dart';
+import 'package:bioplus/ui/visitor_check_in/cubit/visitor_check_in_cubit.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

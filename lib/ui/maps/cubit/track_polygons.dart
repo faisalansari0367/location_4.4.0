@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/forms/forms_page.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo.dart';
+import 'package:bioplus/ui/forms/forms_page.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
@@ -58,12 +58,20 @@ class TrackPolygons {
     }
   }
 
-  //
+  //p
+  static const String _formsPage = '/FormsPage';
+  // static const String _mapsPage = '/MapsPage';
+  bool get isDialogOpen => Get.isDialogOpen ?? true;
+  bool get isFormsPage => Get.currentRoute == _formsPage;
+
+  /// this will be called when the user is inside a polygon
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
-    if (Get.currentRoute != '/MapsPage' || (Get.isDialogOpen ?? true)) {
+    log('message from track polygons ${polygonsInCoverage.length}}');
+    if (isFormsPage) return;
+    _userIsInside(polygonsInCoverage, currentPosition);
+    if (isFormsPage || isDialogOpen) {
       return;
     }
-    _userIsInside(polygonsInCoverage, currentPosition);
 
     // this.polygonsInCoverage.add(polygonsInCoverage);
 
@@ -89,9 +97,7 @@ class TrackPolygons {
           }
         }
         print('calling hide pop up timer function');
-        dontShowAgain.call(() {
-          showPopup(currentPosition);
-        });
+        dontShowAgain.call(() => showPopup(currentPosition));
       },
     );
 

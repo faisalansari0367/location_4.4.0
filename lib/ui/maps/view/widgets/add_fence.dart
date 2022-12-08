@@ -1,9 +1,9 @@
-import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
-import 'package:background_location/ui/maps/location_service/polygons_service.dart';
-import 'package:background_location/ui/maps/view/widgets/add_polygon_details.dart';
-import 'package:background_location/ui/maps/view/widgets/select_color.dart';
-import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
-import 'package:background_location/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
+import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
+import 'package:bioplus/ui/maps/view/widgets/add_polygon_details.dart';
+import 'package:bioplus/ui/maps/view/widgets/select_color.dart';
+import 'package:bioplus/widgets/bottom_navbar/bottom_navbar_item.dart';
+import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,7 +1,7 @@
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
-import 'package:background_location/widgets/dialogs/status_dialog_new.dart';
-import 'package:background_location/widgets/dialogs/success.dart';
+import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
+import 'package:bioplus/widgets/dialogs/status_dialog_new.dart';
+import 'package:bioplus/widgets/dialogs/success.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

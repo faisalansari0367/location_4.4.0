@@ -1,4 +1,4 @@
-import 'package:background_location/extensions/size_config.dart';
+import 'package:bioplus/extensions/size_config.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/constans.dart';
@@ -7,8 +7,7 @@ class MyCrossFade extends StatelessWidget {
   final Widget child;
   final Widget? placeHolder;
   final bool isLoading;
-  const MyCrossFade({Key? key, this.isLoading = false, required this.child, this.placeHolder})
-      : super(key: key);
+  const MyCrossFade({Key? key, this.isLoading = false, required this.child, this.placeHolder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

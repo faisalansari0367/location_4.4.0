@@ -1,4 +1,4 @@
-import 'package:background_location/ui/cvd_form/models/cvd_field_data.dart';
+import 'package:bioplus/ui/cvd_form/models/cvd_field_data.dart';
 
 class CommodityDetailsModel {
   CvdFieldData? commodity;

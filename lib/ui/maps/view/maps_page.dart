@@ -1,9 +1,9 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
-import 'package:background_location/ui/maps/location_service/background_location_service.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
-import 'package:background_location/ui/maps/location_service/polygons_service.dart';
-import 'package:background_location/ui/maps/models/polygon_model.dart';
+import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
+import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo_local.dart';
+import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
+import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
 import 'package:local_notification/local_notification.dart';
 

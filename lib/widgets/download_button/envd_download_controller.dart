@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/services/notifications/forms_storage_service.dart';
-import 'package:background_location/widgets/download_button/download_controller.dart';
+import 'package:bioplus/services/notifications/forms_storage_service.dart';
+import 'package:bioplus/widgets/download_button/download_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 

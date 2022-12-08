@@ -1,5 +1,7 @@
+import 'dart:ui';
+
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
@@ -16,9 +18,9 @@ export 'select_role_state.dart';
 class SelectRoleCubit extends Cubit<SelectRoleState> {
   final Api api;
   final LocalApi localApi;
-
+  final VoidCallback? onRoleUpdated;
   final PushNotificationService pushNotificationService;
-  SelectRoleCubit(this.api, this.localApi, this.pushNotificationService)
+  SelectRoleCubit(this.api, this.localApi, this.pushNotificationService, {this.onRoleUpdated})
       : super(
           SelectRoleState(
             user: api.getUser() ?? User(),

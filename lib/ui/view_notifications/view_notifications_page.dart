@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/expanded_tile.dart';
-import 'package:background_location/widgets/listview/my_listview.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/expanded_tile.dart';
+import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

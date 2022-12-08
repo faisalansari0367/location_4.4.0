@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/helpers/callback_debouncer.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/helpers/callback_debouncer.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';

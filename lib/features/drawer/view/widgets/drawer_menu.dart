@@ -1,7 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/features/drawer/models/drawer_items.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/features/drawer/models/drawer_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +27,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
   User? user;
 
   @override
+  void didUpdateWidget(covariant DrawerMenu oldWidget) {
+    setState(() {});
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void initState() {
     _init();
     final api = context.read<Api>();
@@ -47,7 +53,6 @@ class _DrawerMenuState extends State<DrawerMenu> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Gap(15.height),
-        // Spacer(),
         _buildWelcome(context),
         Gap(10.height),
         Gap(2.height),
@@ -102,13 +107,20 @@ class _DrawerMenuState extends State<DrawerMenu> {
               Container(
                 decoration: MyDecoration.decoration(),
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
-                child: Text(
-                  user?.role ?? '',
-                  style: context.textTheme.bodyText2?.copyWith(
-                    color: context.theme.primaryColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
+                child: StreamBuilder<UserData?>(
+                  stream: context.read<Api>().userDataStream,
+                  builder: (context, snapshot) {
+                    final hasName = !([null, ''].contains(snapshot.data?.role));
+                    final role = hasName ? snapshot.data?.role : '';
+                    return Text(
+                      role ?? '',
+                      style: context.textTheme.bodyText2?.copyWith(
+                        color: context.theme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

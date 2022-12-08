@@ -1,8 +1,8 @@
-import 'package:background_location/constants/constans.dart';
-import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/ui/forgot_password/view/forgot_password.dart';
-import 'package:background_location/ui/sign_up/view/sign_up_page.dart';
-import 'package:background_location/widgets/logo/app_name_widget.dart';
+import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/ui/forgot_password/view/forgot_password.dart';
+import 'package:bioplus/ui/sign_up/view/sign_up_page.dart';
+import 'package:bioplus/widgets/logo/app_name_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';

@@ -1,12 +1,12 @@
 // import 'dart:async';
 // import 'dart:developer';
 
-// import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
-// import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-// import 'package:background_location/ui/maps/models/polygon_model.dart';
-// import 'package:background_location/ui/maps/view/widgets/dialog/enter_property.dart';
-// import 'package:background_location/ui/maps/view/widgets/entry_form/entry_form.dart';
-// import 'package:background_location/widgets/dialogs/dialog_service.dart';
+// import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
+// import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
+// import 'package:bioplus/ui/maps/models/polygon_model.dart';
+// import 'package:bioplus/ui/maps/view/widgets/dialog/enter_property.dart';
+// import 'package:bioplus/ui/maps/view/widgets/entry_form/entry_form.dart';
+// import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 // import 'package:get/get.dart';
 // // import 'package:local_notification/local_notification.dart';
 // import 'package:rxdart/rxdart.dart';

@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
-import 'package:background_location/services/notifications/push_notifications.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo_local.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
+import 'package:bioplus/services/notifications/push_notifications.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo_local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_notification/local_notification.dart';

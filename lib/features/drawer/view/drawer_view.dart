@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/features/drawer/models/drawer_items.dart';
+import 'package:bioplus/features/drawer/models/drawer_items.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

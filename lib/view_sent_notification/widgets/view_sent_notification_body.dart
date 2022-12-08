@@ -1,6 +1,6 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/view_sent_notification/provider/provider.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/view_sent_notification/provider/provider.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/index.dart';

@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/features/webview/flutter_webview.dart';
-import 'package:background_location/widgets/auto_spacing.dart';
-import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/my_listTile.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/features/webview/flutter_webview.dart';
+import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

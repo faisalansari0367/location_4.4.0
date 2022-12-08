@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/maps/cubit/track_polygons.dart';
-import 'package:background_location/ui/maps/location_service/background_plugin.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/models/polygon_model.dart';
+import 'package:bioplus/ui/maps/cubit/track_polygons.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
+import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -42,9 +41,9 @@ class GeofenceService {
         polygons: polygons,
         accuracy: event.accuracy,
       );
-      if (polygonsInCoverage.isNotEmpty) {
+      // if (polygonsInCoverage.isNotEmpty) {
         trackPolygons.update(polygonsInCoverage, position);
-      }
+      // }
       onLocationChanged?.call(event);
     }, onError: (e) {
       print(e);

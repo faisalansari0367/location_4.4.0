@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/role_details/view/role_details_view.dart';
+import 'package:bioplus/ui/role_details/view/role_details_view.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

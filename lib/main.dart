@@ -3,14 +3,14 @@ import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
-import 'package:background_location/theme/color_constants.dart';
-import 'package:background_location/ui/maps/location_service/background_location_service.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/location_service/polygons_service.dart';
-import 'package:background_location/ui/maps/view/maps_page.dart';
-import 'package:background_location/ui/splash/splash_screen.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
+import 'package:bioplus/theme/color_constants.dart';
+import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
+import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -61,10 +61,7 @@ Future<void> bgHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  await _setOrientation();
 
   await runZonedGuarded(() async {
     await Firebase.initializeApp(
@@ -120,6 +117,13 @@ Future<void> main() async {
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
+}
+
+Future<void> _setOrientation() async {
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 }
 
 class MyApp extends StatefulWidget {

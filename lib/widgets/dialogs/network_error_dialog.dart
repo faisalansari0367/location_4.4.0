@@ -1,5 +1,5 @@
-import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';

@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 

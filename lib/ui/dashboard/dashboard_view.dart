@@ -1,22 +1,22 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/dashboard/dashboard_card.dart';
-import 'package:background_location/ui/edec_forms/view/edec_forms_page.dart';
-import 'package:background_location/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
-import 'package:background_location/ui/envd/cubit/graphql_client.dart';
-import 'package:background_location/ui/envd/view/evnd_page.dart';
-import 'package:background_location/ui/maps/location_service/maps_repo.dart';
-import 'package:background_location/ui/maps/view/maps_page.dart';
-import 'package:background_location/ui/records/records_page.dart';
-import 'package:background_location/ui/select_role/view/select_role_page.dart';
-import 'package:background_location/ui/sos_warning/view/sos_warning_page.dart';
-import 'package:background_location/ui/visitors/visitors_page.dart';
-import 'package:background_location/ui/work_safety/view/work_safety_page.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/status_dialog_new.dart';
-import 'package:background_location/widgets/logo/app_name_widget.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/dashboard/dashboard_card.dart';
+import 'package:bioplus/ui/edec_forms/view/edec_forms_page.dart';
+import 'package:bioplus/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
+import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
+import 'package:bioplus/ui/envd/view/evnd_page.dart';
+import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/records/records_page.dart';
+import 'package:bioplus/ui/select_role/view/select_role_page.dart';
+import 'package:bioplus/ui/sos_warning/view/sos_warning_page.dart';
+import 'package:bioplus/ui/visitors/visitors_page.dart';
+import 'package:bioplus/ui/work_safety/view/work_safety_page.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/status_dialog_new.dart';
+import 'package:bioplus/widgets/logo/app_name_widget.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -109,13 +109,14 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/Geofences (1).png',
                     onTap: () => Get.to(() => const MapsPage()),
                   ),
-                  DashboardCard(
-                    text: 'EMERGENCY WARNING!'.capitalize!,
-                    image: 'assets/icons/warning_icon.png',
-                    onTap: () {
-                      Get.to(() => EmergencyWarningPagePage());
-                    },
-                  ),
+                  if (!isVisitor)
+                    DashboardCard(
+                      text: 'EMERGENCY WARNING!'.capitalize!,
+                      image: 'assets/icons/warning_icon.png',
+                      onTap: () {
+                        Get.to(() => EmergencyWarningPagePage());
+                      },
+                    ),
                   DashboardCard(
                     text: Strings.records,
                     image: 'assets/icons/edit.png',

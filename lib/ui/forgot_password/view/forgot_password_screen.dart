@@ -1,9 +1,9 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/constans.dart';
-import 'package:background_location/extensions/size_config.dart';
-import 'package:background_location/ui/forgot_password/cubit/forgot_password_state.dart';
-import 'package:background_location/ui/otp/otp/otp_countdown.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/ui/forgot_password/cubit/forgot_password_state.dart';
+import 'package:bioplus/ui/otp/otp/otp_countdown.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,8 +1,8 @@
-import 'package:background_location/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:background_location/ui/cvd_form/models/chemical_use.dart';
-import 'package:background_location/ui/cvd_form/models/product_integrity_details_model.dart';
-import 'package:background_location/ui/cvd_form/widgets/common_buttons.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
+import 'package:bioplus/ui/cvd_form/models/chemical_use.dart';
+import 'package:bioplus/ui/cvd_form/models/product_integrity_details_model.dart';
+import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

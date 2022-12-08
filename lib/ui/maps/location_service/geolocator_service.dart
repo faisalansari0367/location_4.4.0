@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/location_permission_dialog.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/location_permission_dialog.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
@@ -65,7 +65,6 @@ class GeolocatorService {
   }
 
   static Stream<Position> getLocationUpdates() {
-    
     return instance.getPositionStream(locationSettings: _getLocationSettings);
   }
 

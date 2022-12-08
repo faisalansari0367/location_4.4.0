@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:background_location/constants/index.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -1,6 +1,6 @@
-import 'package:background_location/ui/envd/cubit/envd_cubit.dart';
-import 'package:background_location/ui/envd/cubit/graphql_client.dart';
-import 'package:background_location/ui/envd/view/envd_view.dart';
+import 'package:bioplus/ui/envd/cubit/envd_cubit.dart';
+import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
+import 'package:bioplus/ui/envd/view/envd_view.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,6 @@
-import 'package:background_location/helpers/validator.dart';
-import 'package:background_location/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
-import 'package:background_location/widgets/widgets.dart';
+import 'package:bioplus/helpers/validator.dart';
+import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
+import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

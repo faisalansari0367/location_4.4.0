@@ -1,4 +1,4 @@
-import 'package:background_location/constants/index.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetService {

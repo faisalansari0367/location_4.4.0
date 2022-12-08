@@ -2,14 +2,14 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/services/notifications/connectivity/connectivity_service.dart';
-import 'package:background_location/ui/envd/cubit/graphql_client.dart';
-import 'package:background_location/ui/maps/view/maps_page.dart';
-import 'package:background_location/ui/role_details/models/field_types.dart';
-import 'package:background_location/ui/role_details/widgets/property_address.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/no_signature_found.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
+import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/role_details/models/field_types.dart';
+import 'package:bioplus/ui/role_details/widgets/property_address.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/no_signature_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

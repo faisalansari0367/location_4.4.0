@@ -1,7 +1,7 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/theme/color_constants.dart';
-import 'package:background_location/ui/visitor_check_in/view/visitor_check_in_page.dart';
-import 'package:background_location/widgets/my_listTile.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/theme/color_constants.dart';
+import 'package:bioplus/ui/visitor_check_in/view/visitor_check_in_page.dart';
+import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

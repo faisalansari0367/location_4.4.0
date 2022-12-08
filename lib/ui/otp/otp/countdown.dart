@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:background_location/constants/constans.dart';
+import 'package:bioplus/constants/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

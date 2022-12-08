@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/constants/index.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/widgets.dart';
 
 class AppName extends StatelessWidget {

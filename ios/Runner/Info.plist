@@ -37,7 +37,7 @@
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>BIOPLUS uses your location to find nearby fields</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>BIOPLUS uses your location to monitor the user&apos;s entry or exit into the geofence in background</string>
+	<string>BIOPLUS uses your location to monitor the user's entry or exit into the geofence in background</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>BIOPLUS uses your location to find nearby fields</string>
 	<key>NSMotionUsageDescription</key>
@@ -45,7 +45,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-<!--		<string>location</string>-->
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

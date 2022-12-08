@@ -1,5 +1,5 @@
-import 'package:background_location/widgets/animations/my_scale_transition.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/widgets/animations/my_scale_transition.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -37,8 +37,8 @@ class ComingSoonDialog extends StatelessWidget {
             Gap(20.h),
             ElevatedButton(
               onPressed: Get.back,
-              style:
-                  OutlinedButton.styleFrom(shape: const StadiumBorder(), textStyle: const TextStyle(fontWeight: FontWeight.bold)),
+              style: OutlinedButton.styleFrom(
+                  shape: const StadiumBorder(), textStyle: const TextStyle(fontWeight: FontWeight.bold)),
               child: const Text('Go back'),
             ),
           ],

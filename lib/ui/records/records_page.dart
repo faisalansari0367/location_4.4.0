@@ -1,7 +1,7 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/cvd_forms/view/cvd_forms.dart';
-import 'package:background_location/view_sent_notification/view_sent_notification.dart';
-import 'package:background_location/widgets/my_listTile.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/cvd_forms/view/cvd_forms.dart';
+import 'package:bioplus/view_sent_notification/view_sent_notification.dart';
+import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

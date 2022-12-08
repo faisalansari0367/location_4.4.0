@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bioplus/ui/sos_warning/cubit/cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:background_location/ui/sos_warning/cubit/cubit.dart';
 
 void main() {
   group('SosWarningState', () {

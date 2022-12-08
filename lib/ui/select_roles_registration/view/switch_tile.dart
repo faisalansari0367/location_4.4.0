@@ -1,5 +1,5 @@
-import 'package:background_location/ui/select_roles_registration/models/select_role_model.dart';
-import 'package:background_location/widgets/my_listTile.dart';
+import 'package:bioplus/ui/select_roles_registration/models/select_role_model.dart';
+import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

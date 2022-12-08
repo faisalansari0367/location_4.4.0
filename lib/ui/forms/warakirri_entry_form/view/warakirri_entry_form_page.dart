@@ -1,6 +1,6 @@
-import 'package:background_location/ui/forms/warakirri_entry_form/provider/provider.dart';
-import 'package:background_location/ui/forms/warakirri_entry_form/widgets/warakirri_entry_form_body.dart';
-import 'package:background_location/widgets/my_appbar.dart';
+import 'package:bioplus/ui/forms/warakirri_entry_form/provider/provider.dart';
+import 'package:bioplus/ui/forms/warakirri_entry_form/widgets/warakirri_entry_form_body.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

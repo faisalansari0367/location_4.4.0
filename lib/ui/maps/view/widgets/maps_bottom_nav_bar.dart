@@ -2,15 +2,15 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/gen/assets.gen.dart';
-import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
-import 'package:background_location/ui/maps/cubit/maps_cubit.dart';
-import 'package:background_location/ui/maps/view/widgets/add_fence.dart';
-import 'package:background_location/widgets/bottom_navbar/bottom_navbar.dart';
-import 'package:background_location/widgets/bottom_navbar/bottom_navbar_item.dart';
-import 'package:background_location/widgets/dialogs/dialog_layout.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/gen/assets.gen.dart';
+import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
+import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
+import 'package:bioplus/ui/maps/view/widgets/add_fence.dart';
+import 'package:bioplus/widgets/bottom_navbar/bottom_navbar.dart';
+import 'package:bioplus/widgets/bottom_navbar/bottom_navbar_item.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 
 import 'map_type_widget.dart';

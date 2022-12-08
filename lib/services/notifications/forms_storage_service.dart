@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:api_repo/api_repo.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../constants/my_decoration.dart';
 
@@ -43,6 +44,7 @@ class FormsStorageService {
   Future<Directory> _getUserDir() async {
     final appDir = await _getAppDir();
     final path = '${appDir.path}/${user.email}';
+    await Permission.storage.request();
     final userDir = Directory(path);
     if (!(await userDir.exists())) userDir.create(recursive: false);
     return userDir;
@@ -92,7 +94,7 @@ class FormsStorageService {
 
   Future<File> _createCvdFile(String path, String date, String buyerName, {int? count}) async {
     var _count = count ?? 0;
-    final file = File('${path}/${'$date $buyerName ${_count == 0 ? '' : _count}.pdf'}');
+    final file = File('${path}/${'$date $buyerName${_count == 0 ? '' : _count}.pdf'}');
     if (await file.exists()) {
       // final _newpath = '${path}/${'$date $buyerName ${_count == 0 ? '' : _count}.pdf'}';
       return _createCvdFile(path, date, buyerName, count: _count + 1);

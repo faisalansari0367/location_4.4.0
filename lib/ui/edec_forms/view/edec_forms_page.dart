@@ -1,4 +1,4 @@
-import 'package:background_location/ui/edec_forms/view/edec_forms_view.dart';
+import 'package:bioplus/ui/edec_forms/view/edec_forms_view.dart';
 import 'package:flutter/material.dart';
 
 class EdecFormsPage extends StatelessWidget {

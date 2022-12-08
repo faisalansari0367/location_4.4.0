@@ -1,9 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/ui/select_roles_registration/view/select_roles_registration_page.dart';
-import 'package:background_location/widgets/listview/my_listview.dart';
-import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/my_listTile.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/select_roles_registration/view/select_roles_registration_page.dart';
+import 'package:bioplus/widgets/listview/my_listview.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -123,7 +123,14 @@ class SelectRoleView extends StatelessWidget {
             MyElevatedButton(
               text: 'Select Role',
               onPressed: () async {
-                Get.to(() => SelectRolesRegistrationPage());
+                Get.to(
+                  () => SelectRolesRegistrationPage(
+                    onRoleUpdated: () {
+                      Get.back();
+                      context.read<SelectRoleCubit>().getRoles();
+                    },
+                  ),
+                );
               },
             ),
           ],

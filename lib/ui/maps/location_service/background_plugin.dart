@@ -3,7 +3,7 @@
 // import 'dart:isolate';
 // import 'dart:ui';
 
-// import 'package:background_location/main.dart';
+// import 'package:bioplus/main.dart';
 // import 'package:carp_background_location/carp_background_location.dart';
 
 // class BackgroundPlugin {

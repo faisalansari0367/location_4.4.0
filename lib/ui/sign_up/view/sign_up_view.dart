@@ -1,9 +1,9 @@
-import 'package:background_location/constants/index.dart';
-import 'package:background_location/gen/assets.gen.dart';
-import 'package:background_location/helpers/validator.dart';
-import 'package:background_location/ui/sign_up/cubit/sign_up_cubit.dart';
-import 'package:background_location/widgets/my_appbar.dart';
-import 'package:background_location/widgets/pdf_viewer.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/gen/assets.gen.dart';
+import 'package:bioplus/helpers/validator.dart';
+import 'package:bioplus/ui/sign_up/cubit/sign_up_cubit.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:bioplus/widgets/pdf_viewer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

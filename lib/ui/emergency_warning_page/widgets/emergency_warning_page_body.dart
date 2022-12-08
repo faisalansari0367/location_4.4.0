@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:background_location/ui/emergency_warning_page/provider/provider.dart';
-import 'package:background_location/ui/maps/widgets/geofences_list/geofences_view.dart';
+import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
+import 'package:bioplus/ui/maps/widgets/geofences_list/geofences_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';

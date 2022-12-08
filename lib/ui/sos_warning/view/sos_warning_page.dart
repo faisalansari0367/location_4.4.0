@@ -1,7 +1,6 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/maps/location_service/geolocator_service.dart';
-import 'package:background_location/ui/sos_warning/cubit/cubit.dart';
-import 'package:background_location/ui/sos_warning/widgets/sos_warning_body.dart';
+import 'package:bioplus/ui/sos_warning/cubit/cubit.dart';
+import 'package:bioplus/ui/sos_warning/widgets/sos_warning_body.dart';
 import 'package:flutter/material.dart';
 
 /// {@template sos_warning_page}

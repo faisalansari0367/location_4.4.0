@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/constants/index.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/login/view/login_page.dart';
+import 'package:bioplus/ui/login/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

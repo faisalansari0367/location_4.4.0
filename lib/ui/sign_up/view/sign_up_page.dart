@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:background_location/ui/sign_up/view/sign_up_view.dart';
+import 'package:bioplus/ui/sign_up/view/sign_up_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

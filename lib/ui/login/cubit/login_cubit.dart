@@ -1,10 +1,10 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:background_location/constants/strings.dart';
-import 'package:background_location/features/drawer/view/drawer_page.dart';
-import 'package:background_location/ui/maps/view/maps_page.dart';
-import 'package:background_location/widgets/dialogs/dialog_service.dart';
-import 'package:background_location/widgets/dialogs/network_error_dialog.dart';
+import 'package:bioplus/constants/strings.dart';
+import 'package:bioplus/features/drawer/view/drawer_page.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
