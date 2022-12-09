@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../constants/index.dart';
-import '../../../models/enum/filter_type.dart';
 import '../../../widgets/dialogs/dialog_layout.dart';
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../../../widgets/empty_screen.dart';
@@ -39,15 +38,15 @@ class EmergencyWarningPageBody extends StatelessWidget {
         ),
         centreTitle: true,
       ),
-      // bottomNavigationBar: Selector<EmergencyWarningPageNotifier, bool>(
-      //   selector: (p0, p1) => p1.hasPolygon,
-      //   builder: (context, value, child) => value ? _bottomNavbar(context) : const SizedBox(),
-      // ),
-      bottomNavigationBar: _bottomNavbar(context),
+      bottomNavigationBar: Selector<EmergencyWarningPageNotifier, bool>(
+        selector: (p0, p1) => p1.hasPolygon,
+        builder: (context, value, child) => value ? _bottomNavbar(context) : const SizedBox(),
+      ),
+      // bottomNavigationBar: _bottomNavbar(context),
       body: Consumer<EmergencyWarningPageNotifier>(
         builder: (context, state, child) {
-          // return state.hasPolygon ? _buildBody(context) : _noGeofences();
-          return _buildBody(context);
+          return state.hasPolygon ? _buildBody(context) : _noGeofences();
+          // return _buildBody(context);
         },
       ),
     );
@@ -175,45 +174,45 @@ class EmergencyWarningPageBody extends StatelessWidget {
     );
   }
 
-  Row _buildFilters(BuildContext context) {
-    final provider = context.read<EmergencyWarningPageNotifier>();
+  // Row _buildFilters(BuildContext context) {
+  //   final provider = context.read<EmergencyWarningPageNotifier>();
 
-    return Row(
-      children: [
-        Text(
-          'Filter by',
-          style: TextStyle(
-            fontSize: 15.h,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey,
-          ),
-        ),
-        ...FilterType.values
-            .map(
-              (e) => Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.w),
-                child: InputChip(
-                  selected: provider.filterType == e,
-                  backgroundColor: Colors.grey.shade200,
-                  selectedColor: context.theme.primaryColor.withOpacity(1),
-                  // elevation: 5,
-                  onPressed: provider.setFilter,
-                  checkmarkColor: provider.filterType == e ? Colors.white : Colors.grey,
+  //   return Row(
+  //     children: [
+  //       Text(
+  //         'Filter by',
+  //         style: TextStyle(
+  //           fontSize: 15.h,
+  //           fontWeight: FontWeight.w600,
+  //           color: Colors.grey,
+  //         ),
+  //       ),
+  //       ...FilterType.values
+  //           .map(
+  //             (e) => Padding(
+  //               padding: EdgeInsets.symmetric(horizontal: 5.w),
+  //               child: InputChip(
+  //                 selected: provider.filterType == e,
+  //                 backgroundColor: Colors.grey.shade200,
+  //                 selectedColor: context.theme.primaryColor.withOpacity(1),
+  //                 // elevation: 5,
+  //                 onPressed: () => provider.onFilterTypeChange(e),
+  //                 checkmarkColor: provider.filterType == e ? Colors.white : Colors.grey,
 
-                  label: Text(
-                    e.name.replaceAll('_', ' ').capitalize!,
-                    style: TextStyle(
-                      fontSize: 15.h,
-                      color: provider.filterType == e ? Colors.white : Colors.grey.shade700,
-                    ),
-                  ),
-                ),
-              ),
-            )
-            .toList()
-      ],
-    );
-  }
+  //                 label: Text(
+  //                   e.name.replaceAll('_', ' ').capitalize!,
+  //                   style: TextStyle(
+  //                     fontSize: 15.h,
+  //                     color: provider.filterType == e ? Colors.white : Colors.grey.shade700,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           )
+  //           .toList()
+  //     ],
+  //   );
+  // }
 
   Future<void> _warningDialog(BuildContext context) async {
     final provider = context.read<EmergencyWarningPageNotifier>();

@@ -33,6 +33,7 @@ class TrackPolygons {
   final polygonsInCoverage = BehaviorSubject<Set<PolygonModel>>.seeded({});
   PolygonModel? currentPolygon;
   bool isManagerNotified = false;
+  static bool isShowingPopUp = false;
 
   final CallRestricter hidePopUpTimer = CallRestricter(duration: 30.seconds, callback: hidePopUp);
   NotifyManagerHandler notifyManager = NotifyManagerHandler();
@@ -41,7 +42,7 @@ class TrackPolygons {
   int attemptOfShowingPopUp = 0;
 
   TrackPolygons({required this.mapsRepo, required this.api}) {
-    // notifyManager ??= NotifyManagerHandler(mapsRepo, duration: 5.minutes);
+    isShowingPopUp = false;
     notifyManager.init(mapsRepo);
     logbookEntryHandler = LogbookEntryHandler(
       mapsRepo: mapsRepo,
@@ -54,19 +55,22 @@ class TrackPolygons {
 
   static void hidePopUp() {
     if (Get.isDialogOpen ?? false) {
-      Get.back();
+      if (isShowingPopUp) {
+        Get.back();
+        isShowingPopUp = false;
+      }
     }
   }
 
   //p
   static const String _formsPage = '/FormsPage';
   // static const String _mapsPage = '/MapsPage';
-  bool get isDialogOpen => Get.isDialogOpen ?? true;
+  bool get isDialogOpen => Get.isDialogOpen ?? false;
   bool get isFormsPage => Get.currentRoute == _formsPage;
 
   /// this will be called when the user is inside a polygon
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
-    log('message from track polygons ${polygonsInCoverage.length}}');
+    // log('message from track polygons ${polygonsInCoverage.length}}');
     if (isFormsPage) return;
     _userIsInside(polygonsInCoverage, currentPosition);
     if (isFormsPage || isDialogOpen) {
@@ -120,12 +124,13 @@ class TrackPolygons {
       notifyManager.updateData(position, currentPolygon);
     }
     attemptOfShowingPopUp++;
-
+    isShowingPopUp = true;
     await DialogService.showDialog(
       child: EnterProperty(
         stream: polygonsInCoverage.stream,
         onTap: (s) async {
           _stopTimers();
+
           final logRecord = await api.getLogRecord(s.id!);
           Get.to(
             () => FormsPage(

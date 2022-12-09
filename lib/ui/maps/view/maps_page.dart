@@ -5,7 +5,6 @@ import 'package:bioplus/ui/maps/location_service/maps_repo_local.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
-import 'package:local_notification/local_notification.dart';
 
 import '../../../services/notifications/push_notifications.dart';
 import '../cubit/maps_cubit.dart';
@@ -23,7 +22,7 @@ class MapsPage extends StatelessWidget {
 
       create: (context) => MapsCubit(
         context,
-        context.read<NotificationService>(),
+        // context.read<NotificationService>(),
         // context.read<MapsRepo>(),
         context.read<PolygonsService>(),
         context.read<PushNotificationService>(),

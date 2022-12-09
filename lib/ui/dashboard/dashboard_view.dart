@@ -3,8 +3,6 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/dashboard/dashboard_card.dart';
 import 'package:bioplus/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:bioplus/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
-import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
-import 'package:bioplus/ui/envd/view/evnd_page.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/records/records_page.dart';
@@ -14,7 +12,6 @@ import 'package:bioplus/ui/visitors/visitors_page.dart';
 import 'package:bioplus/ui/work_safety/view/work_safety_page.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
-import 'package:bioplus/widgets/dialogs/status_dialog_new.dart';
 import 'package:bioplus/widgets/logo/app_name_widget.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
@@ -137,44 +134,44 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/Links.png',
                     onTap: () => Get.to(() => const LinksPage()),
                   ),
-                  if (!isVisitor)
-                    DashboardCard(
-                      text: Strings.envds,
-                      image: 'assets/icons/eNVD.jpg',
-                      size: 65.w,
-                      onTap: () async {
-                        final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
-                        final isInit = await client.init();
+                  // if (!isVisitor)
+                  // DashboardCard(
+                  //   text: Strings.envds,
+                  //   image: 'assets/icons/eNVD.jpg',
+                  //   size: 65.w,
+                  //   onTap: () async {
+                  //     final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
+                  //     final isInit = await client.init();
 
-                        if (!client.hasCredentials()) {
-                          final message =
-                              "Please provide valid LPA credentials in your role settings to use this feature.";
-                          Get.dialog(
-                            StatusDialog(
-                              lottieAsset: 'assets/animations/error.json',
-                              message: message,
-                              onContinue: () async {
-                                Get.back();
-                                Get.to(
-                                  () => const SelectRolePage(
-                                    showBackArrow: true,
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                          return;
-                        }
+                  //     if (!client.hasCredentials()) {
+                  //       final message =
+                  //           "Please provide valid LPA credentials in your role settings to use this feature.";
+                  //       Get.dialog(
+                  //         StatusDialog(
+                  //           lottieAsset: 'assets/animations/error.json',
+                  //           message: message,
+                  //           onContinue: () async {
+                  //             Get.back();
+                  //             Get.to(
+                  //               () => const SelectRolePage(
+                  //                 showBackArrow: true,
+                  //               ),
+                  //             );
+                  //           },
+                  //         ),
+                  //       );
+                  //       return;
+                  //     }
 
-                        if (isInit) {
-                          Get.to(() => const EnvdPage());
-                        } else {
-                          DialogService.error(
-                            "Unable to connect with the ISC server currently. Please try again later.",
-                          );
-                        }
-                      },
-                    ),
+                  //     if (isInit) {
+                  //       Get.to(() => const EnvdPage());
+                  //     } else {
+                  //       DialogService.error(
+                  //         "Unable to connect with the ISC server currently. Please try again later.",
+                  //       );
+                  //     }
+                  //   },
+                  // ),
                   DashboardCard(
                     text: 'Work Safety',
                     image: 'assets/icons/Work Safety.png',

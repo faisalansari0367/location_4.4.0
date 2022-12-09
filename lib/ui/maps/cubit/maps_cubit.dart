@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:local_notification/local_notification.dart';
 
 import '../../../services/notifications/push_notifications.dart';
 import '../location_service/maps_repo_local.dart';
@@ -24,7 +23,7 @@ part 'maps_state.dart';
 
 class MapsCubit extends BaseModel {
   // ignore: unused_field
-  final NotificationService _notificationService;
+  // final NotificationService _notificationService;
   // ignore: unused_field
   final PushNotificationService _pushNotificationService;
   final PolygonModel? polygonId;
@@ -38,7 +37,7 @@ class MapsCubit extends BaseModel {
 
   MapsCubit(
     BuildContext context,
-    this._notificationService,
+    // this._notificationService,
     // this._mapsRepo,
     this._polygonsService,
     this._pushNotificationService,

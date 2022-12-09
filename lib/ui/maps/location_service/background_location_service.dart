@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../main.dart';
 import 'geolocator_service.dart';
 import 'map_toolkit_utils.dart';
 
@@ -35,6 +36,7 @@ class GeofenceService {
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
       // showNotification(title: 'monitoring', body: '${event.latitude}, ${event.longitude}');
+
       final position = LatLng(event.latitude, event.longitude);
       final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
         latLng: position,
@@ -42,7 +44,7 @@ class GeofenceService {
         accuracy: event.accuracy,
       );
       // if (polygonsInCoverage.isNotEmpty) {
-        trackPolygons.update(polygonsInCoverage, position);
+      trackPolygons.update(polygonsInCoverage, position);
       // }
       onLocationChanged?.call(event);
     }, onError: (e) {

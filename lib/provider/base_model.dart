@@ -5,7 +5,6 @@ import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo_local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_notification/local_notification.dart';
 
 abstract class BaseModel extends ChangeNotifier {
   late Api api;
@@ -13,11 +12,10 @@ abstract class BaseModel extends ChangeNotifier {
 
   late Api apiService;
   bool mounted = true;
-  late NotificationService service;
+  // late NotificationService service;
   late MapsRepo mapsRepo;
   late MapsRepoLocal _mapsRepoLocal;
   late PushNotificationService pushNotificationService;
-
 
   //
   //  context.read<NotificationService>(),
@@ -36,7 +34,6 @@ abstract class BaseModel extends ChangeNotifier {
   //   _isLoading = value;
   //   notifyListeners();
   // }
-
 
   BaseModel(BuildContext context) {
     api = context.read<Api>();
