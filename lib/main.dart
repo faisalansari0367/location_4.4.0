@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:api_repo/api_repo.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/flutter_background_service.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
@@ -102,7 +103,8 @@ Future<void> main() async {
     FirebaseMessaging.onBackgroundMessage(bgHandler);
 
     await pushNotification.initmessaging();
-
+    //  registerGeofenceService();
+    // await initBackgroundLocator();
     runApp(
       MyApp(
         localApi: localApi,

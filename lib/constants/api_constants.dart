@@ -11,6 +11,7 @@ class ApiConstants {
   static const envdGraphQl = 'https://api.integritysystems.com.au/graphql';
 
   // uat envd token url
+  // ignore: unused_field
   static const _envdUATUrl = 'https://auth-uat.integritysystems.com.au/connect/token';
 
   static Map<String, dynamic> get itrackCientUAT {
