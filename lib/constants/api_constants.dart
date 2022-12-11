@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class ApiConstants {
   static const String localUrl = 'http://13.55.174.146:3000';
   static const String liveUrl = 'https://app.itrakassets.com';
@@ -8,7 +6,8 @@ class ApiConstants {
   static const _envdProdUrl = 'https://auth.integritysystems.com.au/connect/token';
 
   // production envd graphql url
-  static const envdGraphQl = 'https://api.integritysystems.com.au/graphql';
+  // static const envdGraphQl = 'https://api.integritysystems.com.au/graphql';
+  static const envdGraphQl = 'https://api.uat.integritysystems.com.au/graphql';
 
   // uat envd token url
   // ignore: unused_field
@@ -23,10 +22,12 @@ class ApiConstants {
     };
   }
 
-  static String get envdTokenUrl => _envdProdUrl;
+  static String get envdTokenUrl => _envdUATUrl;
 
-  static const String baseUrl = kDebugMode ? localUrl : liveUrl;
-  // static const String baseUrl = liveUrl;
+  static bool get isDegugMode => baseUrl == localUrl;
+
+  // static const String baseUrl = kDebugMode ? localUrl : liveUrl;
+  static const String baseUrl = localUrl;
 
   static const String mapsKey = 'AIzaSyBxMIupdGzYQM6yk1ix1xGhgIyPw_42wlI';
 }

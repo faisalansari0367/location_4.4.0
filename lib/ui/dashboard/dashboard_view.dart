@@ -20,6 +20,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../../services/notifications/push_notifications.dart';
+import '../../widgets/dialogs/status_dialog_new.dart';
+import '../envd/cubit/graphql_client.dart';
+import '../envd/view/evnd_page.dart';
 import '../links_page/links_page.dart';
 
 class DashboardView extends StatefulWidget {
@@ -134,44 +137,44 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/Links.png',
                     onTap: () => Get.to(() => const LinksPage()),
                   ),
-                  // if (!isVisitor)
-                  // DashboardCard(
-                  //   text: Strings.envds,
-                  //   image: 'assets/icons/eNVD.jpg',
-                  //   size: 65.w,
-                  //   onTap: () async {
-                  //     final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
-                  //     final isInit = await client.init();
+                  if (ApiConstants.baseUrl == ApiConstants.localUrl)
+                    DashboardCard(
+                      text: Strings.envds,
+                      image: 'assets/icons/eNVD.jpg',
+                      size: 65.w,
+                      onTap: () async {
+                        final client = GraphQlClient(userData: context.read<Api>().getUserData()!);
+                        final isInit = await client.init();
 
-                  //     if (!client.hasCredentials()) {
-                  //       final message =
-                  //           "Please provide valid LPA credentials in your role settings to use this feature.";
-                  //       Get.dialog(
-                  //         StatusDialog(
-                  //           lottieAsset: 'assets/animations/error.json',
-                  //           message: message,
-                  //           onContinue: () async {
-                  //             Get.back();
-                  //             Get.to(
-                  //               () => const SelectRolePage(
-                  //                 showBackArrow: true,
-                  //               ),
-                  //             );
-                  //           },
-                  //         ),
-                  //       );
-                  //       return;
-                  //     }
+                        if (!client.hasCredentials()) {
+                          final message =
+                              "Please provide valid LPA credentials in your role settings to use this feature.";
+                          Get.dialog(
+                            StatusDialog(
+                              lottieAsset: 'assets/animations/error.json',
+                              message: message,
+                              onContinue: () async {
+                                Get.back();
+                                Get.to(
+                                  () => const SelectRolePage(
+                                    showBackArrow: true,
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                          return;
+                        }
 
-                  //     if (isInit) {
-                  //       Get.to(() => const EnvdPage());
-                  //     } else {
-                  //       DialogService.error(
-                  //         "Unable to connect with the ISC server currently. Please try again later.",
-                  //       );
-                  //     }
-                  //   },
-                  // ),
+                        if (isInit) {
+                          Get.to(() => const EnvdPage());
+                        } else {
+                          DialogService.error(
+                            "Unable to connect with the ISC server currently. Please try again later.",
+                          );
+                        }
+                      },
+                    ),
                   DashboardCard(
                     text: 'Work Safety',
                     image: 'assets/icons/Work Safety.png',
