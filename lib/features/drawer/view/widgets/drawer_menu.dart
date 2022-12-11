@@ -179,7 +179,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
 
   Widget _buildVersion() {
     return Text(
-      'Version ${packageInfo?.version}',
+      'Version ${Strings.appVersion}',
       style: TextStyle(
         color: Color.fromARGB(235, 255, 255, 255),
         fontWeight: FontWeight.w600,
