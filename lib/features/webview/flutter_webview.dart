@@ -55,6 +55,11 @@ class WebviewState extends State<Webview> {
             onProgress: onProgress,
             onPageStarted: onPageStarted,
             onPageFinished: onPageFinished,
+            navigationDelegate: (NavigationRequest request) {
+              if (request.url.startsWith('https:')) {}
+              print('allowing navigation to $request');
+              return NavigationDecision.navigate;
+            },
           ),
           LinearProgressIndicator(
             color: context.theme.primaryColor,

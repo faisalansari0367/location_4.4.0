@@ -1,5 +1,6 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/cvd_form/view/cvd_from_page.dart';
+import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
@@ -30,15 +31,24 @@ class EdecFormsView extends StatelessWidget {
               },
             ),
             MyListTile(
-                text: 'Feedsafe Personal Quarantine Declaration',
-                onTap: () async {
-                  comingSoon();
-                }),
+              text: Strings.livestockWaybillDeclaration,
+              onTap: () async {
+                // comingSoon();
+                Get.to(() => LivestockWaybillPage());
+              },
+            ),
             MyListTile(
-                text: 'Feedsafe Stockfeed Supplier Declaration',
-                onTap: () async {
-                  comingSoon();
-                }),
+              text: 'Feedsafe Personal Quarantine Declaration',
+              onTap: () async {
+                comingSoon();
+              },
+            ),
+            MyListTile(
+              text: 'Feedsafe Stockfeed Supplier Declaration',
+              onTap: () async {
+                comingSoon();
+              },
+            ),
           ],
         ),
       ),

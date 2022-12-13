@@ -66,19 +66,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           padding: kPadding,
           child: SizedBox(
             width: 50.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildCopyright(context),
-                if (packageInfo != null)
-                  Column(
-                    children: [
-                      Gap(5.h),
-                      _buildVersion(),
-                    ],
-                  ),
-              ],
-            ),
+            child: _buildCopyright(context),
           ),
         ),
         Spacer(),

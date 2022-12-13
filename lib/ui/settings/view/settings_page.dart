@@ -104,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                           Gap(10.h),
                           Text(
-                            packageInfo?.version ?? '',
+                            Strings.appVersion,
                             style: context.textTheme.headline6,
                           ),
                           Gap(20.h),

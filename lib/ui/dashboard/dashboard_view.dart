@@ -40,6 +40,12 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant DashboardView oldWidget) {
+    setState(() {});
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _init() async {
     final api = context.read<Api>();
     if (api.isInit) {
@@ -105,7 +111,7 @@ class _DashboardViewState extends State<DashboardView> {
                     onTap: () => DialogService.showDialog(child: DialogLayout(child: SosWarningPage())),
                   ),
                   DashboardCard(
-                    text: 'Location',
+                    text: 'My Location',
                     image: 'assets/icons/Geofences (1).png',
                     onTap: () => Get.to(() => const MapsPage()),
                   ),
@@ -118,7 +124,7 @@ class _DashboardViewState extends State<DashboardView> {
                       },
                     ),
                   DashboardCard(
-                    text: Strings.records,
+                    text: 'My Records',
                     image: 'assets/icons/edit.png',
                     onTap: () async {
                       Get.to(() => const RecordsPage());
@@ -126,7 +132,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   if (!isVisitor)
                     DashboardCard(
-                      text: 'eDEC Forms',
+                      text: 'My eDEC\nForms',
                       image: 'assets/icons/eDEC forms.png',
                       onTap: () {
                         Get.to(() => EdecFormsPage());
@@ -139,7 +145,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   if (ApiConstants.baseUrl == ApiConstants.localUrl)
                     DashboardCard(
-                      text: Strings.envds,
+                      text: 'My Waybill',
                       image: 'assets/icons/eNVD.jpg',
                       size: 65.w,
                       onTap: () async {
