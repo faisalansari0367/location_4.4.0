@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class Strings {
 // AppName
   static const String appName = 'BIOPLUS';
+  static const String appVersion = '1.0.1';
 
   static const name = 'Name',
       warakirri = 'Warakirri',
@@ -79,6 +80,9 @@ class Strings {
       book = 'Book',
       geofence = 'Geofence',
       envds = 'eNVD',
+      livestock = 'Livestock',
+      movement = 'Movement',
+      waybill = 'Waybill',
       links = 'Links',
       check = 'Check',
       commodities = 'Commodities';
@@ -98,6 +102,9 @@ class Strings {
   static String get geofences => '${geofence}s';
   static String get visitorCheckIn => '$visitor $check-${in_}s';
   static String get selectCommodities => '$select $commodities';
+
+  // livestock movement declaration
+  static String get livestockWaybillDeclaration => '$livestock $waybill $declaration';
 
   // confirm password
   static String get confirmPassword => '$confirm $password';

@@ -35,9 +35,9 @@ class TrackPolygons {
   bool isManagerNotified = false;
   static bool isShowingPopUp = false;
 
-  final CallRestricter hidePopUpTimer = CallRestricter(duration: 30.seconds, callback: hidePopUp);
+  final CallRestricter hidePopUpTimer = CallRestricter(duration: 60.seconds, callback: hidePopUp);
   NotifyManagerHandler notifyManager = NotifyManagerHandler();
-  final CallRestricter dontShowAgain = CallRestricter(duration: 180.seconds, callback: () {});
+  final CallRestricter dontShowAgain = CallRestricter(duration: 240.seconds, callback: () {});
   late LogbookEntryHandler logbookEntryHandler;
   int attemptOfShowingPopUp = 0;
 
@@ -64,14 +64,16 @@ class TrackPolygons {
 
   //p
   static const String _formsPage = '/FormsPage';
+  static const String _signaturePage = '/CreateSignature';
   // static const String _mapsPage = '/MapsPage';
   bool get isDialogOpen => Get.isDialogOpen ?? false;
-  bool get isFormsPage => Get.currentRoute == _formsPage;
+  bool get isFormsPage => Get.currentRoute == _signaturePage;
+  bool get isSignaturePage => Get.currentRoute == _formsPage;
 
   /// this will be called when the user is inside a polygon
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
     // log('message from track polygons ${polygonsInCoverage.length}}');
-    if (isFormsPage) return;
+    if (isFormsPage || isSignaturePage) return;
     _userIsInside(polygonsInCoverage, currentPosition);
     if (isFormsPage || isDialogOpen) {
       return;

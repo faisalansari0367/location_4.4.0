@@ -97,9 +97,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             packageInfo?.appName ?? '',
                             style: context.textTheme.headline5,
                           ),
+                          if (ApiConstants.isDegugMode)
+                            const Text(
+                              ' (Debug)',
+                              style: TextStyle(color: Colors.red),
+                            ),
                           Gap(10.h),
                           Text(
-                            packageInfo?.version ?? '',
+                            Strings.appVersion,
                             style: context.textTheme.headline6,
                           ),
                           Gap(20.h),

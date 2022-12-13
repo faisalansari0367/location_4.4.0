@@ -2,6 +2,7 @@ import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_no
 import 'package:bioplus/widgets/text_fields/my_text_field.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../constants/strings.dart';
 import '../ui/role_details/widgets/states.dart';
@@ -42,6 +43,7 @@ class _StateDropdownFieldState extends State<StateDropdownField> {
           onChanged: (value) => setState(() {
             controller.text = value;
             widget.onChanged?.call(value);
+            Get.back();
           }),
         ),
       ),

@@ -151,4 +151,13 @@ class FormsStorageService {
     await file.writeAsBytes(bytes);
     return file;
   }
+
+  Future<File> downloadPdf({String? fileName, required Uint8List bytes}) async {
+    final String directory = (await _getUserDir()).path;
+    final pdfDir = Directory('$directory/$_pdfs');
+    if (!(await pdfDir.exists())) pdfDir.create();
+    final file = File('${pdfDir.path}/${MyDecoration.formatDate(DateTime.now())}.pdf');
+    await file.writeAsBytes(bytes);
+    return file;
+  }
 }

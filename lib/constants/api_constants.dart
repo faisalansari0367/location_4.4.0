@@ -8,7 +8,8 @@ class ApiConstants {
   static const _envdProdUrl = 'https://auth.integritysystems.com.au/connect/token';
 
   // production envd graphql url
-  static const envdGraphQl = 'https://api.integritysystems.com.au/graphql';
+  // static const envdGraphQl = 'https://api.integritysystems.com.au/graphql';
+  static const envdGraphQl = 'https://api.uat.integritysystems.com.au/graphql';
 
   // uat envd token url
   // ignore: unused_field
@@ -23,7 +24,9 @@ class ApiConstants {
     };
   }
 
-  static String get envdTokenUrl => _envdProdUrl;
+  static String get envdTokenUrl => _envdUATUrl;
+
+  static bool get isDegugMode => baseUrl == localUrl;
 
   static const String baseUrl = kDebugMode ? localUrl : liveUrl;
   // static const String baseUrl = liveUrl;
