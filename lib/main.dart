@@ -7,7 +7,6 @@ import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
-import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -20,9 +19,7 @@ import 'package:flutter_bloc/src/repository_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:local_auth_repo/local_auth.dart';
 
-import 'features/drawer/view/drawer_page.dart';
 import 'firebase_options.dart';
 import 'services/notifications/push_notifications.dart';
 import 'ui/login/view/login_page.dart';
@@ -119,7 +116,7 @@ class _MyAppState extends State<MyApp> {
     return MultiRepositoryProvider(
       providers: _providers,
       child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: kDebugMode,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,
@@ -165,15 +162,15 @@ class _MyAppState extends State<MyApp> {
       final isLoggedIn = event;
       print('isLoggedIn $isLoggedIn');
       if (!isLoggedIn) return Get.off(() => LoginPage());
-      final user = widget.api.getUser()!;
-      final localAuth = LocalAuth();
-      final result = await localAuth.authenticate();
-      if (!result) {
-        await Get.offAll(() => LoginPage(email: user.email));
-      } else {
-        Get.offAll(() => const DrawerPage());
-        Get.to(() => MapsPage());
-      }
+      // final user = widget.api.getUser()!;
+      // final localAuth = LocalAuth();
+      // final result = await localAuth.authenticate();
+      // if (!result) {
+      //   await Get.offAll(() => LoginPage(email: user.email));
+      // } else {
+      //   Get.offAll(() => const DrawerPage());
+      //   Get.to(() => MapsPage());
+      // }
     });
   }
 }

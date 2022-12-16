@@ -300,6 +300,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         return MyTextField(
           hintText: name,
           controller: controller,
+          validator: Validator.none,
           inputFormatters: [CapitalizeAllInputFormatter()],
         );
 

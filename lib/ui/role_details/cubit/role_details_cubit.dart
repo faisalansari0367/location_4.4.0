@@ -34,7 +34,12 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     MyConnectivity().connectionStream.listen((event) {
       apiService = event ? api : localApi;
     });
-    emit(state.copyWith(fields: fields));
+    emit(
+      state.copyWith(
+        fields: fields,
+        // userRoleDetails: api.getUserData()?.toJson(),
+      ),
+    );
     user = apiService.getUser()!.toJson();
     _init();
   }
@@ -467,6 +472,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         data.remove(licenseKey);
         data['driversLicense'] = ngrValue;
       }
+
+      if (data.containsKey('pic')) {}
 
       final result = await apiService.updateRole(role, data);
       result.when(

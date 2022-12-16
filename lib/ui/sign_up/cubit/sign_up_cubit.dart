@@ -17,8 +17,17 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(email: value));
   }
 
+  void onCountryChanged(String value) {
+    emit(state.copyWith(countryOfResidency: value));
+  }
+
   void onPhoneChanged(String value, String countryCode) {
-    emit(state.copyWith(phoneNumber: value, countryCode: countryCode));
+    emit(
+      state.copyWith(
+        phoneNumber: value,
+        countryCode: countryCode,
+      ),
+    );
   }
 
   void onFirstNameChanged(String value) {
@@ -50,6 +59,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       phoneNumber: int.parse(state.phoneNumber),
       password: state.password,
       countryCode: state.countryCode,
+      countryOfResidency: state.countryOfResidency
     );
     final result = await authRepo.signUp(data: model);
     result.when(

@@ -5,8 +5,10 @@ class VisitorCheckInState extends Equatable {
   final UserFormsData? formData;
   final String? qrCode;
   final bool isLoading;
+  final bool showQrCodeForAndroid;
 
   const VisitorCheckInState({
+    this.showQrCodeForAndroid = false,
     this.qrCode,
     this.formData,
     this.isLoading = false,
@@ -16,6 +18,7 @@ class VisitorCheckInState extends Equatable {
   List<Object> get props => [
         if (formData != null) formData!,
         isLoading,
+        showQrCodeForAndroid,
         if (qrCode != null) qrCode!,
       ];
 
@@ -23,11 +26,13 @@ class VisitorCheckInState extends Equatable {
     UserFormsData? formData,
     String? qrCode,
     bool? isLoading,
+    bool? showQrCodeForAndroid,
   }) {
     return VisitorCheckInState(
       formData: formData ?? this.formData,
       qrCode: qrCode ?? this.qrCode,
       isLoading: isLoading ?? this.isLoading,
+      showQrCodeForAndroid: showQrCodeForAndroid ?? this.showQrCodeForAndroid,
     );
   }
 }

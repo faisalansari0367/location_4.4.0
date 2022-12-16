@@ -61,6 +61,7 @@ class _SignUpViewState extends State<SignUpView> {
               gap,
               PhoneTextField(
                 onChanged: cubit.onPhoneChanged,
+                onCountryChanged: cubit.onCountryChanged,
               ),
               gap,
               EmailField(

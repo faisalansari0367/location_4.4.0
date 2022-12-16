@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -9,8 +12,19 @@ class VisitorCheckInCubit extends Cubit<VisitorCheckInState> {
   final Api api;
   VisitorCheckInCubit({required this.api}) : super(const VisitorCheckInState()) {
     getUserForms();
-    getQrCode();
+    emit(state.copyWith(showQrCodeForAndroid: Platform.isAndroid));
+    // getQrCode();
   }
+
+  void changePlatForm() {
+    emit(state.copyWith(showQrCodeForAndroid: !state.showQrCodeForAndroid));
+  }
+
+  // String get getQrData => state.showQrCodeForAndroid ? ApiConstants.playStoreid : ApiConstants.appStoreid;
+  String get getQrData =>
+      'Appstore link: ${ApiConstants.appStoreid}\n\nOr \n\nPlaystore link: ${ApiConstants.playStoreid}';
+  String get platform => state.showQrCodeForAndroid ? 'Android' : 'iPhone';
+  String get buttonText => state.showQrCodeForAndroid ? 'iPhone' : 'Android';
 
   Future<void> getUserForms() async {
     emit(state.copyWith(isLoading: true));
@@ -24,16 +38,16 @@ class VisitorCheckInCubit extends Cubit<VisitorCheckInState> {
     emit(state.copyWith(isLoading: false));
   }
 
-  Future<void> getQrCode() async {
-    final result = await api.getQrCode('App store link and playstore link is coming soon...');
-    result.when(
-      success: (data) {
-        final qrCode = (data['data'] as String).split(',').last;
-        emit(state.copyWith(qrCode: qrCode));
-      },
-      failure: (e) => DialogService.failure(error: e),
-    );
-  }
+  // Future<void> getQrCode() async {
+  //   final result = await api.getQrCode(ApiConstants.appLink);
+  //   result.when(
+  //     success: (data) {
+  //       final qrCode = (data['data'] as String).split(',').last;
+  //       emit(state.copyWith(qrCode: qrCode));
+  //     },
+  //     failure: (e) => DialogService.failure(error: e),
+  //   );
+  // }
 
   String getPhoneNumber() {
     final userData = api.getUserData();

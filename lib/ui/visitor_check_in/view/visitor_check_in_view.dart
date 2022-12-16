@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/intent_service.dart';
 import 'package:bioplus/ui/visitor_check_in/cubit/visitor_check_in_cubit.dart';
+import 'package:bioplus/ui/visitor_check_in/view/qr_code_widget.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class VisitorCheckInView extends StatelessWidget {
       ),
       body: BlocBuilder<VisitorCheckInCubit, VisitorCheckInState>(
         builder: (context, state) {
+          final cubit = context.read<VisitorCheckInCubit>();
           return SingleChildScrollView(
             padding: kPadding,
             child: Column(
@@ -30,36 +32,37 @@ class VisitorCheckInView extends StatelessWidget {
                 Container(
                   child: Column(
                     children: [
-                      Gap(20.h),
-                      Text(
-                        'Scan the Entry Gate QR',
-                        style: context.textTheme.headline6?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 25.w,
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                        ),
-                      ),
+                      // Gap(20.h),
+                      // Text(
+                      //   'Scan the Entry Gate QR',
+                      //   style: context.textTheme.headline6?.copyWith(
+                      //     fontWeight: FontWeight.w600,
+                      //     fontSize: 25.w,
+                      //     color: const Color.fromARGB(255, 0, 0, 0),
+                      //   ),
+                      // ),
                       Gap(10.h),
-                      SizedBox(
-                        width: 60.width,
-                        height: 60.width,
-                        child: Container(
-                          decoration: const BoxDecoration(),
-                          child: AnimatedSwitcher(
-                            duration: kDuration,
-                            child: _qrCode(state),
-                          ),
-                        ),
+                      // Text('Scan QR for ${cubit.platform}'),
+                      AnimatedSwitcher(
+                        duration: kDuration,
+                        child: QrCodeGenerator(qrData: cubit.getQrData),
                       ),
-                      Gap(10.h),
-                      Text(
-                        'Scan me',
-                        style: context.textTheme.headline6?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: const Color.fromARGB(255, 0, 0, 0),
-                          fontSize: 25.h,
-                        ),
-                      ),
+                      // Gap(10.h),
+                      // Text('Not ${cubit.platform}: Press below button for ${cubit.buttonText}'),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     // BottomSheetService.showSheet(child: QrCodeGenerator(qrData: ApiConstants.playStoreid));
+                      //     context.read<VisitorCheckInCubit>().changePlatForm();
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     shape: StadiumBorder(),
+                      //     padding: EdgeInsets.symmetric(
+                      //       horizontal: 20.w,
+                      //       vertical: 10.h,
+                      //     ),
+                      //   ),
+                      //   child: Text('${cubit.buttonText} QR Scan'),
+                      // ),
                       Gap(20.h),
                     ],
                   ),
@@ -78,7 +81,12 @@ class VisitorCheckInView extends StatelessWidget {
         child: CircularProgressIndicator(),
       );
     } else {
-      return Image.memory(base64Decode(state.qrCode!));
+      return Image.memory(
+        base64Decode(state.qrCode!),
+        fit: BoxFit.fitHeight,
+        width: 75.width,
+        height: 75.width,
+      );
     }
   }
 

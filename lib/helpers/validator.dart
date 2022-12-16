@@ -28,6 +28,7 @@ class Validator {
   }
 
   static String? pic(String? value) {
+    if (value == null || value.isEmpty) return null;
     final validate = ValidationBuilder().minLength(8).build();
     final result = validate(value);
     return result;

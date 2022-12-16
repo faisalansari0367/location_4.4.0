@@ -8,20 +8,22 @@ class SignUpState extends Equatable {
   final String phoneNumber;
   final String password;
   final String countryCode;
+  final String countryOfResidency;
   final bool termsAndConditions;
 
   const SignUpState({
-    this.countryCode = '', 
-    this.termsAndConditions = false, 
-    this.password = '',
     this.email = '',
     this.firstName = '',
     this.lastName = '',
     this.phoneNumber = '',
+    this.password = '',
+    this.countryCode = '',
+    this.countryOfResidency = '',
+    this.termsAndConditions = false,
   });
 
   @override
-  List<Object> get props => [email, firstName, lastName, phoneNumber, password, termsAndConditions, countryCode];
+  List<Object> get props => [email, firstName, lastName, phoneNumber, password, termsAndConditions, countryCode, countryOfResidency];
 
   SignUpState copyWith({
     String? email,
@@ -30,6 +32,7 @@ class SignUpState extends Equatable {
     String? phoneNumber,
     String? password,
     String? countryCode,
+    String? countryOfResidency,
     bool? termsAndConditions,
   }) {
     return SignUpState(
@@ -39,6 +42,7 @@ class SignUpState extends Equatable {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       password: password ?? this.password,
       countryCode: countryCode ?? this.countryCode,
+      countryOfResidency: countryOfResidency ?? this.countryOfResidency,
       termsAndConditions: termsAndConditions ?? this.termsAndConditions,
     );
   }

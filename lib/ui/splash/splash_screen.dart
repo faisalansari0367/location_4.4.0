@@ -31,8 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     final api = context.read<Api>();
     // final notificationService = context.read<PushNotificationService>();
-    final isLoggedIn = api.isLoggedIn;
     api.isLoggedInStream.listen((event) async {
+      if (!mounted) return;
       final isLoggedIn = event;
       log('isLoggedIn $isLoggedIn');
       if (!isLoggedIn) return Get.off(() => LoginPage());
@@ -50,6 +50,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final duration = (kSplashDuration.inMilliseconds - 1000).milliseconds;
     Future.delayed(duration, () async {
       // Get.offAll(() => NewSplashScreen());
+      if (!mounted) return;
+      final isLoggedIn = api.isLoggedIn;
+
       if (!isLoggedIn) return Get.off(() => LoginPage());
       final user = context.read<Api>().getUser()!;
       final localAuth = LocalAuth();

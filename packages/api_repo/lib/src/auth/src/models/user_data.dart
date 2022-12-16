@@ -68,6 +68,7 @@ class UserData {
   String? nlisUsername;
   String? msaNumber;
   String? nfasAccreditationNumber;
+  String? countryOfResidency;
 
   List<String> allowedRoles = const [];
 
@@ -82,6 +83,7 @@ class UserData {
     this.phoneNumber,
     this.countryCode,
     this.role,
+    this.countryOfResidency,
     this.pic,
     this.propertyName,
     this.state,
@@ -142,7 +144,7 @@ class UserData {
 
   UserData.fromJson(Map<String, dynamic> json) {
     allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
-
+    countryOfResidency = json['countryOfResidency'];
     status = getStatus(json['status']);
     ngr = json['ngr'];
 
@@ -205,6 +207,7 @@ class UserData {
     eventName = json['eventName'];
     contactEmail = json['contactEmail'];
     contactNumber = json['contactNumber'];
+
     startDate = json['startDate'] == null ? null : DateTime.tryParse(json['startDate'])?.toLocal();
     endDate = json['endDate'] == null ? null : DateTime.tryParse(json['endDate'])?.toLocal();
     edec = json['edec'];
@@ -232,6 +235,7 @@ class UserData {
         : status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
     data['firstName'] = firstName;
     data['lastName'] = lastName;
+    data['countryOfResidency'] = countryOfResidency;
     data['email'] = email;
     data['phoneNumber'] = phoneNumber;
     data['id'] = id;
