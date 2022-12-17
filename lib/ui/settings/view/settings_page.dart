@@ -99,7 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           if (ApiConstants.isDegugMode)
                             const Text(
-                              ' (Debug)',
+                              '(Debug)',
                               style: TextStyle(color: Colors.red),
                             ),
                           Gap(10.h),
