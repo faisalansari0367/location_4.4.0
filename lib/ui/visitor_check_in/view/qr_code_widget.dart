@@ -1,15 +1,14 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
 
-class QrCodeGenerator extends StatefulWidget {
-  final String qrData;
-  const QrCodeGenerator({super.key, required this.qrData});
+class QRCodeImage extends StatefulWidget {
+  const QRCodeImage({super.key});
 
   @override
-  State<QrCodeGenerator> createState() => _QrCodeGeneratorState();
+  State<QRCodeImage> createState() => _QRCodeImageState();
 }
 
-class _QrCodeGeneratorState extends State<QrCodeGenerator> {
+class _QRCodeImageState extends State<QRCodeImage> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(

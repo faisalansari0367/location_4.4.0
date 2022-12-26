@@ -21,10 +21,10 @@ class VisitorCheckInCubit extends Cubit<VisitorCheckInState> {
   }
 
   // String get getQrData => state.showQrCodeForAndroid ? ApiConstants.playStoreid : ApiConstants.appStoreid;
-  String get getQrData =>
-      'Appstore link: ${ApiConstants.appStoreid}\n\nOr \n\nPlaystore link: ${ApiConstants.playStoreid}';
-  String get platform => state.showQrCodeForAndroid ? 'Android' : 'iPhone';
-  String get buttonText => state.showQrCodeForAndroid ? 'iPhone' : 'Android';
+  // String get getQrData =>
+  //     'Appstore link: ${ApiConstants.appStoreid}\n\nOr \n\nPlaystore link: ${ApiConstants.playStoreid}';
+  // String get platform => state.showQrCodeForAndroid ? 'Android' : 'iPhone';
+  // String get buttonText => state.showQrCodeForAndroid ? 'iPhone' : 'Android';
 
   Future<void> getUserForms() async {
     emit(state.copyWith(isLoading: true));

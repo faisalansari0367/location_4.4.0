@@ -55,8 +55,9 @@ class _ExpandedTileState extends State<ExpandedTile> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 20.sp),
         child: AnimatedSize(
-          duration: 1000.milliseconds,
-          curve: Curves.elasticOut,
+          duration: 200.milliseconds,
+          curve: Curves.linearToEaseOut,
+          alignment: Alignment.topCenter,
           child: Column(
             crossAxisAlignment: widget.crossAxisAlignment,
             children: [

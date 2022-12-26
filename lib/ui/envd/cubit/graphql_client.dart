@@ -4,11 +4,15 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:bioplus/constants/api_constants.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_storage.dart';
-import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
+
+import '../../../widgets/dialogs/dialogs.dart';
+import '../../select_role/view/select_role_page.dart';
+import '../view/evnd_page.dart';
 
 class GraphQlClient {
   // static const _envdProdUrl = 'https://auth.integritysystems.com.au/connect/token';
@@ -94,6 +98,41 @@ class GraphQlClient {
       rethrow;
     }
     // return null;
+  }
+
+  Future<bool> validateCreds() async {
+    if (!hasCredentials()) {
+      final message = "Please provide valid LPA credentials in your role settings to use this feature.";
+      await Get.dialog(
+        StatusDialog(
+          lottieAsset: 'assets/animations/error.json',
+          message: message,
+          onContinue: () async {
+            Get.back();
+            Get.to(
+              () => const SelectRolePage(
+                showBackArrow: true,
+              ),
+            );
+          },
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> redirect() async {
+    final isInit = await init();
+    final isCredsValid = await validateCreds();
+    if (!isCredsValid) return;
+    if (isInit) {
+      Get.to(() => const EnvdPage());
+    } else {
+      DialogService.error(
+        "Unable to connect with the ISC server currently. Please try again later.",
+      );
+    }
   }
 
   // Map<String, dynamic> _itrackClientUAT() {

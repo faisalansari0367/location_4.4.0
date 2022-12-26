@@ -1,6 +1,7 @@
 import 'package:bioplus/view_sent_notification/provider/provider.dart';
 import 'package:bioplus/view_sent_notification/widgets/view_sent_notification_body.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// {@template view_sent_notification_page}
 /// A description for ViewSentNotificationPage

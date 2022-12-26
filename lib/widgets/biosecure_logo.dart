@@ -8,10 +8,9 @@ class BioSecureLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      // crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // Gap(20.h),
         Image.asset(
           'assets/icons/BIO_shield1 (1).png',
           height: 7.height,

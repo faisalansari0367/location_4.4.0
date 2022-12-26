@@ -1,9 +1,10 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/sync_service.dart';
-import 'package:bioplus/ui/dashboard/dashboard_card.dart';
+import 'package:bioplus/ui/dashboard/widgets/dashboard_card.dart';
 import 'package:bioplus/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:bioplus/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
+import 'package:bioplus/ui/forms/global_questionnaire_form/global_questionnaire_form.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/records/records_page.dart';
@@ -11,12 +12,12 @@ import 'package:bioplus/ui/select_role/view/select_role_page.dart';
 import 'package:bioplus/ui/sos_warning/view/sos_warning_page.dart';
 import 'package:bioplus/ui/visitors/visitors_page.dart';
 import 'package:bioplus/ui/work_safety/view/work_safety_page.dart';
+import 'package:bioplus/widgets/biosecure_logo.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/logo/app_name_widget.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -82,7 +83,7 @@ class _DashboardViewState extends State<DashboardView> {
               child: ScaleAnimation(
                 scale: 0.7,
                 curve: Curves.easeIn,
-                child: _logo(),
+                child: BioSecureLogo(),
               ),
             ),
           ),
@@ -98,8 +99,8 @@ class _DashboardViewState extends State<DashboardView> {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: kPadding.left.h,
-                  // mainAxisSpacing: 20,
                   crossAxisSpacing: kPadding.left.w,
+                  childAspectRatio: 1,
                 ),
                 children: [
                   DashboardCard(
@@ -146,7 +147,7 @@ class _DashboardViewState extends State<DashboardView> {
                     image: 'assets/icons/Links.png',
                     onTap: () => Get.to(() => const LinksPage()),
                   ),
-                  if (ApiConstants.baseUrl == ApiConstants.localUrl)
+                  if (ApiConstants.isDegugMode)
                     DashboardCard(
                       text: 'My Waybill',
                       image: 'assets/icons/eNVD.jpg',

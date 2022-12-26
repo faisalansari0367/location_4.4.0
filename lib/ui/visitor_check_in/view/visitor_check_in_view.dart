@@ -20,15 +20,11 @@ class VisitorCheckInView extends StatelessWidget {
       ),
       body: BlocBuilder<VisitorCheckInCubit, VisitorCheckInState>(
         builder: (context, state) {
-          final cubit = context.read<VisitorCheckInCubit>();
           return SingleChildScrollView(
             padding: kPadding,
             child: Column(
               children: [
-                AnimatedSwitcher(
-                  duration: kDuration,
-                  child: QrCodeGenerator(qrData: cubit.getQrData),
-                ),
+                QRCodeImage(),
                 Gap(20.h),
                 _infoCard(context),
               ],

@@ -111,8 +111,6 @@ class LogRecordsImpl implements LogRecordsRepo {
         }
       }
 
-
-
       if (offlineRecords.isEmpty) {
         log('no offline records to sync');
         _isSyncing = false;
