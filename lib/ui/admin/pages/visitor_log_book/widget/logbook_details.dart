@@ -24,7 +24,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
     return Scaffold(
       appBar: MyAppBar(
         elevation: 5,
-        title: Text(widget.item.form.isWarakirriFarm ? 'Warakirri Entry Form' : 'Declaration Form'),
+        title: Text((widget.item.form?.isWarakirriFarm ?? false) ? 'Warakirri Entry Form' : 'Declaration Form'),
         actions: [
           IconButton(
             onPressed: () {
@@ -46,26 +46,29 @@ class _LogbookDetailsState extends State<LogbookDetails> {
       ),
       body: ListView(
         padding: kPadding,
-        children: widget.item.form.isWarakirriFarm ? _buildWarakirriForm() : _buildChildrens(),
+        children: (widget.item.form?.isWarakirriFarm ?? false) ? _buildWarakirriForm() : _buildChildrens(),
       ),
     );
   }
 
+  WarakirriQuestionFormModel get warakirriKeys => widget.item.form!.warakirriKeys;
+  LogbookFormModel get form => widget.item.form!;
+
   List<Widget> _buildWarakirriForm() {
     return [
       _userInfo(context),
-      _card(widget.item.form.warakirriKeys.isPeopleTravelingWith, getNames()),
-      _card(widget.item.form.warakirriKeys.isFluSymptoms, getValue(widget.item.form.isFluSymptoms)),
-      _card(widget.item.form.warakirriKeys.isOverSeaVisit, getValue(widget.item.form.isOverSeaVisit)),
-      _card(widget.item.form.warakirriKeys.hasBeenInducted, getValue(widget.item.form.hasBeenInducted)),
-      _card(widget.item.form.warakirriKeys.isConfinedSpace, getValue(widget.item.form.isConfinedSpace)),
-      _card(widget.item.form.warakirriKeys.additionalInfo, widget.item.form.additionalInfo),
-      _card(widget.item.form.warakirriKeys.warakirriFarm, widget.item.form.warakirriFarm),
+      _card(warakirriKeys.isPeopleTravelingWith, getNames()),
+      _card(warakirriKeys.isFluSymptoms, getValue(form.isFluSymptoms)),
+      _card(warakirriKeys.isOverSeaVisit, getValue(form.isOverSeaVisit)),
+      _card(warakirriKeys.hasBeenInducted, getValue(form.hasBeenInducted)),
+      _card(warakirriKeys.isConfinedSpace, getValue(form.isConfinedSpace)),
+      _card(warakirriKeys.additionalInfo, form.additionalInfo),
+      _card(warakirriKeys.warakirriFarm, form.warakirriFarm),
     ];
   }
 
   _buildChildrens() {
-    final form = widget.item.form;
+    final form = widget.item.form!;
     return [
       _userInfo(context),
       _card(form.keys.isPeopleTravelingWith, form.getVisitorsNames()),
@@ -100,7 +103,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.item.form.question(key),
+            widget.item.form!.question(key),
             style: TextStyle(
               color: Colors.grey.shade800,
               fontWeight: FontWeight.w600,
@@ -134,7 +137,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
             'Phone Number',
             (widget.item.user?.countryCode ?? '') + ' ' + (widget.item.user?.phoneNumber ?? ''),
             'Expected Departure Time',
-            getDateTime(widget.item.form.expectedDepartureDate),
+            getDateTime(widget.item.form?.expectedDepartureDate),
           )
         ],
       ),
@@ -194,8 +197,8 @@ class _LogbookDetailsState extends State<LogbookDetails> {
   }
 
   String getNames() {
-    return (widget.item.form.usersTravellingAlong?.isEmpty ?? true)
+    return (widget.item.form?.usersTravellingAlong?.isEmpty ?? true)
         ? 'No'
-        : widget.item.form.usersTravellingAlong!.join(', ');
+        : widget.item.form!.usersTravellingAlong!.join(', ');
   }
 }

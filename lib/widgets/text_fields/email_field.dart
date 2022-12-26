@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bioplus/helpers/validator.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 import 'my_text_field.dart';
 import 'text_formatters/input_formatters.dart';
@@ -7,17 +9,20 @@ import 'text_formatters/input_formatters.dart';
 class EmailField extends StatelessWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
+
   final String? label;
   final void Function(String)? onChanged, onSubmitted;
   final InputDecoration? inputDecoration;
+  final bool readOnly;
   const EmailField({
     Key? key,
-    this.onChanged,
-    this.onSubmitted,
     this.controller,
+    this.onChanged,
     this.focusNode,
-    this.inputDecoration,
     this.label,
+    this.onSubmitted,
+    this.inputDecoration,
+    this.readOnly = false,
   }) : super(key: key);
 
   @override
@@ -29,6 +34,7 @@ class EmailField extends StatelessWidget {
       focusNode: focusNode,
       controller: controller,
       hintText: label ?? 'Email ID',
+      readOnly: readOnly,
       decoration: inputDecoration,
       onChanged: onChanged,
       validator: Validator.email,

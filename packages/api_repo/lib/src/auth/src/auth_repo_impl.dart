@@ -53,17 +53,34 @@ class AuthRepoImpl implements AuthRepo {
       if (oldUser?.id != model.data!.user!.id) {
         storage.box.deleteAll(storage.box.keys);
       }
+
       client.token = model.token!;
+
+      // open the user's hive box
+      final storageBox = StorageService(box: await Hive.openBox('storage'));
+      final userStorage = StorageService(box: await Hive.openBox(model.data!.user!.email!));
 
       await Future.wait(
         [
-          storage.setUserData(userData),
-          storage.setToken(model.token!),
-          storage.setUser(model.data!.user!.toJson()),
-          storage.setIsLoggedIn(true),
-          storage.setSignInData(data.toMap()),
+          storageBox.setUserData(userData),
+          storageBox.setToken(model.token!),
+          storageBox.setUser(model.data!.user!.toJson()),
+          storageBox.setIsLoggedIn(true),
+          storageBox.setSignInData(data.toMap()),
         ],
       );
+
+      await Future.wait(
+        [
+          userStorage.setUserData(userData),
+          userStorage.setToken(model.token!),
+          userStorage.setUser(model.data!.user!.toJson()),
+          userStorage.setIsLoggedIn(true),
+          userStorage.setSignInData(data.toMap()),
+        ],
+      );
+
+      // onUserChange(model.data!.user!.email!);
 
       return ApiResult.success(data: model.data!.user!);
     } catch (e) {

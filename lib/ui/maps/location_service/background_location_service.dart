@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/maps/cubit/track_polygons.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../main.dart';
 import 'geolocator_service.dart';
 import 'map_toolkit_utils.dart';
 
@@ -18,20 +16,22 @@ class GeofenceService {
   late TrackPolygons trackPolygons;
   Set<PolygonModel> polygons = {};
   ValueChanged<Position>? onLocationChanged;
+  // late Api api;
+  // late MapsRepo mapsRepo;
 
-  GeofenceService({
-    required MapsRepo mapsRepo,
-    required Api api,
-  }) {
-    mapsRepo.polygonStream.listen(
-      (event) => polygons = event.toSet(),
-    );
+  static bool _init = false;
+
+  GeofenceService();
+
+  Future<void> init(MapsRepo mapsRepo, Api api) async {
+    // if (_init) return;
     trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
+    mapsRepo.polygonStream.listen((event) => polygons = event.toSet());
+
+    _init = true;
   }
 
   Future<void> getLocationUpdates(ValueChanged<Position>? onLocationChanged) async {
-    // BackgroundPlugin().init();
-    log('Polygons: ${polygons.length}');
     await _positionSubscription?.cancel();
     final locationupdates = await GeolocatorService.getLocationUpdates();
     _positionSubscription = locationupdates.listen((event) {
@@ -43,6 +43,7 @@ class GeofenceService {
         polygons: polygons,
         accuracy: event.accuracy,
       );
+
       // if (polygonsInCoverage.isNotEmpty) {
       trackPolygons.update(polygonsInCoverage, position);
       // }

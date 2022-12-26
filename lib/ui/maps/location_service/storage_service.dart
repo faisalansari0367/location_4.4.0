@@ -113,7 +113,11 @@ class MapsStorageService implements MapsRepo {
     //   entry.form = jsonDecode(form).map((field) => LogbookFormField.fromJson(field)).toList();
     //   return _box.put(geofenceId, entry.toJson()).then((value) => ApiResult.success(data: entry));
     // } else {
-    return ApiResult.failure(error: NetworkExceptions.defaultError('Entry not found'));
+    return ApiResult.failure(
+      error: NetworkExceptions.defaultError(
+        'Entry not found',
+      ),
+    );
     // }
   }
 

@@ -8,6 +8,7 @@ import 'package:bioplus/ui/maps/location_service/background_location_service.dar
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
+import 'package:bioplus/work_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -36,6 +37,7 @@ Future<void> bgHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _setOrientation();
+  initWorkManager();
   await runZonedGuarded(() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -43,10 +45,10 @@ Future<void> main() async {
     await Hive.initFlutter();
     final _box = await Hive.openBox('storage');
     // final notifications = AwesomeNotifications();
-    final repo = ApiRepo();
     final localApi = LocalApi();
+    final repo = ApiRepo(localApiinit: localApi.init);
     await repo.init(baseUrl: ApiConstants.baseUrl, box: _box);
-    await localApi.init(baseUrl: ApiConstants.baseUrl, box: _box);
+    // await localApi.init(baseUrl: ApiConstants.baseUrl, box: _box);
     final mapsRepo = MapsApi(client: repo.client);
     await mapsRepo.init();
     final pushNotification = PushNotificationService();
@@ -132,11 +134,13 @@ class _MyAppState extends State<MyApp> {
             fillColor: MaterialStateProperty.all(kPrimaryColor),
           ),
         ),
-        home: ScreenUtilInit(
-          designSize: Get.size,
-          // designSize: Size(1179, 2556),
-          builder: (context, child) => const SplashScreen(),
-          child: const SplashScreen(),
+        home: LayoutBuilder(
+          builder: (context, constraints) => ScreenUtilInit(
+            designSize: Size(constraints.maxWidth, constraints.maxHeight),
+            // designSize: Size(1179, 2556),
+            builder: (context, child) => const SplashScreen(),
+            child: const SplashScreen(),
+          ),
         ),
       ),
     );
@@ -152,7 +156,7 @@ class _MyAppState extends State<MyApp> {
       RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
       RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
       RepositoryProvider<GeofenceService>(
-        create: (context) => GeofenceService(api: widget.api, mapsRepo: widget.mapsRepo),
+        create: (context) => GeofenceService(),
       ),
     ];
   }

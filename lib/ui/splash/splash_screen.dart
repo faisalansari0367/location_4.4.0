@@ -7,6 +7,7 @@ import 'package:bioplus/ui/login/view/login_page.dart';
 import 'package:bioplus/ui/sign_up/view/sign_up_page.dart';
 import 'package:bioplus/widgets/logo/app_name_widget.dart';
 import 'package:bioplus/widgets/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -55,6 +56,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (!isLoggedIn) return Get.off(() => LoginPage());
       final user = context.read<Api>().getUser()!;
+      if (kDebugMode) {
+        Get.offAll(() => const DrawerPage());
+        Get.to(() => MapsPage());
+        return;
+      }
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
       if (!result) {

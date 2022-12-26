@@ -98,7 +98,8 @@ class LogbookEntry {
   DateTime? createdAt;
   DateTime? updatedAt;
   Geofence? geofence;
-  late LogbookFormModel form;
+  LogbookFormModel? form;
+  bool isOffline = false;
 
   UserData? user;
 
@@ -108,6 +109,8 @@ class LogbookEntry {
     this.exitDate,
     required this.form,
     this.createdAt,
+    this.user,
+    this.isOffline = false,
     this.updatedAt,
     this.geofence,
   });
@@ -115,6 +118,7 @@ class LogbookEntry {
   LogbookEntry.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     enterDate = _getDateTime(json['enterDate']);
+    isOffline = json['isOffline'] ?? false;
     exitDate = _getDateTime(json['exitDate']);
 
     form = LogbookFormModel.fromJson(json);
@@ -130,7 +134,13 @@ class LogbookEntry {
   //   id = json['id'];
   // }
 
-  DateTime? _getDateTime(String? date) => date != null ? DateTime.tryParse(date)?.toLocal() : null;
+  DateTime? _getDateTime(String? date) {
+    if (date == null) return null;
+    final dateTime = DateTime.tryParse(date);
+    return dateTime?.toLocal();
+  }
+
+  String? _toDateTime(DateTime? date) => date?.toUtc().toIso8601String();
 
   Map<String, dynamic> saveId() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -140,12 +150,15 @@ class LogbookEntry {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['isOffline'] = isOffline;
     data['id'] = id;
-    data['enterDate'] = enterDate?.toIso8601String();
-    data['exitDate'] = exitDate?.toIso8601String();
-    data['createdAt'] = createdAt?.toIso8601String();
-    data['updatedAt'] = updatedAt?.toIso8601String();
-    data.addAll(form.toJson());
+    data['enterDate'] = _toDateTime(enterDate);
+    data['exitDate'] = _toDateTime(exitDate);
+    data['createdAt'] = _toDateTime(createdAt);
+    data['updatedAt'] = _toDateTime(updatedAt);
+    if (form != null) {
+      data.addAll(form!.toJson());
+    }
     if (user != null) {
       data['user'] = user!.toJson();
     }
@@ -365,7 +378,7 @@ class Points {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
     if (coordinates != null) {
-      // data['coordinates'] = coordinates!.map((v) => v.toJson()).toList();
+      data['coordinates'] = coordinates;
     }
     return data;
   }

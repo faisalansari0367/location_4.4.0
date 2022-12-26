@@ -1,78 +1,38 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/log/models/logbook_entry_model.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rxdart/subjects.dart';
 
+import 'log_records_offline.dart';
+
 abstract class _Keys {
   static const logRecords = 'logRecords';
 }
 
 class LogRecordsLocalService {
-  final Box box;
   LogRecordsLocalService({required this.box}) {
-    _init();
+    offlineLogRecords = OfflineLogRecordsImpl(box: box);
+    getLogbookRecords();
+    box.watch(key: _Keys.logRecords).listen((event) {
+      if (event.value == null) return;
+      // log(jsonEncode(event.value));
+      final responseModel = LogbookResponseModel.fromJson(_parseData(event.value)!);
+      _controller.add(responseModel.data!);
+    });
   }
 
-  void _init() async {
-    getLogbookRecords();
-    // _controller.listen((value) {
-    //   log('we have ${value.length} log records');
-    // });
-    // data.when(
-    //   success: (s) => _controller.add(s.data ?? []),
-    //   failure: (f) {},
-    // );
-    // box.watch(key: _Keys.logRecords).listen((event) {
-    //   if (event.value == null) {
-    //     return;
-    //   }
-    //   final data = LogbookResponseModel.fromJson(_parseData(event.value)!).data;
-    //   _controller.add(data!);
-    // });
-  }
+  final Box box;
+  late OfflineLogRecordsImpl offlineLogRecords;
 
   final _controller = BehaviorSubject<List<LogbookEntry>>.seeded([]);
 
-  Future<ApiResult<LogbookEntry>> saveLogRecord(String geofenceId, LogbookEntry logbookEntry) async {
-    try {
-      await box.put(geofenceId, logbookEntry.toJson());
-      return ApiResult.success(data: logbookEntry);
-    } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.defaultError(e.toString()));
-    }
-  }
-
-  LogbookEntry? getLogRecord(String geofenceId) {
-    try {
-      final data = _parseData(box.get(geofenceId));
-      if (data == null) return null;
-      return LogbookEntry.fromJson(data);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> setLogRecord(String geofenceId, LogbookEntry logbookEntry) async {
-    try {
-      await (box.put(geofenceId, logbookEntry.toJson()));
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> removeLogRecord(String geofenceId) async {
-    try {
-      await box.delete(geofenceId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
-    final data = (box.get(_Keys.logRecords));
+    final data = box.get(_Keys.logRecords);
     if (data == null) return ApiResult.success(data: LogbookResponseModel(data: []));
-    final responseModel = LogbookResponseModel.fromJson(_parseData((data))!);
+    final responseModel = LogbookResponseModel.fromJson(_parseData(data)!);
     _controller.add(responseModel.data!);
     return ApiResult.success(data: responseModel);
   }
@@ -80,8 +40,7 @@ class LogRecordsLocalService {
   Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(LogbookResponseModel logbookResponseModel) async {
     try {
       final json = logbookResponseModel.toJson();
-      await box.put(_Keys.logRecords, (json));
-      _controller.add(logbookResponseModel.data!);
+      await box.put(_Keys.logRecords, json);
       return ApiResult.success(data: logbookResponseModel);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.defaultError(e.toString()));
@@ -91,15 +50,6 @@ class LogRecordsLocalService {
   Map<String, dynamic>? _parseData(data) {
     if (data == null) return null;
     return Map<String, dynamic>.from(data);
-  }
-
-  Future<ApiResult<LogbookEntry>> updateLogRecord(String geofenceId, LogbookEntry logbookEntry) async {
-    try {
-      await box.put(geofenceId, logbookEntry.toJson());
-      return ApiResult.success(data: logbookEntry);
-    } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.defaultError(e.toString()));
-    }
   }
 
   List<LogbookEntry> get logRecords => _controller.value;

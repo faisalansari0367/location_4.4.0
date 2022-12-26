@@ -63,6 +63,11 @@ abstract class BaseModel extends ChangeNotifier {
   }
 
   @override
+  void notifyListeners() {
+    if (mounted) super.notifyListeners();
+  }
+
+  @override
   void dispose() {
     mounted = false;
     super.dispose();

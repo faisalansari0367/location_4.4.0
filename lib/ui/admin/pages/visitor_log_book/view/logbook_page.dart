@@ -1,7 +1,6 @@
-import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/view/logbook_view.dart';
+import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/logbook_cubit.dart';
 
@@ -10,8 +9,8 @@ class LogbookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LogBookCubit(api: context.read<Api>()),
+    return ChangeNotifierProvider(
+      create: (context) => LogBookCubit(context),
       child: const LogbookView(),
     );
   }

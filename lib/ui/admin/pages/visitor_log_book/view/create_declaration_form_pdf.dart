@@ -114,9 +114,9 @@ class DeclarationFormPrinter {
     OpenFile.open(file.path);
   }
 
-  LogbookFormModel get form => entry.form;
+  LogbookFormModel get form => entry.form!;
 
-  WarakirriQuestionFormModel get _warakirriKeys => entry.form.warakirriKeys;
+  WarakirriQuestionFormModel get _warakirriKeys => entry.form!.warakirriKeys;
 
   pw.Container _card(String key, String? value2) {
     if (value2 == null) return pw.Container();
@@ -127,7 +127,7 @@ class DeclarationFormPrinter {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            entry.form.question(key),
+            entry.form!.question(key),
             style: pw.TextStyle(
               color: PdfColors.black,
               fontWeight: pw.FontWeight.bold,

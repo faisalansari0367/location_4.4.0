@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/sync_service.dart';
 import 'package:bioplus/ui/dashboard/dashboard_card.dart';
 import 'package:bioplus/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:bioplus/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
@@ -48,10 +49,12 @@ class _DashboardViewState extends State<DashboardView> {
 
   void _init() async {
     final api = context.read<Api>();
+    final localApi = context.read<LocalApi>();
     if (api.isInit) {
       return;
     }
     api.setIsInit(true);
+    SyncService().init(localApi, api);
 
     final mapsApi = context.read<MapsRepo>();
     final notificationService = context.read<PushNotificationService>();

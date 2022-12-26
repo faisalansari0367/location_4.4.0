@@ -3,6 +3,7 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/forms/widget/form_card.dart';
 import 'package:bioplus/ui/role_details/cubit/role_details_cubit.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/my_cross_fade.dart';
 import 'package:bioplus/widgets/state_dropdown_field.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,11 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                     MyElevatedButton(
                       isLoading: state.isLoading,
                       onPressed: () async {
-                        await cubit.submitFormData(map);
+                        try {
+                          await cubit.submitFormData(map);
+                        } catch (e) {
+                          DialogService.error('Something went wrong');
+                        }
                       },
                       text: 'Submit',
                     ),
@@ -168,6 +173,11 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           controller: controller,
         );
       case 'email':
+        return EmailField(
+          readOnly: true,
+          label: name,
+          controller: controller,
+        );
       case 'contactEmail':
       case 'emergencyEmailContact':
         return EmailField(

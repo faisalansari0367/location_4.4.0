@@ -257,7 +257,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
               message: 'No signature found',
               subtitle: 'Please add signature and try again',
               buttonText: 'Ok',
-              onCancel: Get.back,
+              onTap: Get.back,
             ),
           );
           return;
@@ -353,7 +353,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
               message: 'No signature found',
               subtitle: 'Please add signature and try again',
               buttonText: 'Ok',
-              onCancel: Get.back,
+              onTap: Get.back,
             ),
           );
           return;
@@ -473,7 +473,20 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         data['driversLicense'] = ngrValue;
       }
 
-      if (data.containsKey('pic')) {}
+      if (data.containsKey('email')) {
+        data.remove('email');
+      }
+
+      // if (data.containsKey('pic')) {}
+      final keys = [];
+      data.forEach((key, value) {
+        if (value == null || value == '') {
+          keys.add(key);
+        }
+      });
+      keys.forEach((element) {
+        data.remove(element);
+      });
 
       final result = await apiService.updateRole(role, data);
       result.when(

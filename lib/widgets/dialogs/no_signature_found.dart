@@ -9,13 +9,13 @@ class NoSignatureFound extends StatelessWidget {
   final String? subtitle;
   final String buttonText;
   // final VoidCallback onRetry;
-  final VoidCallback? onCancel;
+  final VoidCallback? onTap;
   const NoSignatureFound({
     Key? key,
     required this.message,
     this.subtitle,
     required this.buttonText,
-    this.onCancel,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -61,7 +61,7 @@ class NoSignatureFound extends StatelessWidget {
               width: 35.width,
               color: Colors.red,
               onPressed: () async {
-                if (onCancel != null) onCancel!();
+                if (onTap != null) onTap!();
                 // if (onCancel == null) {
                 //   // Get.to(() => CreateSignature(onDone: (s) {
 

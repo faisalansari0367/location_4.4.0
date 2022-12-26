@@ -3,6 +3,7 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/intent_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/admin/pages/users_list/view/roles_sheet.dart';
+import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/expanded_tile.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -208,6 +209,25 @@ class UsersView extends StatelessWidget {
             ],
           ),
           const Divider(),
+          Row(
+            children: [
+              Text('Delete User'),
+              const Spacer(),
+              IconButton(
+                onPressed: () {
+                  DialogService.showDialog(
+                    child: DeleteDialog(
+                      msg: 'Are you sure you want to delete this user?',
+                      onConfirm: () => context.read<UsersCubit>().deleteUser(user.id!),
+                      onCancel: Get.back,
+                    ),
+                  );
+                },
+                icon: Icon(Icons.delete_forever),
+                color: Colors.red,
+              ),
+            ],
+          ),
 
           // Text
           Row(
@@ -251,17 +271,20 @@ class __StatusWidgetState extends State<_StatusWidget> {
       options: UserStatus.values,
       onSelected: (s) async {
         final api = context.read<Api>();
-        final userData = api.getUserData();
-        userData?.status = s;
+        // final userData = api.getUserData();
+        widget.user.status = s;
 
-        final result = await api.updateUser(userData: userData!);
-        result.when(success: (data) {
-          final cubit = context.read<UsersCubit>();
-          cubit.fetchUsers();
-          setState(() => selected = s);
-        }, failure: (error) {
-          DialogService.failure(error: error);
-        },);
+        final result = await api.updateStatus(userData: widget.user);
+        result.when(
+          success: (data) {
+            final cubit = context.read<UsersCubit>();
+            cubit.fetchUsers();
+            setState(() => selected = s);
+          },
+          failure: (error) {
+            DialogService.failure(error: error);
+          },
+        );
         // api.updateMe(user: api.user);
       },
       child: Container(

@@ -18,6 +18,7 @@ class MyConnectivity {
   Stream<bool> get connectionStream => _controller.stream;
 
   MyConnectivity() {
+    _checkConnectivity();
     if (_isInited) return;
     initConnectivity();
   }

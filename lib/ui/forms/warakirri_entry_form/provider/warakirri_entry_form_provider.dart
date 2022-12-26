@@ -110,7 +110,7 @@ class WarakirriEntryFormNotifier extends BaseModel {
           return;
         }
       }
-      final result = await api.udpateForm(zoneId, logId: logrecordId, data);
+      final result = await localApi.udpateForm(zoneId, logId: logrecordId, data);
       result.when(
         success: success,
         failure: failure,

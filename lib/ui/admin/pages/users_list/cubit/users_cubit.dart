@@ -75,6 +75,17 @@ class UsersCubit extends Cubit<UsersState> {
     return result;
   }
 
+  Future<void> deleteUser(int userId) async {
+    final result = await api.deleteUserById(userId: userId);
+    result.when(
+      success: (data) {
+        DialogService.success('User deleted successfully', onCancel: Get.back);
+        fetchUsers();
+      },
+      failure: (e) => DialogService.failure(error: e),
+    );
+  }
+
   // String _upperCaseFirstLetter(String word) {
   //   return '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
   // }

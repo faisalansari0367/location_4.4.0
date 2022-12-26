@@ -1,34 +1,52 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'dart:io';
 
-import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/cubit/logbook_state.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/view/create_pdf.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../../constants/index.dart';
 
-class LogBookCubit extends Cubit<LogBookState> {
-  final Api api;
+class LogBookCubit extends BaseModel {
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  bool isGetting = false;
 
-  LogBookCubit({required this.api}) : super(const LogBookState()) {
-    api.logbookRecordsStream.listen((event) {
+  LogBookCubit(BuildContext context) : super(context) {
+    // apiService.getLogbookRecords();
+    // if (baseState.isConnected) {
+    //   sync();
+    // }
+    apiService.logbookRecordsStream.listen((event) {
       emit(state.copyWith(entries: event));
     });
+    // MyConnectivity().connectionStream.listen((isConnected) {
+
+    // });
   }
 
-  @override
+  // Future<void> sync() async {
+  //   if (completer.isCompleted) return;
+  //   if (isSynched) return;
+  //   final result = await apiService.synchronizeLogRecords();
+  //   isSynched = result;
+  //   if (completer.isCompleted) return;
+  //   completer.complete(result);
+  // }
+
+  LogBookState state = const LogBookState();
+
   void emit(LogBookState state) {
-    if (isClosed) return;
-    super.emit(state);
+    this.state = state;
+    if (!mounted) return;
+    notifyListeners();
   }
 
   final list = [
@@ -60,7 +78,7 @@ class LogBookCubit extends Cubit<LogBookState> {
             (item.geofence?.name ?? ''),
             item.geofence?.pic ?? item.user?.ngr ?? '',
             (item.user?.postcode == null) ? '' : (item.user?.postcode).toString(),
-            item.form.isNotEmpty ? 'Registered'.toUpperCase() : 'Unregistered'.toUpperCase()
+            (item.form?.isNotEmpty ?? false) ? 'Registered'.toUpperCase() : 'Unregistered'.toUpperCase()
           ],
         )
         .toList();
@@ -77,7 +95,11 @@ class LogBookCubit extends Cubit<LogBookState> {
   }
 
   Future<void> getRecords() async {
-    final result = await api.getLogbookRecords(page: state.page, limit: state.limit);
+    // await completer.future;
+    if (isGetting) return;
+    isGetting = true;
+
+    final result = await apiService.getLogbookRecords(page: state.page, limit: state.limit);
     result.when(
       success: (s) async {
         emit(
@@ -89,6 +111,7 @@ class LogBookCubit extends Cubit<LogBookState> {
       },
       failure: (failure) => DialogService.failure(error: failure),
     );
+    isGetting = false;
   }
 
   Future<void> generateCsv() async {
@@ -98,7 +121,6 @@ class LogBookCubit extends Cubit<LogBookState> {
     final data = await ListToCsvConverter().convert(rows);
     final String directory = (await getApplicationSupportDirectory()).path;
     final path = "$directory/csv-${DateTime.now()}.csv";
-    print(path);
     final File file = File(path);
     await file.writeAsString(data);
 
@@ -106,50 +128,3 @@ class LogBookCubit extends Cubit<LogBookState> {
     // exportCSV.myCSV(newHeaders, rows);
   }
 }
-
-// @override
-// void emit(LogBookState state) {
-
-//   // super.emit(state);
-
-// }
-
-// class TableDataModel {
-//   final List<String> headers;
-//   TableDataModel({
-//     this.headers = const [
-//       if (kDebugMode) 'id',
-//       'Full Name',
-//       'entry date',
-//       'exit date',
-//       'Zone',
-//       'PIC/NGR',
-//       'Post Code',
-//       'Declaration'
-//     ],
-//   });
-// }
-
-// class TableRowData {
-//   final int id;
-//   final String fullName;
-//   final String entryDate;
-//   final String exitDate;
-//   final String zone;
-//   final String pic;
-//   final String ngr;
-//   final String postCode;
-//   final String declaration;
-
-//   TableRowData({
-//     required this.id,
-//     required this.fullName,
-//     required this.entryDate,
-//     required this.exitDate,
-//     required this.zone,
-//     required this.pic,
-//     required this.ngr,
-//     required this.postCode,
-//     required this.declaration,
-//   });
-// }

@@ -73,11 +73,11 @@ class TrackPolygons {
   /// this will be called when the user is inside a polygon
   void update(Set<PolygonModel> polygonsInCoverage, LatLng currentPosition) {
     // log('message from track polygons ${polygonsInCoverage.length}}');
-    if (isFormsPage || isSignaturePage) return;
+    // log('current polygon is ${currentPolygon?.id}');
+    // if (isFormsPage || isSignaturePage) return;
+    // log('Polygons in coverage ${polygonsInCoverage.length}');
     _userIsInside(polygonsInCoverage, currentPosition);
-    if (isFormsPage || isDialogOpen) {
-      return;
-    }
+    if (isFormsPage || isDialogOpen || isSignaturePage) return;
 
     // this.polygonsInCoverage.add(polygonsInCoverage);
 
@@ -93,11 +93,11 @@ class TrackPolygons {
         if (currentPolygon?.id != null) {
           final entry = await api.getLogRecord(currentPolygon!.id!);
           log('logRecord id is : ${entry?.id}');
-          log('form is empty : ${entry?.form.isEmpty}');
-          log('should show pop up : ${entry?.form.isEmpty}');
+          log('form is empty : ${entry?.form?.isEmpty}');
+          log('should show pop up : ${entry?.form?.isEmpty}');
           if (entry != null) {
             // final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
-            if (entry.form.isNotEmpty) {
+            if (entry.form?.isNotEmpty ?? false) {
               return;
             }
           }
@@ -111,16 +111,14 @@ class TrackPolygons {
     // notifyManager.updateData(currentPosition, currentPolygon);
   }
 
-  int getDifference(DateTime? date) {
-    if (date == null) return 0;
-    final difference = DateTime.now().difference(date);
-    return difference.inMinutes;
-  }
+  // int getDifference(DateTime? date) {
+  //   if (date == null) return 0;
+  //   final difference = DateTime.now().difference(date);
+  //   return difference.inMinutes;
+  // }
 
   void showPopup(LatLng position) async {
-    if (currentPolygon == null) {
-      return;
-    }
+    if (currentPolygon == null) return;
     if (attemptOfShowingPopUp >= 3) return;
     if (attemptOfShowingPopUp == 2) {
       notifyManager.updateData(position, currentPolygon);

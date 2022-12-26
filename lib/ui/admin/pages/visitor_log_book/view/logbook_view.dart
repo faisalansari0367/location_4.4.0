@@ -1,16 +1,17 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
+import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
 import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/empty_screen.dart';
 import 'package:bioplus/widgets/listview/infinite_table.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../cubit/logbook_cubit.dart';
@@ -40,7 +41,6 @@ class _LogbookViewState extends State<LogbookView> {
 
     final cubit = context.read<LogBookCubit>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // cubit.getLogbookRecords();
       cubit.refreshIndicatorKey.currentState?.show();
     });
   }
@@ -59,8 +59,10 @@ class _LogbookViewState extends State<LogbookView> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LogBookCubit>();
-    return BlocBuilder<LogBookCubit, LogBookState>(
-      builder: (context, state) {
+    return Consumer<LogBookCubit>(
+      builder: (context, provider, child) {
+        final state = provider.state;
+
         return Scaffold(
           appBar: MyAppBar(
             elevation: 5,
@@ -91,6 +93,7 @@ class _LogbookViewState extends State<LogbookView> {
             child: InfiniteTable(
               hasReachedMax: state.hasReachedMax,
               onRefresh: cubit.onRefresh,
+
               // table: DataTable(
               //   dataRowHeight: 60,
               //   columns: cubit.list.map((e) => _dataColumn(e.toUpperCase())).toList(),
@@ -98,16 +101,27 @@ class _LogbookViewState extends State<LogbookView> {
               //   columnSpacing: 31,
               // ),
               table: StreamBuilder<List<LogbookEntry>>(
-                stream: cubit.api.logbookRecordsStream,
+                stream: cubit.localApi.logbookRecordsStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+
+                  if (snapshot.hasData && snapshot.data!.isEmpty) {
+                    return Center(
+                      heightFactor: 2,
+                      widthFactor: 1.1,
+                      child: const EmptyScreen(
+                        message: 'No Log Records Found',
+                      ),
+                    );
+                  }
+
                   return DataTable(
                     dataRowHeight: 60,
                     columns: cubit.list.map((e) => _dataColumn(e.toUpperCase())).toList(),
                     rows: _buildRows(snapshot.data ?? [], state),
-                    columnSpacing: 31,
+                    columnSpacing: 30,
                   );
                 },
               ),
@@ -134,7 +148,7 @@ class _LogbookViewState extends State<LogbookView> {
       ),
       cells: [
         if (kDebugMode) _dataCell(item.id.toString()),
-        _dataCell('${item.user?.firstName} ${item.user?.lastName}'),
+        _dataCell('${item.user?.firstName} ${item.user?.lastName}', isOffline: item.isOffline),
         _dataCell('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
         _dataCell('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
         _dataCell(item.geofence?.name ?? ''),
@@ -149,7 +163,7 @@ class _LogbookViewState extends State<LogbookView> {
 
   DataCell _buildFormButton(LogbookEntry item) {
     return DataCell(
-      (item.form.isNotEmpty)
+      (item.form?.isNotEmpty ?? false)
           ? TextButton(
               onPressed: () => Get.to(() => LogbookDetails(item: item)),
               style: TextButton.styleFrom(
@@ -259,29 +273,57 @@ class _LogbookViewState extends State<LogbookView> {
   bool isCurrentUser(context, int? id) => id == context.read<LogBookCubit>().state.user.id;
 
   // _datacell
-  DataCell _dataCell(String data, {Color? color = Colors.black, bool isPic = false}) {
+  DataCell _dataCell(String data, {Color? color = Colors.black, bool isPic = false, bool isOffline = false}) {
     return DataCell(
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: isPic ? 10.w : 0.w, vertical: 5.h),
-        decoration: isPic
-            ? BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(5),
-              )
-            : null,
-        child: Text(
-          data,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 14,
-            color: !isPic
-                ? null
-                : (color ?? Colors.transparent).computeLuminance() <= 0.5
-                    ? Colors.white
-                    : Colors.black,
-            fontWeight: FontWeight.w600,
+      Stack(
+        children: [
+          // offline tag
+
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: isPic ? 10.w : 0.w, vertical: 5.h),
+            decoration: isPic
+                ? BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(5),
+                  )
+                : null,
+            child: Row(
+              children: [
+                if (isOffline)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+                    margin: EdgeInsets.only(right: 5.w),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      // borderRadius: BorderRadius.circular(50),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                Text(
+                  data,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: !isPic
+                        ? null
+                        : (color ?? Colors.transparent).computeLuminance() <= 0.5
+                            ? Colors.white
+                            : Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          // if (isOffline)
+          //   Container(
+          //     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+          //     decoration: BoxDecoration(
+          //       color: Colors.red,
+          //       borderRadius: BorderRadius.circular(50),
+          //     ),
+          //   ),
+        ],
       ),
     );
   }

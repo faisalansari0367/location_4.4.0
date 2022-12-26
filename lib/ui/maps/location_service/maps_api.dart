@@ -28,7 +28,8 @@ class MapsApi implements MapsRepo {
     try {
       completer = Completer<List<PolygonModel>>();
       final result = await client.get(_Endpoints.geofences, logging: false);
-      final data = (result.data['data'] as List<dynamic>).map((e) => PolygonModel.fromJson(e)).toList();
+      final list = result.data['data'] as List<dynamic>;
+      final data = list.map((e) => PolygonModel.fromJson(e)).toList();
       _controller.add(data);
       await storage.saveAllPolygon(data);
       if (!completer.isCompleted) {

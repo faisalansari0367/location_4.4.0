@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/intent_service.dart';
@@ -27,67 +25,18 @@ class VisitorCheckInView extends StatelessWidget {
             padding: kPadding,
             child: Column(
               children: [
-                _infoCard(context),
-                Gap(20.h),
-                Container(
-                  child: Column(
-                    children: [
-                      // Gap(20.h),
-                      // Text(
-                      //   'Scan the Entry Gate QR',
-                      //   style: context.textTheme.headline6?.copyWith(
-                      //     fontWeight: FontWeight.w600,
-                      //     fontSize: 25.w,
-                      //     color: const Color.fromARGB(255, 0, 0, 0),
-                      //   ),
-                      // ),
-                      Gap(10.h),
-                      // Text('Scan QR for ${cubit.platform}'),
-                      AnimatedSwitcher(
-                        duration: kDuration,
-                        child: QrCodeGenerator(qrData: cubit.getQrData),
-                      ),
-                      // Gap(10.h),
-                      // Text('Not ${cubit.platform}: Press below button for ${cubit.buttonText}'),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     // BottomSheetService.showSheet(child: QrCodeGenerator(qrData: ApiConstants.playStoreid));
-                      //     context.read<VisitorCheckInCubit>().changePlatForm();
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     shape: StadiumBorder(),
-                      //     padding: EdgeInsets.symmetric(
-                      //       horizontal: 20.w,
-                      //       vertical: 10.h,
-                      //     ),
-                      //   ),
-                      //   child: Text('${cubit.buttonText} QR Scan'),
-                      // ),
-                      Gap(20.h),
-                    ],
-                  ),
+                AnimatedSwitcher(
+                  duration: kDuration,
+                  child: QrCodeGenerator(qrData: cubit.getQrData),
                 ),
+                Gap(20.h),
+                _infoCard(context),
               ],
             ),
           );
         },
       ),
     );
-  }
-
-  Widget _qrCode(VisitorCheckInState state) {
-    if (state.qrCode == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else {
-      return Image.memory(
-        base64Decode(state.qrCode!),
-        fit: BoxFit.fitHeight,
-        width: 75.width,
-        height: 75.width,
-      );
-    }
   }
 
   Container _infoCard(BuildContext context) {
@@ -132,9 +81,7 @@ class VisitorCheckInView extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(
-            color: Color.fromARGB(255, 0, 0, 0),
-          ),
+          const Divider(color: Color.fromARGB(255, 0, 0, 0)),
           SizedBox(
             width: double.infinity,
             child: AutoSizeText(

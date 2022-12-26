@@ -65,6 +65,7 @@ class MapsCubit extends BaseModel {
   // StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
+    geofenceService.init(mapsRepo, localApi);
     updateCurrentLocation();
     // so that device can determine the connectivity status
     await 100.milliseconds.delay();
@@ -133,10 +134,10 @@ class MapsCubit extends BaseModel {
   }
 
   // @override
-  void emit(MapsState state) {
+  void emit(MapsState state, {bool notify = true}) {
     if (!mounted) return;
     this.state = state;
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void startEditPolygon(PolygonModel polygon) {
@@ -224,11 +225,11 @@ class MapsCubit extends BaseModel {
       animateCamera(_lastPosition);
       emit(state.copyWith(currentLocation: _lastPosition));
     }
-    final currentPosition = await GeolocatorService.getCurrentPosition();
-    final target = LatLng(currentPosition.latitude, currentPosition.longitude);
+    // final currentPosition = await GeolocatorService.getCurrentPosition();
+    // final target = LatLng(currentPosition.latitude, currentPosition.longitude);
 
-    animateCamera(target);
-    emit(state.copyWith(currentLocation: target));
+    // animateCamera(target);
+    // emit(state.copyWith(currentLocation: target));
   }
 
   void animateCamera(LatLng latLng) async {
@@ -282,7 +283,10 @@ class MapsCubit extends BaseModel {
       final position = LatLng(event.latitude, event.longitude);
       // print(position);
 
-      emit(state.copyWith(currentLocation: position));
+      emit(
+        state.copyWith(currentLocation: position),
+        notify: false,
+      );
       if (state.isTracking) {
         if (event.speed > 0) animateCamera(position);
       }
@@ -305,7 +309,7 @@ class MapsCubit extends BaseModel {
   // void stopLocationUpdates() => _positionSubscription?.cancel();
   @override
   Future<void> dispose() async {
-    geofenceService.stopTimers();
+    // geofenceService.stopTimers();
     _polygonsService.clear();
     super.dispose();
   }

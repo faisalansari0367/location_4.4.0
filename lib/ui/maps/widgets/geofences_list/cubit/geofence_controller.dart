@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +14,7 @@ abstract class GeofenceController extends BaseModel {
   User? user;
   final searchController = TextEditingController();
   final _cd = CallbackDebouncer(200.milliseconds);
+  StreamSubscription<List<PolygonModel>>? _streamSubscription;
 
   /// Check if there are any polygons
   bool _hasPolygons = true;
@@ -46,9 +49,15 @@ abstract class GeofenceController extends BaseModel {
   bool _search(element) => element.name.toLowerCase().contains(searchController.text.toLowerCase());
 
   void _checkPolygons(Stream<List<PolygonModel>> stream) {
-    stream.listen((event) {
+    _streamSubscription = stream.listen((event) {
       _hasPolygons = event.isNotEmpty;
       notifyListeners();
     });
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription?.cancel();
+    super.dispose();
   }
 }

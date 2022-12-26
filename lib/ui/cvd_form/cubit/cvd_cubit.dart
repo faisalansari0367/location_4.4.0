@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/api/api_repo.dart';
@@ -200,14 +201,19 @@ class CvdCubit extends Cubit<CvdState> {
         DialogService.error('${result.data['message']} \n ${error.values.first}');
         return;
       }
-      
+
       final formsService = FormsStorageService(api);
       final bytes = base64Decode(result.data['data']);
       final file = await formsService.saveCvdForm(bytes, buyerDetailsModel.name?.value ?? '');
       await OpenFile.open(file.path);
       Get.close(2);
-    } catch (e) {
-      print(e);
+    } on DioError catch (e) {
+      if (e.error is SocketException) {
+        DialogService.error('CVD offline functionality not available yet\nCheck your internet connection');
+      } else {
+        DialogService.error('Something went wrong');
+      }
+      // print(e);
     }
     // emit(state.copyWith(isLoading: false));
   }

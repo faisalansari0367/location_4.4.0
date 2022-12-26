@@ -3,12 +3,26 @@ import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:api_repo/src/local_api/local_log_records/src/local_log_records_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class LocalApi extends Api {
   late StorageService storage;
-  // late LogRecordsLocalService _logRecordsLocalService;
+  late LocalLogRecordsImpl _logRecordsImpl;
+
+  @override
+  Future<void> init({required String baseUrl, required Box box}) async {
+    // const path = "/data/user/0/com.itrakassets.biosecure/app_flutter";
+    // final dir = await Directory(path).list().toList();
+    // for (var item in dir) {
+    //   print(item.path.split('/').last);
+    // }
+    // print(dir);
+    _logRecordsImpl = LocalLogRecordsImpl(box: box);
+
+    storage = StorageService(box: box);
+  }
 
   @override
   Client get client => throw UnimplementedError();
@@ -17,6 +31,8 @@ class LocalApi extends Api {
   Future<ApiResult<ResponseModel>> forgotPassword({required String email}) {
     throw UnimplementedError();
   }
+
+  Stream<List<LogbookEntry>> get offlineRecordsToSync => _logRecordsImpl.logRecordsToSync;
 
   @override
   Future<ApiResult<RoleDetailsModel>> getFields(String role) async {
@@ -35,7 +51,7 @@ class LocalApi extends Api {
 
   @override
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100}) {
-    throw UnimplementedError();
+    return _logRecordsImpl.getLogbookRecords(page: page, limit: limit);
   }
 
   @override
@@ -97,18 +113,6 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) {
     throw UnimplementedError();
-  }
-
-  @override
-  Future<void> init({required String baseUrl, required Box box}) async {
-    // const path = "/data/user/0/com.itrakassets.biosecure/app_flutter";
-    // final dir = await Directory(path).list().toList();
-    // for (var item in dir) {
-    //   print(item.path.split('/').last);
-    // }
-    // print(dir);
-
-    storage = StorageService(box: box);
   }
 
   @override
@@ -223,34 +227,25 @@ class LocalApi extends Api {
 
   @override
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) {
-    throw UnimplementedError();
+    return _logRecordsImpl.createLogRecord(geofenceId, form: form);
   }
 
   @override
-  Stream<List<LogbookEntry>> get logbookRecordsStream => throw UnimplementedError();
-
-  @override
-  Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId) {
-    // TODO: implement updateLogRecord
-    throw UnimplementedError();
-  }
+  Stream<List<LogbookEntry>> get logbookRecordsStream => _logRecordsImpl.logbookRecordsStream;
 
   @override
   Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId}) {
-    // TODO: implement udpateForm
-    throw UnimplementedError();
+    return _logRecordsImpl.udpateForm(geofenceId, form, logId: logId);
   }
 
   @override
   Future<ApiResult<LogbookEntry>> logBookEntry(String pic, String geofenceId, {bool isExiting = false, String? form}) {
-    // TODO: implement logBookEntry
-    throw UnimplementedError();
+    return _logRecordsImpl.logBookEntry(pic, geofenceId, isExiting: isExiting, form: form);
   }
 
   @override
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId) {
-    // TODO: implement markExit
-    throw UnimplementedError();
+    return _logRecordsImpl.markExit(geofenceId);
   }
 
   @override
@@ -261,7 +256,7 @@ class LocalApi extends Api {
 
   @override
   Future<LogbookEntry?> getLogRecord(String geofenceId) {
-    throw UnimplementedError();
+    return _logRecordsImpl.getLogRecord(geofenceId);
   }
 
   @override
@@ -324,5 +319,15 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<String>> deleteUser() async {
     return const ApiResult.failure(error: NetworkExceptions.defaultError('Not available in offline mode'));
+  }
+
+  @override
+  Future<ApiResult<String>> deleteUserById({required int userId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> synchronizeLogRecords() {
+    return _logRecordsImpl.synchronizeLogRecords();
   }
 }

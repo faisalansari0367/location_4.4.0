@@ -26,6 +26,7 @@ abstract class UserRepo {
   Future<dynamic> getQrCode(String data);
   Future<ApiResult> openPdf(String url);
   Future<ApiResult<String>> deleteUser();
+  Future<ApiResult<String>> deleteUserById({required int userId});
 }
 
 class UserRepoImpl extends UserRepo {
@@ -204,9 +205,20 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<String>> deleteUser() async {
+  Future<ApiResult<String>> deleteUser({int? userId}) async {
     try {
-      final result = await client.delete(Endpoints.deleteUser);
+      final result = await client.delete(Endpoints.deleteUser, data: {'id': userId});
+      final model = result.data['data'];
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<String>> deleteUserById({required int userId}) async {
+    try {
+      final result = await client.delete('${Endpoints.deleteUserById}/$userId');
       final model = result.data['data'];
       return ApiResult.success(data: model);
     } catch (e) {

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:api_repo/configs/client.dart';
-import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -23,19 +22,41 @@ class ApiRepo implements Api {
   late LogRecordsRepo _logRecordsRepo;
   late FunctionsRepo _functionsRepo;
 
+  Future<void> Function({required String baseUrl, required Box<dynamic> box}) localApiinit;
+
   late Box _box;
   // late LocalesApi _localesApi;
 
-  ApiRepo();
+  ApiRepo({required this.localApiinit});
 
   StreamSubscription<BoxEvent>? _onUserChange;
 
   @override
-  Future<void> init({required String baseUrl, required Box box}) async {
-    _box = box;
+  Future<void> init({
+    required String baseUrl,
+    required Box box,
+  }) async {
+    //  _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
+    final _storage = StorageService(box: box);
+
+    if (_storage.isLoggedIn) {
+      final userBox = await Hive.openBox(_storage.getUser()!.email!);
+      log('userbox name is ${userBox.name}}');
+      if (userBox.isNotEmpty) {
+        _box = userBox;
+      } else {
+        _box = box;
+      }
+    } else {
+      _box = box;
+    }
+
+    // _box = box;
+    localApiinit(baseUrl: baseUrl, box: _box);
     final storage = StorageService(box: _box);
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token, onError: _onError);
+    localApiinit(baseUrl: baseUrl, box: _box);
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
     _userRepo = UserRepoImpl(client: _client, box: _box);
@@ -46,7 +67,8 @@ class ApiRepo implements Api {
   Future<void> changeUserBox(String email) async {
     try {
       _box = await Hive.openBox(email.trim());
-      await init(baseUrl: Endpoints.baseUrl, box: _box);
+      // _authRepo.signIn(data: data);
+      await init(baseUrl: _client.baseUrl, box: _box);
     } catch (e) {
       log('error while opening box for user $email');
     }
@@ -59,15 +81,25 @@ class ApiRepo implements Api {
       final storage = StorageService(box: _box);
       final token = storage.getToken();
       if (token != null) {
-        _client.token = (token);
+        _client.token = token;
       }
       log('updating the token ${_client.token}');
     });
   }
 
   @override
-  Future<ApiResult<User>> signIn({required SignInModel data}) {
-    return _authRepo.signIn(data: data);
+  Future<ApiResult<User>> signIn({required SignInModel data}) async {
+    final result = await _authRepo.signIn(data: data);
+    result.when(
+        success: (s) async {
+          // change user box and update all repos
+          await changeUserBox(s.email!);
+          // the box is already opened in the changeUserBox method
+          // now we need to update the user in the box
+          // await _authRepo.signIn(data: data);
+        },
+        failure: (s) {});
+    return result;
   }
 
   @override
@@ -96,25 +128,6 @@ class ApiRepo implements Api {
   Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
     return await _authRepo.updateMe(user: user, isUpdate: isUpdate);
   }
-
-  // @override
-  // void changeCountry({required String code, required String dial, required String name}) {
-  //   return _localesApi.changeCountry(code: code, dial: dial, name: name);
-  // }
-
-  // @override
-  // String? get countryCode => _localesApi.countryCode;
-
-  // @override
-  // String? get countryName => _localesApi.countryName;
-
-  // @override
-  // String? get dialCode => _localesApi.dialCode;
-
-  // @override
-  // Future<void> initLocale() {
-  //   throw UnimplementedError();
-  // }
 
   @override
   Future<ApiResult<ResponseModel>> forgotPassword({required String email}) {
@@ -306,5 +319,15 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<String>> deleteUser() {
     return _userRepo.deleteUser();
+  }
+
+  @override
+  Future<ApiResult<String>> deleteUserById({required int userId}) {
+    return _userRepo.deleteUserById(userId: userId);
+  }
+
+  @override
+  Future<bool> synchronizeLogRecords() {
+    return _logRecordsRepo.synchronizeLogRecords();
   }
 }

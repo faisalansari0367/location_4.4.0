@@ -27,7 +27,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     firstName = json[UserKeys.firstName];
     lastName = json[UserKeys.lastName];
-    email = json[UserKeys.email];
+    email = json[UserKeys.email].toString().trim();
     phoneNumber = json[UserKeys.phoneNumber];
     id = json['id'];
     role = json[UserKeys.role];

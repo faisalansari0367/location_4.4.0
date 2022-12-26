@@ -7,6 +7,10 @@ class Endpoints {
   static const auth = '/auth';
   static const functions = '/functions';
 
+  static const String geofences = '/geofences';
+  static String geofence(String? id) => '/geofences/$id';
+  static const String notifyProperyManager = '$users/notify-property-manager';
+
   static const String signUp = '$auth/signup',
       verifyOtp = '$auth/verify',
       forgotPassword = '$auth/forgot-password',
@@ -21,6 +25,7 @@ class Endpoints {
       forms = '$records/forms',
       roles = '$records/roles',
       deleteUser = '$users/me',
+      deleteUserById = users,
 
       // users
       getFields = '$users/fields',
@@ -32,6 +37,7 @@ class Endpoints {
   // log records
   static const logRecords = '/log-records';
   static const markExit = '$logRecords/mark-exit';
+  static const logRecordsOffline = '$logRecords/offline';
 
   static const qrCode = '$functions/qrcode';
   static const sendEmergencyNotification = '$functions/send-emergency-notification';

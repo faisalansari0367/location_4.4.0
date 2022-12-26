@@ -181,7 +181,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                         child: NoSignatureFound(
                           message: 'Please sign the declaration',
                           buttonText: 'Ok',
-                          onCancel: () async {
+                          onTap: () async {
                             // Get.back();
                             Get.to(
                               () => CreateSignature(

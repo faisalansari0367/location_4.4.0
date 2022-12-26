@@ -41,7 +41,14 @@ class LogbookEntryHandler {
       markExitHandler?.callExit(polygonModel, isExiting);
       return;
     } else {
-      markExitHandler?.cancel();
+      // if current polygon is the same as the previous polygon
+      final sameZone = markExitHandler?.model?.id == polygonModel?.id;
+
+      // if user is still in the same zone
+      // cancel the timer
+      if (sameZone) {
+        markExitHandler?.cancel();
+      }
     }
     final result = await api.logBookEntry(
       polygonModel!.pic!,
@@ -49,7 +56,10 @@ class LogbookEntryHandler {
       isExiting: isExiting,
     );
     result.when(
-      success: (s) => log('logbook entry success'),
+      success: (s) {
+        log('logbook entry success');
+        
+      },
       failure: (e) => log(NetworkExceptions.getErrorMessage(e)),
     );
   }
@@ -92,9 +102,7 @@ class MarkExitHandler {
 
   void printTimer() {
     var seconds = 20;
-    logger = Timer.periodic(1.seconds, (_) {
-      log('api will be called in ${seconds--}');
-    });
+    logger = Timer.periodic(1.seconds, (_) => log('api will be called in ${seconds--}'));
     Future.delayed(_duration, logger?.cancel);
   }
 

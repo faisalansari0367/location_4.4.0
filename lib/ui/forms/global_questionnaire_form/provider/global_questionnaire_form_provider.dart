@@ -98,10 +98,11 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
   }
 
   Future<void> submitFormData(Map<String, dynamic> json) async {
-    final result = await apiService.udpateForm(zoneId.toString(), json, logId: logrecordId);
+    final result = await localApi.udpateForm(zoneId.toString(), json, logId: logrecordId);
     result.when(
       success: (data) {
-        DialogService.success('Form Submitted', onCancel: () => Get.close(2));
+        final msg = baseState.isConnected ? 'Form Submitted' : 'Form Saved Locally';
+        DialogService.success(msg, onCancel: () => Get.close(2));
       },
       failure: (e) => DialogService.failure(error: e),
     );
@@ -112,7 +113,7 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
       child: NoSignatureFound(
         message: 'Please sign the declaration',
         buttonText: 'OK',
-        onCancel: () async {
+        onTap: () async {
           Get.back();
           Get.to(
             () => CreateSignature(

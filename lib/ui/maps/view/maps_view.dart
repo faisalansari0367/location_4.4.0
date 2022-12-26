@@ -332,6 +332,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         //       listenWhen: (previous, current) => previous.insideFence != current.insideFence,
         //       child: BlocBuilder<MapsCubit, MapsState>(
         //         builder: (context, state) {
+        print('rebuilding maps');
         return GoogleMap(
           initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
           onMapCreated: cubit.onMapCreated,

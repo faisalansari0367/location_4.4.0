@@ -67,7 +67,7 @@ class AdminView extends StatelessWidget {
                   onTap: () async {
                     await Get.to(
                       () => const PdfViewer(
-                        path: 'assets/terms_and_conditions/BIOPLUS Price List 1122022.pdf',
+                        path: 'assets/terms_and_conditions/BIOPLUS Price List 19122022.pdf',
                         title: 'Price List',
                       ),
                     );

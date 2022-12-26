@@ -18,19 +18,22 @@ class MyRadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (text == null) return _radio(context);
-    return Row(
-      children: [
-        if (text != null)
-          Text(
-            text!,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 16.h,
-              color: Colors.grey.shade600,
+    return InkWell(
+      onTap: () => onChanged?.call(value),
+      child: Row(
+        children: [
+          if (text != null)
+            Text(
+              text!,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 16.h,
+                color: Colors.grey.shade600,
+              ),
             ),
-          ),
-        _radio(context),
-      ],
+          _radio(context),
+        ],
+      ),
     );
   }
 

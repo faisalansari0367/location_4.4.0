@@ -2,7 +2,6 @@ import 'package:api_repo/api_result/api_result.dart';
 
 import '../models/models.dart';
 
-
 abstract class LogRecordsRepo {
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100});
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form});
@@ -19,6 +18,8 @@ abstract class LogRecordsRepo {
     bool isExiting = false,
     String? form,
   });
+
+  Future<bool> synchronizeLogRecords();
 
   Stream<List<LogbookEntry>> get logbookRecordsStream;
   List<LogbookEntry> get logbookRecords;
