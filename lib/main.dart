@@ -118,7 +118,7 @@ class _MyAppState extends State<MyApp> {
     return MultiRepositoryProvider(
       providers: _providers,
       child: GetMaterialApp(
-        debugShowCheckedModeBanner: kDebugMode,
+        debugShowCheckedModeBanner: ApiConstants.isDegugMode,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,
