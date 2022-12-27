@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/hive_boxes.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
@@ -43,7 +44,7 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await Hive.initFlutter();
-    final _box = await Hive.openBox('storage');
+    final _box = await Hive.openBox(HiveBox.storage);
     // final notifications = AwesomeNotifications();
     final localApi = LocalApi();
     final repo = ApiRepo(localApiinit: localApi.init);

@@ -5,6 +5,7 @@ import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:api_repo/src/api/api_repo.dart';
 import 'package:api_repo/src/local_api/src/local_api.dart';
 import 'package:api_repo/src/user/src/models/user_forms_data.dart';
+import 'package:bioplus/constants/hive_boxes.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:bioplus/ui/cvd_form/models/chemical_use.dart';
@@ -37,7 +38,7 @@ class CvdCubit extends Cubit<CvdState> {
 
   void init(BuildContext context) async {
     emit(state.copyWith(isLoading: true));
-    _box = await Hive.openBox('cvdbox');
+    _box = await Hive.openBox(HiveBox.cvdBox);
     final futures = [
       _fetchVendorDetailsModel(context),
       _fetchBuyerDetailsModel(context),
