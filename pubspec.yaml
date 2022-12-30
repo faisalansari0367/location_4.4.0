@@ -61,7 +61,7 @@ dependencies:
   flutter_staggered_animations:
   country_codes: ^2.2.0
   intl_phone_field: ^3.1.0
-  awesome_notifications: ^0.7.4+1
+  awesome_notifications: ^0.6.21
   signature: ^5.1.0
   # hydrated_bloc: ^8.1.0
   path_provider: ^2.0.11
