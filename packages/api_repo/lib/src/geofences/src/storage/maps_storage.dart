@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:api_client/api_client.dart';
 import 'package:api_repo/src/geofences/geofences_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import '../../../../api_result/api_result.dart';
 
 class _Keys {
   static const _getAllPolygonKey = 'get_all_polygon';

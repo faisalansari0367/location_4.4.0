@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,14 +8,16 @@ import 'download_controller.dart';
 
 class DownloadButton extends StatelessWidget {
   final DownloadController controller;
+  final EdgeInsets? padding;
   final String? buttonText;
-  const DownloadButton({super.key, required this.controller, this.buttonText});
+  const DownloadButton({super.key, required this.controller, this.buttonText, this.padding});
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) => _DownloadButton(
+        padding: padding,
         status: controller.downloadStatus,
         buttonTitle: buttonText,
         downloadProgress: controller.progress,
@@ -38,12 +41,14 @@ class _DownloadButton extends StatelessWidget {
     // this.transitionDuration = const Duration(milliseconds: 300)
     required this.transitionDuration,
     this.buttonTitle = 'Download',
+    this.padding,
   });
 
   final DownloadStatus status;
   final String? buttonTitle;
   final double downloadProgress;
   final VoidCallback onDownload;
+  final EdgeInsets? padding;
   final VoidCallback onCancel;
   final VoidCallback onOpen;
   final Duration transitionDuration;
@@ -83,6 +88,7 @@ class _DownloadButton extends StatelessWidget {
             isDownloading: _isDownloading,
             isFetching: _isFetching,
             buttonTitle: buttonTitle,
+            padding: padding,
           ),
           Positioned.fill(
             child: AnimatedOpacity(
@@ -118,6 +124,7 @@ class ButtonShapeWidget extends StatelessWidget {
   const ButtonShapeWidget({
     super.key,
     required this.isDownloading,
+    this.padding,
     required this.isDownloaded,
     required this.isFetching,
     required this.transitionDuration,
@@ -129,6 +136,7 @@ class ButtonShapeWidget extends StatelessWidget {
   final bool isFetching;
   final Duration transitionDuration;
   final String? buttonTitle;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -146,12 +154,12 @@ class ButtonShapeWidget extends StatelessWidget {
 
     return AnimatedContainer(
       duration: transitionDuration,
-      curve: Curves.ease,
+      curve: kCurve,
       width: double.infinity,
       decoration: shape,
       child: Container(
         // margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
+        padding: padding ?? const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
 
         child: AnimatedOpacity(
           duration: transitionDuration,

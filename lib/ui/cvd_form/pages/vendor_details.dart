@@ -2,13 +2,13 @@ import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:bioplus/widgets/widgets.dart';
+import 'package:cvd_forms/models/src/vendor_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../cubit/cvd_cubit.dart';
-import '../models/vendor_details_model.dart';
 import '../widgets/common_buttons.dart';
 import '../widgets/cvd_textfield.dart';
 
@@ -114,9 +114,8 @@ class _VendorDetailsState extends State<VendorDetails> {
             final isValidated = formKey.currentState!.validate();
             final cubit = context.read<CvdCubit>();
             if (isValidated) {
-              cubit.vendorDetails = widget.vendorDetailsModel;
+              cubit.setVendorDetails(widget.vendorDetailsModel);
               cubit.moveToNext();
-              // cubit.addFormData(formData);
             }
           },
         ),

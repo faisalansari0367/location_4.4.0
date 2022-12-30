@@ -1,5 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/api_result.dart';
 
 abstract class AuthRepo {
   Future<ApiResult<ResponseModel>> signUp({required SignUpModel data});
@@ -8,6 +7,7 @@ abstract class AuthRepo {
   Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true});
   Future<ApiResult<User>> updateUser({required UserData userData});
   Future<ApiResult<User>> updateStatus({required UserData userData});
+  Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs});
 
   Future<ApiResult<ResponseModel>> forgotPassword({required String email});
   Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model});

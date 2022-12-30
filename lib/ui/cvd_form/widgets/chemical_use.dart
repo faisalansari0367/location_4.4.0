@@ -1,6 +1,5 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
-import 'package:bioplus/ui/cvd_form/models/chemical_use.dart';
 import 'package:bioplus/ui/cvd_form/widgets/add_fields.dart';
 import 'package:bioplus/ui/cvd_form/widgets/add_table_entries.dart';
 import 'package:bioplus/ui/cvd_form/widgets/cvd_textfield.dart';
@@ -8,6 +7,7 @@ import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:cvd_forms/models/src/chemical_use.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +34,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
   Future<void> _init() async {
     form = widget.chemicalUseDetailsModel;
     tableData = widget.chemicalUseDetailsModel.chemicalTable;
-
+    // form?.cropList?
     setState(() {});
   }
 
@@ -130,6 +130,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
           ),
           AddFields(
             no: '7. ',
+            value: form?.cropList?.value,
             field: form?.cropList?.field ?? '',
             onChanged: (list) {
               form?.cropList?.value = list.join();
@@ -146,7 +147,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
               if (form!.riskCheck!.value == '1') {
                 _enterTextPopup(
                   (s) {
-                    cubit.riskAssesment = s;
+                    cubit.setRiskAssesment(s);
                     setState(() {});
                   },
                   'Enter Risk Assesment',
@@ -160,7 +161,8 @@ class _ChemicalUseState extends State<ChemicalUse> {
             onChanged: (s) {
               if (form!.nataCheck!.value == '1') {
                 _enterTextPopup((s) {
-                  cubit.testResults = s;
+                  // cubit.testResults = s;
+                  cubit.setTestResults(s);
                   setState(() {});
                 }, 'Enter Test Results');
               }

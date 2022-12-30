@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:api_repo/api_result/api_result.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/configs/client.dart';
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/storage_service.dart';
 import 'package:bioplus/ui/maps/models/polygon_model.dart';

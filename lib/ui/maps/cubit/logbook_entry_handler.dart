@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:get/get.dart';
 
 import '../location_service/maps_repo.dart';
@@ -43,7 +42,6 @@ class LogbookEntryHandler {
     } else {
       // if current polygon is the same as the previous polygon
       final sameZone = markExitHandler?.model?.id == polygonModel?.id;
-
       // if user is still in the same zone
       // cancel the timer
       if (sameZone) {
@@ -53,12 +51,11 @@ class LogbookEntryHandler {
     final result = await api.logBookEntry(
       polygonModel!.pic!,
       polygonModel!.id!,
-      isExiting: isExiting,
+      isExiting: isExiting
     );
     result.when(
       success: (s) {
         log('logbook entry success');
-        
       },
       failure: (e) => log(NetworkExceptions.getErrorMessage(e)),
     );

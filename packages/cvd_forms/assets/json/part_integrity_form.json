@@ -1,0 +1,59 @@
+{
+    "field": "Part A – Product Integrity",
+    "data": {
+        "sourceCheck": {
+            "field": "Commodity source (tick one)",
+            "value": null,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Single Source, Single Storage (eg off the header)"
+                },
+                {
+                    "value": 1,
+                    "label": "Single Source, Comingled Storage (eg farm silo)"
+                },
+                {
+                    "value": 2,
+                    "label": "Multi-Vendor Storage (eg grain depot, cotton gin seed storage)"
+                },
+                {
+                    "value": 3,
+                    "label": "Factory Developed Product (eg ethanol plant, gluten plant)"
+                }
+            ]
+        },
+        "materialCheck": {
+            "field": "Does this commodity contain restricted animal materials (eg meat and bone meal)?",
+            "value": null,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Yes"
+                },
+                {
+                    "value": 0,
+                    "label": "No"
+                }
+            ]
+        },
+        "gmoCheck": {
+            "field": "With respect to Genetically Modified Organisms, this commodity: (tick one)",
+            "value": null,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Is non GMO as defined by 99% non GMO"
+                },
+                {
+                    "value": 1,
+                    "label": "Is non GMO as defined by 95% non GMO"
+                },
+                {
+                    "value": 2,
+                    "label": "Contains greater than 5% GMO or content unknown"
+                }
+            ]
+        }
+    }
+}

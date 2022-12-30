@@ -1,0 +1,92 @@
+{
+    "field": "Chemical Use",
+    "chemicalCheck": {
+        "field": "Is this commodity within a withholding period (WHP), Export Slaughter Interval (ESI) or Export Animal Feed Interval (EAFI) following treatment with any plant chemical including a pickling or seed treatment, fumigant, pesticide or insecticide?",
+        "value": null,
+        "options": [
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
+        ]
+    },
+    "chemicalTable": [],
+    "qaCheck": {
+        "key": "qaCheck",
+        "field": "Has the commodity been grown and/or stored under an independently audited QA program which includes chemical residue management?",
+        "value": null,
+        "options": [
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
+        ],
+        "note": "If this commodity has been grown or stored under such a QA program, please now read and sign Part C. If not, please now complete the remainder of Part B."
+    },
+    "qaProgram": {
+        "key": "qaProgram",
+        "field": "QA Program",
+        "value": null
+    },
+    "certificateNumber": {
+        "field": "Accreditation/ Certification Number",
+        "value": null
+    },
+    "cvdCheck": {
+        "field": "Is the vendor of this commodity currently aware of its full chemical treatment history or holds a CVD containing this history?",
+        "value": null,
+        "options": [
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
+        ]
+    },
+    "cropList": {
+        "key": "Crop List",
+        "field": "List all known adjacent crops grown within 100 metres of this commodity (only applicable for single source commodities)",
+        "options": []
+    },
+    "riskCheck": {
+        "field": "If the commodity is a by-product, has a risk assessment been completed? (tick one)",
+        "options": [
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            },
+            {
+                "label": "N/A",
+                "value": "2"
+            }
+        ]
+    },
+    "nataCheck": {
+        "field": "Has the commodity been analysed for chemical residues or toxins by a lab accredited by NATA for the specific test required?",
+        "options": [
+            {
+                "label": "Yes",
+                "value": "1"
+            },
+            {
+                "label": "No",
+                "value": "0"
+            }
+        ]
+    }
+}

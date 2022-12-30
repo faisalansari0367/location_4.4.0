@@ -2,10 +2,6 @@
 
 import 'dart:async';
 
-import 'package:api_repo/api_result/api_result.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/configs/client.dart';
-import 'package:api_repo/configs/endpoint.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -149,6 +145,23 @@ class AuthRepoImpl implements AuthRepo {
         '${Endpoints.users}/me',
         options: Options(headers: {"Content-Type": "application/json"}),
         data: json,
+      );
+      final model = User.fromJson((result.data));
+      final _userData = UserData.fromJson(result.data['data']);
+      await storage.setUserData(_userData);
+      return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) async {
+    try {
+      // final json = userData.updateAllowedRoles();
+      final result = await client.patch(
+        '${Endpoints.users}/me',
+        options: Options(headers: {"Content-Type": "application/json"}),
+        data: {'cvdForms': base64pdfs},
       );
       final model = User.fromJson((result.data));
       final _userData = UserData.fromJson(result.data['data']);

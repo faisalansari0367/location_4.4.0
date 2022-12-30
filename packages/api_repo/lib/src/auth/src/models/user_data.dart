@@ -71,6 +71,7 @@ class UserData {
   String? countryOfResidency;
 
   List<String> allowedRoles = const [];
+  List<String> cvdForms = const [];
 
   String? registrationToken;
   DateTime? createdAt, updatedAt;
@@ -119,6 +120,7 @@ class UserData {
     this.eventName,
     this.contactEmail,
     this.contactNumber,
+    this.cvdForms = const [],
     this.startDate,
     this.endDate,
     this.edec,
@@ -147,6 +149,7 @@ class UserData {
     countryOfResidency = json['countryOfResidency'];
     status = getStatus(json['status']);
     ngr = json['ngr'];
+    cvdForms = json['cvdForms'] ?? [];
 
     id = json['id'];
     firstName = json['firstName'];

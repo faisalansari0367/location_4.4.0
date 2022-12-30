@@ -1,5 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:bioplus/constants/strings.dart';
 import 'package:bioplus/features/drawer/view/drawer_page.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';

@@ -1,5 +1,5 @@
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/ui/cvd_forms/view/cvd_forms.dart';
+import 'package:bioplus/ui/cvd_record/cvd_record.dart';
 import 'package:bioplus/view_sent_notification/view_sent_notification.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _RecordsPageState extends State<RecordsPage> {
               fontSize: 18.sp,
             ),
             onTap: () async {
-              Get.to(() => CvdForms());
+              Get.to(() => CvdRecordPage());
             },
           ),
           Gap(20.h),

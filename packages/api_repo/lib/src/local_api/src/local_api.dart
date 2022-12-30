@@ -1,26 +1,20 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/api_result.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/local_api/local_log_records/src/local_log_records_impl.dart';
+import 'package:cvd_forms/cvd_forms.dart';
+import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class LocalApi extends Api {
   late StorageService storage;
   late LocalLogRecordsImpl _logRecordsImpl;
+  late CvdFormsRepo _cvdFormsRepo;
 
   @override
   Future<void> init({required String baseUrl, required Box box}) async {
-    // const path = "/data/user/0/com.itrakassets.biosecure/app_flutter";
-    // final dir = await Directory(path).list().toList();
-    // for (var item in dir) {
-    //   print(item.path.split('/').last);
-    // }
-    // print(dir);
     _logRecordsImpl = LocalLogRecordsImpl(box: box);
-
+    _cvdFormsRepo = CvdFormsLocalImpl(box: box);
     storage = StorageService(box: box);
   }
 
@@ -329,5 +323,41 @@ class LocalApi extends Api {
   @override
   Future<bool> synchronizeLogRecords() {
     return _logRecordsImpl.synchronizeLogRecords();
+  }
+
+  @override
+  Future<ApiResult<CvdForm>> addCvdForm(CvdForm cvdForm) {
+    return _cvdFormsRepo.addCvdForm(cvdForm);
+  }
+
+  @override
+  CvdForm? getCurrentForm() {
+    return _cvdFormsRepo.getCurrentForm();
+  }
+
+  @override
+  ApiResult<List<CvdForm>> getCvdForms() {
+    return _cvdFormsRepo.getCvdForms();
+  }
+
+  @override
+  Future<ApiResult<Uint8List>> submitForm(CvdForm cvdForm, {ProgressCallback? onReceiveProgress}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<CvdForm>> updateCvdForm(CvdForm cvdForm) {
+    return _cvdFormsRepo.updateCvdForm(cvdForm);
+  }
+
+  @override
+  Future<bool> deleteForm(CvdForm cvdForm) {
+    return _cvdFormsRepo.deleteForm(cvdForm);
+  }
+
+  @override
+  Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) {
+    const api = NetworkExceptions.defaultError('Not available in offline mode');
+    return Future.value(const ApiResult.failure(error: api));
   }
 }

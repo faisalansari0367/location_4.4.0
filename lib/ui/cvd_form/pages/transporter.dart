@@ -1,8 +1,8 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:bioplus/ui/cvd_form/models/transporter_details_model.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:bioplus/widgets/widgets.dart';
+import 'package:cvd_forms/models/src/transporter_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -80,8 +80,8 @@ class _TransporterDetailsState extends State<TransporterDetails> {
             final isValidated = formKey.currentState!.validate();
             // cubit.addFormData(formData);
             if (isValidated) {
-              print(transporterDetails);
-              cubit.transporterDetails = transporterDetails;
+              // print(transporterDetails);
+              cubit.setTransporterDetails(transporterDetails);
               // cubit.changeCurrent(cubit.state.currentStep + 1);
               cubit.moveToNext();
             }

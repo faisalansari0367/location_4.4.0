@@ -1,17 +1,15 @@
 import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:bioplus/ui/cvd_form/models/cvd_field_data.dart';
 import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:bioplus/ui/cvd_form/widgets/cvd_textfield.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/widgets.dart';
+import 'package:cvd_forms/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-
-import '../models/commodity_details_model.dart';
 
 class CommodityDetails extends StatefulWidget {
   final CommodityDetailsModel commodityDetails;
@@ -141,7 +139,7 @@ class _CommodityDetailsState extends State<CommodityDetails> {
               if (formKey.currentState?.validate() ?? false) {
                 // cubit.addFormData(map);
                 // cubit.changeCurrent(0, isNext: true);
-                cubit.commodityDetails = commodityDetails;
+                cubit.setCommodityDetails(commodityDetails);
                 // cubit.changeCurrent(cubit.state.currentStep + 1);
                 cubit.moveToNext();
                 // cubit.

@@ -20,11 +20,15 @@ class EmptyScreen extends StatelessWidget {
     );
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (messsageOnTop) messageWidget,
-        Lottie.asset(
-          'assets/animations/empty-state.json',
-          width: 90.width,
+        Center(
+          child: Lottie.asset(
+            'assets/animations/empty-state.json',
+            width: 90.width,
+          ),
         ),
         Gap(20.h),
         if (!messsageOnTop) messageWidget,

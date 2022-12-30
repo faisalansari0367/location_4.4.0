@@ -3,12 +3,10 @@ import 'dart:convert';
 
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
-import 'package:bioplus/ui/cvd_form/models/chemical_use.dart';
+import 'package:cvd_forms/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../models/witholding_period_model.dart';
 
 class AddTableEntries extends StatefulWidget {
   final ValueChanged<ChemicalTable>? onChanged;

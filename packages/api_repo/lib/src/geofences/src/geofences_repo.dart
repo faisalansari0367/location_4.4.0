@@ -1,4 +1,5 @@
-import '../../../api_result/api_result.dart';
+import 'package:api_client/api_client.dart';
+
 import '../models/models.dart';
 
 abstract class GeofencesRepo {

@@ -5,7 +5,7 @@ const kInputRadius = 50.0;
 
 const kBorderRadius = BorderRadius.all(kCircularRadius);
 const kPhysics = BouncingScrollPhysics();
-const kCurve = Curves.fastOutSlowIn;
+const kCurve = Curves.fastLinearToSlowEaseIn;
 const kMargin = EdgeInsets.all(10);
 const kSplashDuration = Duration(milliseconds: 3000);
 const kDuration = Duration(milliseconds: 500);

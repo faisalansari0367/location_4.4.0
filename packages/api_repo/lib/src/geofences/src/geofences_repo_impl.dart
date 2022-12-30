@@ -1,14 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:api_repo/api_result/api_result.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/configs/client.dart';
-import 'package:api_repo/src/geofences/models/polygon_model.dart';
+import 'package:api_client/api_client.dart';
+import 'package:api_client/configs/client.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../configs/endpoint.dart';
+import '../models/models.dart';
 import 'geofences_repo.dart';
 import 'storage/maps_storage.dart';
 

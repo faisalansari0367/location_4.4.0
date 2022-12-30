@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:api_repo/configs/client.dart';
 import 'package:api_repo/src/functions/functions_repo.dart';
-import 'package:dio/dio.dart';
+import 'package:cvd_forms/cvd_forms.dart';
+import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../api_repo.dart';
-import '../../api_result/api_result.dart';
 import '../auth/src/storage/storage_service.dart';
 
 // import '../log/log_records.dart';
@@ -21,6 +20,7 @@ class ApiRepo implements Api {
   late UserRepo _userRepo;
   late LogRecordsRepo _logRecordsRepo;
   late FunctionsRepo _functionsRepo;
+  late CvdFormsRepo _cvdFormsRepo;
 
   Future<void> Function({required String baseUrl, required Box<dynamic> box}) localApiinit;
 
@@ -51,16 +51,17 @@ class ApiRepo implements Api {
       _box = box;
     }
 
-    // _box = box;
-    localApiinit(baseUrl: baseUrl, box: _box);
     final storage = StorageService(box: _box);
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token, onError: _onError);
+
+    localApiinit(baseUrl: baseUrl, box: _box);
     localApiinit(baseUrl: baseUrl, box: _box);
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
     _userRepo = UserRepoImpl(client: _client, box: _box);
     _functionsRepo = FunctionsRepoImpl(client: _client);
+    _cvdFormsRepo = CvdFormsRepoImpl(box: _box, client: _client);
     _userStream(_box, storage.userKey);
   }
 
@@ -329,5 +330,41 @@ class ApiRepo implements Api {
   @override
   Future<bool> synchronizeLogRecords() {
     return _logRecordsRepo.synchronizeLogRecords();
+  }
+
+  @override
+  Future<ApiResult<CvdForm>> addCvdForm(CvdForm cvdForm) {
+    return _cvdFormsRepo.addCvdForm(cvdForm);
+  }
+
+  @override
+  CvdForm? getCurrentForm() {
+    return _cvdFormsRepo.getCurrentForm();
+  }
+
+  @override
+  ApiResult<List<CvdForm>> getCvdForms() {
+    return _cvdFormsRepo.getCvdForms();
+  }
+
+  @override
+  Future<ApiResult<Uint8List>> submitForm(CvdForm cvdForm, {ProgressCallback? onReceiveProgress}) {
+    return _cvdFormsRepo.submitForm(cvdForm, onReceiveProgress: onReceiveProgress);
+  }
+
+  @override
+  Future<ApiResult<CvdForm>> updateCvdForm(CvdForm cvdForm) {
+    return _cvdFormsRepo.updateCvdForm(cvdForm);
+  }
+  
+  @override
+  Future<bool> deleteForm(CvdForm cvdForm) {
+    return _cvdFormsRepo.deleteForm(cvdForm);
+  }
+  
+  @override
+  Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) {
+    return _authRepo.updateCvdForms(base64pdfs: base64pdfs);
+    
   }
 }

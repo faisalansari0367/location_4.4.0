@@ -1,4 +1,5 @@
-import 'package:api_repo/api_result/api_result.dart';
+
+import 'package:api_repo/api_repo.dart';
 
 import '../models/polygon_model.dart';
 

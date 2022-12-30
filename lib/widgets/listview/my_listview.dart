@@ -85,12 +85,12 @@ class MyListview<T> extends StatelessWidget {
 
   Widget _child() {
     if (isLoading) return _loader();
-    if (data.isEmpty)
-      return SingleChildScrollView(
-        // physics: NeverScrollableScrollPhysics(),
-        controller: controller,
-        child: emptyWidget ?? _empty(),
-      );
+    if (data.isEmpty) emptyWidget ?? _empty();
+    // return SingleChildScrollView(
+    //   // physics: NeverScrollableScrollPhysics(),
+    //   controller: controller,
+    //   child: emptyWidget ?? _empty(),
+    // );
     return ListView.separated(
       controller: controller,
       padding: padding,

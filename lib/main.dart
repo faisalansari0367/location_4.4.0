@@ -10,6 +10,7 @@ import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
 import 'package:bioplus/work_manager.dart';
+import 'package:cvd_forms/cvd_forms.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -44,13 +45,16 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await Hive.initFlutter();
+
     final _box = await Hive.openBox(HiveBox.storage);
+    // final _cvdBox = await Hive.openBox(HiveBox.cvdBox);
     // final notifications = AwesomeNotifications();
     final localApi = LocalApi();
     final repo = ApiRepo(localApiinit: localApi.init);
     await repo.init(baseUrl: ApiConstants.baseUrl, box: _box);
-    // await localApi.init(baseUrl: ApiConstants.baseUrl, box: _box);
     final mapsRepo = MapsApi(client: repo.client);
+    // final cvdFormsRepo = CvdFormsRepoImpl(box: _cvdBox, client: repo.client);
+
     await mapsRepo.init();
     final pushNotification = PushNotificationService();
     FirebaseMessaging.onBackgroundMessage(bgHandler);
@@ -60,10 +64,10 @@ Future<void> main() async {
     // await initBackgroundLocator();
     runApp(
       MyApp(
+        // cvdFormsRepo: cvdFormsRepo,
         localApi: localApi,
         pushNotificationService: pushNotification,
         api: repo,
-        // notificationService: localNotification,
         mapsRepo: mapsRepo,
       ),
     );
@@ -84,6 +88,7 @@ Future<void> _setOrientation() async {
 class MyApp extends StatefulWidget {
   final Api api;
   final MapsRepo mapsRepo;
+  // final CvdFormsRepoImpl cvdFormsRepo;
   // final NotificationService notificationService;
   final PushNotificationService pushNotificationService;
   final LocalApi localApi;
@@ -95,6 +100,7 @@ class MyApp extends StatefulWidget {
     required this.mapsRepo,
     required this.pushNotificationService,
     required this.localApi,
+    // required this.cvdFormsRepo,
   }) : super(key: key);
 
   @override
@@ -159,6 +165,9 @@ class _MyAppState extends State<MyApp> {
       RepositoryProvider<GeofenceService>(
         create: (context) => GeofenceService(),
       ),
+      // RepositoryProvider<CvdFormsRepo>.value(
+      //   value: widget.cvdFormsRepo,
+      // ),
     ];
   }
 

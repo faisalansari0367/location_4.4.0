@@ -3,13 +3,14 @@ import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:bioplus/widgets/widgets.dart';
+import 'package:cvd_forms/models/src/buyer_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 import '../cubit/cvd_cubit.dart';
-import '../models/buyer_details_model.dart';
+// import '../models/buyer_details_model.dart';
 import '../widgets/common_buttons.dart';
 import '../widgets/cvd_textfield.dart';
 
@@ -29,7 +30,7 @@ class _BuyerDetailsState extends State<BuyerDetails> {
 
   //
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _init();
   }
@@ -115,9 +116,10 @@ class _BuyerDetailsState extends State<BuyerDetails> {
             final cubit = context.read<CvdCubit>();
             // cubit.addFormData(formData);
             if (isValidated) {
-              cubit.buyerDetailsModel = buyerDetails;
+              // cubit.buyerDetailsModel = buyerDetails;
+              cubit.setBuyerDetails(buyerDetails);
               cubit.moveToNext();
-              print(buyerDetails);
+              // print(buyerDetails);
             }
           },
         ),

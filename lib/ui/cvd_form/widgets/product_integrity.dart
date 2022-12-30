@@ -1,8 +1,7 @@
 import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
-import 'package:bioplus/ui/cvd_form/models/chemical_use.dart';
-import 'package:bioplus/ui/cvd_form/models/product_integrity_details_model.dart';
 import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:cvd_forms/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -86,7 +85,7 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
               // print(formData);
               final cubit = context.read<CvdCubit>();
               // cubit.addFormData(newMap);
-              cubit.productIntegrityDetailsModel = form!;
+              cubit.setProductIntegrityDetails(form!);
               // cubit.changeCurrent(cubit.state.currentStep + 1);
               cubit.moveToNext();
             },

@@ -2,15 +2,12 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:api_repo/api_result/api_result.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
-import 'package:api_repo/configs/client.dart';
+import 'package:api_client/api_client.dart';
+import 'package:api_client/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/log/log_records.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../../../configs/endpoint.dart';
 
 class LogRecordsImpl implements LogRecordsRepo {
   final Client client;
@@ -99,7 +96,15 @@ class LogRecordsImpl implements LogRecordsRepo {
         for (final entry in recordsToBeUpdated) {
           if (!entry.isOffline) {
             log('updating log record : ${entry.id}');
-            final result = await _patchForm(entry.form?.toJson() ?? {}, entry.id!);
+            final form = entry.form?.toJson() ?? {};
+
+           
+            if (entry.exitDate != null) {
+              form['exitTime'] = entry.exitDate?.toIso8601String();
+              form['updatedAt'] = DateTime.now().toIso8601String();
+            }
+
+            final result = await _patchForm(form, entry.id!);
             result.when(success: (s) async {
               log('log record ${s.id} updated successfully');
               offlineRecords.removeWhere((element) => element.id == s.id);

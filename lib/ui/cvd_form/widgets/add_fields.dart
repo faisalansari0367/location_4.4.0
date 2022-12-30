@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AddFields extends StatefulWidget {
   final String field;
   final ValueChanged<List<String>> onChanged;
+  final String? value;
   final String? no;
-  const AddFields({Key? key, required this.field, this.no, required this.onChanged}) : super(key: key);
+
+  const AddFields({Key? key, required this.field, this.value, required this.onChanged, this.no}) : super(key: key);
 
   @override
   State<AddFields> createState() => _AddFieldsState();
@@ -16,6 +18,14 @@ class AddFields extends StatefulWidget {
 class _AddFieldsState extends State<AddFields> {
   List<String> fields = [];
   String value = '';
+
+  @override
+  void initState() {
+    if (widget.value != null || (widget.value?.isNotEmpty ?? false)) {
+      fields = widget.value!.split(',').toList();
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +72,7 @@ class _AddFieldsState extends State<AddFields> {
                     IconButton(
                       onPressed: () {
                         fields.remove(e);
+                        widget.onChanged.call(fields);
                         setState(() {});
                       },
                       icon: const Icon(Icons.remove),
@@ -100,7 +111,7 @@ class _AddFieldsState extends State<AddFields> {
                 onPressed: value.isEmpty
                     ? null
                     : () {
-                        FocusScope.of(context).unfocus();
+                        // FocusScope.of(context).unfocus();
                         fields.add(value);
                         value = '';
                         widget.onChanged.call(fields);

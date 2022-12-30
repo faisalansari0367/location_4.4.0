@@ -3,15 +3,16 @@ import 'dart:convert';
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
-import 'package:bioplus/widgets/dialogs/dialog_service.dart';
-import 'package:bioplus/widgets/dialogs/no_signature_found.dart';
+import 'package:bioplus/widgets/download_button/download_button.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get.dart';
+
+import '../../../constants/index.dart';
+import '../../../widgets/dialogs/dialogs.dart';
 
 class SelfDeclaration extends StatefulWidget {
   const SelfDeclaration({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
   @override
   void initState() {
     orgController = TextEditingController(text: context.read<Api>().getUserData()?.company);
-    context.read<CvdCubit>().organisationName = orgController.text;
+    context.read<CvdCubit>().setOrgName(orgController.text);
     nameController = TextEditingController(text: getName());
     _init();
     super.initState();
@@ -69,7 +70,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
               textCapitalization: TextCapitalization.characters,
               onChanged: (s) {
                 setState(() {
-                  context.read<CvdCubit>().organisationName = s;
+                  context.read<CvdCubit>().setOrgName(s);
                   org = s;
                 });
               },
@@ -142,7 +143,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
             SignatureWidget(
               signature: context.read<CvdCubit>().signature,
               onChanged: (s) {
-                context.read<CvdCubit>().signature = s;
+                context.read<CvdCubit>().setSignature(s);
                 setState(() {});
               },
             ),
@@ -171,6 +172,19 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
             Gap(20.h),
             BlocBuilder<CvdCubit, CvdState>(
               builder: (context, state) {
+                final cubit = context.read<CvdCubit>();
+                // return LimitedBox(
+                //   // height: 50.h,
+                //   maxHeight: 100,
+                //   maxWidth: 80,
+                //   child: SizedBox(
+                //     child: DownloadButton(
+                //       controller: cubit.cvdDownloadController,
+                //       buttonText: 'Submit',
+                //       padding: const EdgeInsets.all(15),
+                //     ),
+                //   ),
+                // );
                 return MyElevatedButton(
                   // isLoading: state.isLoading,
                   text: 'Submit',
@@ -182,11 +196,11 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                           message: 'Please sign the declaration',
                           buttonText: 'Ok',
                           onTap: () async {
-                            // Get.back();
                             Get.to(
                               () => CreateSignature(
                                 onDone: (s) {
-                                  cubit.signature = s;
+                                  if (s == null) return;
+                                  cubit.setSignature(s);
                                   Get.back();
                                 },
                               ),
@@ -196,7 +210,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                       );
                       // return;
                     } else {
-                      await cubit.getApiData();
+                      await cubit.submitForm();
                     }
                   },
                 );

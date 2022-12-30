@@ -116,10 +116,15 @@ class FormsStorageService {
     }
   }
 
-  Future<File> saveCvdForm(Uint8List bytes, String buyerName) async {
+  Future<Directory> getCvdDir() async {
     final userDir = await _getUserDir();
     final cvdDir = Directory(userDir.path + '/$_cvdFolder');
     if (!(await cvdDir.exists())) cvdDir.create();
+    return cvdDir;
+  }
+
+  Future<File> saveCvdForm(Uint8List bytes, String buyerName) async {
+    final cvdDir = await getCvdDir();
     final date = MyDecoration.formatDate(DateTime.now());
     final file = await _createCvdFile(cvdDir.path, date, buyerName);
     await file.writeAsBytes(bytes);

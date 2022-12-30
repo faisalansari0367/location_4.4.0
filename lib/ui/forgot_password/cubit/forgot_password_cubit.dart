@@ -1,5 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/forgot_password/cubit/forgot_password_state.dart';
 import 'package:bioplus/ui/forgot_password/view/reset_password.dart';

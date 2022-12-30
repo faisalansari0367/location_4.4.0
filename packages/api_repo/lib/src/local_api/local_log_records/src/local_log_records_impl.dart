@@ -4,13 +4,11 @@ import 'dart:developer' show log;
 import 'dart:math' show Random;
 
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/api_result.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/geofences/src/storage/maps_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import '../../../../api_result/network_exceptions/network_exceptions.dart';
 
 class LocalLogRecordsImpl extends LogRecordsRepo {
   LocalLogRecordsImpl({

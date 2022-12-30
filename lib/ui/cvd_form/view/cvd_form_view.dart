@@ -51,31 +51,29 @@ class _CvdFormViewState extends State<CvdFormView> {
         body: BlocBuilder<CvdCubit, CvdState>(
           builder: (context, state) {
             if (state.isLoading) return Center(child: CircularProgressIndicator());
-            // index = -1;
+
             return Column(
               children: [
                 CustomSteppar(
                   onChanged: (value) => cubit.moveToPage(value),
                   currentStep: state.currentStep,
                   stepper: cubit.stepNames,
-                  // isCompleted: cubit.isStepCompleted(),
                 ),
                 Expanded(
                   child: PageView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: cubit.pageController,
                     children: [
-                      // CommonPage(data: state.formStepper[0].formDataList),
                       VendorDetails(
-                        vendorDetailsModel: cubit.vendorDetails,
+                        vendorDetailsModel: cubit.vendorDetailsModel,
                       ),
                       BuyerDetails(
                         buyerDetails: cubit.buyerDetailsModel,
                       ),
-                      TransporterDetails(transporDetails: cubit.transporterDetails),
+                      TransporterDetails(transporDetails: cubit.transporterDetailsModel),
                       // CommonPage(data: state.formStepper[2].formDataList),
                       CommodityDetails(
-                        commodityDetails: cubit.commodityDetails,
+                        commodityDetails: cubit.commodityDetailsModel,
                       ),
                       ProductIntegrity(
                         productIntegrityDetails: cubit.productIntegrityDetailsModel,
@@ -90,22 +88,6 @@ class _CvdFormViewState extends State<CvdFormView> {
                         child: e,
                       );
                     }).toList(),
-                    // itemBuilder: (context, index) {
-                    // final e = state.formStepper.elementAt(index);
-                    // final step = FormStepper(
-                    //   actions: Padding(
-                    //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    //     child: _actions(state, index),
-                    //   ),
-                    //   heading: e.heading,
-                    //   isActive: state.formStepper.indexOf(e) == state.currentStep,
-                    //   formDataList: e.formDataList,
-                    // );
-                    // return Padding(
-                    //   padding: kPadding,
-                    //   child: step.content,
-                    // );
-                    // },
                   ),
                 ),
               ],
@@ -114,9 +96,5 @@ class _CvdFormViewState extends State<CvdFormView> {
         ),
       ),
     );
-  }
-
-  Widget vendorDetails(List<String> fields) {
-    return Column();
   }
 }

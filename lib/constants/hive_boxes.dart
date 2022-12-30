@@ -1,3 +1,3 @@
 class HiveBox {
-  static const String cvdBox = 'cvdBox', storage = 'storage';
+  static const String cvdBox = 'cvdBox', storage = 'storage', location = 'location';
 }

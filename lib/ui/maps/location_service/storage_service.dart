@@ -1,6 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/api_result.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../models/polygon_model.dart';

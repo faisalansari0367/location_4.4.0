@@ -1,5 +1,4 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
 import 'package:bioplus/constants/constans.dart';
 import 'package:bioplus/constants/strings.dart';
 import 'package:bioplus/extensions/size_config.dart';

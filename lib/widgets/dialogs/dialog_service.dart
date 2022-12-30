@@ -1,4 +1,4 @@
-import 'package:api_repo/api_result/network_exceptions/network_exceptions.dart';
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
 import 'package:bioplus/widgets/dialogs/status_dialog_new.dart';
 import 'package:bioplus/widgets/dialogs/success.dart';

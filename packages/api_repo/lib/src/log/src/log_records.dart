@@ -1,4 +1,5 @@
-import 'package:api_repo/api_result/api_result.dart';
+
+import 'package:api_client/api_result/api_result.dart';
 
 import '../models/models.dart';
 
