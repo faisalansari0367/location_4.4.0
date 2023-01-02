@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/provider/base_model.dart';
-import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
+import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/geolocator_service.dart';
 import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';

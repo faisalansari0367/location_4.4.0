@@ -1,6 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
-import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
+import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo_local.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/maps/models/polygon_model.dart';

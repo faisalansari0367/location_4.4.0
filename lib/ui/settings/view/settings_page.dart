@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
-import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
+import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';

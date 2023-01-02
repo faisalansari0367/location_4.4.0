@@ -5,12 +5,10 @@ import 'package:bioplus/constants/hive_boxes.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
-import 'package:bioplus/ui/maps/location_service/background_location_service.dart';
+import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
-import 'package:bioplus/work_manager.dart';
-import 'package:cvd_forms/cvd_forms.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -39,7 +37,7 @@ Future<void> bgHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _setOrientation();
-  initWorkManager();
+  // initWorkManager();
   await runZonedGuarded(() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
