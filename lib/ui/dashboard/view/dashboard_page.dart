@@ -34,7 +34,7 @@ class DashboardPage extends StatelessWidget {
                 child: ScaleAnimation(
                   scale: 0.7,
                   curve: Curves.easeIn,
-                  child: BioSecureLogo(),
+                  child: AppLogo(),
                 ),
               ),
             ),

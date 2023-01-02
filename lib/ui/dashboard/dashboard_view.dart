@@ -19,7 +19,6 @@ import 'package:bioplus/widgets/logo/app_name_widget.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../../services/notifications/push_notifications.dart';
 import '../../widgets/dialogs/status_dialog_new.dart';
@@ -79,13 +78,7 @@ class _DashboardViewState extends State<DashboardView> {
           centreTitle: true,
           title: SizedBox(
             height: 50,
-            child: AnimationConfiguration.synchronized(
-              child: ScaleAnimation(
-                scale: 0.7,
-                curve: Curves.easeIn,
-                child: BioSecureLogo(),
-              ),
-            ),
+            child: AppLogo(),
           ),
         ),
         body: SingleChildScrollView(

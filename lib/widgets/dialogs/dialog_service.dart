@@ -1,18 +1,21 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
 import 'package:bioplus/widgets/dialogs/status_dialog_new.dart';
 import 'package:bioplus/widgets/dialogs/success.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class DialogService {
+  static const _transitionDuration = Duration(milliseconds: 275);
+  static const _curve = kCurve;
+
   static Future<T?> showDialog<T>({
     required Widget child,
   }) async {
     final result = await Get.dialog(
       child,
-      transitionCurve: Curves.elasticOut,
-      transitionDuration: const Duration(milliseconds: 400),
+      transitionCurve: _curve,
+      transitionDuration: _transitionDuration,
     );
     return result;
   }
@@ -26,8 +29,8 @@ class DialogService {
         message: NetworkExceptions.getErrorMessage(error),
         onCancel: onCancel ?? Get.back,
       ),
-      transitionCurve: Curves.elasticOut,
-      transitionDuration: const Duration(milliseconds: 400),
+      transitionCurve: _curve,
+      transitionDuration: _transitionDuration,
     );
   }
 
@@ -39,7 +42,7 @@ class DialogService {
         onContinue: Get.back,
       ),
       transitionCurve: Curves.elasticOut,
-      transitionDuration: const Duration(milliseconds: 400),
+      transitionDuration: _transitionDuration,
     );
   }
 
@@ -52,8 +55,8 @@ class DialogService {
         onTap: () => onCancel(),
         message: success,
       ),
-      transitionCurve: Curves.elasticOut,
-      transitionDuration: const Duration(milliseconds: 400),
+      transitionCurve: _curve,
+      transitionDuration: _transitionDuration,
     );
   }
 }

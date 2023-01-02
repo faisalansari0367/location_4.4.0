@@ -4,8 +4,7 @@ import 'package:bioplus/ui/admin/pages/visitor_log_book/widget/logbook_details.d
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
 import 'package:bioplus/ui/maps/models/polygon_model.dart';
-import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
-import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:bioplus/widgets/empty_screen.dart';
 import 'package:bioplus/widgets/listview/infinite_table.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -140,17 +139,21 @@ class _LogbookViewState extends State<LogbookView> {
     return rows;
   }
 
+  Color _zebraColor(int index) {
+    return index % 2 == 0 ? Colors.grey.shade100 : Colors.white;
+  }
+
   // DataRow _tableRow(data) {
   DataRow _dataRow(LogbookEntry item, int index, LogBookState state) {
     return DataRow(
-      color: MaterialStateProperty.all(
-        index % 2 == 0 ? Colors.grey.shade100 : Colors.white,
-      ),
+      color: MaterialStateProperty.all(_zebraColor(index)),
       cells: [
         if (kDebugMode) _dataCell(item.id.toString()),
-        _dataCell('${item.user?.firstName} ${item.user?.lastName}', isOffline: item.isOffline),
-        _dataCell('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
-        _dataCell('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
+        _dataCell('${item.user?.fullName}', isOffline: item.isOffline),
+        // _dataCell('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
+        // _dataCell(MyDecoration())
+        _dataCell(_dateAndTime(item.enterDate)),
+        _dataCell(_dateAndTime(item.exitDate)),
         _dataCell(item.geofence?.name ?? ''),
         _dataCell(item.geofence?.pic ?? item.user?.ngr ?? '',
             color: item.geofence?.color, isPic: item.geofence?.pic != null),
@@ -159,6 +162,10 @@ class _LogbookViewState extends State<LogbookView> {
         _buildFormButton(item),
       ],
     );
+  }
+
+  String _dateAndTime(DateTime? date) {
+    return '${MyDecoration.formatTime(date)}\n${MyDecoration.formatDate(date)}';
   }
 
   DataCell _buildFormButton(LogbookEntry item) {
@@ -173,8 +180,10 @@ class _LogbookViewState extends State<LogbookView> {
               ),
               child: const Text('View'),
             )
-          : GestureDetector(
-              onTap: !(_user?.id == item.user!.id) ? null : () => _completeDeclarationDialog(item),
+          : TextButton(
+              onPressed: !(_user?.id == item.user!.id)
+                  ? () => _notAllowedDeclarationForm()
+                  : () => _completeDeclarationDialog(item),
               child: Text(
                 'Unregistered'.toUpperCase(),
                 style: TextStyle(
@@ -184,6 +193,15 @@ class _LogbookViewState extends State<LogbookView> {
                 ),
               ),
             ),
+    );
+  }
+
+  Future<void> _notAllowedDeclarationForm() {
+    return DialogService.showDialog(
+      child: ErrorDialog(
+        message: 'You are not allowed to complete declaration form for this user',
+        onTap: Get.back,
+      ),
     );
   }
 
@@ -227,7 +245,6 @@ class _LogbookViewState extends State<LogbookView> {
                   Expanded(
                     child: MyElevatedButton(
                       onPressed: () async {
-                        // final PolygonModel polygonModel = PolygonModel.fromLocalJson(item.toJson());
                         Get.back();
                         Get.to(
                           () => FormsPage(
@@ -243,13 +260,11 @@ class _LogbookViewState extends State<LogbookView> {
                               createdAt: item.createdAt,
                               updatedAt: item.updatedAt,
                               createdBy: item.user,
-                              // TODO: check if this is correct
                               points: [],
                             ),
                           ),
                         );
                       },
-                      // text: 'Yes',
                       color: Colors.green,
                       child: Text(
                         'Yes',
@@ -277,8 +292,6 @@ class _LogbookViewState extends State<LogbookView> {
     return DataCell(
       Stack(
         children: [
-          // offline tag
-
           Container(
             padding: EdgeInsets.symmetric(horizontal: isPic ? 10.w : 0.w, vertical: 5.h),
             decoration: isPic
@@ -289,16 +302,7 @@ class _LogbookViewState extends State<LogbookView> {
                 : null,
             child: Row(
               children: [
-                if (isOffline)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
-                    margin: EdgeInsets.only(right: 5.w),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      // borderRadius: BorderRadius.circular(50),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+                if (isOffline) _buildDot(),
                 Text(
                   data,
                   textAlign: TextAlign.center,
@@ -315,15 +319,18 @@ class _LogbookViewState extends State<LogbookView> {
               ],
             ),
           ),
-          // if (isOffline)
-          //   Container(
-          //     padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
-          //     decoration: BoxDecoration(
-          //       color: Colors.red,
-          //       borderRadius: BorderRadius.circular(50),
-          //     ),
-          //   ),
         ],
+      ),
+    );
+  }
+
+  Container _buildDot() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+      margin: EdgeInsets.only(right: 5.w),
+      decoration: BoxDecoration(
+        color: Colors.red,
+        shape: BoxShape.circle,
       ),
     );
   }

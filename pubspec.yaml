@@ -163,7 +163,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/images/bioplus_app_icon.png"
-  adaptive_icon_background: "assets/icons/background.png"
+  adaptive_icon_background: "#3E4893"
   # adaptive_icon_background: "assets/icons/background.png"
 
 flutter_gen:

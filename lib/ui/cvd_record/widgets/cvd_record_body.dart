@@ -37,17 +37,28 @@ class CvdRecordBody extends StatelessWidget {
               if (state.files.isNotEmpty) ...[
                 _buildPdfs(state),
                 Gap(20.h),
-              ],
-              if (state.forms.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    'Offline Records',
-                    style: context.textTheme.headline6,
+              ] else ...[
+                SizedBox(
+                  height: 70.height,
+                  child: Center(
+                    child: EmptyScreen(
+                      message: 'No Records Found',
+                      // subtitle: 'Please fill the form to get records',
+                    ),
                   ),
+                  // height: 50.height,
                 ),
-                offlineRecords(state),
               ],
+              // if (state.forms.isNotEmpty) ...[
+              //   Padding(
+              //     padding: const EdgeInsets.all(12.0),
+              //     child: Text(
+              //       'Offline Records',
+              //       style: context.textTheme.headline6,
+              //     ),
+              //   ),
+              //   offlineRecords(state),
+              // ],
             ],
           ),
         );

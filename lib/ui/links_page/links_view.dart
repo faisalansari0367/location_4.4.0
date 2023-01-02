@@ -35,7 +35,7 @@ class LinksView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
                   height: 40.w,
-                  child: BioSecureLogo(),
+                  child: AppLogo(),
                 ),
               ),
               onTap: () async => Get.to(

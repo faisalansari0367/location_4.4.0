@@ -2,6 +2,7 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/widgets/animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class MyElevatedButton extends StatefulWidget {
   final Widget? child;
@@ -95,9 +96,16 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
           //         ),
           //       ],
         ),
-        child: MySlideAnimation(
-          // key: ValueKey(isLoading),s
-          child: isLoading ? _showLoading() : widget.child ?? _showText(context),
+        child: AnimationConfiguration.synchronized(
+          child: ScaleAnimation(
+            curve: kCurve,
+            scale: 0.5,
+            // key: ValueKey(isLoading),s
+            child: FadeInAnimation(
+              curve: kCurve,
+              child: isLoading ? _showLoading() : widget.child ?? _showText(context),
+            ),
+          ),
         ),
       ),
     );
