@@ -98,10 +98,8 @@ class LogRecordsImpl implements LogRecordsRepo {
             log('updating log record : ${entry.id}');
             final form = entry.form?.toJson() ?? {};
 
-           
             if (entry.exitDate != null) {
-              form['exitTime'] = entry.exitDate?.toIso8601String();
-              form['updatedAt'] = DateTime.now().toIso8601String();
+              form['exitDate'] = entry.exitDate?.toIso8601String();
             }
 
             final result = await _patchForm(form, entry.id!);
@@ -217,7 +215,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   @override
   Future<ApiResult<LogbookEntry>> logBookEntry(
-    String pic,
+    // String pic,
     String geofenceId, {
     bool isExiting = false,
     String? form,

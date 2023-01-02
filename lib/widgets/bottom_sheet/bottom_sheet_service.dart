@@ -13,6 +13,7 @@ class BottomSheetService {
       exitBottomSheetDuration: 175.milliseconds,
       backgroundColor: Colors.white,
       barrierColor: Colors.black.withOpacity(0.1),
+      
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

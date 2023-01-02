@@ -120,7 +120,7 @@ class VisitorCheckInView extends StatelessWidget {
           ),
           Gap(20.h),
           AutoSizeText(
-            'Automated BioSecurity Compliance\nPowered by ${Strings.appName}',
+            'Automated Biosecurity Compliance\nPowered by ${Strings.appName}',
             textAlign: TextAlign.center,
             style: context.textTheme.headline6?.copyWith(
               color: context.theme.primaryColor,

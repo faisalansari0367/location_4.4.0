@@ -46,32 +46,22 @@ class MapsCubit extends BaseModel {
     required this.geofenceService,
     this.polygonId,
   }) : super(context) {
-    // mapsRepo = _mapsRepo;
-    // trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
-    // MyConnectivity().connectionStream.listen((event) {
-    //   mapsRepo = event ? _mapsRepo : mapsRepoLocal;
-    //   emit(state.copyWith(isConnected: event));
-    // });
-
     init();
   }
-
-  MapsState state = const MapsState(
-    currentLocation: LatLng(-25.185575842417077, 134.68900724218238),
-  );
+  static const _latLng = LatLng(-25.185575842417077, 134.68900724218238);
+  MapsState state = const MapsState(currentLocation: _latLng);
 
   final Completer<GoogleMapController> controller = Completer();
   Future<GoogleMapController> get mapController async => await controller.future;
-  // StreamSubscription<Position>? _positionSubscription;
 
   Future<void> init() async {
     geofenceService.init(mapsRepo, localApi);
-    updateCurrentLocation();
     // so that device can determine the connectivity status
     await 100.milliseconds.delay();
     if (state.polygons.isEmpty) {
-      _getAllPolygon();
+      await _getAllPolygon();
     }
+    updateCurrentLocation();
     getLocationUpdates();
     polygonsStream();
     polylinesStream();
@@ -97,9 +87,9 @@ class MapsCubit extends BaseModel {
 
   bool canUserEdit(int? id) {
     if (id == null) return false;
-    final id2 = api.getUserData()?.id;
+    final currentUserId = api.getUserData()?.id;
     // final roles = [Roles.producer, Roles.agent, Roles.consignee].contains(userData?.role?.camelCase?.getRole);
-    return id2 == id;
+    return currentUserId == id;
   }
 
   void toggleTracking() {
@@ -108,7 +98,6 @@ class MapsCubit extends BaseModel {
 
   Future<void> doneEditing() async {
     if (state.currentPolygon == null) return;
-    // final polygon = state.currentPolygon?.color = state.selectedColor;
     final polygon = state.currentPolygon?.copyWith(color: state.selectedColor);
 
     final result = await mapsRepo.updatePolygon(polygon!);
@@ -153,6 +142,7 @@ class MapsCubit extends BaseModel {
     allPolygon.when(
       success: (allPolygon) {
         emit(state.copyWith(polygons: allPolygon.toSet()));
+        // getLocationUpdates();
       },
       failure: (error) => DialogService.failure(error: error),
     );
@@ -166,8 +156,8 @@ class MapsCubit extends BaseModel {
     emit(state.copyWith(isEditingFence: !state.isEditingFence));
   }
 
-  void setAssetColor(Color color) {
-    emit(state.copyWith(selectedColor: color));
+  void setPolygonColor(Color color) {
+    emit(state.copyWith(polygonColor: color));
   }
 
   void addPolygon(String name, {String? companyOwner}) async {
@@ -178,7 +168,6 @@ class MapsCubit extends BaseModel {
       id: Random().nextInt(10000000).toString(),
       companyOwner: companyOwner,
     );
-    // final userData = await api.getUserData();
     final result = await mapsRepo.savePolygon(model);
     result.when(
       success: (data) => _polygonsService.clear(),
@@ -188,7 +177,6 @@ class MapsCubit extends BaseModel {
       },
     );
 
-    // _getAllPolygon();
     emit(
       state.copyWith(
         polygons: {
@@ -205,11 +193,6 @@ class MapsCubit extends BaseModel {
     );
   }
 
-  // void zoom() async {
-  //   final zoom = await mapController.getZoomLevel();
-  //   emit(state.copyWith(zoom: zoom + 5));
-  // }
-
   void changeMapType(MapType type) async {
     emit(state.copyWith(mapType: type));
   }
@@ -225,11 +208,6 @@ class MapsCubit extends BaseModel {
       animateCamera(_lastPosition);
       emit(state.copyWith(currentLocation: _lastPosition));
     }
-    // final currentPosition = await GeolocatorService.getCurrentPosition();
-    // final target = LatLng(currentPosition.latitude, currentPosition.longitude);
-
-    // animateCamera(target);
-    // emit(state.copyWith(currentLocation: target));
   }
 
   void animateCamera(LatLng latLng) async {
@@ -252,37 +230,14 @@ class MapsCubit extends BaseModel {
     this.controller.complete(controller);
   }
 
-  // PolygonModel? getPolygon() {
-  //   final polygon = state.polygons.where(
-  //     (element) => MapsToolkitService.isInsidePolygon(
-  //       latLng: state.currentLocation,
-  //       polygon: element.points,
-  //     ),
-  //   );
-  //   if (polygon.isEmpty) return null;
-  //   return polygon.first;
-  // }
-
-  // Future<void> zoom(double zoom) async {
-  //   emit(state.copyWith(zoom: min(max(1, state.zoom + zoom), 20)));
-  //   print(state.zoom);
-  //   await mapController.animateCamera(
-  //     CameraUpdate.newCameraPosition(
-  //       CameraPosition(
-  //         target: state.currentLocation,
-  //         zoom: state.zoom,
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Future<void> getLocationUpdates() async {
-    await mapsRepo.polygonsCompleter;
+    print('waiting for polygons to complete');
+    // await mapsRepo.polygonsCompleter;
+    print('polygons completed');
+    // notifyListeners();
 
     geofenceService.getLocationUpdates((event) {
       final position = LatLng(event.latitude, event.longitude);
-      // print(position);
-
       emit(
         state.copyWith(currentLocation: position),
         notify: false,
@@ -291,22 +246,8 @@ class MapsCubit extends BaseModel {
         if (event.speed > 0) animateCamera(position);
       }
     });
-    // final locationupdates = await GeolocatorService.getLocationUpdates();
-    // _positionSubscription = locationupdates.listen((event) {
-
-    //   final polygonsInCoverage = MapsToolkitService.isInsideAccuracy(
-    //     latLng: position,
-    //     polygons: state.polygons,
-    //     accuracy: event.accuracy,
-    //   );
-
-    //   if (polygonsInCoverage.isNotEmpty) {
-    //     trackPolygons.update(polygonsInCoverage, position);
-    //   }
-    // });
   }
 
-  // void stopLocationUpdates() => _positionSubscription?.cancel();
   @override
   Future<void> dispose() async {
     // geofenceService.stopTimers();

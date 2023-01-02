@@ -61,7 +61,7 @@ class NotifyManagerHandler {
   Future<void> _notifyManager() async {
     if (position == null || polygon == null) return;
     final result = await mapsRepo.notifyManager(
-      polygon!.pic!,
+      // polygon!.pic!,
       position!.latitude.toString(),
       position!.longitude.toString(),
       polygon!.id!,

@@ -4,6 +4,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/biosecure_logo.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,22 @@ class LinksView extends StatelessWidget {
         child: AutoSpacing(
           spacing: Gap(15.h),
           children: [
+            MyListTile(
+              text: 'Bioplus'.capitalize!,
+              title: Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  height: 40.w,
+                  child: BioSecureLogo(),
+                ),
+              ),
+              onTap: () async => Get.to(
+                () => const Webview(
+                  url: 'https://bioplus.live/',
+                  title: 'Bioplus',
+                ),
+              ),
+            ),
             MyListTile(
               text: 'iTRAK'.toUpperCase(),
               title: Align(

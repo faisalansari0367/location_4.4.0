@@ -37,7 +37,7 @@ class AdminView extends StatelessWidget {
             child: AutoSpacing(
               spacing: Gap(2.5.height),
               children: [
-                const BioSecureLogo(),
+                Center(child: const BioSecureLogo()),
                 MyListTile(
                   text: 'Users',
                   onTap: () async => Get.to(() => const UsersPage()),

@@ -5,6 +5,7 @@ import 'package:bioplus/provider/base_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../constants/constans.dart';
 import '../../../../widgets/dialogs/dialog_service.dart';
 import '../../../../widgets/dialogs/no_signature_found.dart';
 import '../../../../widgets/signature/signature_widget.dart';
@@ -20,6 +21,7 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
     model = FormQuestionDataModel.fromLocal();
   }
   final formKey = GlobalKey<FormState>();
+  final sc = ScrollController();
 
   void pickDateTime(QuestionData questionData, BuildContext context) async {
     final pickedDate = await showDatePicker(
@@ -63,6 +65,14 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
   void onChanged(QuestionData questionData, dynamic value) {
     questionData.value = value;
     notifyListeners();
+  }
+
+  void scrollToEnd() {
+    sc.animateTo(
+      sc.position.maxScrollExtent,
+      duration: kDuration,
+      curve: kCurve,
+    );
   }
   // void onChanged(QuestionData questionData, dynamic value) {
   //   questionData.value = value;

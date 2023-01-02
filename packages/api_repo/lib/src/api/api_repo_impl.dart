@@ -247,8 +247,13 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry(String pic, String geofenceId, {bool isExiting = false, String? form}) {
-    return _logRecordsRepo.logBookEntry(pic, geofenceId, isExiting: isExiting, form: form);
+  Future<ApiResult<LogbookEntry>> logBookEntry( String geofenceId, {bool isExiting = false, String? form}) {
+    return _logRecordsRepo.logBookEntry(
+      // pic,
+      geofenceId,
+      isExiting: isExiting,
+      form: form,
+    );
   }
 
   @override
@@ -356,15 +361,14 @@ class ApiRepo implements Api {
   Future<ApiResult<CvdForm>> updateCvdForm(CvdForm cvdForm) {
     return _cvdFormsRepo.updateCvdForm(cvdForm);
   }
-  
+
   @override
   Future<bool> deleteForm(CvdForm cvdForm) {
     return _cvdFormsRepo.deleteForm(cvdForm);
   }
-  
+
   @override
   Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) {
     return _authRepo.updateCvdForms(base64pdfs: base64pdfs);
-    
   }
 }

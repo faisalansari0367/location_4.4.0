@@ -103,7 +103,7 @@ class MapsRepoLocal implements MapsRepo {
   }
 
   @override
-  Future<ApiResult<String>> notifyManager(String pic, String lat, String lng, String locationId) async {
+  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) async {
     return const ApiResult.success(data: 'No internet connection');
   }
 

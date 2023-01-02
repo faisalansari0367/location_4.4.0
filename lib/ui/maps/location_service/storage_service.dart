@@ -89,8 +89,8 @@ class MapsStorageService implements MapsRepo {
   }
 
   @override
-  Future<ApiResult<String>> notifyManager(String pic, String lat, String lng, String locationId) async {
-    return const ApiResult.success(data: 'Notified manager');
+  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) async {
+    return const ApiResult.success(data: 'Not available in offline mode');
   }
 
   @override

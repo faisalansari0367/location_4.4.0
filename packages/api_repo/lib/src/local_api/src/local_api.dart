@@ -233,8 +233,8 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry(String pic, String geofenceId, {bool isExiting = false, String? form}) {
-    return _logRecordsImpl.logBookEntry(pic, geofenceId, isExiting: isExiting, form: form);
+  Future<ApiResult<LogbookEntry>> logBookEntry( String geofenceId, {bool isExiting = false, String? form}) {
+    return _logRecordsImpl.logBookEntry( geofenceId, isExiting: isExiting, form: form);
   }
 
   @override

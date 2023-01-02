@@ -208,9 +208,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
                 initialChildSize: 0.4,
                 builder: (context, scrollController) {
                   return GeofencesList(
-                    onSelected: (value) {
-                      cubit.moveToSelectedPolygon(value);
+                    onSelected: (value) async {
                       Get.back();
+                      await 200.milliseconds.delay();
+                      cubit.moveToSelectedPolygon(value);
                     },
                     controller: scrollController,
                   );
@@ -240,7 +241,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             title: 'Select Color',
             iconData: Icons.color_lens,
             onTap: () => BottomSheetService.showSheet(
-              child: SelectColor(onColorSelected: cubit.setAssetColor),
+              child: SelectColor(onColorSelected: cubit.setPolygonColor),
             ),
           ),
           BottomNavbarItem(
@@ -276,62 +277,17 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         child: Row(
           children: [
             _buildBackButton(),
+            // BackButton(),
           ],
         ),
       ),
     );
   }
 
-  // Widget _buildMaps(MapsCubit cubit) {
-  //   return StreamBuilder<List<PolygonModel>>(
-  //     stream: cubit.state.isConnected ? cubit.mapsRepoLocal.polygonStream : cubit.mapsRepo.polygonStream,
-  //     builder: (context, snapshot) {
-  //       return StreamBuilder<List<LatLng>>(
-  //         stream: context.read<PolygonsService>().stream,
-  //         initialData: const [],
-  //         builder: (context, polygonsData) {
-  //           return BlocListener<MapsCubit, MapsState>(
-  //             listener: _listener,
-  //             listenWhen: (previous, current) => previous.insideFence != current.insideFence,
-  //             child: BlocBuilder<MapsCubit, MapsState>(
-  //               builder: (context, state) {
-  //                 return GoogleMap(
-  //                   initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
-  //                   onMapCreated: cubit.onMapCreated,
-  //                   mapType: state.mapType,
-  //                   zoomControlsEnabled: false,
-  //                   myLocationButtonEnabled: false,
-  //                   onLongPress: (s) => dev.log(s.toString()),
-  //                   myLocationEnabled: true,
-  //                   polylines: _polylines(state, polygonsData.data ?? []),
-  //                   markers: _markers(polygonsData.data ?? [], state.currentLocation),
-  //                   polygons: (snapshot.data ?? []).map(addPolygon).toSet(),
-  //                   onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
-  //                 );
-  //               },
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
-
   Widget _buildMapsConsumer(MapsCubit cubit) {
     return Consumer<MapsCubit>(
-      // stream: cubit.state.isConnected ? cubit.mapsRepoLocal.polygonStream : cubit.mapsRepo.polygonStream,
       builder: (context, snapshot, child) {
         final state = snapshot.state;
-        // print('rebuilding maps');
-        // return StreamBuilder<List<LatLng>>(
-        //   stream: context.read<PolygonsService>().stream,
-        //   initialData: const [],
-        //   builder: (context, polygonsData) {
-        //     return BlocListener<MapsCubit, MapsState>(
-        //       listener: _listener,
-        //       listenWhen: (previous, current) => previous.insideFence != current.insideFence,
-        //       child: BlocBuilder<MapsCubit, MapsState>(
-        //         builder: (context, state) {
         print('rebuilding maps');
         return GoogleMap(
           initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
@@ -346,13 +302,8 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           polygons: state.polygons.map(addPolygon).toSet(),
           onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
         );
-        // },
-        // ),
-        // );
       },
     );
-    // },
-    // );
   }
 
   void addLatLng(LatLng latLng, LatLng currentLocation) {
@@ -409,8 +360,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   }
 
   bool isClosedPolygon(List<LatLng> polypoints) {
-    final area = MapsToolkitService.isClosedPolygon(_getMtLatLangs(polypoints));
-
+    final area = MapsToolkitService.isClosedPolygon(polypoints);
     return area;
   }
 

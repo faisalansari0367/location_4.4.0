@@ -76,6 +76,7 @@ class TrackPolygons {
     // log('current polygon is ${currentPolygon?.id}');
     // if (isFormsPage || isSignaturePage) return;
     // log('Polygons in coverage ${polygonsInCoverage.length}');
+    // (polygonsInCoverage.length)
     _userIsInside(polygonsInCoverage, currentPosition);
     if (isFormsPage || isDialogOpen || isSignaturePage) return;
 

@@ -168,7 +168,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry(String pic, String geofenceId,
+  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId,
       {bool isExiting = false, String? form}) async {
     try {
       // get the latest entry from the logRecords

@@ -86,7 +86,7 @@ class MapsApi implements MapsRepo {
   }
 
   @override
-  Future<ApiResult<String>> notifyManager(String pic, String lat, String lng, String locationId) async {
+  Future<ApiResult<String>> notifyManager( String lat, String lng, String locationId) async {
     try {
       final result = await client.post(
         _Endpoints.notifyProperyManager,

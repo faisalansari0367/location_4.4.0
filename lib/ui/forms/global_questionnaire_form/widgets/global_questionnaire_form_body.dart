@@ -35,6 +35,7 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
           return Form(
             key: state.formKey,
             child: SingleChildScrollView(
+              controller: state.sc,
               padding: kPadding,
               child: AutoSpacing(
                 children: [
@@ -100,8 +101,10 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                   // ),
                   SignatureWidget(
                     signature: state.model.signature.value,
-                    onChanged: (s) {
+                    onChanged: (s) async {
                       state.onChanged(state.model.signature, s);
+                      await 500.milliseconds.delay();
+                      state.scrollToEnd();
                     },
                   ),
                   Container(

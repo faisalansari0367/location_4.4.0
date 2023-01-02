@@ -49,7 +49,7 @@ class MapsState extends Equatable {
     FieldAssets? fieldAsset,
     double? zoom,
     PolygonModel? currentPolygon,
-    Color? selectedColor,
+    Color? polygonColor,
     bool? isTracking,
   }) {
     return MapsState(
@@ -66,7 +66,7 @@ class MapsState extends Equatable {
       fieldAsset: fieldAsset ?? this.fieldAsset,
       zoom: zoom ?? this.zoom,
       currentPolygon: currentPolygon ?? this.currentPolygon,
-      selectedColor: selectedColor ?? this.selectedColor,
+      selectedColor: polygonColor ?? this.selectedColor,
     );
   }
 

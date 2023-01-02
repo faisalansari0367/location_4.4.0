@@ -14,7 +14,7 @@ abstract class LogRecordsRepo {
   Future<LogbookEntry?> getLogRecord(String geofenceId);
 
   Future<ApiResult<LogbookEntry>> logBookEntry(
-    String pic,
+    // String pic,
     String geofenceId, {
     bool isExiting = false,
     String? form,

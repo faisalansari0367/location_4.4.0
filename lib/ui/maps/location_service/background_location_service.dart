@@ -19,7 +19,7 @@ class GeofenceService {
   // late Api api;
   // late MapsRepo mapsRepo;
 
-  static bool _init = false;
+  // static bool _init = false;
 
   GeofenceService();
 
@@ -28,7 +28,7 @@ class GeofenceService {
     trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
     mapsRepo.polygonStream.listen((event) => polygons = event.toSet());
 
-    _init = true;
+    // _init = true;
   }
 
   Future<void> getLocationUpdates(ValueChanged<Position>? onLocationChanged) async {

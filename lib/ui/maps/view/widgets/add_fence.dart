@@ -28,7 +28,7 @@ class AddFence extends StatelessWidget {
           title: 'Select Color',
           color: color,
           onTap: () => BottomSheetService.showSheet(
-            child: SelectColor(onColorSelected: cubit.setAssetColor),
+            child: SelectColor(onColorSelected: cubit.setPolygonColor),
           ),
           icon: Assets.icons.bottomNavbar.colorPicker.path,
         ),

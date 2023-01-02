@@ -165,7 +165,6 @@ class _DrawerMenuState extends State<DrawerMenu> {
     );
   }
 
-
   Widget _leading(String? image, Color color, IconData iconData) {
     final size = 22.0;
     return image != null

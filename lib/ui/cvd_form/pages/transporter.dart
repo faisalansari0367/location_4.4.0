@@ -79,12 +79,12 @@ class _TransporterDetailsState extends State<TransporterDetails> {
             final cubit = context.read<CvdCubit>();
             final isValidated = formKey.currentState!.validate();
             // cubit.addFormData(formData);
-            if (isValidated) {
+            // if (isValidated) {
               // print(transporterDetails);
               cubit.setTransporterDetails(transporterDetails);
               // cubit.changeCurrent(cubit.state.currentStep + 1);
               cubit.moveToNext();
-            }
+            // }
           },
         ),
         Gap(50.h),

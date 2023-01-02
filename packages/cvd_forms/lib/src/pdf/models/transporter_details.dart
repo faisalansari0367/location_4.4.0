@@ -23,11 +23,11 @@ class TransporterDetails {
       child: Widgets.column(
         spacing: 5,
         children: [
-          Widgets.richText('Driver Name', 'John Doe'),
-          Widgets.richText('Email-Id', '42'),
-          Widgets.richText('Transporter Contact No', '123 Main Street'),
-          Widgets.richText('Company', '123 Main Street'),
-          Widgets.richText('Registration', '123 Main Street'),
+          Widgets.richText('Driver Name', name),
+          Widgets.richText('Email-Id', email),
+          Widgets.richText('Transporter Contact No', tel),
+          Widgets.richText('Company', company),
+          Widgets.richText('Registration', registration),
         ],
       ),
     );

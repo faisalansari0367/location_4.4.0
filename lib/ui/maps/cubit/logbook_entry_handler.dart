@@ -48,11 +48,8 @@ class LogbookEntryHandler {
         markExitHandler?.cancel();
       }
     }
-    final result = await api.logBookEntry(
-      polygonModel!.pic!,
-      polygonModel!.id!,
-      isExiting: isExiting
-    );
+    // log('pic is ${polygonModel!.pic}');
+    final result = await api.logBookEntry(polygonModel!.id!, isExiting: isExiting);
     result.when(
       success: (s) {
         log('logbook entry success');
