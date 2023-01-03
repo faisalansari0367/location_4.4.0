@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
-import 'package:cvd_forms/models/models.dart';
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
+import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class AddTableEntries extends StatefulWidget {
   final ValueChanged<ChemicalTable>? onChanged;
@@ -33,13 +34,23 @@ class _AddTableEntriesState extends State<AddTableEntries> {
   }
 
   void _readTable() async {
-    final data = await rootBundle.loadString("assets/json/witholding_periods.json");
-    final json = jsonDecode(data);
+    final CvdFormsRepo _cvdFormsRepo = context.read<Api>();
+    final result = await _cvdFormsRepo.getWitholdingPeriodsList();
+    result.when(
+      success: (data) {
+        list = data;
+      },
+      failure: (error) {
+        DialogService.failure(error: error);
+      },
+    );
+    // final data = await rootBundle.loadString("assets/json/witholding_periods.json");
+    // final json = jsonDecode(data);
     // final list = <WitholdingPeriodsModel>[];
-    for (var item in json) {
-      final _data = WitholdingPeriodModel.fromJson(item);
-      list.add(_data);
-    }
+    // for (var item in json) {
+    //   final _data = WitholdingPeriodModel.fromJson(item);
+    //   list.add(_data);
+    // }
     setState(() {});
   }
 

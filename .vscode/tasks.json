@@ -2,6 +2,22 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Build Bioplus Release Apk",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"apk",
+				"--release",
+				"--target=lib/main_prod.dart"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
 			"type": "flutter",
 			"command": "flutter",
 			"args": [
@@ -20,4 +36,3 @@
 		}
 	]
 }
-

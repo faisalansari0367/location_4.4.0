@@ -2,7 +2,6 @@ import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/local_api/local_log_records/src/local_log_records_impl.dart';
 import 'package:cvd_forms/cvd_forms.dart';
-import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -233,8 +232,8 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry( String geofenceId, {bool isExiting = false, String? form}) {
-    return _logRecordsImpl.logBookEntry( geofenceId, isExiting: isExiting, form: form);
+  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId, {bool isExiting = false, String? form}) {
+    return _logRecordsImpl.logBookEntry(geofenceId, isExiting: isExiting, form: form);
   }
 
   @override
@@ -359,5 +358,10 @@ class LocalApi extends Api {
   Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) {
     const api = NetworkExceptions.defaultError('Not available in offline mode');
     return Future.value(const ApiResult.failure(error: api));
+  }
+
+  @override
+  Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() {
+    return _cvdFormsRepo.getWitholdingPeriodsList();
   }
 }

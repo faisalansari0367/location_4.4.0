@@ -28,8 +28,16 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   # To add assets to your package, add an assets section, like this:
-  assets:
-    - assets/json/
+  # assets:
+  #   - assets/json/
+  #   - assets/json/buyer_details.json
+  #   - assets/json/chemical_use.json
+  #   - assets/json/commodity_details.json
+  #   - assets/json/declaration_form.json
+  #   - assets/json/part_integrity_form.json
+  #   - assets/json/transporter_details.json
+  #   - assets/json/vendor_details.json
+  # - assets/json/witholding_periods.json
 
   #
   # For details regarding assets in packages, see

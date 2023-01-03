@@ -1,87 +1,22 @@
-import 'dart:async';
-
 import 'package:api_repo/api_repo.dart';
-import 'package:bioplus/constants/hive_boxes.dart';
-import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
-import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
+import 'package:bioplus/ui/sos_warning/sos_warning.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/src/repository_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
-import 'firebase_options.dart';
+import 'constants/api_constants.dart';
 import 'services/notifications/push_notifications.dart';
 import 'ui/login/view/login_page.dart';
-import 'ui/maps/location_service/maps_api.dart';
+import 'ui/maps/location_service/geofence_service.dart';
 import 'ui/maps/location_service/maps_repo_local.dart';
-
-const enableCrashlytics = !kDebugMode;
-
-Future<void> bgHandler(RemoteMessage message) async {
-  final pushNotification = PushNotificationService();
-  pushNotification.handleMessage(message);
-}
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await _setOrientation();
-  // initWorkManager();
-  await runZonedGuarded(() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await Hive.initFlutter();
-
-    final _box = await Hive.openBox(HiveBox.storage);
-    // final _cvdBox = await Hive.openBox(HiveBox.cvdBox);
-    // final notifications = AwesomeNotifications();
-    final localApi = LocalApi();
-    final repo = ApiRepo(localApiinit: localApi.init);
-    await repo.init(baseUrl: ApiConstants.baseUrl, box: _box);
-    final mapsRepo = MapsApi(client: repo.client);
-    // final cvdFormsRepo = CvdFormsRepoImpl(box: _cvdBox, client: repo.client);
-
-    await mapsRepo.init();
-    final pushNotification = PushNotificationService();
-    FirebaseMessaging.onBackgroundMessage(bgHandler);
-
-    await pushNotification.initmessaging();
-    //  registerGeofenceService();
-    // await initBackgroundLocator();
-    runApp(
-      MyApp(
-        // cvdFormsRepo: cvdFormsRepo,
-        localApi: localApi,
-        pushNotificationService: pushNotification,
-        api: repo,
-        mapsRepo: mapsRepo,
-      ),
-    );
-
-    if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  }, (error, stackTrace) {
-    FirebaseCrashlytics.instance.recordError(error, stackTrace);
-  });
-}
-
-Future<void> _setOrientation() async {
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-}
 
 class MyApp extends StatefulWidget {
   final Api api;
@@ -107,7 +42,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<void> _initializeFlutterFire() async {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(enableCrashlytics);
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
   }
 
   @override
@@ -151,7 +86,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  List<RepositoryProviderSingleChildWidget> get _providers {
+  List<RepositoryProvider> get _providers {
     return [
       RepositoryProvider<Api>.value(value: widget.api),
       // RepositoryProvider<NotificationService>.value(value: widget.notificationService),
@@ -160,9 +95,7 @@ class _MyAppState extends State<MyApp> {
       RepositoryProvider<LocalApi>.value(value: widget.localApi),
       RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
       RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
-      RepositoryProvider<GeofenceService>(
-        create: (context) => GeofenceService(),
-      ),
+      RepositoryProvider<GeofenceService>(create: (context) => GeofenceService()),
       // RepositoryProvider<CvdFormsRepo>.value(
       //   value: widget.cvdFormsRepo,
       // ),
