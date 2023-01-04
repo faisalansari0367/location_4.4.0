@@ -6,6 +6,7 @@ import 'package:api_client/api_client.dart';
 import 'package:api_client/configs/client.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/log/log_records.dart';
+import 'package:api_repo/src/log/src/log_records_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -17,7 +18,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   final Completer<LogbookResponseModel> _completer = Completer<LogbookResponseModel>();
 
-  bool _isSyncing = false;
+  // bool _isSyncing = false;
 
   // List<LogbookEntry> _logRecords = [];
   // LogbookEntry? currentLogRecordEntry;
@@ -92,7 +93,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       if (offlineRecords.isEmpty) {
         log('no offline records to sync');
-        _isSyncing = false;
+        // _isSyncing = false;
         return true;
       }
 
@@ -126,7 +127,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       // return false;
     } catch (e) {
-      _isSyncing = false;
+      // _isSyncing = false;
       rethrow;
     }
   }
@@ -186,6 +187,22 @@ class LogRecordsImpl implements LogRecordsRepo {
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  Future<void> exitDateChecker() async {
+    final LogRecordsHelper helper = LogRecordsHelper(storage: storage, userId: storageService.getUser()?.id);
+    final isAdmin = storageService.getUser()?.role == 'Admin';
+    if (!isAdmin) {
+      final loggedInZones = logbookRecords.where(helper.isCreatedByUser).where(helper.loggedInZones);
+      if (loggedInZones.isEmpty) return;
+      final lastEntry = loggedInZones.first;
+      markExitById(lastEntry.id.toString());
+    } else {
+      final loggedInZones = logbookRecords.where(helper.loggedInZones);
+      if (loggedInZones.isEmpty) return;
+      final lastEntry = loggedInZones.first;
+      markExitById(lastEntry.id.toString());
     }
   }
 
@@ -358,124 +375,22 @@ class LogRecordsImpl implements LogRecordsRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
+  /// this will be called when there is not exit date for the current log record
+  /// and user is not in any geofence
+  @override
+  Future<void> previousZoneExitDateChecker() async {
+    final userId = storageService.getUser()?.id;
+    final records = logbookRecords;
+    final recordsByUser = records.where((element) => element.user?.id == userId);
+    if (recordsByUser.isNotEmpty) {
+      final record = recordsByUser.first;
+      record.exitDate = DateTime.now();
+      final index = logbookRecords.indexWhere((element) => element.id == record.id);
+      if (index == -1) return;
+      logbookRecords[index] = record;
+      await storage.saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
+      await storage.offlineLogRecords.update(record);
+    }
+  }
 }
-
-// class SynchronizeRecords {
-//   final List<LogbookEntry> records;
-//   final List<LogbookEntry> offlineRecords;
-//   final ValueChanged<LogbookEntry> onUpdate;
-//   final ValueChanged<bool> onResult;
-//   final Future<ApiResult<LogbookEntry>> Function(Map<String, dynamic> form, int logRecordId) patchForm;
-
-//   SynchronizeRecords({
-//     required this.records,
-//     required this.offlineRecords,
-//     required this.onUpdate,
-//     required this.onResult,
-//     required this.patchForm,
-//   });
-
-//   bool _isSyncing = false;
-
-//   Future<bool> synchronize() async {
-//     if (_isSyncing) return false;
-
-//     // map offline ids and online ids to identify them
-
-//     // fix time difference
-
-//     // _isSyncing = true;
-//     try {
-//       // final offlineRecords = storage.offlineLogRecords.getOfflineLogRecords();
-//       log('offline records: ${offlineRecords.length}');
-//       if (offlineRecords.isEmpty) {
-//         log('no offline records to sync');
-//         _isSyncing = false;
-//         return true;
-//       }
-
-//       final recordsToBeUpdated = <int>{};
-//       final logbookRecords = records;
-
-//       for (var onlineLog in logbookRecords) {
-//         for (var offlineLog in offlineRecords) {
-//           // find the same record on the server
-//           // final onlineLog = logbookRecords.firstWhere((element) => element.id == offlineLog.id);
-
-//           // final index = logbookRecords.indexOf(onlineLog);
-//           // // final hasMatch = onlineLog.enterDate == offlineLog.enterDate &&
-//           // //     onlineLog.geofence?.id == offlineLog.geofence?.id &&
-//           // //     onlineLog.user?.id == offlineLog.user?.id;
-
-//           // // print('match found: $hasMatch ${onlineLog.id} ${offlineLog.id}}');
-//           // if (onlineLog.id == offlineLog.id) {
-//           //   recordsToBeUpdated.add(index);
-//           // } else {
-//           //   final hasMatch = onlineLog.enterDate == offlineLog.enterDate &&
-//           //       onlineLog.geofence?.id == offlineLog.geofence?.id &&
-//           //       onlineLog.user?.id == offlineLog.user?.id;
-//           //   if (hasMatch) {
-//           //     log('entry found on server with same details as offline log record ${onlineLog.id}');
-//           //     recordsToBeUpdated.add(index);
-//           //   }
-//           // }
-//         }
-//       }
-
-//       log('records to be updated: ${recordsToBeUpdated.length}');
-
-//       if (recordsToBeUpdated.isNotEmpty) {
-//         for (var id in recordsToBeUpdated) {
-//           final offlineRecord = logbookRecords[id];
-//           log('updating log record : ${offlineRecord.id}');
-//           final result = await patchForm(offlineRecord.form?.toJson() ?? {}, offlineRecord.id!);
-
-//           result.when(success: (s) async {
-//             log('log record ${s.id} updated successfully');
-//             offlineRecords.removeWhere((element) => element.id == s.id);
-//             await storage.offlineLogRecords.remove(s);
-//           }, failure: (f) {
-//             log('log record ${offlineRecord.id} update failed');
-//           });
-//         }
-//       }
-
-//       if (offlineRecords.isEmpty) {
-//         log('no offline records to sync');
-//         _isSyncing = false;
-//         return true;
-//       }
-
-//       log('final offline records: ${offlineRecords.length}');
-//       final json = offlineRecords.map((e) {
-//         final map = e.toJson();
-//         // because api accepts geofence id not geofence object
-//         // remove geofence object and add geofence id
-//         map.remove('id');
-//         map.remove('updatedAt');
-//         map['geofence'] = e.geofence?.id;
-//         return map;
-//       }).toList();
-
-//       // return true;
-
-//       final result = await client.post(Endpoints.logRecordsOffline, data: {'records': json});
-
-//       final isSuccess = result.data['status'] == 'success';
-//       if (isSuccess) {
-//         log('geofences synced successfully');
-//         await storage.offlineLogRecords.clearOfflineRecords();
-//         await getLogbookRecords();
-//       }
-//       // _isSyncing = false;
-//       return isSuccess;
-//       // return false;
-//       // return false;
-
-//       // return false;
-//     } catch (e) {
-//       _isSyncing = false;
-//       rethrow;
-//     }
-//   }
-

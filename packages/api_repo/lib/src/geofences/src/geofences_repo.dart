@@ -12,6 +12,7 @@ abstract class GeofencesRepo {
   Future<ApiResult<dynamic>> deletePolygon(PolygonModel model);
   Future<void> saveAllPolygon(List<PolygonModel> polygons);
   Future<List<PolygonModel>> get polygonsCompleter;
+  List<PolygonModel> get polygons;
 
   bool get hasPolygons;
   void cancel();

@@ -10,7 +10,7 @@ abstract class LogRecordsRepo {
   Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId});
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId);
   Future<ApiResult<LogbookEntry>> markExitById(String logRecordId);
-
+  Future<void>  previousZoneExitDateChecker();
   Future<LogbookEntry?> getLogRecord(String geofenceId);
 
   Future<ApiResult<LogbookEntry>> logBookEntry(

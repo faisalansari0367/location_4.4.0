@@ -163,6 +163,7 @@ class TrackPolygons {
       this.polygonsInCoverage.add({currentPolygon!});
       logbookEntryHandler.update(true, currentPolygon!);
     } else {
+      api.previousZoneExitDateChecker();
       if (currentPolygon == null) return;
       // attemptOfShowingPopUp = 0;
       hidePopUpTimer.cancel();

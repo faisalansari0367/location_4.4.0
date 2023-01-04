@@ -53,4 +53,7 @@ class GeofencesRepoLocalImpl implements GeofencesRepo {
   Future<ApiResult> updatePolygon(PolygonModel model) {
     return storage.updatePolygon(model);
   }
+
+  @override
+  List<PolygonModel> get polygons => storage.polygons;
 }

@@ -41,7 +41,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) async {
     // final geofence = _logRecordsLocalService.getLogRecord(geofenceId);
     try {
-      final geofences = await _mapsStorageService.polygonsCompleter;
+      await _mapsStorageService.polygonsCompleter;
+      final geofences = _mapsStorageService.polygons;
       final index = geofences.indexWhere((element) => element.id == geofenceId);
 
       if (index == -1) {
@@ -197,6 +198,25 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       );
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  /// this will be called when there is not exit date for the current log record
+  /// and user is not in any geofence
+  @override
+  Future<void> previousZoneExitDateChecker() async {
+    final userId = _storageService.getUser()?.id;
+    final records = _logRecordsLocalService.logRecords;
+    final recordsByUser = records.where((element) => element.user?.id == userId);
+    if (recordsByUser.isNotEmpty) {
+      final record = recordsByUser.first;
+      if (record.exitDate != null) return;
+      record.exitDate = currentUtcTime;
+      final index = logbookRecords.indexWhere((element) => element.id == record.id);
+      if (index == -1) return;
+      logbookRecords[index] = record;
+      await _logRecordsLocalService.saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
+      await _logRecordsLocalService.offlineLogRecords.update(record);
     }
   }
 

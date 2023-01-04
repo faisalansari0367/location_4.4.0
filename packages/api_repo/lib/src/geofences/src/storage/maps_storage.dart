@@ -140,7 +140,7 @@ class MapsStorageService implements GeofencesRepo {
   bool get hasPolygons => _box.get(_Keys._getAllPolygonKey) != null;
 
   @override
-  Future<List<PolygonModel>> get polygonsCompleter => _completer.future;
+  Future<List<PolygonModel>> get polygonsCompleter async => await _completer.future;
 
   void _listen() {
     _box.watch(key: _Keys._getAllPolygonKey).map(
@@ -153,4 +153,7 @@ class MapsStorageService implements GeofencesRepo {
       },
     );
   }
+
+  @override
+  List<PolygonModel> get polygons => _controller.value;
 }

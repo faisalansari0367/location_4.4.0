@@ -411,4 +411,12 @@ class LocalApi extends Api {
 
   @override
   bool get hasPolygons => _geofencesRepoLocalImpl.hasPolygons;
+
+  @override
+  Future<void> previousZoneExitDateChecker() {
+    return _logRecordsImpl.previousZoneExitDateChecker();
+  }
+
+  @override
+  List<PolygonModel> get polygons => _geofencesRepoLocalImpl.polygons;
 }

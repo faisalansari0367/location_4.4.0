@@ -123,4 +123,8 @@ class GeofencesRepoImpl implements GeofencesRepo {
 
   @override
   Future<List<PolygonModel>> get polygonsCompleter => completer.future;
+  
+  @override
+  // TODO: implement polygons
+  List<PolygonModel> get polygons => _controller.value;
 }

@@ -438,4 +438,12 @@ class ApiRepo implements Api {
   Future<ApiResult> updatePolygon(PolygonModel model) {
     return _geofencesRepo.updatePolygon(model);
   }
+  
+  @override
+  Future<void> previousZoneExitDateChecker() {
+   return _logRecordsRepo.previousZoneExitDateChecker();
+  }
+  
+  @override
+  List<PolygonModel> get polygons =>  _geofencesRepo.polygons;
 }
