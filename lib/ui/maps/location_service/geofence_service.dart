@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/maps/cubit/track_polygons.dart';
-import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,9 +21,9 @@ class GeofenceService {
 
   GeofenceService();
 
-  Future<void> init(MapsRepo mapsRepo, Api api) async {
+  Future<void> init(GeofencesRepo mapsRepo, Api api) async {
     // if (_init) return;
-    trackPolygons = TrackPolygons(mapsRepo: mapsRepo, api: api);
+    trackPolygons = TrackPolygons(geofenceRepo: mapsRepo, api: api);
     mapsRepo.polygonStream.listen((event) => polygons = event.toSet());
 
     // _init = true;

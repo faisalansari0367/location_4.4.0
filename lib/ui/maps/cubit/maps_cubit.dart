@@ -16,8 +16,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../../services/notifications/push_notifications.dart';
-import '../location_service/maps_repo_local.dart';
-import '../models/polygon_model.dart';
+
+// import '../models/polygon_model.dart';
 
 part 'maps_state.dart';
 
@@ -31,7 +31,7 @@ class MapsCubit extends BaseModel {
   final PolygonsService _polygonsService;
   final GeofenceService geofenceService;
   final Api api;
-  final MapsRepoLocal mapsRepoLocal;
+  // final MapsRepoLocal mapsRepoLocal;
   // late MapsRepo mapsRepo;
   // late TrackPolygons trackPolygons;
 
@@ -41,8 +41,7 @@ class MapsCubit extends BaseModel {
     // this._mapsRepo,
     this._polygonsService,
     this._pushNotificationService,
-    this.api,
-    this.mapsRepoLocal, {
+    this.api, {
     required this.geofenceService,
     this.polygonId,
   }) : super(context) {
@@ -55,7 +54,7 @@ class MapsCubit extends BaseModel {
   Future<GoogleMapController> get mapController async => await controller.future;
 
   Future<void> init() async {
-    geofenceService.init(mapsRepo, localApi);
+    geofenceService.init(geofenceRepo, localApi);
     // so that device can determine the connectivity status
     await 100.milliseconds.delay();
     if (state.polygons.isEmpty) {
@@ -68,7 +67,7 @@ class MapsCubit extends BaseModel {
   }
 
   void polygonsStream() {
-    mapsRepo.polygonStream.listen((event) {
+    geofenceRepo.polygonStream.listen((event) {
       emit(state.copyWith(polygons: event.toSet()));
     });
   }
@@ -100,7 +99,7 @@ class MapsCubit extends BaseModel {
     if (state.currentPolygon == null) return;
     final polygon = state.currentPolygon?.copyWith(color: state.selectedColor);
 
-    final result = await mapsRepo.updatePolygon(polygon!);
+    final result = await geofenceRepo.updatePolygon(polygon!);
     if (state.currentPolygon != null) {
       result.when(
         success: (s) {
@@ -137,8 +136,8 @@ class MapsCubit extends BaseModel {
   UserData? get userData => api.getUserData();
 
   Future<void> _getAllPolygon() async {
-    if (mapsRepo.hasPolygons) return;
-    final allPolygon = await mapsRepo.getAllPolygon();
+    if (geofenceRepo.hasPolygons) return;
+    final allPolygon = await geofenceRepo.getAllPolygon();
     allPolygon.when(
       success: (allPolygon) {
         emit(state.copyWith(polygons: allPolygon.toSet()));
@@ -168,7 +167,7 @@ class MapsCubit extends BaseModel {
       id: Random().nextInt(10000000).toString(),
       companyOwner: companyOwner,
     );
-    final result = await mapsRepo.savePolygon(model);
+    final result = await geofenceRepo.savePolygon(model);
     result.when(
       success: (data) => _polygonsService.clear(),
       failure: (e) {

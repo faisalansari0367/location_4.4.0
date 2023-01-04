@@ -1,7 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
-import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/sos_warning/sos_warning.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
@@ -10,17 +9,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart' as getx;
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants/api_constants.dart';
 import 'services/notifications/push_notifications.dart';
 import 'ui/login/view/login_page.dart';
 import 'ui/maps/location_service/geofence_service.dart';
-import 'ui/maps/location_service/maps_repo_local.dart';
 
 class MyApp extends StatefulWidget {
   final Api api;
-  final MapsRepo mapsRepo;
+  // final MapsRepo mapsRepo;
   // final CvdFormsRepoImpl cvdFormsRepo;
   // final NotificationService notificationService;
   final PushNotificationService pushNotificationService;
@@ -30,7 +29,7 @@ class MyApp extends StatefulWidget {
     Key? key,
     required this.api,
     // required this.notificationService,
-    required this.mapsRepo,
+    // required this.mapsRepo,
     required this.pushNotificationService,
     required this.localApi,
     // required this.cvdFormsRepo,
@@ -58,6 +57,8 @@ class _MyAppState extends State<MyApp> {
     return MultiRepositoryProvider(
       providers: _providers,
       child: GetMaterialApp(
+        // customTransition,
+        defaultTransition: getx.Transition.cupertino,
         debugShowCheckedModeBanner: ApiConstants.isDegugMode,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
@@ -66,6 +67,14 @@ class _MyAppState extends State<MyApp> {
           colorScheme: Theme.of(context).colorScheme.copyWith(primary: kPrimaryColor),
           primaryColor: kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          // appBarTheme: AppBarTheme(
+          // titleTextStyle: TextStyle(
+          //   // color: Colors.black,
+          //   fontFamily: GoogleFonts.
+          //   // fontSize: 20.sp,
+          //   // fontWeight: FontWeight.w600,
+          // ),
+          // ),
           checkboxTheme: CheckboxThemeData(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
@@ -91,11 +100,12 @@ class _MyAppState extends State<MyApp> {
       RepositoryProvider<Api>.value(value: widget.api),
       // RepositoryProvider<NotificationService>.value(value: widget.notificationService),
       RepositoryProvider<PushNotificationService>.value(value: widget.pushNotificationService),
-      RepositoryProvider<MapsRepo>.value(value: widget.mapsRepo),
+      // RepositoryProvider<MapsRepo>.value(value: widget.mapsRepo),
       RepositoryProvider<LocalApi>.value(value: widget.localApi),
       RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
-      RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
+      // RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
       RepositoryProvider<GeofenceService>(create: (context) => GeofenceService()),
+      // RepositoryProvider<GeofenceService>(create: (context) => GeofenceService()),
       // RepositoryProvider<CvdFormsRepo>.value(
       //   value: widget.cvdFormsRepo,
       // ),

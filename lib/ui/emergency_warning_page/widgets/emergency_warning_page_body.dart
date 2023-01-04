@@ -216,6 +216,10 @@ class EmergencyWarningPageBody extends StatelessWidget {
   Future<void> _warningDialog(BuildContext context) async {
     final provider = context.read<EmergencyWarningPageNotifier>();
 
+    if (provider.selectedZones.isEmpty) {
+      return DialogService.error('Please select a location first');
+    }
+
     DialogService.showDialog(
       child: DialogLayout(
         child: Padding(
@@ -237,12 +241,12 @@ class EmergencyWarningPageBody extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
+              Gap(20.h),
               Row(
                 children: [
                   Gap(20.w),
                   Expanded(
-                    child: ElevatedButton(
+                    child: MyElevatedButton(
                       onPressed: () async {
                         Get.back();
                         final result = await context.read<Api>().sendEmergencyNotification(
@@ -352,16 +356,19 @@ class EmergencyWarningPageBody extends StatelessWidget {
                         );
                         // await DialogService.showDialog(child: const ComingSoonDialog());
                       },
-                      child: const Text('Yes'),
+                      // child: const Text('Yes'),
+                      text: 'Yes',
                     ),
                   ),
-                  Gap(10.w),
+                  Gap(30.w),
+                  // Spacer(),
 
                   // no button
                   Expanded(
-                    child: ElevatedButton(
+                    child: MyElevatedButton(
                       onPressed: () async => Get.back(),
-                      child: const Text('No'),
+                      // child: const Text('No'),
+                      text: 'No',
                     ),
                   ),
                   Gap(20.w),

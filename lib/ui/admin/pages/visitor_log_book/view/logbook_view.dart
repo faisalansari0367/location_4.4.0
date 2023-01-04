@@ -3,7 +3,6 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:bioplus/widgets/empty_screen.dart';
 import 'package:bioplus/widgets/listview/infinite_table.dart';

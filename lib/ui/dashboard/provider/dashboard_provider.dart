@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/notifications/push_notifications.dart';
-import '../../maps/location_service/maps_repo.dart';
 
 class DashboardNotifier extends BaseModel {
   DashboardNotifier(BuildContext context) : super(context) {
@@ -23,7 +22,7 @@ class DashboardNotifier extends BaseModel {
     if (api.isInit) return;
     api.setIsInit(true);
     SyncService().init(localApi, api);
-    final mapsApi = context.read<MapsRepo>();
+    // final mapsApi = context.read<MapsRepo>();
     final notificationService = context.read<PushNotificationService>();
 
     final user = api.getUser();
@@ -31,7 +30,7 @@ class DashboardNotifier extends BaseModel {
       user.registerationToken = await notificationService.getFCMtoken();
       await api.updateMe(user: user);
     }
-    await mapsApi.getAllPolygon();
+    await geofenceRepo.getAllPolygon();
     api.getLogbookRecords();
   }
 }

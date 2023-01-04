@@ -5,7 +5,7 @@ import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../api_repo.dart';
 import '../auth/src/storage/storage_service.dart';
@@ -21,6 +21,7 @@ class ApiRepo implements Api {
   late LogRecordsRepo _logRecordsRepo;
   late FunctionsRepo _functionsRepo;
   late CvdFormsRepo _cvdFormsRepo;
+  late GeofencesRepo _geofencesRepo;
 
   final BehaviorSubject<Box> _userBoxController = BehaviorSubject<Box>();
 
@@ -39,29 +40,22 @@ class ApiRepo implements Api {
     required Box box,
     // required ValueChanged<Box> onBoxChange,
   }) async {
-    //  _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
-    // final _storage = StorageService(box: box);
+    final _userBox = await _getBox(box);
+    _initRepos(baseUrl, _userBox);
+  }
 
-    // if (_storage.isLoggedIn) {
-    //   final userBox = await Hive.openBox(_storage.getUser()!.email!);
-    //   log('userbox name is ${userBox.name}}');
-    //   if (userBox.isNotEmpty) {
-    //     _box = userBox;
-    //   }
-    // }
-    _box = await _getBox(box);
-    // onBoxChange(_box);
-
-    final storage = StorageService(box: _box);
+  void _initRepos(String baseUrl, Box box) {
+    _box = box;
+    final storage = StorageService(box: box);
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token, onError: _onError);
-
-    localApiinit(baseUrl: baseUrl, box: _box);
-    _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
-    _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
-    _userRepo = UserRepoImpl(client: _client, box: _box);
+    localApiinit(baseUrl: baseUrl, box: box);
+    _logRecordsRepo = LogRecordsImpl(client: _client, box: box);
+    _authRepo = AuthRepoImpl(client: _client, box: box, onUserChange: changeUserBox);
+    _userRepo = UserRepoImpl(client: _client, box: box);
     _functionsRepo = FunctionsRepoImpl(client: _client);
-    _cvdFormsRepo = CvdFormsRepoImpl(box: _box, client: _client);
+    _cvdFormsRepo = CvdFormsRepoImpl(box: box, client: _client);
+    _geofencesRepo = GeofencesRepoImpl(client: client, box: box);
     _userStream(_box, storage.userKey);
   }
 
@@ -78,17 +72,22 @@ class ApiRepo implements Api {
     return finalBox;
   }
 
-  void _listenToBoxChanges() {
-    _userBoxController.listen((value) {
-      log('box changed');
-    });
-  }
+  // void _changeUserBox(Box box) {
+  //   _userBoxController.add(box);
+  // }
+
+  // void _listenToBoxChanges() {
+  //   _userBoxController.listen((value) {
+  //     _initRepos(_client.baseUrl, value);
+  //     // log('box changed');
+  //   });
+  // }
 
   Future<void> changeUserBox(String email) async {
     try {
       _box = await Hive.openBox(email.trim());
       // _authRepo.signIn(data: data);
-      await init(baseUrl: _client.baseUrl, box: _box);
+      _initRepos(_client.baseUrl, _box);
     } catch (e) {
       log('error while opening box for user $email');
     }
@@ -390,9 +389,53 @@ class ApiRepo implements Api {
   Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) {
     return _authRepo.updateCvdForms(base64pdfs: base64pdfs);
   }
-  
+
   @override
   Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() {
     return _cvdFormsRepo.getWitholdingPeriodsList();
+  }
+
+  @override
+  void cancel() {
+    _geofencesRepo.cancel();
+  }
+
+  @override
+  Future<ApiResult> deletePolygon(PolygonModel model) {
+    return _geofencesRepo.deletePolygon(model);
+  }
+
+  @override
+  Future<ApiResult<List<PolygonModel>>> getAllPolygon() {
+    return _geofencesRepo.getAllPolygon();
+  }
+
+  @override
+  bool get hasPolygons => _geofencesRepo.hasPolygons;
+
+  @override
+  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) {
+    return _geofencesRepo.notifyManager(lat, lng, locationId);
+  }
+
+  @override
+  Stream<List<PolygonModel>> get polygonStream => _geofencesRepo.polygonStream;
+
+  @override
+  Future<List<PolygonModel>> get polygonsCompleter => _geofencesRepo.polygonsCompleter;
+
+  @override
+  Future<void> saveAllPolygon(List<PolygonModel> polygons) {
+    return _geofencesRepo.saveAllPolygon(polygons);
+  }
+
+  @override
+  Future<ApiResult<void>> savePolygon(PolygonModel model) {
+    return _geofencesRepo.savePolygon(model);
+  }
+
+  @override
+  Future<ApiResult> updatePolygon(PolygonModel model) {
+    return _geofencesRepo.updatePolygon(model);
   }
 }

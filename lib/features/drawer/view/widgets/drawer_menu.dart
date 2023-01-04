@@ -2,6 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/drawer/models/drawer_items.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -92,25 +93,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                 style: style,
               ),
               Gap(10.w),
-              Container(
-                decoration: MyDecoration.decoration(),
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
-                child: StreamBuilder<UserData?>(
-                  stream: context.read<Api>().userDataStream,
-                  builder: (context, snapshot) {
-                    final hasName = !([null, ''].contains(snapshot.data?.role));
-                    final role = hasName ? snapshot.data?.role : '';
-                    return Text(
-                      role ?? '',
-                      style: context.textTheme.bodyText2?.copyWith(
-                        color: context.theme.primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
-                      ),
-                    );
-                  },
-                ),
-              ),
+              _buildRole(context),
             ],
           ),
           Text(
@@ -118,6 +101,37 @@ class _DrawerMenuState extends State<DrawerMenu> {
             style: style,
           ),
         ],
+      ),
+    );
+  }
+
+  Container _buildRole(BuildContext context) {
+    return Container(
+      decoration: MyDecoration.decoration(),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+      child: StreamBuilder<bool>(
+        stream: MyConnectivity().connectionStream,
+        initialData: true,
+        builder: (context, snapshot) {
+          final api = context.read<Api>();
+          final localApi = context.read<LocalApi>();
+          // final userRole = localApi.getUserData();
+          return StreamBuilder<UserData?>(
+            stream: (snapshot.data ?? false) ? api.userDataStream : localApi.userDataStream,
+            builder: (context, snapshot) {
+              final hasName = !([null, ''].contains(snapshot.data?.role));
+              final role = hasName ? snapshot.data?.role : '';
+              return Text(
+                role ?? '',
+                style: context.textTheme.bodyText2?.copyWith(
+                  color: context.theme.primaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

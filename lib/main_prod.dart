@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/hive_boxes.dart';
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/work_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,7 +14,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'firebase_options.dart';
 import 'my_app.dart';
 import 'services/notifications/push_notifications.dart';
-import 'ui/maps/location_service/maps_api.dart';
 
 const enableCrashlytics = !kDebugMode;
 
@@ -34,18 +32,18 @@ Future<void> main() async {
     final localApi = LocalApi();
     final repo = ApiRepo(localApiinit: localApi.init);
     await repo.init(baseUrl: ApiConstants.liveUrl, box: _box);
-    final mapsRepo = MapsApi(client: repo.client);
-    await mapsRepo.init();
+    // final mapsRepo = MapsApi(client: repo.client);
+    // await mapsRepo.init();
     final pushNotification = PushNotificationService();
     FirebaseMessaging.onBackgroundMessage(bgHandler);
     await pushNotification.initmessaging();
-    initWorkManager();
+    // initWorkManager();
     runApp(
       MyApp(
         localApi: localApi,
         pushNotificationService: pushNotification,
         api: repo,
-        mapsRepo: mapsRepo,
+        // mapsRepo: mapsRepo,
       ),
     );
 

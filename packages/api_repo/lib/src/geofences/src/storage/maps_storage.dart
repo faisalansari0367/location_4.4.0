@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:api_client/api_client.dart';
 import 'package:api_repo/src/geofences/geofences_repo.dart';
 import 'package:hive_flutter/adapters.dart';
-
+import 'package:rxdart/subjects.dart';
 
 class _Keys {
   static const _getAllPolygonKey = 'get_all_polygon';
@@ -15,22 +15,37 @@ class _Keys {
 class MapsStorageService implements GeofencesRepo {
   late final Box _box;
 
-  static const String _boxKey = 'location';
+  // static const String _boxKey = 'location';
+
+  final _controller = BehaviorSubject.seeded(<PolygonModel>[]);
+
+  MapsStorageService({required Box box}) {
+    _box = box;
+    initGeofences();
+
+    _listen();
+  }
 
   @override
   Future<ApiResult<List<PolygonModel>>> getAllPolygon() async {
     final map = _box.get(_Keys._getAllPolygonKey);
     if (map == null) return const ApiResult.success(data: <PolygonModel>[]);
-    final data = (map as List<dynamic>).map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e))).toList();
+    final data = (map as List<dynamic>)
+        .map(
+          (e) => PolygonModel.fromLocalJson(
+            Map<String, dynamic>.from(e),
+          ),
+        )
+        .toList();
+    _controller.add(data);
     return ApiResult.success(data: data);
   }
 
   final _completer = Completer<List<PolygonModel>>();
 
-  @override
-  Future<void> init() async {
-    final box = await Hive.openBox(_boxKey);
-    _box = box;
+  Future<void> initGeofences() async {
+    // final box = await Hive.openBox(_boxKey);
+    // _box = box;
     if (_completer.isCompleted) return;
     final list = await getAllPolygon();
     list.when(
@@ -61,30 +76,58 @@ class MapsStorageService implements GeofencesRepo {
   }
 
   @override
-  Stream<List<PolygonModel>> get polygonStream => _box.watch(key: _Keys._getAllPolygonKey).map((event) {
-        final data = (event.value as List<dynamic>)
-            .map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e)))
-            .toList();
-        return data;
-      });
+  Stream<List<PolygonModel>> get polygonStream {
+    return _controller.stream;
+    // return _box.watch(key: _Keys._getAllPolygonKey).map(
+    //   (event) {
+    //     final data = (event.value as List<dynamic>)
+    //         .map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e)))
+    //         .toList();
+    //     return data;
+    //   },
+    // );
+  }
 
   @override
   void cancel() {}
 
-
   @override
   Future<ApiResult> updatePolygon(PolygonModel model) async {
-    return const ApiResult.success(data: Null);
+    final list = await getAllPolygon();
+    await list.when(
+      success: (list) async {
+        final index = list.indexWhere((element) => element.id == model.id);
+        if (index == -1) return;
+        list[index] = model;
+        await saveAllPolygon(list);
+      },
+      failure: (failure) {},
+    );
+    return const ApiResult.success(data: null);
   }
 
   @override
-  Future<ApiResult<String>> notifyManager(String pic, String lat, String lng, String locationId) async {
-    return const ApiResult.success(data: 'Notified manager');
+  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) async {
+    return const ApiResult.failure(
+      error: NetworkExceptions.defaultError(
+        'Not available in offline mode',
+      ),
+    );
   }
 
   @override
-  Future<ApiResult> deletePolygon(PolygonModel model) {
-    throw UnimplementedError();
+  Future<ApiResult> deletePolygon(PolygonModel model) async {
+    final list = await getAllPolygon();
+    await list.when(
+      success: (list) async {
+        final index = list.indexWhere((element) => element.id == model.id);
+        if (index == -1) return;
+        list.removeAt(index);
+        await saveAllPolygon(list);
+      },
+      failure: (failure) {},
+    );
+    return const ApiResult.success(data: null);
   }
 
   @override
@@ -98,4 +141,16 @@ class MapsStorageService implements GeofencesRepo {
 
   @override
   Future<List<PolygonModel>> get polygonsCompleter => _completer.future;
+
+  void _listen() {
+    _box.watch(key: _Keys._getAllPolygonKey).map(
+      (event) {
+        final data = (event.value as List<dynamic>)
+            .map((e) => PolygonModel.fromLocalJson(Map<String, dynamic>.from(e)))
+            .toList();
+        _controller.add(data);
+        return data;
+      },
+    );
+  }
 }

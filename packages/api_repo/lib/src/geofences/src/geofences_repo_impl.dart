@@ -15,7 +15,9 @@ class GeofencesRepoImpl implements GeofencesRepo {
     required this.client,
     required this.box,
   }) {
-    init();
+    // init();
+    storage = MapsStorageService(box: box);
+    // storage.initGeofences();
   }
 
   final Client client;
@@ -44,11 +46,10 @@ class GeofencesRepoImpl implements GeofencesRepo {
     }
   }
 
-  @override
-  Future<void> init() async {
-    storage = MapsStorageService();
-    await storage.init();
-  }
+  // @override
+  // Future<void> initGeofences() async {
+  //   storage = MapsStorageService(box: box);
+  // }
 
   @override
   Stream<List<PolygonModel>> get polygonStream => _controller.stream.map((event) => event
@@ -81,14 +82,14 @@ class GeofencesRepoImpl implements GeofencesRepo {
       list[index] = model;
       _controller.add(list);
       await getAllPolygon();
-      return ApiResult.success(data: result.data);
+      return const ApiResult.success(data: null);
     } on Exception catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
 
   @override
-  Future<ApiResult<String>> notifyManager(String pic, String lat, String lng, String locationId) async {
+  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) async {
     try {
       final data = {'latitude': lat, 'longitude': lng, 'geofenceID': locationId};
       final result = await client.post(Endpoints.notifyProperyManager, data: data);

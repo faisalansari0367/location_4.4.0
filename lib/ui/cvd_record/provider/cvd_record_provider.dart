@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:cvd_forms/cvd_forms.dart';
-import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/material.dart';
 
 class CvdRecordNotifier extends BaseModel {

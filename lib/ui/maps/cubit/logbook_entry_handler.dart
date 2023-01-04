@@ -5,13 +5,10 @@ import 'dart:developer';
 import 'package:api_repo/api_repo.dart';
 import 'package:get/get.dart';
 
-import '../location_service/maps_repo.dart';
-import '../models/polygon_model.dart';
-
 class LogbookEntryHandler {
   PolygonModel? polygonModel;
   bool? isExiting;
-  MapsRepo mapsRepo;
+  GeofencesRepo geofenceRepo;
   Api api;
 
   // final _debouncer = Debouncer(delay: 100.seconds);
@@ -20,7 +17,7 @@ class LogbookEntryHandler {
   LogbookEntryHandler({
     required this.api,
     this.polygonModel,
-    required this.mapsRepo,
+    required this.geofenceRepo,
   }) {
     markExitHandler = MarkExitHandler(
       api: api,

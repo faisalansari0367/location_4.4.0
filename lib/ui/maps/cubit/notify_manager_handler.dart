@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:api_repo/api_repo.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -10,7 +11,7 @@ import '../models/polygon_model.dart';
 import '../view/widgets/dialog/notify_manager.dart';
 
 class NotifyManagerHandler {
-  late MapsRepo mapsRepo;
+  late GeofencesRepo mapsRepo;
   // NotifyManagerHandler(
   //   this.mapsRepo, {
   //   this.duration = const Duration(minutes: 15),
@@ -31,7 +32,7 @@ class NotifyManagerHandler {
 
   NotifyManagerHandler._internal();
 
-  void init(MapsRepo mapsRepo) {
+  void init(GeofencesRepo mapsRepo) {
     this.mapsRepo = mapsRepo;
   }
 

@@ -5,14 +5,12 @@ import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
-import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../widgets/dialogs/dialog_service.dart';
 import '../location_service/map_toolkit_utils.dart';
-import '../models/polygon_model.dart';
 import '../view/widgets/dialog/enter_property.dart';
 import 'logbook_entry_handler.dart';
 import 'notify_manager_handler.dart';
@@ -27,7 +25,7 @@ import 'notify_manager_handler.dart';
 ///
 
 class TrackPolygons {
-  final MapsRepo mapsRepo;
+  final GeofencesRepo geofenceRepo;
   final Api api;
 
   final polygonsInCoverage = BehaviorSubject<Set<PolygonModel>>.seeded({});
@@ -41,11 +39,11 @@ class TrackPolygons {
   late LogbookEntryHandler logbookEntryHandler;
   int attemptOfShowingPopUp = 0;
 
-  TrackPolygons({required this.mapsRepo, required this.api}) {
+  TrackPolygons({required this.geofenceRepo, required this.api}) {
     isShowingPopUp = false;
-    notifyManager.init(mapsRepo);
+    notifyManager.init(geofenceRepo);
     logbookEntryHandler = LogbookEntryHandler(
-      mapsRepo: mapsRepo,
+      geofenceRepo: geofenceRepo,
       api: api,
     );
   }

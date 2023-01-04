@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
@@ -6,7 +5,6 @@ import 'package:bioplus/widgets/dialogs/location_permission_dialog.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
-// import 'package:background_location/background_location.dart';
 
 class GeolocatorService {
   static final GeolocatorPlatform instance = GeolocatorPlatform.instance;
@@ -83,7 +81,6 @@ class GeolocatorService {
     final position = Position(
       latitude: event.latitude!,
       longitude: event.longitude!,
-      // timestamp: DateTime.now(),
       timestamp: DateTime.now(),
       accuracy: event.accuracy!,
       altitude: event.altitude!,
@@ -91,41 +88,26 @@ class GeolocatorService {
       speed: event.speed!,
       speedAccuracy: event.speedAccuracy!,
     );
-    log('position ${position.toJson()}');
+
     return position;
   }
 
   static LocationSettings get _getLocationSettings {
-    // const duration = Duration(seconds: 1);
     late LocationSettings locationSettings;
 
     if (Platform.isAndroid) {
       locationSettings = AndroidSettings(
-        // foregroundNotificationConfig: ForegroundNotificationConfig(
-        //   notificationTitle: 'Monitoring in background',
-        //   notificationText: 'We are monitor ing your entry and exit from locations',
-        // ),
-        // distanceFilter: 0,
-
-        // forceLocationManager: true,
         intervalDuration: const Duration(),
-        // intervalDuration: duration,
       );
     } else if (Platform.isIOS) {
       locationSettings = AppleSettings(
-        // timeLimit: duration,
         pauseLocationUpdatesAutomatically: false,
-
         showBackgroundLocationIndicator: true,
         accuracy: LocationAccuracy.best,
-
-        // activityType: Acti
       );
     } else {
       locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-
-        // distanceFilter: 10,
       );
     }
     return locationSettings;

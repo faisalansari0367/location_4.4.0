@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -36,9 +35,14 @@ class CvdFormUtils {
 
   Future<Map<String, dynamic>> loadJson(String path) async {
     // /assets/json/buyer_details.json
-    final data = await rootBundle.loadString("packages/cvd_forms/$path");
-    final map = jsonDecode(data);
-    return map;
+    try {
+      final data = await rootBundle.loadString("packages/cvd_forms/$path");
+      final map = jsonDecode(data);
+      return map;
+    } on Exception catch (e) {
+      print(e);
+      rethrow;
+    }
   }
 
   Future<VendorDetailsModel> _fetchVendorDetailsModel() async {

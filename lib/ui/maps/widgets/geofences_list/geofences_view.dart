@@ -1,5 +1,5 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:bioplus/ui/maps/widgets/geofences_list/cubit/geofence_cubit.dart';
 import 'package:bioplus/ui/maps/widgets/geofences_list/geofence_card.dart';
 import 'package:bioplus/widgets/animations/animations.dart';

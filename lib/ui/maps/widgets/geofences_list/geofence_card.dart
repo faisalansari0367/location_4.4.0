@@ -1,8 +1,8 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../constants/index.dart';
-import '../../models/polygon_model.dart';
 
 class GeofenceCard extends StatelessWidget {
   final PolygonModel item;

@@ -1,9 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
 import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
-import 'package:bioplus/ui/maps/location_service/maps_repo_local.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/notifications/push_notifications.dart';
@@ -19,7 +17,6 @@ class MapsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-
       create: (context) => MapsCubit(
         context,
         // context.read<NotificationService>(),
@@ -27,7 +24,7 @@ class MapsPage extends StatelessWidget {
         context.read<PolygonsService>(),
         context.read<PushNotificationService>(),
         context.read<Api>(),
-        context.read<MapsRepoLocal>(),
+        // context.read<MapsRepoLocal>(),
         geofenceService: context.read<GeofenceService>(),
       ),
       child: MapsView(fromDrawer: fromDrawer),

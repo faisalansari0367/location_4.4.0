@@ -1,25 +1,34 @@
 import 'dart:core';
 
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/maps/widgets/geofences_list/cubit/geofence_controller.dart';
 
-import '../../maps/location_service/maps_repo.dart';
+import '../../../widgets/dialogs/dialog_service.dart';
 
 class EmergencyWarningPageNotifier extends GeofenceController {
   final selectedZones = Set<int>();
   // FilterType filterType = FilterType.created_by_me;
   // bool hasPolygon = false;
   // UserData? userData;
-  final MapsRepo mapsRepo;
+  // final MapsRepo mapsRepo;
 
-  EmergencyWarningPageNotifier(super.context, {required this.mapsRepo}) {
+  EmergencyWarningPageNotifier(super.context) {
     _getPolygon();
     // userData = api.getUserData();
     // _hasPolygons(polygonStream);
   }
 
   Future<void> _getPolygon() async {
-    if (!mapsRepo.hasPolygons) {
-      mapsRepo.getAllPolygon();
+    if (!geofenceRepo.hasPolygons) {
+      await 100.milliseconds.delay();
+      final polygons = await geofenceRepo.getAllPolygon();
+      polygons.when(
+        success: (polygons) {
+          // emit(state.copyWith(polygons: polygons.toSet()));
+          // print(polygons);
+        },
+        failure: (error) => DialogService.failure(error: error),
+      );
     }
   }
 

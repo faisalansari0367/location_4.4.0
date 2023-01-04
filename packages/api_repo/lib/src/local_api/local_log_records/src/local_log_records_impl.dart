@@ -9,7 +9,6 @@ import 'package:api_repo/src/geofences/src/storage/maps_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 
-
 class LocalLogRecordsImpl extends LogRecordsRepo {
   LocalLogRecordsImpl({
     required this.box,
@@ -27,9 +26,9 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   Future<void> _init() async {
     // geofences = await Hive.openBox('geofences');
     _logRecordsLocalService = LogRecordsLocalService(box: box);
-    _mapsStorageService = MapsStorageService();
+    _mapsStorageService = MapsStorageService(box: box);
     _storageService = StorageService(box: box);
-    await _mapsStorageService.init();
+    await _mapsStorageService.initGeofences();
   }
 
   @override
@@ -96,7 +95,6 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       if (element.exitDate == null) {
         return true;
       }
-
       return DateTime.now().difference(element.enterDate!).inMinutes <= 30;
     });
 
@@ -114,7 +112,6 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   @override
   Future<LogbookEntry?> getLogRecord(String geofenceId) async {
     if (_logRecords.isEmpty) {
-      // await _completer.future;
       return null;
     }
 
@@ -168,8 +165,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId,
-      {bool isExiting = false, String? form}) async {
+  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId, {bool isExiting = false, String? form}) async {
     try {
       // get the latest entry from the logRecords
       final hasEntry = await getLogRecord(geofenceId);
@@ -243,7 +239,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
         return await _patchForm(logId, form);
       } else {
         final logRecord = await getLogRecord(geofenceId);
-        if (logRecord == null) { 
+        if (logRecord == null) {
           return const ApiResult.failure(error: NetworkExceptions.defaultError('no log record found'));
         }
         return await _patchForm(logRecord.id!, form);

@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 
 import '../../../../../helpers/callback_debouncer.dart';
 import '../../../../../models/enum/filter_type.dart';
-import '../../../models/polygon_model.dart';
 
 abstract class GeofenceController extends BaseModel {
   FilterType filterType = FilterType.created_by_me;
@@ -17,12 +16,11 @@ abstract class GeofenceController extends BaseModel {
   StreamSubscription<List<PolygonModel>>? _streamSubscription;
 
   /// Check if there are any polygons
-  bool _hasPolygons = true;
-  bool get hasPolygon => _hasPolygons;
+  bool get hasPolygon => geofenceRepo.hasPolygons;
 
   GeofenceController(super.context) {
     user = apiService.getUser();
-    _checkPolygons(polygonStream);
+    // _checkPolygons(polygonStream);
   }
 
   void onFilterTypeChange(FilterType filterType) {
@@ -38,8 +36,8 @@ abstract class GeofenceController extends BaseModel {
 
   Stream<List<PolygonModel>> get polygonStream {
     return filterType.isAll
-        ? mapsRepo.polygonStream.map((event) => event.where(_search).toList())
-        : mapsRepo.polygonStream.map(
+        ? geofenceRepo.polygonStream.map((event) => event.where(_search).toList())
+        : geofenceRepo.polygonStream.map(
             (event) => event.where(_createdByMe).where(_search).toList(),
           );
   }
@@ -48,12 +46,13 @@ abstract class GeofenceController extends BaseModel {
   bool _createdByMe(element) => element.createdBy?.id == user?.id;
   bool _search(element) => element.name.toLowerCase().contains(searchController.text.toLowerCase());
 
-  void _checkPolygons(Stream<List<PolygonModel>> stream) {
-    _streamSubscription = stream.listen((event) {
-      _hasPolygons = event.isNotEmpty;
-      notifyListeners();
-    });
-  }
+  // void _checkPolygons(Stream<List<PolygonModel>> stream) {
+  //   _streamSubscription = stream.listen((event) {
+  //     // _hasPolygons = event.isNotEmpty;
+  //     _hasPolygons = geofenceRepo.hasPolygons;
+  //     notifyListeners();
+  //   });
+  // }
 
   @override
   void dispose() {

@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class LocalApi extends Api {
   late StorageService storage;
   late LocalLogRecordsImpl _logRecordsImpl;
+  late GeofencesRepo _geofencesRepoLocalImpl;
   late CvdFormsRepo _cvdFormsRepo;
 
   @override
@@ -15,6 +16,7 @@ class LocalApi extends Api {
     _logRecordsImpl = LocalLogRecordsImpl(box: box);
     _cvdFormsRepo = CvdFormsLocalImpl(box: box);
     storage = StorageService(box: box);
+    _geofencesRepoLocalImpl = GeofencesRepoLocalImpl(box: box);
   }
 
   @override
@@ -71,7 +73,7 @@ class LocalApi extends Api {
 
   @override
   UserData? getUserData() {
-    throw UnimplementedError();
+    return storage.getUserData();
   }
 
   @override
@@ -123,6 +125,8 @@ class LocalApi extends Api {
     try {
       // final box = await Hive.openBox(data.email.trim());
       // await init(baseUrl: '', box: box);
+      // final hive = await Hive.openBox('storage');
+      // final storage = StorageService(box: hive);
       final savedModel = storage.getSignInData();
       if (savedModel != data) {
         return const ApiResult.failure(
@@ -165,7 +169,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Stream<UserData?> get userDataStream => throw UnimplementedError();
+  Stream<UserData?> get userDataStream => storage.userDataStrem;
 
   @override
   Stream<List<UserRoles>?> get userRolesStream => storage.userRolesStream;
@@ -179,8 +183,7 @@ class LocalApi extends Api {
   }
 
   @override
-  // TODO: implement isLoggedIn
-  bool get isLoggedIn => throw UnimplementedError();
+  bool get isLoggedIn => storage.isLoggedIn;
 
   @override
   Future<ApiResult<List<String>>> getLicenceCategories() {
@@ -364,4 +367,48 @@ class LocalApi extends Api {
   Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() {
     return _cvdFormsRepo.getWitholdingPeriodsList();
   }
+
+  @override
+  void cancel() {
+    _geofencesRepoLocalImpl.cancel();
+  }
+
+  @override
+  Future<ApiResult> deletePolygon(PolygonModel model) {
+    return _geofencesRepoLocalImpl.deletePolygon(model);
+  }
+
+  @override
+  Future<ApiResult<List<PolygonModel>>> getAllPolygon() {
+    return _geofencesRepoLocalImpl.getAllPolygon();
+  }
+
+  @override
+  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) {
+    return _geofencesRepoLocalImpl.notifyManager(lat, lng, locationId);
+  }
+
+  @override
+  Stream<List<PolygonModel>> get polygonStream => _geofencesRepoLocalImpl.polygonStream;
+
+  @override
+  Future<List<PolygonModel>> get polygonsCompleter => _geofencesRepoLocalImpl.polygonsCompleter;
+
+  @override
+  Future<void> saveAllPolygon(List<PolygonModel> polygons) {
+    return _geofencesRepoLocalImpl.saveAllPolygon(polygons);
+  }
+
+  @override
+  Future<ApiResult<void>> savePolygon(PolygonModel model) {
+    return _geofencesRepoLocalImpl.savePolygon(model);
+  }
+
+  @override
+  Future<ApiResult> updatePolygon(PolygonModel model) {
+    return _geofencesRepoLocalImpl.updatePolygon(model);
+  }
+
+  @override
+  bool get hasPolygons => _geofencesRepoLocalImpl.hasPolygons;
 }

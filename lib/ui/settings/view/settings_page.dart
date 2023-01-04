@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
 import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
-import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
@@ -172,7 +172,8 @@ class _SettingsPageState extends State<SettingsPage> {
             MyListTile(
               onTap: () async {
                 try {
-                  context.read<MapsRepo>().cancel();
+                  final apiService = MyConnectivity.isConnected ? context.read<Api>() : context.read<LocalApi>();
+                  apiService.cancel();
                   context.read<GeofenceService>().cancel();
                   final client = GraphQlClient();
                   await client.clearStorage();
@@ -192,7 +193,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _logout(BuildContext context) async {
-    context.read<MapsRepo>().cancel();
+    // context.read<MapsRepo>().cancel();
+    final apiService = MyConnectivity.isConnected ? context.read<Api>() : context.read<LocalApi>();
+    apiService.cancel();
     context.read<GeofenceService>().cancel();
     final client = GraphQlClient();
     await client.clearStorage();

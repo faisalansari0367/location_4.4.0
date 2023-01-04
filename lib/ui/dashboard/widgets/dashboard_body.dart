@@ -29,7 +29,7 @@ class DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<DashboardNotifier>(
       builder: (context, state, child) {
-        print('is role visitor: ${state.isVisitor}');
+        // print('is role visitor: ${state.isVisitor}');
         return GridView(
           // shrinkWrap: true,
           // primary: false,

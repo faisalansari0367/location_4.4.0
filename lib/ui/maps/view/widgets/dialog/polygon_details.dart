@@ -1,5 +1,5 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
@@ -9,14 +9,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../location_service/map_toolkit_utils.dart';
-import '../../../location_service/maps_repo.dart';
 
 class PolygonDetails extends StatelessWidget {
   final PolygonModel polygonModel;
   final bool canEdit;
   final VoidCallback onTap;
-  const PolygonDetails({Key? key, required this.polygonModel, this.canEdit = false, required this.onTap})
-      : super(key: key);
+  const PolygonDetails({
+    Key? key,
+    required this.polygonModel,
+    this.canEdit = false,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,7 @@ class PolygonDetails extends StatelessWidget {
                       child: DeleteDialog(
                         onConfirm: () async {
                           Get.back();
-                          await context.read<MapsRepo>().deletePolygon(polygonModel);
+                          await context.read<Api>().deletePolygon(polygonModel);
                         },
                       ),
                     );

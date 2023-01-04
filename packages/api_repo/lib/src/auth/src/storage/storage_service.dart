@@ -71,13 +71,16 @@ class StorageService implements LocalStorage {
     // _userStream = BehaviorSubject<User?>.seeded(getUser());
     getUser();
     _userRoles.add(getRoles());
+    _userDataStream.add(getUserData());
     _listenForChanges();
     _listenForUserRoleStream();
+    _listenForUserDataStream();
   }
 
   // late final BehaviorSubject<User?> _controller;
   final _controller = BehaviorSubject<User?>.seeded(null);
   final _userRoles = BehaviorSubject<List<UserRoles>>.seeded([]);
+  final _userDataStream = BehaviorSubject<UserData?>.seeded(null);
 
   String get userKey => _Keys.user;
 
@@ -152,10 +155,11 @@ class StorageService implements LocalStorage {
   }
 
   @override
-  Stream<UserData?> get userDataStrem => box.watch(key: _Keys.userData).map((event) {
-        if (event.value == null) return null;
-        return UserData.fromJson(Map<String, dynamic>.from(event.value));
-      });
+  Stream<UserData?> get userDataStrem => _userDataStream.stream;
+  // box.watch(key: _Keys.userData).map((event) {
+  //       if (event.value == null) return null;
+  //       return UserData.fromJson(Map<String, dynamic>.from(event.value));
+  //     });
 
   @override
   Stream<List<UserRoles>> get userRolesStream => _userRoles.stream;
@@ -263,4 +267,12 @@ class StorageService implements LocalStorage {
 
   @override
   Stream<bool> get isLoggedInStream => box.watch(key: _Keys.isLoggedIn).map((event) => event.value ?? false);
+
+  void _listenForUserDataStream() {
+    box.watch(key: _Keys.userData).map((event) {
+      if (event.value == null) return null;
+      final userData = UserData.fromJson(Map<String, dynamic>.from(event.value));
+      _userDataStream.add(userData);
+    });
+  }
 }

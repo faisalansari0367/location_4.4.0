@@ -18,7 +18,7 @@ class EmergencyWarningPagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => EmergencyWarningPageNotifier(context, mapsRepo: context.read<MapsRepo>()),
+      create: (context) => EmergencyWarningPageNotifier(context),
       child: const Scaffold(
         body: EmergencyWarningPageView(),
       ),
