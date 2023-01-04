@@ -128,6 +128,7 @@ dependencies:
   csv: ^5.0.1
   share_plus: ^4.5.3
   workmanager: ^0.5.1
+  # background_location: ^0.8.1
   # workmanager: ^0.5.1
   # background_locator: ^1.6.12
   # background_location_tracker: ^1.3.0

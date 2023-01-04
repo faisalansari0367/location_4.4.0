@@ -243,7 +243,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
         return await _patchForm(logId, form);
       } else {
         final logRecord = await getLogRecord(geofenceId);
-        if (logRecord == null) {
+        if (logRecord == null) { 
           return const ApiResult.failure(error: NetworkExceptions.defaultError('no log record found'));
         }
         return await _patchForm(logRecord.id!, form);
