@@ -1,15 +1,10 @@
-import 'dart:convert';
-
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
-import 'package:bioplus/widgets/download_button/download_button.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
-import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 import '../../../constants/index.dart';
 import '../../../widgets/dialogs/dialogs.dart';
@@ -22,7 +17,12 @@ class SelfDeclaration extends StatefulWidget {
 }
 
 class _SelfDeclarationState extends State<SelfDeclaration> {
-  List<String> data = [];
+  List<String> data = [
+    "I am the duly authorised representative of the vendor supplying the commodity",
+    "All the information in this document is true and correct",
+    "I have read, understood and answered all questions in accordance with the explanatory notes",
+    "I understand that regulatory authorities may take legal action, and purchasers may seek damages if the information provided is false or misleading"
+  ];
   String? signature;
   TextEditingController nameController = TextEditingController();
   TextEditingController orgController = TextEditingController();
@@ -34,7 +34,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
     orgController = TextEditingController(text: context.read<Api>().getUserData()?.company);
     context.read<CvdCubit>().setOrgName(orgController.text);
     nameController = TextEditingController(text: getName());
-    _init();
+    // _init();
     super.initState();
   }
 
@@ -231,11 +231,5 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
       data = userData!.fullName;
     }
     return data;
-  }
-
-  void _init() async {
-    final json = await DefaultAssetBundle.of(context).loadString('assets/json/declaration_form.json');
-    data = List<String>.from(jsonDecode(json)['conditions']);
-    setState(() {});
   }
 }

@@ -202,32 +202,32 @@ class _ChemicalUseState extends State<ChemicalUse> {
     );
   }
 
-  Table _table() {
-    return Table(
-      border: TableBorder.all(style: BorderStyle.solid, color: Colors.grey.shade400),
-      defaultVerticalAlignment: TableCellVerticalAlignment.top,
-      children: [
-        TableRow(
-          children: [
-            Text('Chemical Applied'),
-            Text('Rate (Tonne/ Ha)'),
-            Text('Application Date'),
-            Text('WHP/ ESI/ EAFI'),
-          ],
-        ),
-        ...tableData.map(
-          (e) => TableRow(
-            children: [
-              Text(e.chemicalName ?? ''),
-              Text(e.rate ?? ''),
-              Text(MyDecoration.formatDate(DateTime.tryParse(e.applicationDate!))),
-              Text(e.wHP ?? ''),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // Table _table() {
+  //   return Table(
+  //     border: TableBorder.all(style: BorderStyle.solid, color: Colors.grey.shade400),
+  //     defaultVerticalAlignment: TableCellVerticalAlignment.top,
+  //     children: [
+  //       TableRow(
+  //         children: [
+  //           Text('Chemical Applied'),
+  //           Text('Rate (Tonne/ Ha)'),
+  //           Text('Application Date'),
+  //           Text('WHP/ ESI/ EAFI'),
+  //         ],
+  //       ),
+  //       ...tableData.map(
+  //         (e) => TableRow(
+  //           children: [
+  //             Text(e.chemicalName ?? ''),
+  //             Text(e.rate ?? ''),
+  //             Text(MyDecoration.formatDate(DateTime.tryParse(e.applicationDate!))),
+  //             Text(e.wHP ?? ''),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _dataTable() {
     // tableData.sort(_sortByDate);
@@ -244,12 +244,12 @@ class _ChemicalUseState extends State<ChemicalUse> {
     );
   }
 
-  int _sortByDate(ChemicalTable a, ChemicalTable b) {
-    final _a = DateTime.tryParse(a.applicationDate!);
-    final _b = DateTime.tryParse(b.applicationDate!);
+  // int _sortByDate(ChemicalTable a, ChemicalTable b) {
+  //   final _a = DateTime.tryParse(a.applicationDate!);
+  //   final _b = DateTime.tryParse(b.applicationDate!);
 
-    return _a!.compareTo(_b!);
-  }
+  //   return _a!.compareTo(_b!);
+  // }
 
   DataColumn _column(String text) {
     return DataColumn(

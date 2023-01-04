@@ -3,9 +3,9 @@ import 'dart:developer';
 
 import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:cvd_forms/cvd_forms.dart';
-import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:rxdart/subjects.dart';
 
 import '../../api_repo.dart';
 import '../auth/src/storage/storage_service.dart';
@@ -22,6 +22,8 @@ class ApiRepo implements Api {
   late FunctionsRepo _functionsRepo;
   late CvdFormsRepo _cvdFormsRepo;
 
+  final BehaviorSubject<Box> _userBoxController = BehaviorSubject<Box>();
+
   Future<void> Function({required String baseUrl, required Box<dynamic> box}) localApiinit;
 
   late Box _box;
@@ -35,27 +37,25 @@ class ApiRepo implements Api {
   Future<void> init({
     required String baseUrl,
     required Box box,
+    // required ValueChanged<Box> onBoxChange,
   }) async {
     //  _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
-    final _storage = StorageService(box: box);
+    // final _storage = StorageService(box: box);
 
-    if (_storage.isLoggedIn) {
-      final userBox = await Hive.openBox(_storage.getUser()!.email!);
-      log('userbox name is ${userBox.name}}');
-      if (userBox.isNotEmpty) {
-        _box = userBox;
-      } else {
-        _box = box;
-      }
-    } else {
-      _box = box;
-    }
+    // if (_storage.isLoggedIn) {
+    //   final userBox = await Hive.openBox(_storage.getUser()!.email!);
+    //   log('userbox name is ${userBox.name}}');
+    //   if (userBox.isNotEmpty) {
+    //     _box = userBox;
+    //   }
+    // }
+    _box = await _getBox(box);
+    // onBoxChange(_box);
 
     final storage = StorageService(box: _box);
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token, onError: _onError);
 
-    localApiinit(baseUrl: baseUrl, box: _box);
     localApiinit(baseUrl: baseUrl, box: _box);
     _logRecordsRepo = LogRecordsImpl(client: _client, box: _box);
     _authRepo = AuthRepoImpl(client: _client, box: _box, onUserChange: changeUserBox);
@@ -63,6 +63,25 @@ class ApiRepo implements Api {
     _functionsRepo = FunctionsRepoImpl(client: _client);
     _cvdFormsRepo = CvdFormsRepoImpl(box: _box, client: _client);
     _userStream(_box, storage.userKey);
+  }
+
+  Future<Box> _getBox(Box oldBox) async {
+    final _storage = StorageService(box: oldBox);
+    late Box finalBox = oldBox;
+    if (_storage.isLoggedIn) {
+      final userBox = await Hive.openBox(_storage.getUser()!.email!);
+      log('userbox name is ${userBox.name}}');
+      if (userBox.isNotEmpty) {
+        finalBox = userBox;
+      }
+    }
+    return finalBox;
+  }
+
+  void _listenToBoxChanges() {
+    _userBoxController.listen((value) {
+      log('box changed');
+    });
   }
 
   Future<void> changeUserBox(String email) async {
@@ -247,7 +266,7 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry( String geofenceId, {bool isExiting = false, String? form}) {
+  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId, {bool isExiting = false, String? form}) {
     return _logRecordsRepo.logBookEntry(
       // pic,
       geofenceId,
@@ -370,5 +389,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) {
     return _authRepo.updateCvdForms(base64pdfs: base64pdfs);
+  }
+  
+  @override
+  Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() {
+    return _cvdFormsRepo.getWitholdingPeriodsList();
   }
 }

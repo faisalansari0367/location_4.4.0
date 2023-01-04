@@ -24,7 +24,45 @@ class VisitorCheckInView extends StatelessWidget {
             padding: kPadding,
             child: Column(
               children: [
-                QRCodeImage(),
+                if (state.qrCode != null)
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 2.width,
+                            strokeAlign: StrokeAlign.outside,
+                          ),
+                          borderRadius: kBorderRadius,
+                        ),
+                        child: QRCodeImage(
+                          image: state.qrCode!,
+                        ),
+                      ),
+                      Gap(20.h),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.width,
+                          vertical: 10.h,
+                        ),
+                        child: AutoSizeText(
+                          'Scan me',
+                          textAlign: TextAlign.center,
+                          style: context.textTheme.headline6?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  const CircularProgressIndicator(),
                 Gap(20.h),
                 _infoCard(context),
               ],

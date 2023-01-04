@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/models.dart';
 
@@ -34,7 +35,8 @@ class CvdFormUtils {
   }
 
   Future<Map<String, dynamic>> loadJson(String path) async {
-    final data = await DefaultAssetBundle.of(context).loadString(path);
+    // /assets/json/buyer_details.json
+    final data = await rootBundle.loadString("packages/cvd_forms/$path");
     final map = jsonDecode(data);
     return map;
   }

@@ -59,7 +59,7 @@ class LogbookEntryHandler {
   }
 
   Future<void> update(bool isInside, PolygonModel polygonModel) async {
-    if (this.isExiting == isInside) return;
+    if (this.isExiting == isInside && this.polygonModel == polygonModel) return;
     this.isExiting = isInside;
     this.polygonModel = polygonModel;
     log('user is exiting ${!isInside}');

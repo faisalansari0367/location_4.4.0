@@ -1,8 +1,8 @@
-import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:api_client/api_client.dart';
 import 'package:cvd_forms/cvd_forms.dart';
-import 'package:cvd_forms/models/src/cvd_form.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../storage/cvd_forms_storage.dart';
@@ -59,5 +59,17 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
   @override
   Future<bool> deleteForm(CvdForm cvdForm) {
     return storage.deleteCvdForm(cvdForm);
+  }
+
+  @override
+  Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() async {
+    try {
+      final data = await rootBundle.loadString("packages/cvd_forms/assets/json/witholding_periods.json");
+      final map = jsonDecode(data);
+      final list = (map as List).map((e) => WitholdingPeriodModel.fromJson(e)).toList();
+      return ApiResult.success(data: list);
+    } catch (e) {
+      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to get witholding periods'));
+    }
   }
 }

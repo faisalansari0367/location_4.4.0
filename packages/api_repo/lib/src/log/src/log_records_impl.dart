@@ -64,30 +64,6 @@ class LogRecordsImpl implements LogRecordsRepo {
         if (offlineLog.isNotEmpty) {
           recordsToBeUpdated.addAll(offlineLog);
         }
-
-        // for (var offlineLog in offlineRecords) {
-
-        // find the same record on the server
-        // final onlineLog = logbookRecords.firstWhere((element) => element.id == offlineLog.id);
-
-        // final index = logbookRecords.indexOf(onlineLog);
-        // // final hasMatch = onlineLog.enterDate == offlineLog.enterDate &&
-        // //     onlineLog.geofence?.id == offlineLog.geofence?.id &&
-        // //     onlineLog.user?.id == offlineLog.user?.id;
-
-        // // print('match found: $hasMatch ${onlineLog.id} ${offlineLog.id}}');
-        // if (onlineLog.id == offlineLog.id) {
-        //   recordsToBeUpdated.add(index);
-        // } else {
-        //   final hasMatch = onlineLog.enterDate == offlineLog.enterDate &&
-        //       onlineLog.geofence?.id == offlineLog.geofence?.id &&
-        //       onlineLog.user?.id == offlineLog.user?.id;
-        //   if (hasMatch) {
-        //     log('entry found on server with same details as offline log record ${onlineLog.id}');
-        //     recordsToBeUpdated.add(index);
-        //   }
-        // }
-        // }
       }
 
       log('records to be updated: ${recordsToBeUpdated.length}');
@@ -99,7 +75,7 @@ class LogRecordsImpl implements LogRecordsRepo {
             final form = entry.form?.toJson() ?? {};
 
             if (entry.exitDate != null) {
-              form['exitDate'] = entry.exitDate?.toIso8601String();
+              form['exitDate'] = entry.exitDate?.toUtc().toIso8601String();
             }
 
             final result = await _patchForm(form, entry.id!);
@@ -325,14 +301,15 @@ class LogRecordsImpl implements LogRecordsRepo {
 
     // records created by the current user for this geofence in the last 15 minutes
     final recordsPast15Minutes = recordsByUser.where((element) {
+      final difference = DateTime.now().difference(element.enterDate!);
       if (element.form?.isEmpty ?? true) {
-        return DateTime.now().difference(element.enterDate!).inHours <= 24;
+        return difference.inHours <= 24;
       }
       if (element.exitDate == null) {
         return true;
       }
 
-      return DateTime.now().difference(element.enterDate!).inMinutes <= 30;
+      return difference.inMinutes <= 30;
     });
 
     if (kDebugMode) {
