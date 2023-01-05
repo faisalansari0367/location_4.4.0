@@ -18,6 +18,36 @@
 			}
 		},
 		{
+			"label": "Build Bioplus Bundle",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"appbundle",
+				"--target=lib/main_prod.dart"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Flutter Build Bioplus IPA",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"ipa",
+				"--target=lib/main_prod.dart"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
 			"type": "flutter",
 			"command": "flutter",
 			"args": [
