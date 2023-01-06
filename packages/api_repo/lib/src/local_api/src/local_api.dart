@@ -419,4 +419,14 @@ class LocalApi extends Api {
 
   @override
   List<PolygonModel> get polygons => _geofencesRepoLocalImpl.polygons;
+
+  @override
+  Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params) {
+    return _geofencesRepoLocalImpl.temporaryOwner(params);
+  }
+  
+  @override
+  Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params) {
+    return _geofencesRepoLocalImpl.removeTemporaryOwner(params);
+  }
 }

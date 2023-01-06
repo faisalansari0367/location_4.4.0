@@ -13,10 +13,12 @@ class PolygonModel {
   final String? pic;
   final List<LatLng> points;
   final UserData? createdBy;
+  final UserData? temporaryOwner;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   PolygonModel({
+    this.temporaryOwner,
     this.companyOwner,
     this.pic,
     this.id,
@@ -39,6 +41,7 @@ class PolygonModel {
       'createdBy': createdBy?.toJson(),
       'pic': pic,
       'companyOwner': companyOwner,
+      'temporaryOwner': temporaryOwner?.toJson(),
 
       // 'createdAt': createdBy.toJson(),
     };
@@ -78,7 +81,8 @@ class PolygonModel {
     // }
     try {
       return PolygonModel(
-        createdBy: UserData.fromJson(Map<String, dynamic>.from(json['createdBy'])),
+        createdBy: _getUserData(json['createdBy']),
+        temporaryOwner: _getUserData(json['temporaryOwner']),
         pic: json['pic'],
         id: json['id'].toString(),
         color: _colorFromHex(json['color']),
@@ -94,6 +98,13 @@ class PolygonModel {
     }
   }
 
+  static UserData? _getUserData(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return UserData.fromJson(Map<String, dynamic>.from(json));
+  }
+
   factory PolygonModel.fromJson(Map<String, dynamic> json) {
     var polygons = <dynamic>[];
     final points = json['points'];
@@ -105,6 +116,7 @@ class PolygonModel {
 
     return PolygonModel(
       createdBy: UserData.fromJson(json['createdBy']),
+      temporaryOwner: _getUserData(json['temporaryOwner']),
       id: json['id'].toString(),
       color: _colorFromHex(json['color']),
       points: List<LatLng>.from(polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),

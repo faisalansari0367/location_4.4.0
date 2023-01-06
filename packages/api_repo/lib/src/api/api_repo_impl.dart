@@ -14,7 +14,7 @@ import '../auth/src/storage/storage_service.dart';
 
 export '../functions/models/notifications_model.dart';
 
-class ApiRepo implements Api {
+class ApiRepo implements Api { 
   late Client _client;
   late AuthRepo _authRepo;
   late UserRepo _userRepo;
@@ -446,4 +446,14 @@ class ApiRepo implements Api {
   
   @override
   List<PolygonModel> get polygons =>  _geofencesRepo.polygons;
+  
+  @override
+  Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params) {
+    return _geofencesRepo.temporaryOwner(params);
+  }
+  
+  @override
+  Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params) {
+    return _geofencesRepo.removeTemporaryOwner(params);
+  }
 }

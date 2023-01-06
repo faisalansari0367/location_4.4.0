@@ -231,6 +231,7 @@ class MapsCubit extends BaseModel {
 
   Future<void> getLocationUpdates() async {
     print('waiting for polygons to complete');
+    await _getAllPolygon();
     // await mapsRepo.polygonsCompleter;
     print('polygons completed');
     // notifyListeners();

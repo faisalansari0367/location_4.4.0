@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:get/get.dart' as getx;
 import 'package:google_fonts/google_fonts.dart';
 
-import 'constants/api_constants.dart';
 import 'services/notifications/push_notifications.dart';
 import 'ui/login/view/login_page.dart';
 import 'ui/maps/location_service/geofence_service.dart';
@@ -59,7 +58,8 @@ class _MyAppState extends State<MyApp> {
       child: GetMaterialApp(
         // customTransition,
         defaultTransition: getx.Transition.cupertino,
-        debugShowCheckedModeBanner: ApiConstants.isDegugMode,
+        // debugShowCheckedModeBanner: ApiConstants.isDegugMode,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,

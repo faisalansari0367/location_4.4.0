@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:api_client/api_client.dart';
+import 'package:api_repo/src/auth/src/models/user_data.dart';
 import 'package:api_repo/src/geofences/geofences_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rxdart/subjects.dart';
@@ -46,17 +47,17 @@ class MapsStorageService implements GeofencesRepo {
   Future<void> initGeofences() async {
     // final box = await Hive.openBox(_boxKey);
     // _box = box;
-    if (_completer.isCompleted) return;
-    final list = await getAllPolygon();
-    list.when(
-      success: (list) {
-        if (_completer.isCompleted) return;
-        _completer.complete(list);
-      },
-      failure: (failure) {
-        _completer.completeError(failure);
-      },
-    );
+    // if (_completer.isCompleted) return;
+    await getAllPolygon();
+    // list.when(
+    //   success: (list) {
+    //     // if (_completer.isCompleted) return;
+    //     // _completer.complete(list);
+    //   },
+    //   failure: (failure) {
+    //     _completer.completeError(failure);
+    //   },
+    // );
     // _completer.complete();
   }
 
@@ -156,4 +157,22 @@ class MapsStorageService implements GeofencesRepo {
 
   @override
   List<PolygonModel> get polygons => _controller.value;
+
+  @override
+  Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params) {
+    return Future.value(const ApiResult.failure(
+      error: NetworkExceptions.defaultError(
+        'Not available in offline mode',
+      ),
+    ));
+  }
+
+  @override
+  Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params) {
+    return Future.value(const ApiResult.failure(
+      error: NetworkExceptions.defaultError(
+        'Not available in offline mode',
+      ),
+    ));
+  }
 }

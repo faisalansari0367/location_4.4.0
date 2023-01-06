@@ -19,13 +19,13 @@ class EmergencyWarningPageNotifier extends GeofenceController {
   }
 
   Future<void> _getPolygon() async {
+    await 100.milliseconds.delay();
     if (!geofenceRepo.hasPolygons) {
-      await 100.milliseconds.delay();
       final polygons = await geofenceRepo.getAllPolygon();
       polygons.when(
         success: (polygons) {
           // emit(state.copyWith(polygons: polygons.toSet()));
-          // print(polygons);
+          print(polygons);
         },
         failure: (error) => DialogService.failure(error: error),
       );

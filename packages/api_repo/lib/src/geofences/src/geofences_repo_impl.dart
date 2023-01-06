@@ -1,13 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
-import 'package:api_client/api_client.dart';
-import 'package:api_client/configs/client.dart';
+import 'package:api_repo/api_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../models/models.dart';
-import 'geofences_repo.dart';
 import 'storage/maps_storage.dart';
 
 class GeofencesRepoImpl implements GeofencesRepo {
@@ -41,6 +38,29 @@ class GeofencesRepoImpl implements GeofencesRepo {
         completer.complete(data);
       }
       return ApiResult.success(data: data);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params) async {
+    try {
+      final result = await client.post(Endpoints.delegation, data: params.toJson());
+      final data = result.data['data'];
+      final userData = UserData.fromJson(data);
+      return ApiResult.success(data: userData);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params) async {
+    try {
+      final result = await client.post(Endpoints.removeDelegation, data: params.removeDelegation());
+      final data = result.data['data'];
+      return const ApiResult.success(data: true);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
@@ -123,8 +143,7 @@ class GeofencesRepoImpl implements GeofencesRepo {
 
   @override
   Future<List<PolygonModel>> get polygonsCompleter => completer.future;
-  
+
   @override
-  // TODO: implement polygons
   List<PolygonModel> get polygons => _controller.value;
 }

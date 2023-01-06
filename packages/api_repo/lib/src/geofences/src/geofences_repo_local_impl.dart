@@ -1,4 +1,5 @@
 import 'package:api_client/api_result/api_result.dart';
+import 'package:api_repo/src/auth/src/models/user_data.dart';
 import 'package:api_repo/src/geofences/geofences_repo.dart';
 import 'package:api_repo/src/geofences/src/storage/maps_storage.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -56,4 +57,14 @@ class GeofencesRepoLocalImpl implements GeofencesRepo {
 
   @override
   List<PolygonModel> get polygons => storage.polygons;
+
+  @override
+  Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params) {
+    return storage.temporaryOwner(params);
+  }
+  
+  @override
+  Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params) {
+    return storage.removeTemporaryOwner(params);
+  }
 }

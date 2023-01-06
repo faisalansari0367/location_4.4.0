@@ -149,12 +149,14 @@ class AuthRepoImpl implements AuthRepo {
       final model = User.fromJson((result.data));
       final _userData = UserData.fromJson(result.data['data']);
       await storage.setUserData(_userData);
+      await storage.setUser(_userData.toJson());
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
 
+  @override
   Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) async {
     try {
       // final json = userData.updateAllowedRoles();

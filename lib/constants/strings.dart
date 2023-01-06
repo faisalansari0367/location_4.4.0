@@ -85,6 +85,7 @@ class Strings {
       waybill = 'Waybill',
       links = 'Links',
       check = 'Check',
+      delegation = 'Delegation',
       commodities = 'Commodities';
 
   static String get firstName => '$first $name';
@@ -102,6 +103,7 @@ class Strings {
   static String get geofences => '${geofence}s';
   static String get visitorCheckIn => '$visitor $check-${in_}s';
   static String get selectCommodities => '$select $commodities';
+  static String get geofenceDelegation => '$geofence $delegation';
 
   // livestock movement declaration
   static String get livestockWaybillDeclaration => '$livestock $waybill $declaration';

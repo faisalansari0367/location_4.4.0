@@ -34,17 +34,34 @@ abstract class GeofenceController extends BaseModel {
     });
   }
 
+  List<FilterType> get filters =>
+      isAdmin ? FilterType.values : FilterType.values.where((element) => element != FilterType.all).toList();
+
   Stream<List<PolygonModel>> get polygonStream {
-    return filterType.isAll
-        ? geofenceRepo.polygonStream.map((event) => event.where(_search).toList())
-        : geofenceRepo.polygonStream.map(
-            (event) => event.where(_createdByMe).where(_search).toList(),
-          );
+    // late Iterable<PolygonModel> = geofenceRepo.polygonStream.where((event) => event.toList());
+    switch (filterType) {
+      case FilterType.all:
+        return geofenceRepo.polygonStream.map((event) => event.where(_search).toList());
+      case FilterType.created_by_me:
+        return geofenceRepo.polygonStream.map((event) => event.where(_createdByMe).where(_search).toList());
+      case FilterType.delegated_geofences:
+        return geofenceRepo.polygonStream.map((event) => event.where(isDelegatedGeofence).where(_search).toList());
+      default:
+        return geofenceRepo.polygonStream.map((event) => event.where(_createdByMe).where(_search).toList());
+    }
+
+    // return filterType.isAll
+    //     ? geofenceRepo.polygonStream.map((event) => event.where(_search).toList())
+    //     : geofenceRepo.polygonStream.map(
+    //         (event) => event.where(_createdByMe).where(_search).toList(),
+    //       );
   }
 
+  bool isDelegatedGeofence(PolygonModel polygon) => user?.id == polygon.temporaryOwner?.id;
+
   bool get isAdmin => api.getUser()?.role == 'Admin';
-  bool _createdByMe(element) => element.createdBy?.id == user?.id;
-  bool _search(element) => element.name.toLowerCase().contains(searchController.text.toLowerCase());
+  bool _createdByMe(PolygonModel element) => element.createdBy?.id == user?.id;
+  bool _search(PolygonModel element) => element.name.toLowerCase().contains(searchController.text.toLowerCase());
 
   // void _checkPolygons(Stream<List<PolygonModel>> stream) {
   //   _streamSubscription = stream.listen((event) {

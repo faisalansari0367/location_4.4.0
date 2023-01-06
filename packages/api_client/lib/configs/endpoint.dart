@@ -10,6 +10,8 @@ class Endpoints {
   static const cvdFormUrl = 'https://uniquetowinggoa.com/safemeat/public/api/declaration';
 
   static const String geofences = '/geofences';
+  static const String delegation = '$geofences/delegation';
+  static const String removeDelegation = '$geofences/removeDelegation';
   static String geofence(String? id) => '/geofences/$id';
   static const String notifyProperyManager = '$users/notify-property-manager';
 

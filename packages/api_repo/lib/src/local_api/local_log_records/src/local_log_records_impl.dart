@@ -41,8 +41,12 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) async {
     // final geofence = _logRecordsLocalService.getLogRecord(geofenceId);
     try {
-      await _mapsStorageService.polygonsCompleter;
+      // await _mapsStorageService.polygonsCompleter;
+      await _mapsStorageService.getAllPolygon();
       final geofences = _mapsStorageService.polygons;
+
+      log('geofences length: ${geofences.length}');
+
       final index = geofences.indexWhere((element) => element.id == geofenceId);
 
       if (index == -1) {

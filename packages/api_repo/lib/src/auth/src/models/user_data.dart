@@ -69,6 +69,9 @@ class UserData {
   String? msaNumber;
   String? nfasAccreditationNumber;
   String? countryOfResidency;
+  DateTime? delegationStartDate;
+  DateTime? delegationEndDate;
+  String? temporaryOwner;
 
   List<String> allowedRoles = const [];
   List<String> cvdForms = const [];
@@ -78,6 +81,9 @@ class UserData {
   UserStatus? status;
 
   UserData({
+    this.temporaryOwner,
+    this.delegationEndDate,
+    this.delegationStartDate,
     this.firstName,
     this.lastName,
     this.email,
@@ -136,17 +142,11 @@ class UserData {
     this.nfasAccreditationNumber,
   });
 
-  static UserStatus getStatus(String? status) {
-    final result = UserStatus.values.where((element) => element.name == (status ?? 'inactive').toLowerCase());
-    if (result.isEmpty) return UserStatus.inactive;
-    return result.first;
-  }
-
-  String get fullName => '$firstName $lastName';
-
   UserData.fromJson(Map<String, dynamic> json) {
+    temporaryOwner = json['temporaryOwner'];
     allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
     countryOfResidency = json['countryOfResidency'];
+
     status = getStatus(json['status']);
     ngr = json['ngr'];
     cvdForms = json['cvdForms'] ?? [];
@@ -186,16 +186,12 @@ class UserData {
     exitDate = json['exitDate'];
     passport = json['passport'];
     registrationToken = json['registrationToken'];
-    createdAt = json['createdAt'] == null ? null : DateTime.tryParse(json['createdAt'])?.toLocal();
-    updatedAt = json['updatedAt'] == null ? null : DateTime.tryParse(json['updatedAt'])?.toLocal();
     businessName = json['businessName'];
     sector = json['sector'];
     contactName = json['contactName'];
     eventName = json['eventName'];
     contactEmail = json['contactEmail'];
     contactNumber = json['contactNumber'];
-    startDate = json['startDate'] == null ? null : DateTime.tryParse(json['startDate'])?.toLocal();
-    endDate = json['endDate'] == null ? null : DateTime.tryParse(json['endDate'])?.toLocal();
     edec = json['edec'];
 
     lpaUsername = json['lpaUsername'];
@@ -211,10 +207,30 @@ class UserData {
     contactEmail = json['contactEmail'];
     contactNumber = json['contactNumber'];
 
-    startDate = json['startDate'] == null ? null : DateTime.tryParse(json['startDate'])?.toLocal();
-    endDate = json['endDate'] == null ? null : DateTime.tryParse(json['endDate'])?.toLocal();
     edec = json['edec'];
+    createdAt = _parseDate(json['createdAt']);
+    updatedAt = _parseDate(json['updatedAt']);
+    startDate = _parseDate(json['startDate']);
+    endDate = _parseDate(json['endDate']);
+    startDate = _parseDate(json['startDate']);
+    endDate = _parseDate(json['endDate']);
+    delegationEndDate = _parseDate(json['delegationEndDate']);
+    delegationStartDate = _parseDate(json['delegationStartDate']);
   }
+
+  static _parseDate(String? date) {
+    if (date == null) return null;
+    return DateTime.tryParse(date)?.toLocal();
+  }
+
+  static UserStatus getStatus(String? status) {
+    final result = UserStatus.values.where((element) => element.name == (status ?? 'inactive').toLowerCase());
+    if (result.isEmpty) return UserStatus.inactive;
+    return result.first;
+  }
+
+  String get fullName => '$firstName $lastName';
+  bool get isTemporaryOwner => temporaryOwner != null && temporaryOwner!.isNotEmpty;
 
   Map<String, dynamic> updateStatus() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -272,8 +288,7 @@ class UserData {
     data['exitDate'] = exitDate;
     data['passport'] = passport;
     data['registrationToken'] = registrationToken;
-    data['createdAt'] = createdAt?.toIso8601String();
-    data['updatedAt'] = updatedAt?.toIso8601String();
+
     data['ngr'] = ngr;
 
     data['lpaUsername'] = lpaUsername;
@@ -291,9 +306,15 @@ class UserData {
     data['eventName'] = eventName;
     data['contactEmail'] = contactEmail;
     data['contactNumber'] = contactNumber;
+    data['edec'] = edec;
+
+    data['createdAt'] = createdAt?.toIso8601String();
+    data['updatedAt'] = updatedAt?.toIso8601String();
     data['startDate'] = startDate?.toIso8601String();
     data['endDate'] = endDate?.toIso8601String();
-    data['edec'] = edec;
+    data['delegationStartDate'] = delegationStartDate?.toIso8601String();
+    data['delegationEndDate'] = delegationEndDate?.toIso8601String();
+    data['temporaryOwner'] = temporaryOwner;
 
     return data;
   }

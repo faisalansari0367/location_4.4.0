@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
@@ -170,28 +171,47 @@ class _LogbookViewState extends State<LogbookView> {
   DataCell _buildFormButton(LogbookEntry item) {
     return DataCell(
       (item.form?.isNotEmpty ?? false)
-          ? TextButton(
+          ? _textButton(
+              'View',
               onPressed: () => Get.to(() => LogbookDetails(item: item)),
-              style: TextButton.styleFrom(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              child: const Text('View'),
             )
-          : TextButton(
-              onPressed: !(_user?.id == item.user!.id)
-                  ? () => _notAllowedDeclarationForm()
-                  : () => _completeDeclarationDialog(item),
-              child: Text(
-                'Unregistered'.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.red,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+          : _textButton(
+              'Unregistered',
+              onPressed: () {
+                if (item.user?.id == _user?.id) {
+                  _completeDeclarationDialog(item);
+                } else {
+                  _notAllowedDeclarationForm();
+                }
+              },
+              color: Colors.red,
             ),
+    );
+  }
+
+  Widget _textButton(String text, {VoidCallback? onPressed, Color? color}) {
+    return Center(
+      child: TextButton(
+        onPressed: onPressed,
+        child: Text(
+          text.toUpperCase(),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            color: color,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        style: TextButton.styleFrom(
+          foregroundColor: color,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          backgroundColor: (color ?? kPrimaryColor).withOpacity(0.1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+      ),
     );
   }
 
@@ -210,7 +230,6 @@ class _LogbookViewState extends State<LogbookView> {
         child: Padding(
           padding: kPadding,
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.,
             mainAxisSize: MainAxisSize.min,
             children: [
               Gap(10.h),

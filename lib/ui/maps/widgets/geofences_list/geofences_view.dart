@@ -44,11 +44,12 @@ class _GeofencesListState extends State<GeofencesList> {
               child: Column(
                 children: [
                   _selectLocationHeader(context),
-                  if (cubit.isAdmin)
-                    FilterWidget(
-                      selectedFilter: cubit.filterType,
-                      onFilterChanged: cubit.onFilterTypeChange,
-                    ),
+                  // if (cubit.isAdmin)
+                  FilterWidget(
+                    filters: cubit.filters,
+                    selectedFilter: cubit.filterType,
+                    onFilterChanged: cubit.onFilterTypeChange,
+                  ),
                   Gap(10.h),
                   CupertinoSearchTextField(
                     controller: cubit.searchController,

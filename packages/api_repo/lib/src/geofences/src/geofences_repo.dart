@@ -1,5 +1,6 @@
 import 'package:api_client/api_client.dart';
 
+import '../../auth/auth_repo.dart';
 import '../models/models.dart';
 
 abstract class GeofencesRepo {
@@ -11,6 +12,8 @@ abstract class GeofencesRepo {
   Future<ApiResult<dynamic>> updatePolygon(PolygonModel model);
   Future<ApiResult<dynamic>> deletePolygon(PolygonModel model);
   Future<void> saveAllPolygon(List<PolygonModel> polygons);
+  Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params);
+  Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params);
   Future<List<PolygonModel>> get polygonsCompleter;
   List<PolygonModel> get polygons;
 

@@ -4,6 +4,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
+import 'package:bioplus/ui/geofence_delegation/view/geofence_delegation_page.dart';
 import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
@@ -97,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             packageInfo?.appName ?? '',
                             style: context.textTheme.headline5,
                           ),
-                          if (ApiConstants.isDegugMode)
+                          if (context.read<Api>().client.baseUrl == ApiConstants.localUrl)
                             const Text(
                               '(Debug)',
                               style: TextStyle(color: Colors.red),
@@ -139,6 +140,20 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
+            if ([
+              Roles.producer.name,
+              Roles.processor.name,
+              Roles.agent.name,
+              Roles.feedlotter.name,
+              Roles.admin.name,
+            ].contains(context.read<Api>().getUser()?.role?.toLowerCase()))
+              MyListTile(
+                text: Strings.geofenceDelegation,
+                onTap: () async => Get.to(
+                  () => GeofenceDelegationPage(),
+                ),
+              ),
+
             MyListTile(
               onTap: () async {
                 try {
