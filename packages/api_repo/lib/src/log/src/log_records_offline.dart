@@ -25,7 +25,6 @@ class OfflineLogRecordsImpl implements OfflineLogRecords {
     getOfflineLogRecords();
     box.watch(key: offlineLogRecords).listen((event) {
       if (event.value == null) return;
-      // log('offline entries: ${jsonEncode(event.value)}');
       final entries = event.value.map((e) => LogbookEntry.fromJson(_parseData(e)!)).toList();
       _controller.add(List<LogbookEntry>.from(entries));
     });
@@ -60,12 +59,6 @@ class OfflineLogRecordsImpl implements OfflineLogRecords {
 
   @override
   Future<LogbookEntry> update(LogbookEntry entry) async {
-    // problem is in updating the offline records
-    // when the log record is on the server
-    // one additional entry is added to the offline records
-    // need to find a way to update the offline records
-    // without creating the duplicate entry
-
     final index = logRecords.indexWhere(
       (element) =>
           element.id == entry.id ||
@@ -93,12 +86,8 @@ class OfflineLogRecordsImpl implements OfflineLogRecords {
   @override
   Future<void> remove(LogbookEntry entry) async {
     final index = logRecords.indexWhere((element) => element.id == entry.id);
-    if (index == -1) {
-      return;
-    } else {
-      logRecords.removeAt(index);
-    }
-
+    if (index == -1) return;
+    logRecords.removeAt(index);
     await _saveOfflineRecords(logRecords);
   }
 

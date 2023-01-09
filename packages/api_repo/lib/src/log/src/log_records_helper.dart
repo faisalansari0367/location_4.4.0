@@ -15,9 +15,9 @@ class LogRecordsHelper {
       storage.logRecords.where((element) => element.id == int.parse(id));
 
   bool isCreatedByUser(LogbookEntry element) => element.user?.id == userId;
-  bool loggedInZones(LogbookEntry element) => element.exitDate == null;
+  bool isLoggedInZone(LogbookEntry element) => element.exitDate == null;
 
-  bool _isCreatedIn15Minutes(element) {
+  bool isCreatedIn15Minutes(element) {
     final difference = DateTime.now().difference(element.enterDate!);
     if (element.form?.isEmpty ?? true) {
       return difference.inHours <= 24;
@@ -43,7 +43,7 @@ class LogRecordsHelper {
     }
 
     // records created by the current user for this geofence in the last 15 minutes
-    final recordsPast15Minutes = recordsByUser.where(_isCreatedIn15Minutes);
+    final recordsPast15Minutes = recordsByUser.where(isCreatedIn15Minutes);
 
     if (kDebugMode) {
       print('records in last 15 minutes: ${recordsPast15Minutes.length}');

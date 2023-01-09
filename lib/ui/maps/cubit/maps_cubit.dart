@@ -196,17 +196,28 @@ class MapsCubit extends BaseModel {
     emit(state.copyWith(mapType: type));
   }
 
-  Future<void> updateCurrentLocation() async {
+  Future<LatLng?> updateCurrentLocation() async {
     final permission = await GeolocatorService.locationPermission();
     if (!permission) {
-      return;
+      return null;
     }
     final result = await GeolocatorService.getLastKnownPosition();
     if (result != null) {
       final _lastPosition = LatLng(result.latitude, result.longitude);
-      animateCamera(_lastPosition);
+      // animateCamera(_lastPosition);
+      if (!mounted) return null;
+      (await controller.future).moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: _lastPosition,
+            zoom: 20.151926040649414,
+          ),
+        ),
+      );
       emit(state.copyWith(currentLocation: _lastPosition));
+      return _lastPosition;
     }
+    return null;
   }
 
   void animateCamera(LatLng latLng) async {
@@ -250,7 +261,7 @@ class MapsCubit extends BaseModel {
 
   @override
   Future<void> dispose() async {
-    // geofenceService.stopTimers();
+  
     _polygonsService.clear();
     super.dispose();
   }

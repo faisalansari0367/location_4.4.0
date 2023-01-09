@@ -117,7 +117,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           final localApi = context.read<LocalApi>();
           // final userRole = localApi.getUserData();
           return StreamBuilder<User?>(
-            stream: (snapshot.data ?? false) ? api.userStream : localApi.userStream,
+            stream: (snapshot.data ?? false) ? api.userStream : api.userStream,
             builder: (context, snapshot) {
               final hasName = !([null, ''].contains(snapshot.data?.role));
               final role = hasName ? snapshot.data?.role : '';

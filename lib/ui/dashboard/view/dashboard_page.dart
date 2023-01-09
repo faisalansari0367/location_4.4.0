@@ -1,11 +1,10 @@
+// import '../../../widgets/my_appbar.dart';
+import 'package:bioplus/ui/dashboard/dashboard.dart';
 import 'package:bioplus/widgets/biosecure_logo.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
-
-// import '../../../widgets/my_appbar.dart';
-import '../dashboard.dart';
 
 /// {@template dashboard_page}
 /// A description for DashboardPage

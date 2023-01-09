@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class Strings {
 // AppName
   static const String appName = 'BIOPLUS';
-  static const String appVersion = '1.0.4';
+  static const String appVersion = '1.0.5';
 
   static const name = 'Name',
       warakirri = 'Warakirri',
@@ -106,7 +106,8 @@ class Strings {
   static String get geofenceDelegation => '$geofence $delegation';
 
   // livestock movement declaration
-  static String get livestockWaybillDeclaration => '$livestock $waybill $declaration';
+  static String get livestockWaybillDeclaration =>
+      '$livestock $waybill $declaration';
 
   // confirm password
   static String get confirmPassword => '$confirm $password';
@@ -115,19 +116,23 @@ class Strings {
   static String get selectState => '$select $state';
 
   // field name
-  static String get fieldNameMsg => '$please $enter $the $field $name'.capitalizeFirst!;
+  static String get fieldNameMsg =>
+      '$please $enter $the $field $name'.capitalizeFirst!;
 
   /// Otp
-  static String get otpSentToVerifiedEmail => '$otp $sent $to $your $verified $email'.capitalizeFirst!;
+  static String get otpSentToVerifiedEmail =>
+      '$otp $sent $to $your $verified $email'.capitalizeFirst!;
 
   // otp verified successfully
-  static String get otpVerifiedSuccessfully => '$otp $verified $successfully'.capitalizeFirst!;
+  static String get otpVerifiedSuccessfully =>
+      '$otp $verified $successfully'.capitalizeFirst!;
 
   // forgot password
   static String get forgotPasswordMessage =>
       "Don't worry! it happens. Please enter the address associated with your account.";
 
-  static const String deleteGeofenceMsg = 'Are you sure you want to delete this Geofence?';
+  static const String deleteGeofenceMsg =
+      'Are you sure you want to delete this Geofence?';
 
   // Errors
   // something went wrong
@@ -139,7 +144,8 @@ class Strings {
   static String get termsAndConditions => '$terms & $conditions';
 
   // privacy policy message
-  static String get privacyPolicyMessage => 'By signing up, you agree to our Terms of Service and Privacy Policy.';
+  static String get privacyPolicyMessage =>
+      'By signing up, you agree to our Terms of Service and Privacy Policy.';
 
   //
   static String get areYouVisitingBelowPic => 'Are you visiting below PIC?';

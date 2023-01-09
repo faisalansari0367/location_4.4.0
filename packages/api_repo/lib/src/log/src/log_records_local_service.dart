@@ -18,7 +18,8 @@ class LogRecordsLocalService {
     box.watch(key: _Keys.logRecords).listen((event) {
       if (event.value == null) return;
       // log(jsonEncode(event.value));
-      final responseModel = LogbookResponseModel.fromJson(_parseData(event.value)!);
+      final responseModel =
+          LogbookResponseModel.fromJson(_parseData(event.value)!);
       _controller.add(responseModel.data!);
     });
   }
@@ -29,20 +30,26 @@ class LogRecordsLocalService {
   final _controller = BehaviorSubject<List<LogbookEntry>>.seeded([]);
 
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
+
     final data = box.get(_Keys.logRecords);
-    if (data == null) return ApiResult.success(data: LogbookResponseModel(data: []));
+    if (data == null) {
+      return ApiResult.success(data: LogbookResponseModel(data: []));
+    }
     final responseModel = LogbookResponseModel.fromJson(_parseData(data)!);
     _controller.add(responseModel.data!);
     return ApiResult.success(data: responseModel);
   }
 
-  Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(LogbookResponseModel logbookResponseModel) async {
+  Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(
+      LogbookResponseModel logbookResponseModel) async {
     try {
+      logbookResponseModel.data!.sort((a, b) => b.id!.compareTo(a.id!));
       final json = logbookResponseModel.toJson();
       await box.put(_Keys.logRecords, json);
       return ApiResult.success(data: logbookResponseModel);
     } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.defaultError(e.toString()));
+      return ApiResult.failure(
+          error: NetworkExceptions.defaultError(e.toString()));
     }
   }
 

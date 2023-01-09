@@ -1,20 +1,19 @@
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/dashboard/dashboard.dart';
+import 'package:bioplus/ui/edec_forms/view/edec_forms_page.dart';
+import 'package:bioplus/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
+import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
+import 'package:bioplus/ui/links_page/links_page.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/records/records_page.dart';
+import 'package:bioplus/ui/select_role/view/select_role_page.dart';
 import 'package:bioplus/ui/sos_warning/sos_warning.dart';
+import 'package:bioplus/ui/visitors/visitors_page.dart';
+import 'package:bioplus/ui/work_safety/view/work_safety_page.dart';
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
-import '../../../constants/index.dart';
-import '../../../widgets/dialogs/dialogs.dart';
-import '../../edec_forms/view/edec_forms_page.dart';
-import '../../emergency_warning_page/view/emergency_warning_page_page.dart';
-import '../../envd/cubit/graphql_client.dart';
-import '../../links_page/links_page.dart';
-import '../../maps/view/maps_page.dart';
-import '../../records/records_page.dart';
-import '../../select_role/view/select_role_page.dart';
-import '../../visitors/visitors_page.dart';
-import '../../work_safety/view/work_safety_page.dart';
-import '../dashboard.dart';
 
 /// {@template dashboard_body}
 /// Body of the DashboardPage.
@@ -39,7 +38,6 @@ class DashboardBody extends StatelessWidget {
             crossAxisCount: 2,
             mainAxisSpacing: kPadding.left.h,
             crossAxisSpacing: kPadding.left.w,
-            childAspectRatio: 1,
           ),
           children: [
             DashboardCard(
@@ -51,7 +49,9 @@ class DashboardBody extends StatelessWidget {
               text: 'SOS',
               iconData: Icons.emergency_outlined,
               image: 'assets/icons/SOS icon.png',
-              onTap: () => DialogService.showDialog(child: DialogLayout(child: SosWarningPage())),
+              onTap: () => DialogService.showDialog(
+                child: const DialogLayout(child: SosWarningPage()),
+              ),
             ),
             DashboardCard(
               text: 'My Location',
@@ -63,7 +63,7 @@ class DashboardBody extends StatelessWidget {
                 text: 'EMERGENCY WARNING!'.capitalize!,
                 image: 'assets/icons/warning_icon.png',
                 onTap: () {
-                  Get.to(() => EmergencyWarningPagePage());
+                  Get.to(() => const EmergencyWarningPagePage());
                 },
               ),
             DashboardCard(
@@ -78,7 +78,7 @@ class DashboardBody extends StatelessWidget {
                 text: 'My eDEC\nForms',
                 image: 'assets/icons/eDEC forms.png',
                 onTap: () {
-                  Get.to(() => EdecFormsPage());
+                  Get.to(() => const EdecFormsPage());
                 },
               ),
             DashboardCard(
@@ -100,11 +100,11 @@ class DashboardBody extends StatelessWidget {
               text: 'Work Safety',
               image: 'assets/icons/Work Safety.png',
               onTap: () {
-                Get.to(() => WorkSafetyPage());
+                Get.to(() => const WorkSafetyPage());
               },
             ),
             DashboardCard(
-              text: ('Service role settings').capitalize!,
+              text: 'Service role settings'.capitalize!,
               image: 'assets/icons/settings.png',
               onTap: () => Get.to(
                 const SelectRolePage(showBackArrow: true),

@@ -16,7 +16,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   late LogRecordsLocalService storage;
   late StorageService storageService;
 
-  final Completer<LogbookResponseModel> _completer = Completer<LogbookResponseModel>();
+  final Completer<LogbookResponseModel> _completer =
+      Completer<LogbookResponseModel>();
 
   // bool _isSyncing = false;
 
@@ -111,7 +112,8 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       // return true;
 
-      final result = await client.post(Endpoints.logRecordsOffline, data: {'records': json});
+      final result = await client
+          .post(Endpoints.logRecordsOffline, data: {'records': json});
 
       final isSuccess = result.data['status'] == 'success';
       if (isSuccess) {
@@ -133,7 +135,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) async {
+  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId,
+      {String? form}) async {
     try {
       final data2 = {'form': form, 'geofenceID': geofenceId};
       if (form == null) data2.remove('form');
@@ -154,10 +157,12 @@ class LogRecordsImpl implements LogRecordsRepo {
     try {
       LogbookEntry? hasEntry = await getLogRecord(geofenceId);
       if (hasEntry == null) {
-        return const ApiResult.failure(error: NetworkExceptions.defaultError('No log record found'));
+        return const ApiResult.failure(
+            error: NetworkExceptions.defaultError('No log record found'));
       }
       final result = await client.patch('${Endpoints.markExit}/${hasEntry.id}');
-      final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+      final logbookEntry =
+          LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
       _updateEntry(logbookEntry);
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
@@ -166,7 +171,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 20}) async {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords(
+      {int page = 1, int limit = 20}) async {
     try {
       // if (!_completer.isCompleted) {
       //   return ApiResult.success(data: await _completer.future);
@@ -191,15 +197,18 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   Future<void> exitDateChecker() async {
-    final LogRecordsHelper helper = LogRecordsHelper(storage: storage, userId: storageService.getUser()?.id);
+    final LogRecordsHelper helper = LogRecordsHelper(
+        storage: storage, userId: storageService.getUser()?.id);
     final isAdmin = storageService.getUser()?.role == 'Admin';
     if (!isAdmin) {
-      final loggedInZones = logbookRecords.where(helper.isCreatedByUser).where(helper.loggedInZones);
+      final loggedInZones = logbookRecords
+          .where(helper.isCreatedByUser)
+          .where(helper.isLoggedInZone);
       if (loggedInZones.isEmpty) return;
       final lastEntry = loggedInZones.first;
       markExitById(lastEntry.id.toString());
     } else {
-      final loggedInZones = logbookRecords.where(helper.loggedInZones);
+      final loggedInZones = logbookRecords.where(helper.isLoggedInZone);
       if (loggedInZones.isEmpty) return;
       final lastEntry = loggedInZones.first;
       markExitById(lastEntry.id.toString());
@@ -225,7 +234,8 @@ class LogRecordsImpl implements LogRecordsRepo {
       // if has entry
       final hasExitDate = hasEntry.exitDate?.microsecond != null;
       if (hasExitDate) {
-        final entryExitDifference = DateTime.now().difference(hasEntry.exitDate!).inMinutes.abs();
+        final entryExitDifference =
+            DateTime.now().difference(hasEntry.exitDate!).inMinutes.abs();
         if (entryExitDifference > 30) {
           return await createLogRecord(geofenceId, form: form);
         } else {
@@ -248,7 +258,9 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId}) async {
+  Future<ApiResult<LogbookEntry>> udpateForm(
+      String geofenceId, Map<String, dynamic> form,
+      {int? logId}) async {
     final logRecord = await getLogRecord(geofenceId);
 
     try {
@@ -259,14 +271,16 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (logRecord != null) {
         return _patchForm(form, logRecord.id!);
       } else {
-        return const ApiResult.failure(error: NetworkExceptions.defaultError('no log record found'));
+        return const ApiResult.failure(
+            error: NetworkExceptions.defaultError('no log record found'));
       }
     } on DioError catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
 
-  Future<ApiResult<LogbookEntry>> _patchForm(Map<String, dynamic> form, int logRecordId) async {
+  Future<ApiResult<LogbookEntry>> _patchForm(
+      Map<String, dynamic> form, int logRecordId) async {
     try {
       final _form = <String, dynamic>{};
       form.forEach((key, value) {
@@ -304,14 +318,16 @@ class LogRecordsImpl implements LogRecordsRepo {
     // _sortById();
 
     /// records of this geofence
-    final geofenceRecords = logbookRecords.where((element) => element.geofence?.id == int.parse(geofenceId));
+    final geofenceRecords = logbookRecords
+        .where((element) => element.geofence?.id == int.parse(geofenceId));
 
     if (kDebugMode) {
       print('geofence $geofenceId records: ${geofenceRecords.length}');
     }
 
     // records created by the current user for this geofence
-    final recordsByUser = geofenceRecords.where((element) => element.user?.id == userId);
+    final recordsByUser =
+        geofenceRecords.where((element) => element.user?.id == userId);
     if (kDebugMode) {
       print('recordsByUser length: ${recordsByUser.length}');
     }
@@ -342,7 +358,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   }
 
   void _updateEntry(LogbookEntry entry) {
-    final index = logbookRecords.indexWhere((element) => element.id == entry.id);
+    final index =
+        logbookRecords.indexWhere((element) => element.id == entry.id);
     if (index != -1) {
       final currentEntry = logbookRecords.elementAt(index);
       currentEntry.exitDate = entry.exitDate;
@@ -358,7 +375,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   void _sortById() => logbookRecords.sort((a, b) => b.id!.compareTo(a.id!));
 
   @override
-  Stream<List<LogbookEntry>> get logbookRecordsStream => storage.logbookRecordsStream;
+  Stream<List<LogbookEntry>> get logbookRecordsStream =>
+      storage.logbookRecordsStream;
 
   @override
   List<LogbookEntry> get logbookRecords => storage.logRecords.toSet().toList();
@@ -368,7 +386,8 @@ class LogRecordsImpl implements LogRecordsRepo {
   Future<ApiResult<LogbookEntry>> markExitById(String logRecordId) async {
     try {
       final result = await client.patch('${Endpoints.markExit}/$logRecordId');
-      final logbookEntry = LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
+      final logbookEntry =
+          LogbookEntry.fromJson(Map<String, dynamic>.from(result.data['data']));
       _updateEntry(logbookEntry);
       return ApiResult.success(data: logbookEntry);
     } on DioError catch (e) {
@@ -382,14 +401,17 @@ class LogRecordsImpl implements LogRecordsRepo {
   Future<void> previousZoneExitDateChecker() async {
     final userId = storageService.getUser()?.id;
     final records = logbookRecords;
-    final recordsByUser = records.where((element) => element.user?.id == userId);
+    final recordsByUser =
+        records.where((element) => element.user?.id == userId);
     if (recordsByUser.isNotEmpty) {
       final record = recordsByUser.first;
       record.exitDate = DateTime.now();
-      final index = logbookRecords.indexWhere((element) => element.id == record.id);
+      final index =
+          logbookRecords.indexWhere((element) => element.id == record.id);
       if (index == -1) return;
       logbookRecords[index] = record;
-      await storage.saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
+      await storage
+          .saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
       await storage.offlineLogRecords.update(record);
     }
   }

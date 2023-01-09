@@ -1,6 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
-import 'package:api_repo/src/local_api/local_log_records/src/local_log_records_impl.dart';
+import 'package:api_repo/src/log/src/local_log_records_impl.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
