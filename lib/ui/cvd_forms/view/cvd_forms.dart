@@ -5,12 +5,12 @@ import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class CvdForms extends StatefulWidget {
-  const CvdForms({Key? key}) : super(key: key);
+  const CvdForms({super.key});
 
   @override
   State<CvdForms> createState() => _CvdFormsState();
@@ -25,7 +25,7 @@ class _CvdFormsState extends State<CvdForms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         title: Text('CVD Forms'),
       ),
       body: FutureBuilder<List<FileSystemEntity>>(
@@ -33,13 +33,13 @@ class _CvdFormsState extends State<CvdForms> {
         builder: (context, snapshot) {
           return MyListview(
             data: _sortData(snapshot.data ?? []),
-            emptyWidget: Center(
+            emptyWidget: const Center(
               child: Text('No forms found'),
             ),
             itemBuilder: (context, index) {
               return ListTile(
                 onTap: () => OpenFile.open(snapshot.data![index].path),
-                leading: Icon(
+                leading: const Icon(
                   Icons.picture_as_pdf,
                   color: Colors.red,
                 ),
@@ -58,7 +58,8 @@ class _CvdFormsState extends State<CvdForms> {
 
   List<FileSystemEntity> _sortData(List<FileSystemEntity> files) {
     // dd-mm--yy
-    files.sort((a, b) => (b.statSync().accessed).compareTo(a.statSync().accessed));
+    files.sort(
+        (a, b) => (b.statSync().accessed).compareTo(a.statSync().accessed));
     return files;
   }
 }

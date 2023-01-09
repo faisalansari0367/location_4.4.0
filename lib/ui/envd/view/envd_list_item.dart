@@ -107,7 +107,7 @@ class EnvdListItem extends StatelessWidget {
           api: context.read<Api>(),
           consignmentNo: items.number!,
           downloadUrl: items.pdfUrl!,
-          onOpenDownload: () {},
+          // onOpenDownload: () {},
         ),
       ),
     );

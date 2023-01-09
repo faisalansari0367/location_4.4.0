@@ -5,18 +5,17 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/biosecure_logo.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../widgets/dialogs/dialog_service.dart';
-
 class LinksView extends StatelessWidget {
-  const LinksView({Key? key}) : super(key: key);
+  const LinksView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class LinksView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
                   height: 40.w,
-                  child: AppLogo(),
+                  child: const AppLogo(),
                 ),
               ),
               onTap: () async => Get.to(
@@ -153,7 +152,8 @@ class LinksView extends StatelessWidget {
     result.when(
       success: (s) async {
         final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
+        final file = File(
+            '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
         await file.writeAsBytes(s);
         await OpenFile.open(file.path);
       },

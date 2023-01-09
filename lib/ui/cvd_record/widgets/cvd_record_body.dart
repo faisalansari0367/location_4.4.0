@@ -1,15 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/cvd_record/provider/provider.dart';
+import 'package:bioplus/widgets/empty_screen.dart';
+import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-
-import '../../../widgets/empty_screen.dart';
-import '../../../widgets/listview/my_listview.dart';
 
 /// {@template cvd_record_body}
 /// Body of the CvdRecordPage.
@@ -40,7 +39,7 @@ class CvdRecordBody extends StatelessWidget {
               ] else ...[
                 SizedBox(
                   height: 70.height,
-                  child: Center(
+                  child: const Center(
                     child: EmptyScreen(
                       message: 'No Records Found',
                       // subtitle: 'Please fill the form to get records',
@@ -76,8 +75,8 @@ class CvdRecordBody extends StatelessWidget {
         thickness: 1,
       ),
       emptyWidget: SizedBox(
-        child: EmptyScreen(),
         height: 50.height,
+        child: EmptyScreen(),
       ),
       itemBuilder: (BuildContext context, p1) {
         final file = state.files[p1];
@@ -85,25 +84,26 @@ class CvdRecordBody extends StatelessWidget {
           onTap: () => OpenFile.open(file.path),
           leading: Container(
             padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color.fromARGB(203, 255, 205, 210),
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.picture_as_pdf,
               color: Colors.red,
             ),
           ),
           trailing: IconButton(
             onPressed: () => Share.shareFiles([file.path]),
-            icon: Icon(
+            icon: const Icon(
               Icons.share,
               // color: Colors.red.shade900,
             ),
           ),
           title: Text(
             file.path.split('/').last,
-            style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: context.textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
         );
       },
@@ -117,7 +117,7 @@ class CvdRecordBody extends StatelessWidget {
           flex: 2,
           child: _buildText(field1, value1),
         ),
-        Spacer(),
+        const Spacer(),
         Expanded(
           flex: 2,
           child: _buildText(field2, value2),
@@ -142,7 +142,7 @@ class CvdRecordBody extends StatelessWidget {
         AutoSizeText(
           value,
           maxLines: 1,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -157,8 +157,8 @@ class CvdRecordBody extends StatelessWidget {
       shrinkWrap: true,
       // spacing: Divider(),
       emptyWidget: SizedBox(
-        child: EmptyScreen(),
         height: 50.height,
+        child: EmptyScreen(),
       ),
       itemBuilder: (BuildContext context, p1) {
         final form = state.forms[p1];
@@ -181,17 +181,19 @@ class CvdRecordBody extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildText('Buyer', (form.buyerDetailsModel?.name?.value ?? '').capitalize!),
+                  _buildText('Buyer',
+                      (form.buyerDetailsModel?.name?.value ?? '').capitalize!),
                   Gap(5.w),
-                  _buildText('Transporter', (form.transporterDetails?.name?.value ?? '').capitalize!),
+                  _buildText('Transporter',
+                      (form.transporterDetails?.name?.value ?? '').capitalize!),
                   // Gap(5.w),
                   // _buildText('Date', form.transporterDetails?.name?.value ?? ''),
                   // _buildText('Date', MyDecoration.formatDate(form.createdAt ) ?? ''),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Column(
-                children: [
+                children: const [
                   // IconButton(
                   //   icon: Icon(Icons.cloud_off_outlined),
                   //   onPressed: () {},
@@ -208,7 +210,7 @@ class CvdRecordBody extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.chevron_right_outlined),
+                icon: const Icon(Icons.chevron_right_outlined),
               ),
             ],
           ),

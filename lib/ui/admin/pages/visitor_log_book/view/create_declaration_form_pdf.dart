@@ -5,14 +5,15 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class DeclarationFormPrinter {
   final LogbookEntry entry;
   final FormsStorageService formsStorageService;
-  const DeclarationFormPrinter({required this.entry, required this.formsStorageService});
+  const DeclarationFormPrinter(
+      {required this.entry, required this.formsStorageService});
 
   Future<void> createPdf() async {
     final pdf = pw.Document();
@@ -27,7 +28,9 @@ class DeclarationFormPrinter {
               _userInfo(),
               pw.SizedBox(height: 30),
               pw.Expanded(
-                child: form.isWarakirriFarm ? _buildWarakirriForm() : _buildDeclarationForm(),
+                child: form.isWarakirriFarm
+                    ? _buildWarakirriForm()
+                    : _buildDeclarationForm(),
               ),
               // form.isWarakirriFarm ? _buildWarakirriForm() : _buildDeclarationForm(),
               // _card(_warakirriKeys.isPeopleTravelingWith, form.getVisitorsNames()),
@@ -52,9 +55,12 @@ class DeclarationFormPrinter {
       children: [
         _card(_warakirriKeys.isPeopleTravelingWith, form.getVisitorsNames()),
         _card(_warakirriKeys.isFluSymptoms, form.getValue(form.isFluSymptoms)),
-        _card(_warakirriKeys.isOverSeaVisit, form.getValue(form.isOverSeaVisit)),
-        _card(_warakirriKeys.hasBeenInducted, form.getValue(form.hasBeenInducted)),
-        _card(_warakirriKeys.isConfinedSpace, form.getValue(form.isConfinedSpace)),
+        _card(
+            _warakirriKeys.isOverSeaVisit, form.getValue(form.isOverSeaVisit)),
+        _card(_warakirriKeys.hasBeenInducted,
+            form.getValue(form.hasBeenInducted)),
+        _card(_warakirriKeys.isConfinedSpace,
+            form.getValue(form.isConfinedSpace)),
         _card(_warakirriKeys.additionalInfo, form.additionalInfo),
         _card(_warakirriKeys.warakirriFarm, form.warakirriFarm),
       ],
@@ -67,13 +73,17 @@ class DeclarationFormPrinter {
       children: [
         _card(
           form.keys.isPeopleTravelingWith,
-          (form.usersTravellingAlong?.isEmpty ?? true) ? 'No' : form.usersTravellingAlong!.join(', '),
+          (form.usersTravellingAlong?.isEmpty ?? true)
+              ? 'No'
+              : form.usersTravellingAlong!.join(', '),
         ),
         // if(form.isQfeverVaccinated != null)
-        _card(form.keys.isQfeverVaccinated, form.getValue(form.isQfeverVaccinated!)),
+        _card(form.keys.isQfeverVaccinated,
+            form.getValue(form.isQfeverVaccinated!)),
         _card(form.keys.isFluSymptoms, form.getValue(form.isFluSymptoms)),
         _card(form.keys.isOverSeaVisit, form.getValue(form.isOverSeaVisit)),
-        _card(form.keys.isAllMeasureTaken, form.getValue(form.isAllMeasureTaken)),
+        _card(
+            form.keys.isAllMeasureTaken, form.getValue(form.isAllMeasureTaken)),
         _card(form.keys.isOwnerNotified, form.getValue(form.isOwnerNotified)),
         // _card(
         //   form.keys.expectedDepartureDate,
@@ -110,7 +120,8 @@ class DeclarationFormPrinter {
   }
 
   Future<void> _saveFile(Uint8List bytes) async {
-    final file = await formsStorageService.saveLogbookPdf(bytes: bytes, entry: entry);
+    final file =
+        await formsStorageService.saveLogbookPdf(bytes: bytes, entry: entry);
     OpenFile.open(file.path);
   }
 
@@ -122,7 +133,7 @@ class DeclarationFormPrinter {
     if (value2 == null) return pw.Container();
     return pw.Container(
       // padding: pw.EdgeInsets.all(20),
-      margin: pw.EdgeInsets.symmetric(vertical: 5),
+      margin: const pw.EdgeInsets.symmetric(vertical: 5),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -136,7 +147,7 @@ class DeclarationFormPrinter {
           ),
           pw.Text(
             value2,
-            style: pw.TextStyle(fontSize: 16, color: PdfColors.blue),
+            style: const pw.TextStyle(fontSize: 16, color: PdfColors.blue),
           ),
         ],
       ),
@@ -146,7 +157,7 @@ class DeclarationFormPrinter {
   pw.Container _buildHeader() {
     final data = entry;
     return pw.Container(
-      decoration: pw.BoxDecoration(),
+      decoration: const pw.BoxDecoration(),
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
@@ -183,14 +194,15 @@ class DeclarationFormPrinter {
         children: [
           pw.Text(
             'Entry Details',
-            style: pw.TextStyle(fontSize: 20),
+            style: const pw.TextStyle(fontSize: 20),
           ),
           pw.SizedBox(height: 20.h),
-          _buildRow('Full Name', entry.user?.fullName ?? '', 'Company Name', entry.user?.company ?? ''),
+          _buildRow('Full Name', entry.user?.fullName ?? '', 'Company Name',
+              entry.user?.company ?? ''),
           pw.SizedBox(height: 20.h),
           _buildRow(
             'Phone Number',
-            (entry.user?.countryCode ?? '') + ' ' + (entry.user?.phoneNumber ?? ''),
+            '${entry.user?.countryCode ?? ''} ${entry.user?.phoneNumber ?? ''}',
             'Expected Departure Time',
             MyDecoration.formatDateWithTime(form.expectedDepartureDate),
           )
@@ -222,7 +234,7 @@ class DeclarationFormPrinter {
         pw.Text(
           text,
           maxLines: 1,
-          style: pw.TextStyle(
+          style: const pw.TextStyle(
             color: PdfColors.grey,
           ),
         ),

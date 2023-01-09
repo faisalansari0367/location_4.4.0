@@ -1,15 +1,14 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/forms_storage_service.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:open_file/open_file.dart';
-
-import '../../../services/notifications/forms_storage_service.dart';
-import '../../../widgets/dialogs/dialog_service.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 
 part 'cvd_state.dart';
 
@@ -20,17 +19,18 @@ class CvdCubit extends Cubit<CvdState> {
   late CvdForm cvdForm;
   late CvdFormsRepo cvdFormsRepo;
 
-  CvdCubit({required this.api, required this.localApi}) : super(const CvdState()) {
+  CvdCubit({required this.api, required this.localApi})
+      : super(const CvdState()) {
     // getCvdForm();
   }
 
-  void init(BuildContext context) async {
+  Future<void> init(BuildContext context) async {
     emit(state.copyWith(isLoading: true));
     cvdFormsRepo = context.read<Api>();
 
-    final _cvdForm = cvdFormsRepo.getCurrentForm();
-    if (_cvdForm != null) {
-      cvdForm = _cvdForm;
+    CvdForm? cvdForm = cvdFormsRepo.getCurrentForm();
+    if (cvdForm != null) {
+      cvdForm = cvdForm;
     } else {
       cvdForm = await CvdForm.init(context);
     }
@@ -39,10 +39,13 @@ class CvdCubit extends Cubit<CvdState> {
 
   VendorDetailsModel get vendorDetailsModel => cvdForm.vendorDetails!;
   BuyerDetailsModel get buyerDetailsModel => cvdForm.buyerDetailsModel!;
-  TransporterDetailsModel get transporterDetailsModel => cvdForm.transporterDetails!;
+  TransporterDetailsModel get transporterDetailsModel =>
+      cvdForm.transporterDetails!;
   CommodityDetailsModel get commodityDetailsModel => cvdForm.commodityDetails!;
-  ChemicalUseDetailsModel get chemicalUseDetailsModel => cvdForm.chemicalUseDetailsModel!;
-  ProductIntegrityDetailsModel get productIntegrityDetailsModel => cvdForm.productIntegrityDetailsModel!;
+  ChemicalUseDetailsModel get chemicalUseDetailsModel =>
+      cvdForm.chemicalUseDetailsModel!;
+  ProductIntegrityDetailsModel get productIntegrityDetailsModel =>
+      cvdForm.productIntegrityDetailsModel!;
   String get testResults => cvdForm.testResult ?? '';
   String get riskAssesment => cvdForm.riskAssesment ?? '';
   String? get signature => cvdForm.signature;
@@ -121,16 +124,16 @@ class CvdCubit extends Cubit<CvdState> {
   ];
 
   void changeCurrent(int step, {bool isNext = false, bool isPrevious = false}) {
-    late var _step = step;
+    late int _step = step;
 
     if (isNext) {
-      step = state.currentStep + 1;
+      _step = state.currentStep + 1;
     } else if (isPrevious) {
-      step = state.currentStep - 1;
+      _step = state.currentStep - 1;
     }
-    stepCompleted[_step] = true;
-    emit(state.copyWith(currentStep: _step));
-    moveToPage(_step);
+    stepCompleted[step] = true;
+    emit(state.copyWith(currentStep: step));
+    moveToPage(step);
   }
 
   void moveToNext() {
@@ -152,7 +155,8 @@ class CvdCubit extends Cubit<CvdState> {
     }
   }
 
-  Future<void> saveFormData() async => await cvdFormsRepo.updateCvdForm(cvdForm);
+  Future<void> saveFormData() async =>
+      await cvdFormsRepo.updateCvdForm(cvdForm);
 
   void moveToPage(int page) {
     if (page != 0) {
@@ -181,7 +185,8 @@ class CvdCubit extends Cubit<CvdState> {
     result.when(
       success: (data) async {
         final formsService = FormsStorageService(api);
-        final file = await formsService.saveCvdForm(data, cvdForm.buyerDetailsModel?.name?.value ?? '');
+        final file = await formsService.saveCvdForm(
+            data, cvdForm.buyerDetailsModel?.name?.value ?? '');
         OpenFile.open(file.path);
         Get.close(2);
       },
@@ -220,8 +225,6 @@ class CvdCubit extends Cubit<CvdState> {
     emit(state.copyWith(forms: data.data?.forms));
     // data.data.forms;
   }
-
-  
 
   Future<void> saveCvdForm(Map<String, Map<String, dynamic>> json) async {
     try {

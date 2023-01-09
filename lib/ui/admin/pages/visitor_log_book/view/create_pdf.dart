@@ -2,12 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:open_file/open_file.dart';
+import 'package:bioplus/constants/my_decoration.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-
-import '../../../../../constants/my_decoration.dart';
 
 class CreatePDf {
   static createLogbookPDf(List<String> headers, List<List<String>> rows) async {
@@ -22,7 +21,9 @@ class CreatePDf {
             child: pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
-                pw.Text('Log Records', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
+                pw.Text('Log Records',
+                    style: pw.TextStyle(
+                        fontSize: 20, fontWeight: pw.FontWeight.bold)),
               ],
             ),
           ),
@@ -36,7 +37,8 @@ class CreatePDf {
 
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
+      final file = File(
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
       await file.writeAsBytes(await pdf.save());
       await OpenFile.open(file.path);
     } catch (e) {
@@ -44,7 +46,7 @@ class CreatePDf {
     }
   }
 
-  static void printDeclarationForm(LogbookEntry data) async {
+  static Future<void> printDeclarationForm(LogbookEntry data) async {
     final pdf = pw.Document();
     pdf.addPage(
       pw.Page(
@@ -55,26 +57,29 @@ class CreatePDf {
             children: [
               // zone
               pw.Container(
-                decoration: pw.BoxDecoration(),
+                decoration: const pw.BoxDecoration(),
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     if (data.geofence?.name != null)
                       pw.Text(
                         'Geofence Name: ${data.geofence!.name}',
-                        style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                        style: pw.TextStyle(
+                            fontSize: 16, fontWeight: pw.FontWeight.bold),
                       ),
                     pw.SizedBox(height: 10),
                     if (data.geofence?.pic != null)
                       pw.Text(
                         'Geofence PIC: ${data.geofence!.pic}',
-                        style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                        style: pw.TextStyle(
+                            fontSize: 16, fontWeight: pw.FontWeight.bold),
                       ),
                     pw.SizedBox(height: 10),
                     if (data.user?.fullName != null)
                       pw.Text(
                         'Visitor Name: ${data.user?.fullName}',
-                        style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                        style: pw.TextStyle(
+                            fontSize: 16, fontWeight: pw.FontWeight.bold),
                       ),
                     pw.SizedBox(height: 20),
                     pw.Divider(),
@@ -95,7 +100,8 @@ class CreatePDf {
     try {
       final directory = await getApplicationDocumentsDirectory();
       // final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
-      final file = File('${directory.path}/${MyDecoration.formatDate(data.createdAt)} ${data.user!.fullName}.pdf');
+      final file = File(
+          '${directory.path}/${MyDecoration.formatDate(data.createdAt)} ${data.user!.fullName}.pdf');
 
       await file.writeAsBytes(await pdf.save());
       await OpenFile.open(file.path);

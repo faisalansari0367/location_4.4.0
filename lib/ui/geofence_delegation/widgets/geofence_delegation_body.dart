@@ -41,10 +41,11 @@ class GeofenceDelegationBody extends StatelessWidget {
                     children: [
                       Text(
                         'Delegated users',
-                        style: context.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                        style: context.textTheme.headline6
+                            ?.copyWith(fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
-                      Divider(),
+                      const Divider(),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -88,8 +89,8 @@ class GeofenceDelegationBody extends StatelessWidget {
         borderRadius: kBorderRadius,
       ),
       child: Text(
-        '''This feature is designed to assign authority for another registered company user to'''
-        '''have access to the ownership functions of the managers created geofences.'''
+        '''This feature is designed to assign authority for another registered company user to '''
+        '''have access to the ownership functions of the managers created geofences. '''
         '''This includes live NOTIFICATIONS of movements In and Out of each geofence, and access to the logbook data records.''',
         style: context.textTheme.headline6,
         textAlign: TextAlign.center,
@@ -97,7 +98,10 @@ class GeofenceDelegationBody extends StatelessWidget {
     );
   }
 
-  Widget _assignGeofencesFunctions(BuildContext context, GeofenceDelegationNotifier state) {
+  Widget _assignGeofencesFunctions(
+    BuildContext context,
+    GeofenceDelegationNotifier state,
+  ) {
     return Container(
       padding: kPadding,
       decoration: BoxDecoration(
@@ -111,7 +115,8 @@ class GeofenceDelegationBody extends StatelessWidget {
           children: [
             Text(
               'Assign geofences functions',
-              style: context.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+              style: context.textTheme.headline6
+                  ?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             // RichText(
@@ -143,7 +148,7 @@ class GeofenceDelegationBody extends StatelessWidget {
 
             EmailField(
               onChanged: state.setEmail,
-              inputDecoration: InputDecoration(
+              inputDecoration: const InputDecoration(
                 labelText: 'Email',
                 suffixIcon: Icon(Icons.email_outlined),
                 filled: true,
@@ -159,7 +164,7 @@ class GeofenceDelegationBody extends StatelessWidget {
               onChanged: state.setStartDate,
               date: state.state.startDate.toIso8601String(),
 
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Start Date',
                 // border: OutlineInputBorder(),
                 suffixIcon: Icon(Icons.date_range),
@@ -175,7 +180,7 @@ class GeofenceDelegationBody extends StatelessWidget {
               label: '',
               onChanged: state.setEndDate,
               date: state.state.endDate?.toIso8601String(),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'End Date',
                 // border: OutlineInputBorder(),
                 suffixIcon: Icon(Icons.date_range),

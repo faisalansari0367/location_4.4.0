@@ -3,14 +3,13 @@ import 'dart:typed_data';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/download_button/download_controller.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
-
-import '../dialogs/dialog_service.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 
 class CvdDownloadController extends DownloadController with ChangeNotifier {
   CvdDownloadController({
@@ -19,7 +18,6 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
     required CvdForm form,
     required CvdFormsRepo cvdFormsRepo,
     required Api api,
-    required VoidCallback onOpenDownload,
   })  : _downloadStatus = downloadStatus,
         _progress = progress,
         cvdForm = form,
@@ -28,7 +26,7 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
 
   final CvdFormsRepo _cvdFormsRepo;
   final CvdForm cvdForm;
-  late FormsStorageService _service;
+  late final FormsStorageService _service;
 
   // final VoidCallback _onOpenDownload;
   double _progress;
@@ -51,10 +49,11 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
   double get progress => _progress;
 
   @override
-  void startDownload() async {
+  Future<void> startDownload() async {
     _downloadStatus = DownloadStatus.downloading;
     notifyListeners();
-    final result = await _cvdFormsRepo.submitForm(cvdForm, onReceiveProgress: _onReceiveProgress);
+    final result = await _cvdFormsRepo.submitForm(cvdForm,
+        onReceiveProgress: _onReceiveProgress);
     result.when(success: success, failure: failure);
 
     // _downloadStatus = DownloadStatus.downloaded;
@@ -69,7 +68,7 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
     notifyListeners();
   }
 
-  void _init() async {
+  Future<void> _init() async {
     // _downloadedFile = await _service.checkEnvdInCache(_consignmentNo!);
     // if (_downloadedFile != null) {
     //   _downloadStatus = DownloadStatus.downloaded;
@@ -85,11 +84,12 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
     DialogService.failure(error: error);
     _downloadStatus = DownloadStatus.notDownloaded;
     notifyListeners();
-    return null;
+    return;
   }
 
   Future<void> success(Uint8List data) async {
-    _downloadedFile = await _service.saveCvdForm(data, cvdForm.buyerDetailsModel?.name?.value ?? '');
+    _downloadedFile = await _service.saveCvdForm(
+        data, cvdForm.buyerDetailsModel?.name?.value ?? '');
     _downloadStatus = DownloadStatus.downloaded;
     notifyListeners();
   }
