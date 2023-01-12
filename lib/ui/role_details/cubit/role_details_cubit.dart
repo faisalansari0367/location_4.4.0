@@ -5,16 +5,15 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/role_details/cubit/role_details_state.dart';
+import 'package:bioplus/ui/role_details/models/field_data.dart';
 import 'package:bioplus/ui/role_details/models/field_types.dart';
 import 'package:bioplus/ui/role_details/widgets/property_address.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
 import 'package:bioplus/widgets/dialogs/no_signature_found.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../widgets/dialogs/network_error_dialog.dart';
-import '../models/field_data.dart';
-import 'role_details_state.dart';
 
 export 'role_details_state.dart';
 
@@ -28,7 +27,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   final formKey = GlobalKey<FormState>();
   late Api apiService;
 
-  RoleDetailsCubit(this.role, this.localApi, this.api, {this.fields = const []}) : super(const RoleDetailsState()) {
+  RoleDetailsCubit(this.role, this.localApi, this.api, {this.fields = const []})
+      : super(const RoleDetailsState()) {
     apiService = api;
     MyConnectivity().connectionStream.listen((event) {
       apiService = event ? api : localApi;
@@ -36,14 +36,14 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
     emit(
       state.copyWith(
         fields: fields,
-        // userRoleDetails: api.getUserData()?.toJson(),
+        userRoleDetails: api.getUserData()?.toJson(),
       ),
     );
     user = apiService.getUser()!.toJson();
     _init();
   }
 
-  void _init() async {
+  Future<void> _init() async {
     await 200.milliseconds.delay();
     await _getFields();
     await getRoleDetails();
@@ -71,7 +71,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   Map<String, dynamic> get userRoleDetails => state.userRoleDetails;
 
   Future<void> getRoleDetails() async {
-    emit(state.copyWith(isLoading: true));
+    // emit(state.copyWith(userRoleDetails: api.getUserData()?.toJson()));
+    // emit(state.copyWith(isLoading: true));
     final data = await apiService.getRoleData(role);
     data.when(
       success: (data) {
@@ -90,7 +91,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   }
 
   Future<void> getSpecies() async {
-    if (!['Expo\'s', 'Producer'].contains(role)) return;
+    if (!["Expo's", 'Producer'].contains(role)) return;
     final result = await apiService.getUserSpecies();
     result.when(
       success: (data) {
@@ -119,16 +120,27 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
   void _getFieldsData() {
     final fieldsData = <FieldData>[];
-    final addressFields = {'street': false, 'town': false, 'state': false, 'postcode': false, 'address': false};
+    final addressFields = {
+      'street': false,
+      'town': false,
+      'state': false,
+      'postcode': false,
+      'address': false
+    };
     _getFieldsDataFromFields(addressFields, fieldsData);
-    final signatureIndex = fieldsData.indexWhere((element) => element.fieldType.isSignature);
-    final addressIndex = fieldsData.indexWhere((element) => element.fieldType.isAddress);
+    final signatureIndex =
+        fieldsData.indexWhere((element) => element.fieldType.isSignature);
+    final addressIndex =
+        fieldsData.indexWhere((element) => element.fieldType.isAddress);
     _addElementToLast(addressIndex, fieldsData);
     _addElementToLast(signatureIndex, fieldsData);
     emit(state.copyWith(fieldsData: List<FieldData>.from(fieldsData)));
   }
 
-  void _getFieldsDataFromFields(Map<String, bool> addressFields, List<FieldData> list) {
+  void _getFieldsDataFromFields(
+    Map<String, bool> addressFields,
+    List<FieldData> list,
+  ) {
     for (final e in state.fields) {
       var hasField = false;
       final isMobile = e.toCamelCase == 'mobile';
@@ -143,9 +155,15 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           if (addressFields.containsKey(e.toLowerCase())) {
             addressFields[e.toLowerCase()] = true;
           } else {
-            final controller =
-                TextEditingController(text: isMobile ? userRoleDetails['phoneNumber'] : userRoleDetails[key]);
-            final fieldData = FieldData(name: isMobile ? 'Phone Number' : e, controller: controller);
+            final controller = TextEditingController(
+              text: isMobile
+                  ? userRoleDetails['phoneNumber']
+                  : userRoleDetails[key],
+            );
+            final fieldData = FieldData(
+              name: isMobile ? 'Phone Number' : e,
+              controller: controller,
+            );
             list.add(fieldData);
           }
         } on Exception catch (e) {
@@ -173,8 +191,9 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       final address = Address.fromMap(map);
       address.fieldsToShow = addressFields;
 
-      final isCompanyAddress =
-          state.fields.indexWhere((element) => element.toCamelCase == FieldType.companyAddress.name);
+      final isCompanyAddress = state.fields.indexWhere(
+        (element) => element.toCamelCase == FieldType.companyAddress.name,
+      );
       if (isCompanyAddress != -1) {
         list.add(
           FieldData(
@@ -219,8 +238,10 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   }
 
   void entryAndExitDateValidator() {
-    final entryField = state.fieldsData.where((element) => element.fieldType.isEntryDate);
-    final exitField = state.fieldsData.where((element) => element.fieldType.isExitDate);
+    final entryField =
+        state.fieldsData.where((element) => element.fieldType.isEntryDate);
+    final exitField =
+        state.fieldsData.where((element) => element.fieldType.isExitDate);
     if (entryField.isNotEmpty && exitField.isNotEmpty) {
       final entry = DateTime.parse(entryField.first.controller.text);
       final exit = DateTime.parse(exitField.first.controller.text);
@@ -229,7 +250,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         message = 'Entry date cannot be after exit date';
       } else if (entry.compareTo(exit) == 0) {
         message = 'Entry date cannot be equal to exit date';
-      } else if (entry.isBefore(DateTime.now().subtract(10.days)) && state.userRoleDetails['role'] != 'Employee') {
+      } else if (entry.isBefore(DateTime.now().subtract(10.days)) &&
+          state.userRoleDetails['role'] != 'Employee') {
         message = "Can't be more than 10 days before today's date";
       } else if (exit.difference(entry).inDays > 10) {
         message = 'Entry date cannot be more than 10 days after today';
@@ -248,7 +270,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
   Future<void> onSubmit() async {
     if (formKey.currentState?.validate() ?? false) {
-      final hasSignature = state.fieldsData.firstWhereOrNull((element) => element.fieldType.isSignature);
+      final hasSignature = state.fieldsData
+          .firstWhereOrNull((element) => element.fieldType.isSignature);
       if (hasSignature != null) {
         if (hasSignature.controller.text.isEmpty) {
           await DialogService.showDialog(
@@ -266,29 +289,36 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       final data = <String, dynamic>{};
       for (final field in state.fieldsData) {
         if (field.fieldType.isAddress) {
-          final _address = field.address!.toMap();
+          final address = field.address!.toMap();
 
-          data.addAll(_address);
+          data.addAll(address);
           return;
         } else if (field.fieldType.isCompanyAddress) {
-          final _address = field.address!.toMap();
-          data.addAll(_address);
+          final address = field.address!.toMap();
+          data.addAll(address);
           return;
         } else if (field.fieldType.isSpecies) {
           final species = field.data['species'] as UserSpecies;
-          final list = (species.data ?? []).where((element) => element.value == true).map((e) => e.species).toList();
+          final list = (species.data ?? [])
+              .where((element) => element.value == true)
+              .map((e) => e.species)
+              .toList();
           if (list.isEmpty) return;
           data[field.fieldType.name] = list;
           return;
         }
-        data[field.name.toCamelCase.replaceAll(String.fromCharCode(0x27), '')] = field.controller.text.trim();
+        data[field.name.toCamelCase.replaceAll(String.fromCharCode(0x27), '')] =
+            field.controller.text.trim();
       }
 
-      if (data.containsKey(FieldType.countryOfOrigin.name) && data.containsKey(FieldType.countryVisiting.name)) {
-        if (data[FieldType.countryOfOrigin.name] == data[FieldType.countryVisiting.name]) {
+      if (data.containsKey(FieldType.countryOfOrigin.name) &&
+          data.containsKey(FieldType.countryVisiting.name)) {
+        if (data[FieldType.countryOfOrigin.name] ==
+            data[FieldType.countryVisiting.name]) {
           await DialogService.showDialog(
             child: NetworkErrorDialog(
-              message: 'Country of origin and country visiting cannot be the same',
+              message:
+                  'Country of origin and country visiting cannot be the same',
               onCancel: Get.back,
             ),
           );
@@ -300,7 +330,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         var message = '';
         final entryDate = DateTime.parse(data['entryDate']);
         final exitDate = DateTime.parse(data['exitDate']);
-        print(exitDate.difference(entryDate).inDays);
+        // print(exitDate.difference(entryDate).inDays);
         if (entryDate.isAfter(exitDate)) {
           message = 'Entry date cannot be after exit date';
         } else if (entryDate.compareTo(exitDate) == 0) {
@@ -321,7 +351,12 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         }
       }
 
-      final result = await apiService.updateRole(role, data);
+      final trimmedMap = <String, dynamic>{};
+      data.forEach((key, value) {
+        trimmedMap[key] = value.toString().trim();
+      });
+
+      final result = await apiService.updateRole(role, trimmedMap);
       result.when(
         success: (data) => Get.to(() => const MapsPage()),
         failure: (error) => DialogService.failure(
@@ -359,11 +394,14 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         }
       }
 
-      if (data.containsKey(FieldType.countryOfOrigin.name) && data.containsKey(FieldType.countryVisiting.name)) {
-        if (data[FieldType.countryOfOrigin.name] == data[FieldType.countryVisiting.name]) {
+      if (data.containsKey(FieldType.countryOfOrigin.name) &&
+          data.containsKey(FieldType.countryVisiting.name)) {
+        if (data[FieldType.countryOfOrigin.name] ==
+            data[FieldType.countryVisiting.name]) {
           await DialogService.showDialog(
             child: NetworkErrorDialog(
-              message: 'Country of origin and country visiting cannot be the same',
+              message:
+                  'Country of origin and country visiting cannot be the same',
               onCancel: Get.back,
             ),
           );
@@ -424,7 +462,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       if (role == 'Producer') {
         final userName = data['lpaUsername'];
         final password = data['lpaPassword'];
-        if (![null, ''].contains(userName) && !['null', ''].contains(password)) {
+        if (![null, ''].contains(userName) &&
+            !['null', ''].contains(password)) {
           // await DialogService.showDialog(
           //   child: NetworkErrorDialog(
           //     message: 'Please enter LPA credentials',
@@ -432,7 +471,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           //   ),
           // );
           // return;
-          final isValidated = await _validateLpaCreds(data['lpaUsername'], data['lpaPassword']);
+          final isValidated =
+              await _validateLpaCreds(data['lpaUsername'], data['lpaPassword']);
           if (!isValidated) {
             await DialogService.showDialog(
               child: NetworkErrorDialog(
@@ -446,7 +486,10 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       }
 
       if (state.userSpecies != null) {
-        final list = state.userSpecies!.data!.where((element) => element.value == true).map((e) => e.species).toList();
+        final list = state.userSpecies!.data!
+            .where((element) => element.value == true)
+            .map((e) => e.species)
+            .toList();
         data['species'] = list;
       }
 
@@ -483,11 +526,20 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           keys.add(key);
         }
       });
-      keys.forEach((element) {
+      for (final element in keys) {
         data.remove(element);
+      }
+
+      final trimmedData = <String, dynamic>{};
+      data.forEach((key, value) {
+        if (value is String) {
+          trimmedData[key] = value.trim();
+        } else {
+          trimmedData[key] = value;
+        }
       });
 
-      final result = await apiService.updateRole(role, data);
+      final result = await apiService.updateRole(role, trimmedData);
       result.when(
         success: (data) => Get.to(() => const MapsPage()),
         failure: (error) => DialogService.failure(

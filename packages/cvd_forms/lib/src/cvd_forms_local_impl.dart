@@ -1,8 +1,8 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:api_client/api_client.dart';
 import 'package:cvd_forms/cvd_forms.dart';
-import 'package:flutter/services.dart';
+import 'package:cvd_forms/src/cvd_form_utils.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../storage/cvd_forms_storage.dart';
@@ -17,7 +17,8 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
       await storage.addCvdForm(cvdForm);
       return ApiResult.success(data: cvdForm);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to save form'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('Failed to save form'));
     }
   }
 
@@ -27,13 +28,16 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
       final forms = storage.getCvdForms();
       return ApiResult.success(data: forms);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to get forms'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('Failed to get forms'));
     }
   }
 
   @override
-  Future<ApiResult<Uint8List>> submitForm(CvdForm cvdForm, {ProgressCallback? onReceiveProgress}) async {
-    return const ApiResult.failure(error: NetworkExceptions.defaultError('Not available in offline mode'));
+  Future<ApiResult<File>> submitCvdForm(CvdForm cvdForm,
+      {ProgressCallback? onReceiveProgress}) async {
+    return const ApiResult.failure(
+        error: NetworkExceptions.defaultError('Not available in offline mode'));
   }
 
   @override
@@ -42,7 +46,8 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
       await storage.updateCvdForm(cvdForm);
       return ApiResult.success(data: cvdForm);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to update form'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('Failed to update form'));
     }
   }
 
@@ -62,14 +67,34 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
   }
 
   @override
-  Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() async {
+  Future<ApiResult<List<WitholdingPeriodModel>>>
+      getWitholdingPeriodsList() async {
     try {
-      final data = await rootBundle.loadString("packages/cvd_forms/assets/json/witholding_periods.json");
-      final map = jsonDecode(data);
-      final list = (map as List).map((e) => WitholdingPeriodModel.fromJson(e)).toList();
-      return ApiResult.success(data: list);
+      final data = await CvdFormUtils.fetchWitholdingPeriods();
+      return ApiResult.success(data: data);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to get witholding periods'));
+      return const ApiResult.failure(
+        error:
+            NetworkExceptions.defaultError('Failed to get witholding periods'),
+      );
     }
+  }
+
+  @override
+  List<CvdForm> get cvdForms => storage.cvdForms;
+
+  @override
+  Stream<List<CvdForm>> get cvdFormsStream => storage.cvdFormsStream;
+
+  @override
+  Future<ApiResult<bool>> uploadCvdForm(
+    CvdForm file,
+    String? pic, {
+    ProgressCallback? onReceiveProgress,
+    ProgressCallback? onSendProgress,
+  }) {
+    return Future.value(const ApiResult.failure(
+      error: NetworkExceptions.defaultError('Not available in offline mode'),
+    ));
   }
 }

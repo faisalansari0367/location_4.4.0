@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/sync_service.dart';
 import 'package:bioplus/ui/cvd_record/provider/provider.dart';
 import 'package:bioplus/widgets/empty_screen.dart';
 import 'package:bioplus/widgets/listview/my_listview.dart';
+import 'package:bioplus/widgets/upload/upload_widget.dart';
 import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +37,12 @@ class CvdRecordBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (state.files.isNotEmpty) ...[
+              // Visibility(
+              //   visible: state.forms.isNotEmpty,
+              //   child:
+              //       UploadProgress(controller: SyncService().syncCvdController),
+              // ),
+              if (state.forms.isNotEmpty) ...[
                 _buildPdfs(state),
                 Gap(20.h),
               ] else ...[
@@ -68,7 +77,7 @@ class CvdRecordBody extends StatelessWidget {
   Widget _buildPdfs(CvdRecordNotifier state) {
     return MyListview(
       shrinkWrap: true,
-      data: state.files,
+      data: state.forms,
       spacing: Divider(
         color: Colors.grey.shade300,
         height: 2,
@@ -76,10 +85,11 @@ class CvdRecordBody extends StatelessWidget {
       ),
       emptyWidget: SizedBox(
         height: 50.height,
-        child: EmptyScreen(),
+        child: const EmptyScreen(),
       ),
       itemBuilder: (BuildContext context, p1) {
-        final file = state.files[p1];
+        final cvdForm = state.forms[p1];
+        final file = File(cvdForm.filePath!);
         return ListTile(
           onTap: () => OpenFile.open(file.path),
           leading: Container(
@@ -93,13 +103,65 @@ class CvdRecordBody extends StatelessWidget {
               color: Colors.red,
             ),
           ),
-          trailing: IconButton(
-            onPressed: () => Share.shareFiles([file.path]),
-            icon: const Icon(
-              Icons.share,
-              // color: Colors.red.shade900,
+          trailing: PopupMenuButton(
+            onSelected: (value) {
+              switch (value) {
+                case 1:
+                  Share.shareFiles([file.path]);
+                  break;
+                case 2:
+                  state.deleteForm(cvdForm);
+                  break;
+                // case 3:
+                //   state.uploadForm(cvdForm);
+                //   break;
+              }
+            },
+            shape: const RoundedRectangleBorder(
+              borderRadius: kBorderRadius,
             ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: [
+                    const Icon(Icons.share),
+                    Gap(10.w),
+                    const Text('Share'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: [
+                    const Icon(Icons.delete),
+                    Gap(10.w),
+                    const Text('Delete'),
+                  ],
+                ),
+              ),
+              // PopupMenuItem(
+              //   value: 3,
+              //   child: Row(
+              //     children: [
+              //       const Icon(Icons.upload_file),
+              //       Gap(10.w),
+              //       const Text('Upload'),
+              //     ],
+              //   ),
+              // ),
+            ],
           ),
+          // trailing: IconButton(
+          //   onPressed: () => Share.shareFiles([file.path]),
+          //   icon: const Icon(
+          //     // three icon vertical icon
+
+          //     // Icons.lines,
+          //     // color: Colors.red.shade900,
+          //   ),
+          // ),
           title: Text(
             file.path.split('/').last,
             style: context.textTheme.titleMedium
@@ -158,7 +220,7 @@ class CvdRecordBody extends StatelessWidget {
       // spacing: Divider(),
       emptyWidget: SizedBox(
         height: 50.height,
-        child: EmptyScreen(),
+        child: const EmptyScreen(),
       ),
       itemBuilder: (BuildContext context, p1) {
         final form = state.forms[p1];
@@ -181,11 +243,15 @@ class CvdRecordBody extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildText('Buyer',
-                      (form.buyerDetailsModel?.name?.value ?? '').capitalize!),
+                  _buildText(
+                    'Buyer',
+                    (form.buyerDetailsModel?.name?.value ?? '').capitalize!,
+                  ),
                   Gap(5.w),
-                  _buildText('Transporter',
-                      (form.transporterDetails?.name?.value ?? '').capitalize!),
+                  _buildText(
+                    'Transporter',
+                    (form.transporterDetails?.name?.value ?? '').capitalize!,
+                  ),
                   // Gap(5.w),
                   // _buildText('Date', form.transporterDetails?.name?.value ?? ''),
                   // _buildText('Date', MyDecoration.formatDate(form.createdAt ) ?? ''),

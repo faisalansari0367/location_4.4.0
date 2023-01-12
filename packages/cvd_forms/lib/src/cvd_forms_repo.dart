@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:api_client/api_client.dart';
 
@@ -12,5 +12,11 @@ abstract class CvdFormsRepo {
   CvdForm? getCurrentForm();
   Future<bool> deleteForm(CvdForm cvdForm);
   // ApiResult<Uint8List> submitForm(CvdForm cvdForm);
-  Future<ApiResult<Uint8List>> submitForm(CvdForm cvdForm, {ProgressCallback? onReceiveProgress});
+  Future<ApiResult<File>> submitCvdForm(CvdForm cvdForm,
+      {ProgressCallback? onReceiveProgress});
+
+  Stream<List<CvdForm>> get cvdFormsStream;
+  List<CvdForm> get cvdForms;
+  Future<ApiResult<bool>> uploadCvdForm(CvdForm file, String? pic,
+      {ProgressCallback? onReceiveProgress, ProgressCallback? onSendProgress});
 }

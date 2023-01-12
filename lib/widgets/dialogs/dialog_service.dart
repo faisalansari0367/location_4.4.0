@@ -12,6 +12,8 @@ class DialogService {
   static Future<T?> showDialog<T>({
     required Widget child,
   }) async {
+    if (Get.isDialogOpen!) Get.back();
+
     final result = await Get.dialog(
       child,
       transitionCurve: _curve,
@@ -21,7 +23,7 @@ class DialogService {
   }
 
   static void failure({
-    required error,
+    required NetworkExceptions error,
     void Function()? onCancel,
   }) {
     Get.dialog(

@@ -1,4 +1,5 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/sign_up/cubit/sign_up_cubit.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpView extends StatefulWidget {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({super.key});
 
   @override
   State<SignUpView> createState() => _SignUpViewState();
@@ -73,7 +74,8 @@ class _SignUpViewState extends State<SignUpView> {
               ),
               Gap(1.height),
               InkWell(
-                onTap: () => cubit.setTermsAndConditions(!cubit.state.termsAndConditions),
+                onTap: () => cubit
+                    .setTermsAndConditions(!cubit.state.termsAndConditions),
                 child: Row(
                   children: [
                     BlocBuilder<SignUpCubit, SignUpState>(
@@ -121,8 +123,9 @@ class _SignUpViewState extends State<SignUpView> {
                             TextSpan(
                               text: Strings.privacyPolicy,
                               recognizer: _onTap(
-                                PdfViewer(
-                                  path: 'assets/terms_and_conditions/privacy_policy.pdf',
+                                Webview(
+                                  url:
+                                      'https://bioplus.live/privacy-policy-plus-t%26cs',
                                   title: Strings.privacyPolicy,
                                 ),
                               ),
@@ -161,5 +164,6 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  GestureRecognizer _onTap(Widget page) => TapGestureRecognizer()..onTap = () => Get.to(() => page);
+  GestureRecognizer _onTap(Widget page) =>
+      TapGestureRecognizer()..onTap = () => Get.to(() => page);
 }

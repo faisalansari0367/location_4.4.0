@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:api_client/api_client.dart';
 import 'package:api_client/configs/client.dart';
 import 'package:cvd_forms/models/models.dart';
-import 'package:cvd_forms/models/src/cvd_form.dart';
+import 'package:cvd_forms/src/cvd_form_utils.dart';
+import 'package:cvd_forms/src/forms_storage_helper.dart';
 import 'package:cvd_forms/src/pdf/models/cvd_pdf_model.dart';
 import 'package:cvd_forms/storage/cvd_forms_storage.dart';
 import 'package:flutter/services.dart';
@@ -16,17 +17,24 @@ import 'cvd_forms_repo.dart';
 class CvdFormsRepoImpl implements CvdFormsRepo {
   final Client client;
   final CvdFormsStorage storage;
-  CvdFormsRepoImpl({required Box box, required this.client}) : storage = CvdFormsStorage(box);
+  final Directory cacheDir;
+  CvdFormsRepoImpl({
+    required this.cacheDir,
+    required Box box,
+    required this.client,
+  }) : storage = CvdFormsStorage(box);
 
   @override
-  Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList() async {
+  Future<ApiResult<List<WitholdingPeriodModel>>>
+      getWitholdingPeriodsList() async {
     try {
-      final data = await rootBundle.loadString("packages/cvd_forms/assets/json/witholding_periods.json");
-      final map = jsonDecode(data);
-      final list = (map as List).map((e) => WitholdingPeriodModel.fromJson(e)).toList();
-      return ApiResult.success(data: list);
+      final data = await CvdFormUtils.fetchWitholdingPeriods();
+      return ApiResult.success(data: data);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to get witholding periods'));
+      return const ApiResult.failure(
+        error:
+            NetworkExceptions.defaultError('Failed to get witholding periods'),
+      );
     }
   }
 
@@ -36,7 +44,8 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
       await storage.addCvdForm(cvdForm);
       return ApiResult.success(data: cvdForm);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to save form'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('Failed to save form'));
     }
   }
 
@@ -46,29 +55,22 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
       final forms = storage.getCvdForms();
       return ApiResult.success(data: forms);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to get forms'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('Failed to get forms'));
     }
   }
 
   @override
-  Future<ApiResult<Uint8List>> submitForm(CvdForm cvdForm, {ProgressCallback? onReceiveProgress}) async {
+  Future<ApiResult<File>> submitCvdForm(CvdForm cvdForm,
+      {ProgressCallback? onReceiveProgress}) async {
     try {
-      // final result = await client.build().post(
-      //       Endpoints.cvdFormUrl,
-      //       data: cvdForm.toFormJson(),
-      //       // options: Options(responseType: ResponseType.bytes),
-      //       onReceiveProgress: onReceiveProgress,
-      //     );
-      // if (result.data['status'] == false) {
-      //   final error = result.data['data'] as Map;
-      //   final exception = NetworkExceptions.defaultError('${result.data['message']} \n ${error.values.first}');
-      //   return ApiResult.failure(error: exception);
-      // }
-
-      return ApiResult.success(data: await _generatePdf(cvdForm.toFormJson()));
-
-      // final Uint8List bytes = base64Decode(result.data['data']);
-      // return ApiResult.success(data: bytes);
+      final Uint8List pdf = await _generatePdf(cvdForm.toFormJson());
+      final FormsHelper formsHelper = FormsHelper(cachePath: cacheDir.path);
+      final file = await formsHelper.createCvdFile(cvdForm.fileName);
+      await file.writeAsBytes(pdf);
+      final form = cvdForm.copyWith(filePath: file.path);
+      await addCvdForm(form);
+      return ApiResult.success(data: file);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
@@ -85,7 +87,8 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
       await storage.updateCvdForm(cvdForm);
       return ApiResult.success(data: cvdForm);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('Failed to update form'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('Failed to update form'));
     }
   }
 
@@ -100,18 +103,50 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
   }
 
   @override
-  Future<bool> deleteForm(CvdForm cvdForm) {
-    return storage.deleteCvdForm(cvdForm);
+  Future<bool> deleteForm(CvdForm cvdForm) async {
+    if (cvdForm.filePath != null) {
+      final file = File(cvdForm.filePath!);
+      final fileExists = await file.exists();
+      if (fileExists) await file.delete();
+    }
+    final isRemoved = await storage.deleteCvdForm(cvdForm);
+    return isRemoved;
   }
 
-  // Future<void> sync() async {
-  //   final forms = storage.getCvdForms();
-  //   for (final form in forms) {
+  @override
+  Future<ApiResult<bool>> uploadCvdForm(CvdForm file, String? pic,
+      {ProgressCallback? onReceiveProgress,
+      ProgressCallback? onSendProgress}) async {
+    try {
+      await client.uploadFile(
+        Endpoints.createCvd,
+        file: File(file.filePath!),
+        fields: file.toForm(),
+        fileName: file.fileName,
+        onReceiveProgress: onReceiveProgress,
+        onSendProgress: onSendProgress,
+      );
+      return const ApiResult.success(data: true);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
 
-  //     final result = await submitForm(form);
-  //     if (result.isSuccess) {
-  //       await storage.updateCvdForm(form.copyWith(isSynced: true));
-  //     }
-  //   }
-  // }
+  Future<void> syncForm() async {
+    for (var cvdform in storage.cvdForms) {
+      final result = await uploadCvdForm(cvdform, '');
+      result.when(
+        success: (s) {
+          if (s) deleteForm(cvdform);
+        },
+        failure: (s) {},
+      );
+    }
+  }
+
+  @override
+  List<CvdForm> get cvdForms => storage.cvdForms;
+
+  @override
+  Stream<List<CvdForm>> get cvdFormsStream => storage.cvdFormsStream;
 }

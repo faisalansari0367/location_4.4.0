@@ -6,7 +6,8 @@ import 'package:dio/dio.dart';
 
 import 'api_logger.dart';
 
-export 'package:dio/dio.dart' show DioError, Response, Dio, Options, ProgressCallback;
+export 'package:dio/dio.dart'
+    show DioError, Response, Dio, Options, ProgressCallback;
 
 class Client {
   // String baseUrl = '';
@@ -62,7 +63,8 @@ class Client {
     return this;
   }
 
-  PrettyDioLogger get dioPrinter => PrettyDioLogger(requestHeader: true, requestBody: true, responseHeader: true);
+  PrettyDioLogger get dioPrinter => PrettyDioLogger(
+      requestHeader: true, requestBody: true, responseHeader: true);
 
   // Client pdfBuilder() {
   //   header = <String, Object>{};
@@ -129,8 +131,10 @@ class Client {
   }
 
   Dio build({bool logging = true}) {
-    (_dio!.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    (_dio!.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       return client;
     };
 
@@ -180,6 +184,37 @@ class Client {
       options: options,
       cancelToken: cancelToken,
       data: data,
+    );
+    // log('$baseUrl$path');
+    return result;
+  }
+
+  Future<Response<T>> uploadFile<T>(
+    String path, {
+    required String fileName,
+    required File file,
+    required List<MapEntry<String, String>> fields,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    final headers = builder().setProtectedApiHeader();
+    final dio = headers.setUrlEncoded().build();
+    final fromFile =
+        await MultipartFile.fromFile(file.path, filename: fileName);
+    final FormData formData = FormData.fromMap({"file": fromFile});
+    formData.fields.add(MapEntry("file", fileName));
+    formData.fields.addAll(fields);
+    final result = await dio.post<T>(
+      baseUrl + path,
+      queryParameters: queryParameters,
+      options: options,
+      cancelToken: cancelToken,
+      data: formData,
+      onReceiveProgress: onReceiveProgress,
+      onSendProgress: onSendProgress,
     );
     // log('$baseUrl$path');
     return result;

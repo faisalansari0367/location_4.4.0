@@ -105,7 +105,7 @@ class ProductIntegrityPartC {
                     pw.Radius.circular(5),
                   ),
                 ),
-                width: 200,
+                width: 100,
                 height: 100,
                 child: pw.Image(
                   pw.MemoryImage(

@@ -6,15 +6,14 @@ import 'package:bioplus/ui/cvd_form/pages/vendor_details.dart';
 import 'package:bioplus/ui/cvd_form/widgets/chemical_use.dart';
 import 'package:bioplus/ui/cvd_form/widgets/commodity_details.dart';
 import 'package:bioplus/ui/cvd_form/widgets/custom_steppar.dart';
+import 'package:bioplus/ui/cvd_form/widgets/product_integrity.dart';
+import 'package:bioplus/ui/cvd_form/widgets/self_declaration.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../widgets/product_integrity.dart';
-import '../widgets/self_declaration.dart';
-
 class CvdFormView extends StatefulWidget {
-  const CvdFormView({Key? key}) : super(key: key);
+  const CvdFormView({super.key});
 
   @override
   State<CvdFormView> createState() => _CvdFormViewState();
@@ -50,7 +49,9 @@ class _CvdFormViewState extends State<CvdFormView> {
         ),
         body: BlocBuilder<CvdCubit, CvdState>(
           builder: (context, state) {
-            if (state.isLoading) return Center(child: CircularProgressIndicator());
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
             return Column(
               children: [
@@ -70,13 +71,16 @@ class _CvdFormViewState extends State<CvdFormView> {
                       BuyerDetails(
                         buyerDetails: cubit.buyerDetailsModel,
                       ),
-                      TransporterDetails(transporDetails: cubit.transporterDetailsModel),
+                      TransporterDetails(
+                        transporDetails: cubit.transporterDetailsModel,
+                      ),
                       // CommonPage(data: state.formStepper[2].formDataList),
                       CommodityDetails(
                         commodityDetails: cubit.commodityDetailsModel,
                       ),
                       ProductIntegrity(
-                        productIntegrityDetails: cubit.productIntegrityDetailsModel,
+                        productIntegrityDetails:
+                            cubit.productIntegrityDetailsModel,
                       ),
                       ChemicalUse(
                         chemicalUseDetailsModel: cubit.chemicalUseDetailsModel,

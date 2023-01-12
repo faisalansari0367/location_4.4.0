@@ -7,13 +7,16 @@ class Endpoints {
   static const auth = '/auth';
   static const functions = '/functions';
 
-  static const cvdFormUrl = 'https://uniquetowinggoa.com/safemeat/public/api/declaration';
+  static const cvdFormUrl =
+      'https://uniquetowinggoa.com/safemeat/public/api/declaration';
 
   static const String geofences = '/geofences';
   static const String delegation = '$geofences/delegation';
   static const String removeDelegation = '$geofences/removeDelegation';
   static String geofence(String? id) => '/geofences/$id';
   static const String notifyProperyManager = '$users/notify-property-manager';
+
+  static const payment = '/payment', createSession = '$payment/create-session';
 
   static const String signUp = '$auth/signup',
       verifyOtp = '$auth/verify',
@@ -34,6 +37,7 @@ class Endpoints {
       // users
       getFields = '$users/fields',
       updateMe = '$users/me',
+      createCvd = '$users/cvd',
       // updateUser = '$users/users',
       usersForms = '$users/forms',
       exportLogRecords = '$users/export-log-records';
@@ -44,7 +48,8 @@ class Endpoints {
   static const logRecordsOffline = '$logRecords/offline';
 
   static const qrCode = '$functions/qrcode';
-  static const sendEmergencyNotification = '$functions/send-emergency-notification';
+  static const sendEmergencyNotification =
+      '$functions/send-emergency-notification';
   static const getSentNotifications = '$functions/getNotificationRecord';
   static const sendSos = '$functions/send-sos';
 

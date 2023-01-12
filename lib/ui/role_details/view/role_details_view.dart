@@ -1,26 +1,25 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/forms/widget/form_card.dart';
 import 'package:bioplus/ui/role_details/cubit/role_details_cubit.dart';
+import 'package:bioplus/ui/role_details/models/field_types.dart';
+import 'package:bioplus/ui/role_details/widgets/property_address.dart';
+import 'package:bioplus/ui/role_details/widgets/species.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_cross_fade.dart';
+import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:bioplus/widgets/state_dropdown_field.dart';
+import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../helpers/validator.dart';
-import '../../../widgets/my_appbar.dart';
-import '../../../widgets/signature/signature_widget.dart';
-import '../../../widgets/text_fields/text_formatters/input_formatters.dart';
-import '../models/field_types.dart';
-import '../widgets/property_address.dart';
-import '../widgets/species.dart';
-
 class RoleDetailsView extends StatefulWidget {
-  const RoleDetailsView({Key? key}) : super(key: key);
+  const RoleDetailsView({super.key});
 
   @override
   State<RoleDetailsView> createState() => _RoleDetailsViewState();
@@ -102,6 +101,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
   }
 
   List<String> sortedFields(List<String> fields) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final _fields = [...fields];
     _fields.remove('Species');
     final hasSignature = fields.contains('Signature');
@@ -117,7 +117,10 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     return _fields;
   }
 
-  void textEditingControllerListener(TextEditingController controller, String field) {
+  void textEditingControllerListener(
+    TextEditingController controller,
+    String field,
+  ) {
     controller.addListener(() {
       // if (controller.text.isEmpty) return;
 
@@ -130,7 +133,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     final userData = state.userRoleDetails;
 
     if (userData.containsKey(name.toCamelCase)) {
-      final value = (map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '').toString();
+      final value = (map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '')
+          .toString();
       controller.text = value;
       map[name.toCamelCase] = value;
     }
@@ -140,7 +144,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         map[name.toCamelCase] = 'Government';
 
         return MyDropdownField(
-          options: ['Government', 'Water', 'Gas', 'Power', 'Waste'],
+          options: const ['Government', 'Water', 'Gas', 'Power', 'Waste'],
           value: map[name.toCamelCase],
           onChanged: (value) {
             map[name.toCamelCase] = value;
@@ -149,11 +153,13 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         );
 
       case 'licenseCategory':
-        map[name.toCamelCase] =
-            userData[name.toCamelCase] ?? (state.licenseCategories.isEmpty ? null : state.licenseCategories.first);
+        map[name.toCamelCase] = userData[name.toCamelCase] ??
+            (state.licenseCategories.isEmpty
+                ? null
+                : state.licenseCategories.first);
         return MyDropdownField(
           options: state.licenseCategories,
-          value: map[name.toCamelCase],
+          value: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             map[name.toCamelCase] = value;
             setState(() {});
@@ -244,7 +250,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           },
         );
       case 'startDate':
-        map[name.toCamelCase] = userData[name.toCamelCase] ?? DateTime.now().toIso8601String();
+        map[name.toCamelCase] =
+            userData[name.toCamelCase] ?? DateTime.now().toIso8601String();
         return MyDateField(
           label: name,
           date: map[name.toCamelCase] ?? '',
@@ -265,7 +272,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           },
         );
       case "driver'sLicense":
-        controller.text = map["driver'sLicense"] ?? userData['driversLicense'] ?? '';
+        controller.text =
+            map["driver'sLicense"] ?? userData['driversLicense'] ?? '';
         return MyTextField(
           hintText: name,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -315,7 +323,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         );
 
       case 'company':
-        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        if (controller.text.isNotEmpty) {
+          controller.text = controller.text.toUpperCase();
+        }
         return MyTextField(
           hintText: name,
           controller: controller,
@@ -325,7 +335,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
 
       case 'city':
       case 'town':
-        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        if (controller.text.isNotEmpty) {
+          controller.text = controller.text.toUpperCase();
+        }
         return MyTextField(
           hintText: name,
           controller: controller,
@@ -333,7 +345,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           inputFormatters: [CapitalizeAllInputFormatter()],
         );
       case 'postcode':
-        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        if (controller.text.isNotEmpty) {
+          controller.text = controller.text.toUpperCase();
+        }
         return MyTextField(
           maxLength: 4,
           hintText: name,

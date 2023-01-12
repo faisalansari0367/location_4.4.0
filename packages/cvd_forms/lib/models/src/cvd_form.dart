@@ -20,8 +20,12 @@ class CvdForm {
   String? testResult;
   String? signature;
   String? organisationName;
+  String? filePath;
+  String? pic;
 
   CvdForm({
+    this.pic,
+    this.filePath,
     this.createdAt,
     this.vendorDetails,
     this.buyerDetailsModel,
@@ -42,7 +46,7 @@ class CvdForm {
 
   Map<String, dynamic> toJson() {
     final json = {
-      'createdAt': createdAt?.toIso8601String(),
+      'createdAt': (createdAt ?? DateTime.now()).toIso8601String(),
       'vendorDetails': vendorDetails?.toJson(),
       'buyerDetailsModel': buyerDetailsModel?.toJson(),
       'transporterDetails': transporterDetails?.toJson(),
@@ -53,8 +57,25 @@ class CvdForm {
       'riskAssesment': riskAssesment,
       'testResult': testResult,
       'signature': signature,
+      'filePath': filePath,
+      'pic': pic,
     };
     return json;
+  }
+
+  String get fileName {
+    final date = MyDateFormat.formatDate(createdAt ?? DateTime.now());
+    final name = buyerDetailsModel?.name?.value ?? '';
+    return '$date $name';
+  }
+
+  List<MapEntry<String, String>> toForm() {
+    return <MapEntry<String, String>>[
+      MapEntry('buyerName', buyerDetailsModel?.name?.value ?? ''),
+      MapEntry('pic', pic ?? ''),
+      MapEntry('transporter', transporterDetails?.name?.value ?? ''),
+      MapEntry('cvdName', fileName),
+    ];
   }
 
   CvdForm copyWith({
@@ -64,22 +85,30 @@ class CvdForm {
     CommodityDetailsModel? commodityDetails,
     ChemicalUseDetailsModel? chemicalUseDetailsModel,
     ProductIntegrityDetailsModel? productIntegrityDetailsModel,
+    DateTime? createdAt,
     String? riskAssesment,
     String? testResult,
     String? signature,
     String? organisationName,
+    String? filePath,
+    String? pic,
   }) {
     return CvdForm(
       vendorDetails: vendorDetails ?? this.vendorDetails,
       buyerDetailsModel: buyerDetailsModel ?? this.buyerDetailsModel,
       transporterDetails: transporterDetails ?? this.transporterDetails,
       commodityDetails: commodityDetails ?? this.commodityDetails,
-      chemicalUseDetailsModel: chemicalUseDetailsModel ?? this.chemicalUseDetailsModel,
-      productIntegrityDetailsModel: productIntegrityDetailsModel ?? this.productIntegrityDetailsModel,
+      chemicalUseDetailsModel:
+          chemicalUseDetailsModel ?? this.chemicalUseDetailsModel,
+      productIntegrityDetailsModel:
+          productIntegrityDetailsModel ?? this.productIntegrityDetailsModel,
       riskAssesment: riskAssesment ?? this.riskAssesment,
       testResult: testResult ?? this.testResult,
       signature: signature ?? this.signature,
       organisationName: organisationName ?? this.organisationName,
+      createdAt: createdAt ?? this.createdAt,
+      filePath: filePath ?? this.filePath,
+      pic: pic ?? this.pic,
     );
   }
 
@@ -116,7 +145,8 @@ class CvdForm {
       'companyName': transporterDetails.company?.value,
       'registration': transporterDetails.registration?.value,
       'commodity': commodityDetails.commodity!.value,
-      'period': MyDateFormat.formatDate(DateTime.tryParse(commodityDetails.deliveryPeriod!.value!)),
+      'period': MyDateFormat.formatDate(
+          DateTime.tryParse(commodityDetails.deliveryPeriod!.value!)),
       'variety1': commodityDetails.variety1!.value,
       'variety2': commodityDetails.variety2!.value,
       'quantity1': commodityDetails.quantity1!.value,
@@ -125,7 +155,8 @@ class CvdForm {
       'materialCheck': productIntegrityDetailsModel.materialCheck?.value,
       'gmoCheck': productIntegrityDetailsModel.gmoCheck?.value,
       'chemicalCheck': chemicalUseDetailsModel.chemicalCheck?.value,
-      'chemicals': chemicalUseDetailsModel.chemicalTable.map((e) => e.toJson()).toList(),
+      'chemicals':
+          chemicalUseDetailsModel.chemicalTable.map((e) => e.toJson()).toList(),
       'qaCheck': chemicalUseDetailsModel.qaCheck?.value,
       'qaProgram': chemicalUseDetailsModel.qaProgram?.value,
       'certificateNumber': chemicalUseDetailsModel.certificateNumber?.value,
@@ -133,10 +164,10 @@ class CvdForm {
       'organisationName': organisationName,
       'riskAssesment': riskAssesment,
       'testResult': testResult,
-      'cropList':
-          chemicalUseDetailsModel.cropList?.value == null || (chemicalUseDetailsModel.cropList?.value?.isEmpty ?? true)
-              ? []
-              : chemicalUseDetailsModel.cropList?.value!.split(',').map((e) => e).toList(),
+      'cropList': chemicalUseDetailsModel.cropList?.value == null ||
+              (chemicalUseDetailsModel.cropList?.value?.isEmpty ?? true)
+          ? []
+          : chemicalUseDetailsModel.cropList?.value!.split(',').toList(),
       'riskCheck': chemicalUseDetailsModel.riskCheck?.value,
       'nataCheck': chemicalUseDetailsModel.nataCheck?.value,
       'signature': signature,
@@ -145,23 +176,34 @@ class CvdForm {
 
   factory CvdForm.fromJson(Map<String, dynamic> map) {
     return CvdForm(
+      filePath: map['filePath'],
+      pic: map['pic'],
       organisationName: map['organisationName'] as String?,
       riskAssesment: map['riskAssesment'] as String?,
       testResult: map['testResult'] as String?,
       signature: map['signature'] as String?,
-      createdAt: map['createdAt'] != null ? DateTime.tryParse(map['createdAt'] as String)?.toLocal() : null,
-      vendorDetails: map['vendorDetails'] == null ? null : VendorDetailsModel.fromJson(map['vendorDetails']),
-      buyerDetailsModel: map['buyerDetailsModel'] == null ? null : BuyerDetailsModel.fromJson(map['buyerDetailsModel']),
-      transporterDetails:
-          map['transporterDetails'] == null ? null : TransporterDetailsModel.fromJson(map['transporterDetails']),
-      commodityDetails:
-          map['commodityDetails'] == null ? null : CommodityDetailsModel.fromJson(map['commodityDetails']),
+      createdAt: map['createdAt'] != null
+          ? DateTime.tryParse(map['createdAt'] as String)?.toLocal()
+          : null,
+      vendorDetails: map['vendorDetails'] == null
+          ? null
+          : VendorDetailsModel.fromJson(map['vendorDetails']),
+      buyerDetailsModel: map['buyerDetailsModel'] == null
+          ? null
+          : BuyerDetailsModel.fromJson(map['buyerDetailsModel']),
+      transporterDetails: map['transporterDetails'] == null
+          ? null
+          : TransporterDetailsModel.fromJson(map['transporterDetails']),
+      commodityDetails: map['commodityDetails'] == null
+          ? null
+          : CommodityDetailsModel.fromJson(map['commodityDetails']),
       chemicalUseDetailsModel: map['chemicalUseDetailsModel'] == null
           ? null
           : ChemicalUseDetailsModel.fromJson(map['chemicalUseDetailsModel']),
       productIntegrityDetailsModel: map['productIntegrityDetailsModel'] == null
           ? null
-          : ProductIntegrityDetailsModel.fromJson(map['productIntegrityDetailsModel']),
+          : ProductIntegrityDetailsModel.fromJson(
+              map['productIntegrityDetailsModel']),
     );
   }
 

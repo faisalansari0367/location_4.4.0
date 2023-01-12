@@ -21,3 +21,6 @@ rules:
   - package_api_docs
   - prefer_final_in_for_each
   - prefer_single_quotes
+
+# avoid leading underscro to false
+# 

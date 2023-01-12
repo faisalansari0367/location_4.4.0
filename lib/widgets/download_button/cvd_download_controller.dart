@@ -52,7 +52,7 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
   Future<void> startDownload() async {
     _downloadStatus = DownloadStatus.downloading;
     notifyListeners();
-    final result = await _cvdFormsRepo.submitForm(cvdForm,
+    final result = await _cvdFormsRepo.submitCvdForm(cvdForm,
         onReceiveProgress: _onReceiveProgress);
     result.when(success: success, failure: failure);
 
@@ -87,11 +87,11 @@ class CvdDownloadController extends DownloadController with ChangeNotifier {
     return;
   }
 
-  Future<void> success(Uint8List data) async {
-    _downloadedFile = await _service.saveCvdForm(
-        data, cvdForm.buyerDetailsModel?.name?.value ?? '');
-    _downloadStatus = DownloadStatus.downloaded;
-    notifyListeners();
+  Future<void> success(File data) async {
+    // _downloadedFile = await _service.saveCvdForm(
+    //     data, cvdForm.buyerDetailsModel?.name?.value ?? '');
+    // _downloadStatus = DownloadStatus.downloaded;
+    // notifyListeners();
   }
 
   Future<void> _saveFormLocally() async {

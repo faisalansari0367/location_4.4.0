@@ -2,9 +2,14 @@ import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/features/webview/flutter_webview.dart';
+// import 'package:very_good_analysis/very_good_analysis.dart';
+
+import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
 import 'package:bioplus/ui/geofence_delegation/view/geofence_delegation_page.dart';
+import 'package:bioplus/ui/login/view/login_page.dart';
 import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
@@ -12,20 +17,15 @@ import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
+import 'package:bioplus/widgets/pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-// import 'package:very_good_analysis/very_good_analysis.dart';
-
-import '../../../gen/assets.gen.dart';
-import '../../../widgets/pdf_viewer.dart';
-import '../../login/view/login_page.dart';
-
 class SettingsPage extends StatefulWidget {
   final bool showBackbutton;
-  const SettingsPage({Key? key, this.showBackbutton = false}) : super(key: key);
+  const SettingsPage({super.key, this.showBackbutton = false});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -98,7 +98,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             packageInfo?.appName ?? '',
                             style: context.textTheme.headline5,
                           ),
-                          if (context.read<Api>().client.baseUrl == ApiConstants.localUrl)
+                          if (context.read<Api>().client.baseUrl ==
+                              ApiConstants.localUrl)
                             const Text(
                               '(Debug)',
                               style: TextStyle(color: Colors.red),
@@ -124,8 +125,8 @@ class _SettingsPageState extends State<SettingsPage> {
             MyListTile(
               text: Strings.privacyPolicy,
               onTap: () async => Get.to(
-                () => PdfViewer(
-                  path: 'assets/terms_and_conditions/privacy_policy.pdf',
+                () => Webview(
+                  url: 'https://bioplus.live/privacy-policy-plus-t%26cs',
                   title: Strings.privacyPolicy,
                 ),
               ),
@@ -150,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
               MyListTile(
                 text: Strings.geofenceDelegation,
                 onTap: () async => Get.to(
-                  () => GeofenceDelegationPage(),
+                  () => const GeofenceDelegationPage(),
                 ),
               ),
 
@@ -187,7 +188,9 @@ class _SettingsPageState extends State<SettingsPage> {
             MyListTile(
               onTap: () async {
                 try {
-                  final apiService = MyConnectivity.isConnected ? context.read<Api>() : context.read<LocalApi>();
+                  final apiService = MyConnectivity.isConnected
+                      ? context.read<Api>()
+                      : context.read<LocalApi>();
                   apiService.cancel();
                   context.read<GeofenceService>().cancel();
                   final client = GraphQlClient();
@@ -209,7 +212,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _logout(BuildContext context) async {
     // context.read<MapsRepo>().cancel();
-    final apiService = MyConnectivity.isConnected ? context.read<Api>() : context.read<LocalApi>();
+    final apiService = MyConnectivity.isConnected
+        ? context.read<Api>()
+        : context.read<LocalApi>();
     apiService.cancel();
     context.read<GeofenceService>().cancel();
     final client = GraphQlClient();
@@ -218,7 +223,7 @@ class _SettingsPageState extends State<SettingsPage> {
     await Get.offAll(() => const LoginPage());
   }
 
-  void _deleteAccount() async {
+  Future<void> _deleteAccount() async {
     final api = context.read<Api>();
     final deleteUser = await api.deleteUser();
     deleteUser.when(
@@ -231,7 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
           },
         );
       },
-      failure: ((error) => DialogService.failure(error: error)),
+      failure: (error) => DialogService.failure(error: error),
     );
   }
 }

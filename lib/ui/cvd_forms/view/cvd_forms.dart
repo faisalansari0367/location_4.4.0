@@ -59,7 +59,8 @@ class _CvdFormsState extends State<CvdForms> {
   List<FileSystemEntity> _sortData(List<FileSystemEntity> files) {
     // dd-mm--yy
     files.sort(
-        (a, b) => (b.statSync().accessed).compareTo(a.statSync().accessed));
+      (a, b) => (b.statSync().accessed).compareTo(a.statSync().accessed),
+    );
     return files;
   }
 }

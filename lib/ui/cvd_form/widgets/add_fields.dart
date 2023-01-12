@@ -9,7 +9,13 @@ class AddFields extends StatefulWidget {
   final String? value;
   final String? no;
 
-  const AddFields({Key? key, required this.field, this.value, required this.onChanged, this.no}) : super(key: key);
+  const AddFields({
+    super.key,
+    required this.field,
+    this.value,
+    required this.onChanged,
+    this.no,
+  });
 
   @override
   State<AddFields> createState() => _AddFieldsState();
@@ -30,7 +36,8 @@ class _AddFieldsState extends State<AddFields> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: MyDecoration.decoration().copyWith(border: Border.all(color: Colors.grey.shade200)),
+      decoration: MyDecoration.decoration()
+          .copyWith(border: Border.all(color: Colors.grey.shade200)),
       padding: kPadding,
       child: Column(
         children: [
@@ -57,30 +64,28 @@ class _AddFieldsState extends State<AddFields> {
             ],
           ),
           Gap(5.h),
-          ...fields
-              .map(
-                (e) => Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        focusNode: AlwaysDisabledFocusNode(),
-                        initialValue: e,
-                        // decoration: MyDecoration.recangularInputDecoration(context),
-                        onChanged: (s) => value = s,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        fields.remove(e);
-                        widget.onChanged.call(fields);
-                        setState(() {});
-                      },
-                      icon: const Icon(Icons.remove),
-                    ),
-                  ],
+          ...fields.map(
+            (e) => Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    focusNode: AlwaysDisabledFocusNode(),
+                    initialValue: e,
+                    // decoration: MyDecoration.recangularInputDecoration(context),
+                    onChanged: (s) => value = s,
+                  ),
                 ),
-              )
-              .toList(),
+                IconButton(
+                  onPressed: () {
+                    fields.remove(e);
+                    widget.onChanged.call(fields);
+                    setState(() {});
+                  },
+                  icon: const Icon(Icons.remove),
+                ),
+              ],
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

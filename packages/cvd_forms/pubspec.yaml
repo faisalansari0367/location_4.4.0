@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   hive_flutter: ^1.1.0
+  rxdart: ^0.27.5
   api_client:
     path: ../api_client
   date_format:

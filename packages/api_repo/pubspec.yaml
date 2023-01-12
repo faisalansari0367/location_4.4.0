@@ -22,6 +22,7 @@ dependencies:
     path: ../api_client
   cvd_forms:
     path: ../cvd_forms
+  path_provider: ^2.0.11
 dev_dependencies:
   flutter_test:
     sdk: flutter

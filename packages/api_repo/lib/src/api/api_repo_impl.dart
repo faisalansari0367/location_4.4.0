@@ -1,20 +1,22 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../api_repo.dart';
 import '../auth/src/storage/storage_service.dart';
+import '../payment/payment_repo.dart';
 
 // import '../log/log_records.dart';
 
 export '../functions/models/notifications_model.dart';
 
-class ApiRepo implements Api { 
+class ApiRepo implements Api {
   late Client _client;
   late AuthRepo _authRepo;
   late UserRepo _userRepo;
@@ -22,10 +24,13 @@ class ApiRepo implements Api {
   late FunctionsRepo _functionsRepo;
   late CvdFormsRepo _cvdFormsRepo;
   late GeofencesRepo _geofencesRepo;
+  late PaymentRepo _paymentRepo;
+  late Directory _cacheDir;
 
-  final BehaviorSubject<Box> _userBoxController = BehaviorSubject<Box>();
+  // final BehaviorSubject<Box> _userBoxController = BehaviorSubject<Box>();
 
-  Future<void> Function({required String baseUrl, required Box<dynamic> box}) localApiinit;
+  Future<void> Function({required String baseUrl, required Box<dynamic> box})
+      localApiinit;
 
   late Box _box;
   // late LocalesApi _localesApi;
@@ -41,22 +46,34 @@ class ApiRepo implements Api {
     // required ValueChanged<Box> onBoxChange,
   }) async {
     final _userBox = await _getBox(box);
-    _initRepos(baseUrl, _userBox);
+    await _initRepos(baseUrl, _userBox);
   }
 
-  void _initRepos(String baseUrl, Box box) {
+  Future<void> _initRepos(String baseUrl, Box box) async {
     _box = box;
     final storage = StorageService(box: box);
     final token = storage.getToken();
     _client = Client(baseUrl: baseUrl, token: token, onError: _onError);
     localApiinit(baseUrl: baseUrl, box: box);
     _logRecordsRepo = LogRecordsImpl(client: _client, box: box);
-    _authRepo = AuthRepoImpl(client: _client, box: box, onUserChange: changeUserBox);
+    _authRepo =
+        AuthRepoImpl(client: _client, box: box, onUserChange: changeUserBox);
     _userRepo = UserRepoImpl(client: _client, box: box);
     _functionsRepo = FunctionsRepoImpl(client: _client);
-    _cvdFormsRepo = CvdFormsRepoImpl(box: box, client: _client);
+    _cacheDir = await _getUserCacheDir();
+    _cvdFormsRepo =
+        CvdFormsRepoImpl(box: box, client: _client, cacheDir: _cacheDir);
     _geofencesRepo = GeofencesRepoImpl(client: client, box: box);
+    _paymentRepo = PaymentRepoImpl(client: client);
+
     _userStream(_box, storage.userKey);
+  }
+
+  Future<Directory> _getUserCacheDir() async {
+    final storage = StorageService(box: _box);
+    final cacheDir = await getApplicationDocumentsDirectory();
+    _cacheDir = Directory('${cacheDir.path}/${storage.getUser()!.email}');
+    return _cacheDir;
   }
 
   Future<Box> _getBox(Box oldBox) async {
@@ -138,13 +155,16 @@ class ApiRepo implements Api {
   Future<void> logout() => _authRepo.logout();
 
   @override
-  Future<ApiResult<List<UserRoles>>> getUserRoles() async => await _userRepo.getUserRoles();
+  Future<ApiResult<List<UserRoles>>> getUserRoles() async =>
+      await _userRepo.getUserRoles();
 
   @override
-  Future<ApiResult<RoleDetailsModel>> getFields(String role) => _userRepo.getFields(role);
+  Future<ApiResult<RoleDetailsModel>> getFields(String role) =>
+      _userRepo.getFields(role);
 
   @override
-  Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
+  Future<ApiResult<User>> updateMe(
+      {required User user, bool isUpdate = true}) async {
     return await _authRepo.updateMe(user: user, isUpdate: isUpdate);
   }
 
@@ -183,12 +203,14 @@ class ApiRepo implements Api {
   UserData? getUserData() => _authRepo.getUserData();
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 20}) {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords(
+      {int page = 1, int limit = 20}) {
     return _logRecordsRepo.getLogbookRecords(page: page, limit: limit);
   }
 
   @override
-  Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) {
+  Future<ApiResult<UsersResponseModel>> getUsers(
+      {Map<String, dynamic>? queryParams}) {
     return _userRepo.getUsers(queryParams: queryParams);
   }
 
@@ -247,12 +269,14 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) {
+  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId,
+      {String? form}) {
     return _logRecordsRepo.createLogRecord(geofenceId);
   }
 
   @override
-  Stream<List<LogbookEntry>> get logbookRecordsStream => _logRecordsRepo.logbookRecordsStream;
+  Stream<List<LogbookEntry>> get logbookRecordsStream =>
+      _logRecordsRepo.logbookRecordsStream;
 
   // @override
   // Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId) {
@@ -260,14 +284,16 @@ class ApiRepo implements Api {
   // }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId}) {
+  Future<ApiResult<LogbookEntry>> udpateForm(
+      String geofenceId, Map<String, dynamic> form,
+      {int? logId}) {
     return _logRecordsRepo.udpateForm(geofenceId, form, logId: logId);
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId, {bool isExiting = false, String? form}) {
+  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId,
+      {bool isExiting = false, String? form}) {
     return _logRecordsRepo.logBookEntry(
-      // pic,
       geofenceId,
       isExiting: isExiting,
       form: form,
@@ -295,7 +321,8 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<List<UserData>>> sendEmergencyNotification({required List<int> ids}) async {
+  Future<ApiResult<List<UserData>>> sendEmergencyNotification(
+      {required List<int> ids}) async {
     return _functionsRepo.sendEmergencyNotification(ids: ids);
   }
 
@@ -311,8 +338,10 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<Uint8List> downloadPdf(String url, {void Function(int, int)? onReceiveProgress}) {
-    return _functionsRepo.downloadPdf(url, onReceiveProgress: onReceiveProgress);
+  Future<Uint8List> downloadPdf(String url,
+      {void Function(int, int)? onReceiveProgress}) {
+    return _functionsRepo.downloadPdf(url,
+        onReceiveProgress: onReceiveProgress);
   }
 
   @override
@@ -371,8 +400,10 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<Uint8List>> submitForm(CvdForm cvdForm, {ProgressCallback? onReceiveProgress}) {
-    return _cvdFormsRepo.submitForm(cvdForm, onReceiveProgress: onReceiveProgress);
+  Future<ApiResult<File>> submitCvdForm(CvdForm cvdForm,
+      {ProgressCallback? onReceiveProgress}) {
+    return _cvdFormsRepo.submitCvdForm(cvdForm,
+        onReceiveProgress: onReceiveProgress);
   }
 
   @override
@@ -414,7 +445,8 @@ class ApiRepo implements Api {
   bool get hasPolygons => _geofencesRepo.hasPolygons;
 
   @override
-  Future<ApiResult<String>> notifyManager(String lat, String lng, String locationId) {
+  Future<ApiResult<String>> notifyManager(
+      String lat, String lng, String locationId) {
     return _geofencesRepo.notifyManager(lat, lng, locationId);
   }
 
@@ -422,7 +454,8 @@ class ApiRepo implements Api {
   Stream<List<PolygonModel>> get polygonStream => _geofencesRepo.polygonStream;
 
   @override
-  Future<List<PolygonModel>> get polygonsCompleter => _geofencesRepo.polygonsCompleter;
+  Future<List<PolygonModel>> get polygonsCompleter =>
+      _geofencesRepo.polygonsCompleter;
 
   @override
   Future<void> saveAllPolygon(List<PolygonModel> polygons) {
@@ -438,22 +471,40 @@ class ApiRepo implements Api {
   Future<ApiResult> updatePolygon(PolygonModel model) {
     return _geofencesRepo.updatePolygon(model);
   }
-  
+
   @override
   Future<void> previousZoneExitDateChecker() {
-   return _logRecordsRepo.previousZoneExitDateChecker();
+    return _logRecordsRepo.previousZoneExitDateChecker();
   }
-  
+
   @override
-  List<PolygonModel> get polygons =>  _geofencesRepo.polygons;
-  
+  List<PolygonModel> get polygons => _geofencesRepo.polygons;
+
   @override
   Future<ApiResult<UserData>> temporaryOwner(TemporaryOwnerParams params) {
     return _geofencesRepo.temporaryOwner(params);
   }
-  
+
   @override
   Future<ApiResult<bool>> removeTemporaryOwner(TemporaryOwnerParams params) {
     return _geofencesRepo.removeTemporaryOwner(params);
+  }
+
+  @override
+  Future<ApiResult<String>> createStripeSession() {
+    return _paymentRepo.createStripeSession();
+  }
+
+  @override
+  List<CvdForm> get cvdForms => _cvdFormsRepo.cvdForms;
+
+  @override
+  Stream<List<CvdForm>> get cvdFormsStream => _cvdFormsRepo.cvdFormsStream;
+
+  @override
+  Future<ApiResult<bool>> uploadCvdForm(CvdForm file, String? pic,
+      {ProgressCallback? onReceiveProgress, ProgressCallback? onSendProgress}) {
+    return _cvdFormsRepo.uploadCvdForm(file, pic,
+        onReceiveProgress: onReceiveProgress, onSendProgress: onSendProgress);
   }
 }

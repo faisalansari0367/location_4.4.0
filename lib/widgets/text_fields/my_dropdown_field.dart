@@ -1,10 +1,9 @@
+import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
+import 'package:bioplus/widgets/text_fields/my_text_field.dart';
+import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../bottom_sheet/bottom_sheet_service.dart';
-import 'focus_nodes/always_disabled_focus_node.dart';
-import 'my_text_field.dart';
-import 'text_formatters/input_formatters.dart';
 
 class MyDropdownField extends StatefulWidget {
   final String hintText;
@@ -57,7 +56,6 @@ class _MyDropdownFieldState extends State<MyDropdownField> {
           maxChildSize: 0.9,
           expand: false,
           minChildSize: 0.2,
-          initialChildSize: 0.5,
           builder: (context, scrollController) {
             return Options(
               controller: scrollController,
@@ -123,12 +121,12 @@ class Options extends StatelessWidget {
   final ScrollController controller;
 
   const Options({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.items = const [],
     this.hintText,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

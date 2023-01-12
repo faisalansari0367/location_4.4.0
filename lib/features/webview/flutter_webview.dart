@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -56,7 +57,29 @@ class WebviewState extends State<Webview> {
             onPageStarted: onPageStarted,
             onPageFinished: onPageFinished,
             navigationDelegate: (NavigationRequest request) {
-              if (request.url.startsWith('https:')) {}
+              if (request.url.startsWith('https:')) {
+                final success = request.url == 'https://google.com/';
+                final error = request.url == 'https://youtube.com/';
+                if (success) {
+                  Get.back();
+                  DialogService.showDialog(
+                    child: SuccessDialog(
+                      onTap: Get.back,
+                      message: 'Payment Successful',
+                    ),
+                  );
+                }
+
+                if (error) {
+                  Get.back();
+                  DialogService.showDialog(
+                    child: SuccessDialog(
+                      onTap: Get.back,
+                      message: 'Payment Failed',
+                    ),
+                  );
+                }
+              }
               print('allowing navigation to $request');
               return NavigationDecision.navigate;
             },

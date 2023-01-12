@@ -24,6 +24,8 @@
 			"args": [
 				"build",
 				"appbundle",
+				"--obfuscate",
+				"--split-debug-info=build/bioplus",
 				"--target=lib/main_prod.dart"
 			],
 			"problemMatcher": [],

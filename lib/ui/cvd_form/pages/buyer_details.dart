@@ -1,5 +1,9 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/helpers/validator.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
+// import '../models/buyer_details_model.dart';
+import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
+import 'package:bioplus/ui/cvd_form/widgets/cvd_textfield.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:bioplus/widgets/widgets.dart';
@@ -9,14 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../cubit/cvd_cubit.dart';
-// import '../models/buyer_details_model.dart';
-import '../widgets/common_buttons.dart';
-import '../widgets/cvd_textfield.dart';
-
 class BuyerDetails extends StatefulWidget {
   final BuyerDetailsModel buyerDetails;
-  const BuyerDetails({Key? key, required this.buyerDetails}) : super(key: key);
+  const BuyerDetails({super.key, required this.buyerDetails});
 
   @override
   State<BuyerDetails> createState() => _BuyerDetailsState();
@@ -70,7 +69,8 @@ class _BuyerDetailsState extends State<BuyerDetails> {
                 onChanged: (value) => buyerDetails.town?.value = value,
               ),
               PhoneTextField(
-                controller: TextEditingController(text: buyerDetails.tel?.value),
+                controller:
+                    TextEditingController(text: buyerDetails.tel?.value),
                 onChanged: (phone, s) => buyerDetails.tel?.value = phone,
               ),
               CvdTextField(
@@ -80,7 +80,8 @@ class _BuyerDetailsState extends State<BuyerDetails> {
                 onChanged: (value) => buyerDetails.fax?.value = value,
               ),
               EmailField(
-                controller: TextEditingController(text: buyerDetails.email?.value),
+                controller:
+                    TextEditingController(text: buyerDetails.email?.value),
                 // value: vendorDetails.email?.value,
                 onChanged: (value) => buyerDetails.email?.value = value,
               ),
@@ -94,7 +95,11 @@ class _BuyerDetailsState extends State<BuyerDetails> {
                 inputFormatters: [CapitalizeAllInputFormatter()],
                 maxLength: 8,
                 // validator: Validator.pic,
-                validator: Validator.none,
+                validator: (value) {
+                  return (value?.isEmpty ?? true)
+                      ? Validator.none(value)
+                      : Validator.pic(value);
+                },
 
                 name: buyerDetails.pic!.label!,
                 value: buyerDetails.pic?.value,

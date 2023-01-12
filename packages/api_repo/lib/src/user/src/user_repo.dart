@@ -1,6 +1,5 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
-import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 
 // import '../../../api_result/api_result.dart';
@@ -16,7 +15,8 @@ abstract class UserRepo {
   Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data);
   Future<ApiResult<Map<String, dynamic>>> getRoleData(String role);
   // Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
-  Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams});
+  Future<ApiResult<UsersResponseModel>> getUsers(
+      {Map<String, dynamic>? queryParams});
   Future<ApiResult<List<String>>> getFormQuestions();
   Future<ApiResult<UserSpecies>> getUserSpecies();
   Future<ApiResult<UserFormsData>> getUserForms();
@@ -33,7 +33,8 @@ class UserRepoImpl extends UserRepo {
   final Client client;
   final StorageService storage;
 
-  UserRepoImpl({required this.client, required Box box}) : storage = StorageService(box: box);
+  UserRepoImpl({required this.client, required Box box})
+      : storage = StorageService(box: box);
 
   @override
   Future<ApiResult<List<UserRoles>>> getUserRoles() async {
@@ -65,9 +66,16 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<void>> updateRole(String role, Map<String, dynamic> data) async {
+  Future<ApiResult<void>> updateRole(
+      String role, Map<String, dynamic> data) async {
     try {
-      final result = await client.patch(Endpoints.updateMe, data: data);
+      final result = await client.patch(
+        Endpoints.updateMe,
+        data: data,
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
+      );
       final model = UserData.fromJson(result.data['data']);
       await storage.setUserData(model);
       // storage.setRoleData(role, data);
@@ -104,9 +112,11 @@ class UserRepoImpl extends UserRepo {
   // }
 
   @override
-  Future<ApiResult<UsersResponseModel>> getUsers({Map<String, dynamic>? queryParams}) async {
+  Future<ApiResult<UsersResponseModel>> getUsers(
+      {Map<String, dynamic>? queryParams}) async {
     try {
-      final result = await client.get(Endpoints.users, queryParameters: queryParams);
+      final result =
+          await client.get(Endpoints.users, queryParameters: queryParams);
       final data = UsersResponseModel.fromJson(result.data['data']);
       return ApiResult.success(data: data);
     } catch (e) {
@@ -207,7 +217,8 @@ class UserRepoImpl extends UserRepo {
   @override
   Future<ApiResult<String>> deleteUser({int? userId}) async {
     try {
-      final result = await client.delete(Endpoints.deleteUser, data: {'id': userId});
+      final result =
+          await client.delete(Endpoints.deleteUser, data: {'id': userId});
       final model = result.data['data'];
       return ApiResult.success(data: model);
     } catch (e) {

@@ -1,7 +1,9 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:bioplus/ui/cvd_form/widgets/add_fields.dart';
 import 'package:bioplus/ui/cvd_form/widgets/add_table_entries.dart';
+import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
 import 'package:bioplus/ui/cvd_form/widgets/cvd_textfield.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
@@ -12,12 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../cubit/cvd_cubit.dart';
-import 'common_buttons.dart';
-
 class ChemicalUse extends StatefulWidget {
   final ChemicalUseDetailsModel chemicalUseDetailsModel;
-  const ChemicalUse({Key? key, required this.chemicalUseDetailsModel}) : super(key: key);
+  const ChemicalUse({super.key, required this.chemicalUseDetailsModel});
 
   @override
   State<ChemicalUse> createState() => _ChemicalUseState();
@@ -62,33 +61,37 @@ class _ChemicalUseState extends State<ChemicalUse> {
             fieldData: form!.chemicalCheck!,
             onChanged: (v) {
               if (v ?? false) {
-                BottomSheetService.showSheet(child: AddTableEntries(
-                  onChanged: (value) {
-                    // tableData.add(value);
-                    tableData.insert(0, value);
-                    widget.chemicalUseDetailsModel.chemicalTable = tableData;
-                    setState(() {});
-                  },
-                ));
+                BottomSheetService.showSheet(
+                  child: AddTableEntries(
+                    onChanged: (value) {
+                      // tableData.add(value);
+                      tableData.insert(0, value);
+                      widget.chemicalUseDetailsModel.chemicalTable = tableData;
+                      setState(() {});
+                    },
+                  ),
+                );
               }
             },
             children: [
               // _table(),
               SingleChildScrollView(
-                child: _dataTable(),
                 scrollDirection: Axis.horizontal,
+                child: _dataTable(),
               ),
               Gap(10.h),
               ElevatedButton(
                 onPressed: () {
-                  BottomSheetService.showSheet(child: AddTableEntries(
-                    onChanged: (value) {
-                      tableData.add(value);
-                      setState(() {});
-                    },
-                  ));
+                  BottomSheetService.showSheet(
+                    child: AddTableEntries(
+                      onChanged: (value) {
+                        tableData.add(value);
+                        setState(() {});
+                      },
+                    ),
+                  );
                 },
-                child: Text(
+                child: const Text(
                   'Add Another Product',
                   textAlign: TextAlign.right,
                   style: TextStyle(
@@ -98,7 +101,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
               ),
             ],
           ),
-          Divider(
+          const Divider(
             color: Colors.grey,
             height: 2,
           ),
@@ -133,15 +136,21 @@ class _ChemicalUseState extends State<ChemicalUse> {
             value: form?.cropList?.value,
             field: form?.cropList?.field ?? '',
             onChanged: (list) {
-              form?.cropList?.value = list.join();
+              final cropList = list.map((e) => e.trim().capitalize!).join(',');
+              print(cropList);
+              form?.cropList?.value = cropList;
             },
           ),
           _QuestionWithCheckbox(
             questionNo: '8',
             fieldData: form!.riskCheck!,
             children: [
-              Divider(),
-              _resultsBox(context, 'Risk Assesment Results', cubit.riskAssesment),
+              const Divider(),
+              _resultsBox(
+                context,
+                'Risk Assesment Results',
+                cubit.riskAssesment,
+              ),
             ],
             onChanged: (value) {
               if (form!.riskCheck!.value == '1') {
@@ -160,33 +169,37 @@ class _ChemicalUseState extends State<ChemicalUse> {
             fieldData: form!.nataCheck!,
             onChanged: (s) {
               if (form!.nataCheck!.value == '1') {
-                _enterTextPopup((s) {
-                  // cubit.testResults = s;
-                  cubit.setTestResults(s);
-                  setState(() {});
-                }, 'Enter Test Results');
+                _enterTextPopup(
+                  (s) {
+                    // cubit.testResults = s;
+                    cubit.setTestResults(s);
+                    setState(() {});
+                  },
+                  'Enter Test Results',
+                );
               }
             },
             children: [
-              Divider(),
+              const Divider(),
               _resultsBox(context, 'Test Results', cubit.testResults),
             ],
           ),
           CommonButtons(
             onContinue: () {
-              final _form = form!.toJson();
+              final jsonForm = form!.toJson();
 
               final cubit = context.read<CvdCubit>();
-              for (var value in _form.values) {
+              for (final value in jsonForm.values) {
                 if (value is Map) {
-                  // value['key']
-                  print(value['value']);
                   if (value['value'] == null) {
                     DialogService.error('Please fill the ${value['field']}');
                     return;
                   }
-                  if ([form!.cropList?.key, form!.qaProgram?.key, form!.certificateNumber?.key]
-                      .contains(value['key'])) {
+                  if ([
+                    form!.cropList?.key,
+                    form!.qaProgram?.key,
+                    form!.certificateNumber?.key
+                  ].contains(value['key'])) {
                     cubit.moveToNext();
                     return;
                   }
@@ -257,7 +270,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
         // width: 25.width,
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.bold,
           ),
@@ -281,7 +294,7 @@ class _ChemicalUseState extends State<ChemicalUse> {
         DataCell(
           IconButton(
             color: Colors.red,
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () {
               tableData.remove(e);
               setState(() {});
@@ -294,15 +307,17 @@ class _ChemicalUseState extends State<ChemicalUse> {
 
   Container _resultsBox(BuildContext context, String text, String value) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       width: double.infinity,
-      decoration: MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
+      decoration:
+          MyDecoration.decoration(shadow: false).copyWith(border: Border.all()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             text,
-            style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: context.textTheme.bodyMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             value,
@@ -332,12 +347,11 @@ class _QuestionWithCheckbox extends StatefulWidget {
   final List<Widget> children;
 
   const _QuestionWithCheckbox({
-    Key? key,
     required this.questionNo,
     required this.fieldData,
     this.onChanged,
     this.children = const [],
-  }) : super(key: key);
+  });
 
   @override
   State<_QuestionWithCheckbox> createState() => _QuestionWithCheckboxState();
@@ -439,7 +453,7 @@ class _EnterResultsState extends State<_EnterResults> {
             TextFormField(
               decoration: InputDecoration(
                 labelText: widget.hint,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               maxLines: 10,
               minLines: 3,

@@ -69,11 +69,13 @@ class UserData {
   String? msaNumber;
   String? nfasAccreditationNumber;
   String? countryOfResidency;
-  DateTime? delegationStartDate;
-  DateTime? delegationEndDate;
+  String? employerCompany;
   String? temporaryOwner;
 
+  DateTime? delegationStartDate;
+  DateTime? delegationEndDate;
   List<String> allowedRoles = const [];
+  List<String> species = const <String>[];
   List<String> cvdForms = const [];
 
   String? registrationToken;
@@ -81,6 +83,8 @@ class UserData {
   UserStatus? status;
 
   UserData({
+    this.species = const <String>[],
+    this.employerCompany,
     this.temporaryOwner,
     this.delegationEndDate,
     this.delegationStartDate,
@@ -143,6 +147,8 @@ class UserData {
   });
 
   UserData.fromJson(Map<String, dynamic> json) {
+    species = List<String>.from(json['species'] ?? []);
+    employerCompany = json['employerCompany'] ?? '';
     temporaryOwner = json['temporaryOwner'];
     allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
     countryOfResidency = json['countryOfResidency'];
@@ -224,19 +230,21 @@ class UserData {
   }
 
   static UserStatus getStatus(String? status) {
-    final result = UserStatus.values.where((element) => element.name == (status ?? 'inactive').toLowerCase());
+    final result = UserStatus.values.where(
+        (element) => element.name == (status ?? 'inactive').toLowerCase());
     if (result.isEmpty) return UserStatus.inactive;
     return result.first;
   }
 
   String get fullName => '$firstName $lastName';
-  bool get isTemporaryOwner => temporaryOwner != null && temporaryOwner!.isNotEmpty;
+  bool get isTemporaryOwner =>
+      temporaryOwner != null && temporaryOwner!.isNotEmpty;
 
   Map<String, dynamic> updateStatus() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['status'] =
-        status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
+    data['status'] = status!.name.replaceFirst(status!.name.characters.first,
+        status!.name.characters.first.toUpperCase());
     return data;
   }
 
@@ -248,10 +256,13 @@ class UserData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['species'] = List<String>.from(species);
+    data['employerCompany'] = employerCompany;
     data['allowedRoles'] = allowedRoles;
     data['status'] = status == null
         ? null
-        : status!.name.replaceFirst(status!.name.characters.first, status!.name.characters.first.toUpperCase());
+        : status!.name.replaceFirst(status!.name.characters.first,
+            status!.name.characters.first.toUpperCase());
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['countryOfResidency'] = countryOfResidency;
@@ -350,7 +361,8 @@ class UserData {
       company: other.company ?? company,
       picVisiting: other.picVisiting ?? picVisiting,
       reason: other.reason ?? reason,
-      worksafeQuestionsForm: other.worksafeQuestionsForm ?? worksafeQuestionsForm,
+      worksafeQuestionsForm:
+          other.worksafeQuestionsForm ?? worksafeQuestionsForm,
       countryOfOrigin: other.countryOfOrigin ?? countryOfOrigin,
       countryVisiting: other.countryVisiting ?? countryVisiting,
       entryDate: other.entryDate ?? entryDate,

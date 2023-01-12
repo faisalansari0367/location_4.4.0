@@ -1,14 +1,13 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:cvd_forms/cvd_forms.dart';
-import 'package:cvd_forms/models/src/cvd_form.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:open_file_safe/open_file_safe.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'cvd_state.dart';
 
@@ -28,13 +27,11 @@ class CvdCubit extends Cubit<CvdState> {
     emit(state.copyWith(isLoading: true));
     cvdFormsRepo = context.read<Api>();
 
-    CvdForm? cvdForm = cvdFormsRepo.getCurrentForm();
-    if (cvdForm != null) {
-      cvdForm = cvdForm;
-    } else {
-      cvdForm = await CvdForm.init(context);
-    }
+    final CvdForm? currentForm = cvdFormsRepo.getCurrentForm();
+    cvdForm = currentForm ?? await CvdForm.init(context);
+
     emit(state.copyWith(isLoading: false));
+    listenToScrollPosition();
   }
 
   VendorDetailsModel get vendorDetailsModel => cvdForm.vendorDetails!;
@@ -120,16 +117,20 @@ class CvdCubit extends Cubit<CvdState> {
     false,
     false,
     false,
-    false,
+    false
   ];
 
-  void changeCurrent(int step, {bool isNext = false, bool isPrevious = false}) {
-    late int _step = step;
+  void changeCurrent(
+    int currentStep, {
+    bool isNext = false,
+    bool isPrevious = false,
+  }) {
+    late int step = currentStep;
 
     if (isNext) {
-      _step = state.currentStep + 1;
+      step = state.currentStep + 1;
     } else if (isPrevious) {
-      _step = state.currentStep - 1;
+      step = state.currentStep - 1;
     }
     stepCompleted[step] = true;
     emit(state.copyWith(currentStep: step));
@@ -147,12 +148,25 @@ class CvdCubit extends Cubit<CvdState> {
       duration: 500.milliseconds,
     );
     if (page > 1) {
-      stepController.animateTo(
-        (90 * page).toDouble(),
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+      centerStep(page);
     }
+  }
+
+  Future<void> centerStep(int step) {
+    final stepSize = stepController.position.maxScrollExtent / 2;
+    // final currentScrollExtent = stepController.offset;
+
+    return stepController.animateTo(
+      100.0 * step,
+      duration: const Duration(milliseconds: 500),
+      curve: kCurve,
+    );
+  }
+
+  void listenToScrollPosition() {
+    stepController.addListener(() {
+      print(stepController.offset);
+    });
   }
 
   Future<void> saveFormData() async =>
@@ -165,11 +179,7 @@ class CvdCubit extends Cubit<CvdState> {
       }
     }
     if (page > 1) {
-      stepController.animateTo(
-        (90 * page).toDouble(),
-        duration: const Duration(milliseconds: 500),
-        curve: kCurve,
-      );
+      centerStep(page);
     }
 
     emit(state.copyWith(currentStep: page));
@@ -181,13 +191,24 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   Future<void> submitForm() async {
-    final result = await cvdFormsRepo.submitForm(cvdForm);
+    final permission = await Permission.storage.request();
+    if (!permission.isGranted) {
+      DialogService.error(
+        'Storage permission is required to save the form',
+      );
+      return;
+    }
+
+    final result = await cvdFormsRepo.submitCvdForm(cvdForm);
     result.when(
       success: (data) async {
-        final formsService = FormsStorageService(api);
-        final file = await formsService.saveCvdForm(
-            data, cvdForm.buyerDetailsModel?.name?.value ?? '');
-        OpenFile.open(file.path);
+        // final formsService = FormsStorageService(api);
+        // final file = await formsService.saveCvdForm(
+        //   data,
+        //   cvdForm.buyerDetailsModel?.name?.value ?? '',
+        // );
+        // cvdFormsRepo.addCvdForm(cvdForm.copyWith(filePath: file.path));
+        await OpenFile.open(data.path);
         Get.close(2);
       },
       failure: (e) async {

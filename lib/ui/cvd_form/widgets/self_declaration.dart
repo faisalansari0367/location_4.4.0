@@ -1,16 +1,15 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../constants/index.dart';
-import '../../../widgets/dialogs/dialogs.dart';
-
 class SelfDeclaration extends StatefulWidget {
-  const SelfDeclaration({Key? key}) : super(key: key);
+  const SelfDeclaration({super.key});
 
   @override
   State<SelfDeclaration> createState() => _SelfDeclarationState();
@@ -31,7 +30,8 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
 
   @override
   void initState() {
-    orgController = TextEditingController(text: context.read<Api>().getUserData()?.company);
+    orgController =
+        TextEditingController(text: context.read<Api>().getUserData()?.company);
     context.read<CvdCubit>().setOrgName(orgController.text);
     nameController = TextEditingController(text: getName());
     // _init();
@@ -99,9 +99,17 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                   style: style,
                   text: 'I ',
                   children: [
-                    TextSpan(text: nameController.text.isEmpty ? '____' : nameController.text),
+                    TextSpan(
+                      text: nameController.text.isEmpty
+                          ? '____'
+                          : nameController.text,
+                    ),
                     const TextSpan(text: ' of '),
-                    TextSpan(text: orgController.text.isEmpty ? '____' : orgController.text),
+                    TextSpan(
+                      text: orgController.text.isEmpty
+                          ? '____'
+                          : orgController.text,
+                    ),
                     const TextSpan(text: ' declare that:'),
                   ],
                 ),
@@ -136,14 +144,17 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
                       ),
                     ],
                   );
-                }).toList(),
+                }),
               ],
             ),
             Gap(20.h),
             SignatureWidget(
               signature: context.read<CvdCubit>().signature,
               onChanged: (s) {
-                context.read<CvdCubit>().setSignature(s);
+                final read = context.read<CvdCubit>();
+                read.setSignature(s);
+                // read.centerStep();
+
                 setState(() {});
               },
             ),

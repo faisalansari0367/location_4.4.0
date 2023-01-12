@@ -2,14 +2,13 @@ import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
+import 'package:bioplus/services/notifications/push_notifications.dart';
+import 'package:bioplus/ui/role_details/view/role_details_page.dart';
+import 'package:bioplus/ui/select_role/cubit/select_role_state.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
-
-import '../../../services/notifications/push_notifications.dart';
-import '../../../widgets/dialogs/dialog_service.dart';
-import '../../role_details/view/role_details_page.dart';
-import 'select_role_state.dart';
 
 export 'select_role_state.dart';
 
@@ -20,8 +19,12 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
   final LocalApi localApi;
   final VoidCallback? onRoleUpdated;
   final PushNotificationService pushNotificationService;
-  SelectRoleCubit(this.api, this.localApi, this.pushNotificationService, {this.onRoleUpdated})
-      : super(
+  SelectRoleCubit(
+    this.api,
+    this.localApi,
+    this.pushNotificationService, {
+    this.onRoleUpdated,
+  }) : super(
           SelectRoleState(
             user: api.getUser() ?? User(),
           ),
@@ -49,27 +52,30 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     // Get.to(() => RoleDetailsPage(role: role));
     // final user = state.user;
 
-    final user = apiService.getUser()!;
+    // final user = apiService.getUser()!;
 
-    if (user.role == 'Admin') {
-      Get.to(() => RoleDetailsPage(userRole: userRole));
-      return;
-    }
+    Get.to(() => RoleDetailsPage(userRole: userRole));
+    return;
+    // if (user.role == 'Admin') {
+    //   return;
+    // }
 
-    user.role = userRole.role;
-    // user.registerationToken = await pushNotificationService.getFCMtoken();
-    final result = await apiService.updateMe(user: user);
-    result.when(
-      success: (data) => Get.to(() => RoleDetailsPage(userRole: userRole)),
-      failure: (error) => DialogService.failure(error: error),
-    );
+    // user.role = userRole.role;
+    // // user.registerationToken = await pushNotificationService.getFCMtoken();
+    // final result = await apiService.updateMe(user: user);
+    // result.when(
+    //   success: (data) => Get.to(() => RoleDetailsPage(userRole: userRole)),
+    //   failure: (error) => DialogService.failure(error: error),
+    // );
   }
 
   Future<void> getRoles() async {
     emit(state.copyWith(isLoading: state.roles.isEmpty));
     try {
       await 200.milliseconds.delay();
-      final result = await (state.isConnected ? apiService.getUserRoles() : localApi.getUserRoles());
+      final result = await (state.isConnected
+          ? apiService.getUserRoles()
+          : localApi.getUserRoles());
       // apiService.userRolesStream.listen((event) {
       //   emit(state.copyWith(isLoading: false, roles: event));
       // });

@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/select_role/cubit/select_role_cubit.dart';
+import 'package:bioplus/ui/select_role/view/payment_view.dart';
 import 'package:bioplus/ui/select_roles_registration/view/select_roles_registration_page.dart';
 import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -8,13 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// import 'package:get/get.dart';
-
-import '../cubit/select_role_cubit.dart';
-
 class SelectRoleView extends StatelessWidget {
   final bool showBackArrow;
-  const SelectRoleView({Key? key, this.showBackArrow = false}) : super(key: key);
+  const SelectRoleView({super.key, this.showBackArrow = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +23,8 @@ class SelectRoleView extends StatelessWidget {
         // elevation: 2,
         showBackButton: showBackArrow,
         title: BlocBuilder<SelectRoleCubit, SelectRoleState>(
-          builder: (context, state) {
-            return Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}');
-          },
+          builder: (context, state) =>
+              Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}'),
         ),
         // actions: [
         //   InkWell(
@@ -49,6 +46,21 @@ class SelectRoleView extends StatelessWidget {
         //   Gap(10.w),
         // ],
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.payment),
+      //   onPressed: () async {
+      //     Get.to(() => const BuyServiceRoleView(serviceRole: 'Producer'));
+      //     // final result = await context.read<Api>().createStripeSession();
+      //     // result.when(
+      //     //   success: (data) {
+      //     //     Get.to(
+      //     //       () => Webview(url: data),
+      //     //     );
+      //     //   },
+      //     //   failure: (e) => DialogService.failure(error: e),
+      //     // );
+      //   },
+      // ),
       body: Container(
         color: context.theme.backgroundColor,
         padding: kPadding,

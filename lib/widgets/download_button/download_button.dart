@@ -1,16 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/widgets/download_button/download_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'download_controller.dart';
 
 class DownloadButton extends StatelessWidget {
   final DownloadController controller;
   final EdgeInsets? padding;
   final String? buttonText;
-  const DownloadButton({super.key, required this.controller, this.buttonText, this.padding});
+  const DownloadButton({
+    super.key,
+    required this.controller,
+    this.buttonText,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +162,7 @@ class ButtonShapeWidget extends StatelessWidget {
       decoration: shape,
       child: Container(
         // margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-        padding: padding ?? const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
+        padding: padding ?? const EdgeInsets.symmetric(vertical: 6),
 
         child: AnimatedOpacity(
           duration: transitionDuration,
@@ -202,9 +205,14 @@ class ProgressIndicatorWidget extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         builder: (context, progress, child) {
           return CircularProgressIndicator(
-            backgroundColor: isDownloading ? CupertinoColors.lightBackgroundGray : Colors.white.withOpacity(0),
-            valueColor:
-                AlwaysStoppedAnimation(isFetching ? CupertinoColors.lightBackgroundGray : CupertinoColors.activeBlue),
+            backgroundColor: isDownloading
+                ? CupertinoColors.lightBackgroundGray
+                : Colors.white.withOpacity(0),
+            valueColor: AlwaysStoppedAnimation(
+              isFetching
+                  ? CupertinoColors.lightBackgroundGray
+                  : CupertinoColors.activeBlue,
+            ),
             strokeWidth: 2,
             value: isFetching ? null : progress,
           );

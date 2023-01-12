@@ -33,7 +33,7 @@ class CvdFormUtils {
     return cvdForm;
   }
 
-  Future<Map<String, dynamic>> loadJson(String path) async {
+  static Future<dynamic> loadJson(String path) async {
     // /assets/json/buyer_details.json
     try {
       final data = await rootBundle.loadString("packages/cvd_forms/$path");
@@ -72,7 +72,15 @@ class CvdFormUtils {
 
   Future<ProductIntegrityDetailsModel> _fetchPartIntegrityDetailsModel() async {
     final data = await loadJson('assets/json/part_integrity_form.json');
-    final productIntegrityDetailsModel = ProductIntegrityDetailsModel.fromJson(data['data']);
+    final productIntegrityDetailsModel =
+        ProductIntegrityDetailsModel.fromJson(data['data']);
     return productIntegrityDetailsModel;
+  }
+
+  static Future<List<WitholdingPeriodModel>> fetchWitholdingPeriods() async {
+    final data = await loadJson('assets/json/witholding_periods.json');
+    final list =
+        (data as List).map((e) => WitholdingPeriodModel.fromJson(e)).toList();
+    return list;
   }
 }
