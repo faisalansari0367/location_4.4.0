@@ -17,4 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 
 // mason feature brick command
-mason make feature_brick --feature_name work_safety --state_management cubit
+mason make feature_brick --feature_name payment_sheet --state_management provider

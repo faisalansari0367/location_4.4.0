@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/select_role/cubit/select_role_cubit.dart';
-import 'package:bioplus/ui/select_role/view/payment_view.dart';
 import 'package:bioplus/ui/select_roles_registration/view/select_roles_registration_page.dart';
 import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -85,9 +84,13 @@ class SelectRoleView extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) => MyListTile(
                           text: state.roles[index].role,
-                          onTap: () async => cubit.updateRole(
-                            state.roles[index],
-                          ),
+                          onTap: () async {
+                            // Get.to(() => const PaymentSheetPage());
+                            // BottomSheetService.showSheet(
+                            //   child: const PaymentSheetPage(),
+                            // );
+                            cubit.updateRole(state.roles[index]);
+                          },
                         ),
                         data: state.roles,
                         onRetry: cubit.getRoles,
@@ -140,6 +143,7 @@ class SelectRoleView extends StatelessWidget {
                     onRoleUpdated: () {
                       Get.back();
                       context.read<SelectRoleCubit>().getRoles();
+                      // Get.to(page)
                     },
                   ),
                 );

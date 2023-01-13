@@ -18,13 +18,13 @@ class GeofencesList extends StatefulWidget {
   final bool Function(PolygonModel model)? isSelected;
   final bool showCloseButton;
   const GeofencesList({
-    Key? key,
+    super.key,
     this.controller,
     required this.onSelected,
     this.isSelected,
     this.showCloseButton = true,
     this.emptyScreen,
-  }) : super(key: key);
+  });
 
   @override
   State<GeofencesList> createState() => _GeofencesListState();
@@ -68,7 +68,10 @@ class _GeofencesListState extends State<GeofencesList> {
                     child: MyListview(
                       data: snapshot.data ?? [],
                       emptyWidget: widget.emptyScreen ?? _emptyWidget(),
-                      padding: EdgeInsets.symmetric(horizontal: kPadding.left, vertical: 5.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: kPadding.left,
+                        vertical: 5.h,
+                      ),
                       controller: widget.controller,
                       itemBuilder: (context, index) {
                         final fence = snapshot.data![index];
@@ -91,7 +94,7 @@ class _GeofencesListState extends State<GeofencesList> {
   }
 
   Center _emptyWidget() {
-    return Center(
+    return const Center(
       child: EmptyScreen(
         message: 'You have not created any geofences',
         messsageOnTop: true,
