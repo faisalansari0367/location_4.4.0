@@ -35,7 +35,7 @@ class GeolocatorService {
   }
 
   static Future<bool> openLocationSettings() async {
-    return await instance.openLocationSettings();
+    return  instance.openLocationSettings();
   }
 
   static Future<bool> locationPermission() async {

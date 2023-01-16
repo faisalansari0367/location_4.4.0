@@ -1,23 +1,26 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-enum UserStatus { active, inactive, delete }
+enum UserStatus { active, inactive, delete, unknown }
 
 extension UserStatusExt on UserStatus {
   Color get color {
     switch (this) {
       case UserStatus.active:
         return Colors.teal;
-
       case UserStatus.inactive:
         return Colors.orange;
       case UserStatus.delete:
         return Colors.red;
+      case UserStatus.unknown:
+        return Colors.grey;
     }
   }
 }
 
 class UserData {
+  int? postcode;
+  int? id;
   String? firstName;
   String? lastName;
   String? email;
@@ -29,8 +32,6 @@ class UserData {
   String? state;
   String? street;
   String? town;
-  int? postcode;
-  int? id;
   String? signature;
   String? logOn;
   String? employeeNumber;
@@ -59,8 +60,6 @@ class UserData {
   String? eventName;
   String? contactEmail;
   String? contactNumber;
-  DateTime? startDate;
-  DateTime? endDate;
   String? edec;
   String? lpaPassword;
   String? lpaUsername;
@@ -72,14 +71,18 @@ class UserData {
   String? employerCompany;
   String? temporaryOwner;
 
+  DateTime? startDate;
+  DateTime? endDate;
   DateTime? delegationStartDate;
   DateTime? delegationEndDate;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
   List<String> allowedRoles = const [];
   List<String> species = const <String>[];
   List<String> cvdForms = const [];
 
   String? registrationToken;
-  DateTime? createdAt, updatedAt;
   UserStatus? status;
 
   UserData({

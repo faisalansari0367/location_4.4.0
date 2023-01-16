@@ -1,13 +1,12 @@
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/ui/maps/location_service/geolocator_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
 
-class LocationPermissionDialog extends StatelessWidget {
+class WhileUsingAppPermission extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? buttonText;
-  const LocationPermissionDialog({super.key, this.onPressed, this.buttonText});
+
+  const WhileUsingAppPermission({super.key, this.onPressed, this.buttonText});
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +16,15 @@ class LocationPermissionDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Lottie.asset(
-              'assets/animations/precise_location.json',
-              height: 40.height,
+            Image.asset(
+              'assets/icons/map.png',
+              height: 20.height,
             ),
             Gap(40.h),
             // Spacer(),
             Text(
               // '${Strings.appName} Needs location permission to confirm what location you are entering. Please allow location permission to use this service.',
-              '${Strings.appName} collects background location data when the user selects “Allow all the time” in the app request permission, to enable registered geofences Entry and Exit data to be collected even when the app is closed or not in use. This background feature will also be used for Imminent Danger alerts and SOS Emergency notifications.',
+              '${Strings.appName} Needs access to your location to confirm what Geofence you are entering. Please allow location permission to use this service.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -34,17 +33,17 @@ class LocationPermissionDialog extends StatelessWidget {
             ),
             Gap(20.h),
             MyElevatedButton(
-              text: buttonText ?? 'Open Settings',
+              text: 'Continue',
               onPressed: () async {
                 if (onPressed != null) {
                   onPressed?.call();
                   return;
                 }
 
-                final result = await GeolocatorService.openLocationSettings();
-                if (result) {
-                  Get.back();
-                }
+                // final result = await GeolocatorService.openLocationSettings();
+                // if (result) {
+                //   Get.back();
+                // }
               },
             ),
           ],

@@ -1,7 +1,10 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/ui/select_role/payment_sheet/payment_sheet.dart';
+import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_get_started.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:flutter/material.dart';
 
 enum Subscriptions { monthly, yearly }
 
@@ -13,12 +16,23 @@ extension SubscriptionsExt on Subscriptions {
 class PaymentSheetNotifier extends BaseModel {
   final double monthlyPrice = 35.00;
   final double yearlyPrice = 350.00;
+  final PageController pageController = PageController();
 
-  bool _showPlanSelection = false;
+  final pages = const <Widget>[
+    PaymentGetStarted(),
+    PaymentSheetBody(),
+  ];
+
+  final bool _showPlanSelection = false;
   bool get showPlanSelection => _showPlanSelection;
 
   void setShowPlanSelection() {
-    _showPlanSelection = !_showPlanSelection;
+    pageController.animateToPage(
+      1,
+      duration: const Duration(milliseconds: 1000),
+      curve: kCurve,
+    );
+
     notifyListeners();
   }
 

@@ -1,6 +1,6 @@
 import 'package:bioplus/ui/select_role/payment_sheet/provider/provider.dart';
-import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_get_started.dart';
-import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_sheet_body.dart';
+import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_page_view.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 /// {@template payment_sheet_page}
@@ -19,10 +19,11 @@ class PaymentSheetPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => PaymentSheetNotifier(context),
-      child: const PaymentSheetBody(),
-      // child: const Scaffold(
-      //   body: PaymentSheetView(),
-      // ),
+      // child: const PaymentSheetBody(),
+      child: const Scaffold(
+        appBar: MyAppBar(),
+        body: PaymentSheetView(),
+      ),
     );
   }
 }
@@ -36,6 +37,6 @@ class PaymentSheetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PaymentSheetBody();
+    return const PaymentPageView();
   }
 }

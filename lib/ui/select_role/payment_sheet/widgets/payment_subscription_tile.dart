@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/select_role/payment_sheet/provider/payment_sheet_provider.dart';
@@ -24,8 +23,11 @@ class PaymentSubscriptionTile extends StatelessWidget {
     final price = '\$$amount${0}';
     // final price = double.parse(amount.toStringAsFixed(2)).toString();
 
+    // final bgColor =
+    //     !(isSelected ?? false) ? context.theme.primaryColor : Colors.white;
+
     return InkWell(
-      onTap: () => onChanged(subscription),
+      onTap: () => onChanged.call(subscription),
       child: AnimatedContainer(
         duration: kDuration,
         curve: kCurve,
@@ -68,7 +70,7 @@ class PaymentSubscriptionTile extends StatelessWidget {
     );
   }
 
-  Container _buildFreeTrial() {
+  Widget _buildFreeTrial() {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 6.w,

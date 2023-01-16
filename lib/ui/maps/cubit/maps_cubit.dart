@@ -45,7 +45,7 @@ class MapsCubit extends BaseModel {
     required this.geofenceService,
     this.polygonId,
   }) : super(context) {
-    init();
+    // init();
   }
   static const _latLng = LatLng(-25.185575842417077, 134.68900724218238);
   MapsState state = const MapsState(currentLocation: _latLng);

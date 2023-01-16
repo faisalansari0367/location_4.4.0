@@ -60,6 +60,7 @@ class ApiRepo implements Api {
         AuthRepoImpl(client: _client, box: box, onUserChange: changeUserBox);
     _userRepo = UserRepoImpl(client: _client, box: box);
     _functionsRepo = FunctionsRepoImpl(client: _client);
+
     _cacheDir = await _getUserCacheDir();
     _cvdFormsRepo =
         CvdFormsRepoImpl(box: box, client: _client, cacheDir: _cacheDir);
@@ -72,7 +73,8 @@ class ApiRepo implements Api {
   Future<Directory> _getUserCacheDir() async {
     final storage = StorageService(box: _box);
     final cacheDir = await getApplicationDocumentsDirectory();
-    _cacheDir = Directory('${cacheDir.path}/${storage.getUser()!.email}');
+    final email = storage.getUser()?.email ?? '';
+    _cacheDir = Directory('${cacheDir.path}/$email');
     return _cacheDir;
   }
 

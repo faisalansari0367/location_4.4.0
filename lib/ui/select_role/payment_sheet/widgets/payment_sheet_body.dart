@@ -1,8 +1,6 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/select_role/payment_sheet/provider/provider.dart';
-import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_get_started.dart';
 import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_subscription_tile.dart';
-import 'package:bioplus/widgets/animations/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,30 +17,32 @@ class PaymentSheetBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PaymentSheetNotifier>(
       builder: (context, state, child) {
-        if (!state.showPlanSelection) return const PaymentGetStarted();
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _selectLocationHeader(context),
-            Gap(20.h),
-            PaymentSubscriptionTile(
-              amount: state.monthlyPrice,
-              subscription: Subscriptions.monthly,
-              isSelected: state.subscription?.isMonthly,
-              onChanged: state.setSubscription,
-            ),
-            Gap(20.h),
-            PaymentSubscriptionTile(
-              amount: state.yearlyPrice,
-              subscription: Subscriptions.yearly,
-              isSelected: state.subscription?.isYearly,
-              onChanged: state.setSubscription,
-            ),
-            Gap(20.h),
-            _checkoutButton(state),
-            Gap(20.h),
-          ],
+        return Padding(
+          padding: kPadding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _selectLocationHeader(context),
+              Gap(20.h),
+              PaymentSubscriptionTile(
+                amount: state.monthlyPrice,
+                subscription: Subscriptions.monthly,
+                isSelected: state.subscription?.isMonthly,
+                onChanged: state.setSubscription,
+              ),
+              Gap(20.h),
+              PaymentSubscriptionTile(
+                amount: state.yearlyPrice,
+                subscription: Subscriptions.yearly,
+                isSelected: state.subscription?.isYearly,
+                onChanged: state.setSubscription,
+              ),
+              // Gap(20.h),
+              const Spacer(),
+              _checkoutButton(state),
+              Gap(20.h),
+            ],
+          ),
         );
       },
     );
@@ -78,24 +78,26 @@ class PaymentSheetBody extends StatelessWidget {
     return Row(
       children: [
         Text(
-          'Choose your plan'.capitalize!,
+          'Choose your plan'.toUpperCase(),
           style: context.textTheme.headline6?.copyWith(
             fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: 1.5,
           ),
         ),
         const Spacer(),
-        AnimatedButton(
-          scale: 0.8,
-          onTap: Get.back,
-          child: Container(
-            padding: EdgeInsets.all(5.r),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.clear),
-          ),
-        ),
+        // AnimatedButton(
+        //   scale: 0.8,
+        //   onTap: Get.back,
+        //   child: Container(
+        //     padding: EdgeInsets.all(5.r),
+        //     decoration: BoxDecoration(
+        //       color: Colors.grey.shade200,
+        //       shape: BoxShape.circle,
+        //     ),
+        //     child: const Icon(Icons.clear),
+        //   ),
+        // ),
       ],
     );
   }

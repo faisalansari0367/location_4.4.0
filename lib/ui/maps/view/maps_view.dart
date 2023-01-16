@@ -4,8 +4,11 @@ import 'dart:math';
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/drawer/view/widgets/drawer_menu_icon.dart';
+import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
+import 'package:bioplus/ui/login/view/login_page.dart';
 import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
+import 'package:bioplus/ui/maps/location_service/geolocator_service.dart';
 import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/maps/view/widgets/add_fence.dart';
@@ -18,23 +21,20 @@ import 'package:bioplus/ui/maps/widgets/geofences_list/geofences_view.dart';
 import 'package:bioplus/widgets/animations/my_slide_animation.dart';
 import 'package:bioplus/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/error.dart';
 import 'package:bioplus/widgets/dialogs/location_permission_dialog.dart';
+import 'package:bioplus/widgets/dialogs/while_using_app_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../../gen/assets.gen.dart';
-import '../../../widgets/dialogs/dialog_layout.dart';
-import '../location_service/geolocator_service.dart';
-import '../models/polygon_model.dart';
-
 class MapsView extends StatefulWidget {
   final bool fromDrawer;
-  const MapsView({Key? key, this.fromDrawer = false}) : super(key: key);
+  const MapsView({super.key, this.fromDrawer = false});
 
   @override
   State<MapsView> createState() => _MapsViewState();
@@ -42,8 +42,9 @@ class MapsView extends StatefulWidget {
 
 class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   late MapsCubit cubit;
+
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     dev.log(state.name);
     switch (state) {
       case AppLifecycleState.detached:
@@ -84,19 +85,104 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         );
       }
 
-      await Permission.location.request();
-      final result = await GeolocatorService.locationPermission();
-      if (result) {
-        final result = await Permission.locationAlways.request();
-        print(PermissionStatus.values[result.index].name);
-        final cubit = context.read<MapsCubit>();
-        await cubit.init();
+      // final isLimitedPermission = await Permission.location.isLimited;
+      // if (isLimitedPermission) {
+      //   BottomSheetService.showSheet(
+      //     child: LocationPermissionDialog(
+      //       onPressed: () => Permission.location.request(),
+      //     ),
+      //   );
+      // }
+      final isPermissionGranted = await Permission.location.isGranted;
+      // print(await Permission.location.isLimited);
+      // print(await Permission.location.isDenied);
+      // print(await Permission.location.isRestricted);
+      // print(Permission.location.isBlank);
+
+      if (!isPermissionGranted) {
+        // final status = await Permission.location.request();
+        // if (status.isGranted) {
+        //   // Get.back();
+        //   _allowAllTheTime();
+        // }
+        BottomSheetService.showSheet(
+          child: WhileUsingAppPermission(
+            buttonText: 'Ask Permission',
+            onPressed: () async {
+              final status = await Permission.location.request();
+              if (status.isGranted) {
+                Get.back();
+                _allowAllTheTime();
+                return;
+              }
+
+              if (status.isDenied) {
+                Get.back();
+                _permissionDenied(api);
+                return;
+              }
+            },
+          ),
+        );
+      } else if (await Permission.location.isPermanentlyDenied) {
+        _permissionDenied(api);
+      } else if (await Permission.location.isDenied) {
+        _permissionDenied(api);
       } else {
-        await 3.seconds.delay();
-        await DialogService.showDialog(child: const LocationPermissionDialog());
+        _allowAllTheTime();
       }
+
+      // if(status.)
+
+      // await _allowAllTheTime();
     });
     super.initState();
+  }
+
+  void _permissionDenied(Api api) {
+    DialogService.showDialog(
+      child: ErrorDialog(
+        message:
+            'You have denied the location permission therefore we regret to inform you that we cannot proceed further\n\nPlease go to app settings and allow the permission to use this app',
+        onTap: () {
+          Get.back();
+          // Get.reset();
+          api.logout();
+          Get.offAll(() => const LoginPage());
+        },
+      ),
+    );
+  }
+
+  Future<void> _allowAllTheTime() async {
+    final result = await GeolocatorService.locationPermission();
+    if (result) {
+      final status = await Permission.locationAlways.status;
+      final isNotGranted = PermissionStatus.granted != status;
+      if (isNotGranted) {
+        BottomSheetService.showSheet(
+          child: LocationPermissionDialog(
+            onPressed: () async {
+              final result = await Permission.locationAlways.request();
+              final cubit = context.read<MapsCubit>();
+              if (result.isGranted) {
+                Get.back();
+                await cubit.init();
+              } else {
+                Get.back();
+                _permissionDenied(cubit.api);
+              }
+            },
+          ),
+        );
+      } else {
+        await cubit.init();
+      }
+    } else {
+      // await cubit.init();
+      // await 3.seconds.delay();
+      // await DialogService.showDialog(child: const LocationPermissionDialog());
+    }
   }
 
   @override
@@ -155,7 +241,9 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
             key: ValueKey(state.addingGeofence),
             child: Container(
               clipBehavior: Clip.antiAlias,
-              padding: EdgeInsets.only(bottom: min(context.mediaQueryViewPadding.bottom, 15.h)),
+              padding: EdgeInsets.only(
+                bottom: min(context.mediaQueryViewPadding.bottom, 15.h),
+              ),
               decoration: MyDecoration.bottomSheetDecoration(),
               child: _getWidget(state),
             ),
@@ -178,8 +266,14 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   }
 
   Row _defaultNavbar(MapsState state) {
-    final allowedRoles = [Roles.producer, Roles.agent, Roles.consignee, Roles.admin];
-    final isAllowed = allowedRoles.contains(cubit.userData?.role?.camelCase?.getRole);
+    final allowedRoles = [
+      Roles.producer,
+      Roles.agent,
+      Roles.consignee,
+      Roles.admin
+    ];
+    final isAllowed =
+        allowedRoles.contains(cubit.userData?.role?.camelCase?.getRole);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -221,7 +315,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           ),
         ],
         BottomNavbarItem(
-          iconData: (Icons.directions_walk_rounded),
+          iconData: Icons.directions_walk_rounded,
           isSelected: state.isTracking,
           color: state.isTracking ? context.theme.primaryColor : null,
           onTap: cubit.toggleTracking,
@@ -254,7 +348,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
                   name: state.currentPolygon?.name,
                   onDone: (name, companyOwnerName) {
                     final polygon = state.currentPolygon!;
-                    final updatePolygon = polygon.copyWith(companyOwner: companyOwnerName, name: name);
+                    final updatePolygon = polygon.copyWith(
+                      companyOwner: companyOwnerName,
+                      name: name,
+                    );
                     cubit.updatePolygon(updatePolygon);
                     cubit.toggleIsEditingFence();
                     cubit.doneEditing();
@@ -290,7 +387,8 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         final state = snapshot.state;
         print('rebuilding maps');
         return GoogleMap(
-          initialCameraPosition: CameraPosition(target: state.currentLocation, zoom: 5),
+          initialCameraPosition:
+              CameraPosition(target: state.currentLocation, zoom: 5),
           onMapCreated: cubit.onMapCreated,
           mapType: state.mapType,
           zoomControlsEnabled: false,
@@ -300,7 +398,9 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           polylines: _polylines(state, state.polylines),
           markers: _markers(state.polylines, state.currentLocation),
           polygons: state.polygons.map(addPolygon).toSet(),
-          onTap: state.addingGeofence ? (e) => addLatLng(e, state.currentLocation) : null,
+          onTap: state.addingGeofence
+              ? (e) => addLatLng(e, state.currentLocation)
+              : null,
         );
       },
     );
@@ -315,10 +415,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
       (e) {
         final isPolygonClosed = isClosedPolygon(points);
         final polygonService = context.read<PolygonsService>();
-        final onTap = isPolygonClosed ? null : () => polygonService.addLatLng(e);
+        final onTap =
+            isPolygonClosed ? null : () => polygonService.addLatLng(e);
         return Marker(
           markerId: MarkerId(e.toString()),
-          flat: false,
           draggable: true,
           onTap: onTap,
           onDragEnd: (p) => polygonService.updateMarkers(p, points.indexOf(e)),
@@ -382,8 +482,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
   Widget _buildBackButton() {
     return Container(
       padding: EdgeInsets.only(left: widget.fromDrawer ? 0 : 8),
-      decoration:
-          MyDecoration.decoration(isCircle: true, color: const Color.fromARGB(26, 255, 255, 255).withOpacity(.71)),
+      decoration: MyDecoration.decoration(
+        isCircle: true,
+        color: const Color.fromARGB(26, 255, 255, 255).withOpacity(.71),
+      ),
       child: widget.fromDrawer
           ? const DrawerMenuIcon()
           : IconButton(

@@ -1,6 +1,9 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
+import 'package:bioplus/services/notifications/push_notifications.dart';
 import 'package:bioplus/theme/color_constants.dart';
+import 'package:bioplus/ui/login/view/login_page.dart';
+import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/sos_warning/sos_warning.dart';
 import 'package:bioplus/ui/splash/splash_screen.dart';
@@ -12,10 +15,6 @@ import 'package:get/get.dart';
 import 'package:get/get.dart' as getx;
 import 'package:google_fonts/google_fonts.dart';
 
-import 'services/notifications/push_notifications.dart';
-import 'ui/login/view/login_page.dart';
-import 'ui/maps/location_service/geofence_service.dart';
-
 class MyApp extends StatefulWidget {
   final Api api;
   // final MapsRepo mapsRepo;
@@ -25,14 +24,14 @@ class MyApp extends StatefulWidget {
   final LocalApi localApi;
 
   const MyApp({
-    Key? key,
+    super.key,
     required this.api,
     // required this.notificationService,
     // required this.mapsRepo,
     required this.pushNotificationService,
     required this.localApi,
     // required this.cvdFormsRepo,
-  }) : super(key: key);
+  });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -40,7 +39,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<void> _initializeFlutterFire() async {
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode);
+    await FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(!kDebugMode);
   }
 
   @override
@@ -64,7 +64,8 @@ class _MyAppState extends State<MyApp> {
           fontFamily: GoogleFonts.nunito().fontFamily,
           backgroundColor: Colors.white,
           scaffoldBackgroundColor: Colors.white,
-          colorScheme: Theme.of(context).colorScheme.copyWith(primary: kPrimaryColor),
+          colorScheme:
+              Theme.of(context).colorScheme.copyWith(primary: kPrimaryColor),
           primaryColor: kPrimaryColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           // appBarTheme: AppBarTheme(
@@ -99,12 +100,18 @@ class _MyAppState extends State<MyApp> {
     return [
       RepositoryProvider<Api>.value(value: widget.api),
       // RepositoryProvider<NotificationService>.value(value: widget.notificationService),
-      RepositoryProvider<PushNotificationService>.value(value: widget.pushNotificationService),
+      RepositoryProvider<PushNotificationService>.value(
+        value: widget.pushNotificationService,
+      ),
       // RepositoryProvider<MapsRepo>.value(value: widget.mapsRepo),
       RepositoryProvider<LocalApi>.value(value: widget.localApi),
-      RepositoryProvider<PolygonsService>(create: (context) => PolygonsService()),
+      RepositoryProvider<PolygonsService>(
+        create: (context) => PolygonsService(),
+      ),
       // RepositoryProvider<MapsRepoLocal>(create: (context) => MapsRepoLocal()..init()),
-      RepositoryProvider<GeofenceService>(create: (context) => GeofenceService()),
+      RepositoryProvider<GeofenceService>(
+        create: (context) => GeofenceService(),
+      ),
       // RepositoryProvider<GeofenceService>(create: (context) => GeofenceService()),
       // RepositoryProvider<CvdFormsRepo>.value(
       //   value: widget.cvdFormsRepo,
@@ -116,7 +123,8 @@ class _MyAppState extends State<MyApp> {
     widget.api.isLoggedInStream.listen((event) async {
       final isLoggedIn = event;
       print('isLoggedIn $isLoggedIn');
-      if (!isLoggedIn) return Get.off(() => LoginPage());
+      if (Get.isDialogOpen ?? false) Get.back();
+      if (!isLoggedIn) return Get.off(() => const LoginPage());
       // final user = widget.api.getUser()!;
       // final localAuth = LocalAuth();
       // final result = await localAuth.authenticate();

@@ -1,18 +1,17 @@
 import 'dart:io';
 
 import 'package:bioplus/ui/scan_qr/widgets/show_scanned_data.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/error.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-
-import '../../../widgets/dialogs/dialog_service.dart';
-import '../../../widgets/dialogs/error.dart';
 
 class ScanQrView extends StatefulWidget {
   //  final String? qrData;
   // final void Function(Barcode)? onData;
 
-  const ScanQrView({Key? key}) : super(key: key);
+  const ScanQrView({super.key});
   @override
   State<StatefulWidget> createState() => _ScanQrViewState();
 }
@@ -60,7 +59,9 @@ class _ScanQrViewState extends State<ScanQrView> {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) return const SizedBox();
                     return IconButton(
-                      icon: snapshot.data ? const Icon(Icons.flash_off) : const Icon(Icons.flash_on),
+                      icon: snapshot.data
+                          ? const Icon(Icons.flash_off)
+                          : const Icon(Icons.flash_on),
                       onPressed: () async {
                         await controller?.toggleFlash();
                         setState(() {});
@@ -78,8 +79,10 @@ class _ScanQrViewState extends State<ScanQrView> {
   }
 
   Widget _buildQrView(BuildContext context) {
-    final scanArea =
-        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 300.0;
+    final scanArea = (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400)
+        ? 250.0
+        : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
