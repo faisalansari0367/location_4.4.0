@@ -1,0 +1,30 @@
+{
+    "isFreeGateSign": {
+        "title": "Free Gate Sign",
+        "description": " every property receive free gate sign. Additional signs can be ordered on line."
+    },
+    "isEmergencyWarning": {
+        "title": "Emergency Warning",
+        "description": "In the event an accident or incident simply press the Emergency button tohave all people inside the geofenced property to meet at the 'rally point'"
+    },
+    "isVisitorLogbook": {
+        "title": "Visitor Logbook",
+        "description": "all records are automated on entering & leaving a geofence.  All records can be exported as a PDF or CSV."
+    },
+    "isEcvd": {
+        "title": "eCVD",
+        "description": "A complete record of all movements of Grain, Stockfeed or Fodder. All records are stored as a PDF or CSV and can be transferred easily."
+    },
+    "isElwd": {
+        "title": "eLWD",
+        "description": " A complete record of all movements of Grain, Stockfeed or Fodder. All records are stored as a PDF or CSV and can be transferred easily."
+    },
+    "isWorkSaftey": {
+        "title": "Work Saftey",
+        "description": "Access to our complete record of all movements of Grain, Stockfeed or Fodder. All records are stored as a PDF or CSV and can be transferred easily"
+    },
+    "isDesktopAccess": {
+        "title": "Desktop Access",
+        "description": "Available in Mid-January"
+    }
+}

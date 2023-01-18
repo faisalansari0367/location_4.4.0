@@ -50,6 +50,36 @@
 			}
 		},
 		{
+			"label": "Flutter Build Release Apk (Dev)",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"apk",
+				"--target=lib/main_dev.dart"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Flutter Build Bioplus IPA (Dev)",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"ipa",
+				"--target=lib/main_dev.dart"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
 			"type": "flutter",
 			"command": "flutter",
 			"args": [

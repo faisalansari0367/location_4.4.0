@@ -10,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../api_repo.dart';
 import '../auth/src/storage/storage_service.dart';
-import '../payment/payment_repo.dart';
 
 // import '../log/log_records.dart';
 
@@ -397,8 +396,8 @@ class ApiRepo implements Api {
   }
 
   @override
-  ApiResult<List<CvdForm>> getCvdForms() {
-    return _cvdFormsRepo.getCvdForms();
+  Future<ApiResult<List<CvdModel>>> getCvdUrls() {
+    return _cvdFormsRepo.getCvdUrls();
   }
 
   @override
@@ -493,8 +492,9 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<String>> createStripeSession() {
-    return _paymentRepo.createStripeSession();
+  Future<ApiResult<String>> createStripeSession(
+      String priceId, String paymentMode) {
+    return _paymentRepo.createStripeSession(priceId, paymentMode);
   }
 
   @override
@@ -508,5 +508,10 @@ class ApiRepo implements Api {
       {ProgressCallback? onReceiveProgress, ProgressCallback? onSendProgress}) {
     return _cvdFormsRepo.uploadCvdForm(file, pic,
         onReceiveProgress: onReceiveProgress, onSendProgress: onSendProgress);
+  }
+
+  @override
+  Future<ApiResult<PlanDetailsModel>> getPlanDetails() {
+    return _paymentRepo.getPlanDetails();
   }
 }

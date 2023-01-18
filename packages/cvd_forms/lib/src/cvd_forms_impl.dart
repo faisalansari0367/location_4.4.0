@@ -113,6 +113,20 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
     return isRemoved;
   }
 
+  Future<ApiResult<List<CvdModel>>> getCvds() async {
+    try {
+      final result = await client.get(Endpoints.cvd);
+      final response = result.data as List;
+      final cvds = response
+          .map((e) => CvdModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      return ApiResult.success(data: cvds);
+      // await storage.addCvdForms(cvdForms);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
   @override
   Future<ApiResult<bool>> uploadCvdForm(CvdForm file, String? pic,
       {ProgressCallback? onReceiveProgress,
@@ -149,4 +163,19 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
 
   @override
   Stream<List<CvdForm>> get cvdFormsStream => storage.cvdFormsStream;
+
+  @override
+  Future<ApiResult<List<CvdModel>>> getCvdUrls() async {
+    try {
+      final result = await client.get(Endpoints.cvd);
+      final response = result.data['data'] as List;
+      final cvds = response
+          .map((e) => CvdModel.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+      return ApiResult.success(data: cvds);
+      // await storage.addCvdForms(cvdForms);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
 }

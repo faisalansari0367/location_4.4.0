@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/src/payment/src/payement_repo.dart';
 
 class PaymentRepoImpl implements PaymentRepo {
   final Client client;
@@ -9,10 +8,28 @@ class PaymentRepoImpl implements PaymentRepo {
   });
 
   @override
-  Future<ApiResult<String>> createStripeSession() async {
+  Future<ApiResult<String>> createStripeSession(
+      String priceId, String paymentMode) async {
     try {
-      final session = await client.post(Endpoints.createSession);
+      final session = await client.post(
+        Endpoints.createSession,
+        data: {
+          'priceId': priceId,
+          'mode': paymentMode.toLowerCase(),
+        },
+      );
       return ApiResult.success(data: session.data['url']);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<PlanDetailsModel>> getPlanDetails() async {
+    try {
+      final session = await client.get(Endpoints.planDetails);
+      final model = PlanDetailsModel.fromJson(session.data);
+      return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

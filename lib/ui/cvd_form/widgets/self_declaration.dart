@@ -150,9 +150,16 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
             Gap(20.h),
             SignatureWidget(
               signature: context.read<CvdCubit>().signature,
-              onChanged: (s) {
+              onChanged: (s) async {
                 final read = context.read<CvdCubit>();
                 read.setSignature(s);
+                // read.centerStep(read.stepCompleted.length);
+                await 1.seconds.delay();
+                read.stepController.animateTo(
+                  read.stepController.position.maxScrollExtent,
+                  duration: 300.milliseconds,
+                  curve: Curves.easeInOut,
+                );
                 // read.centerStep();
 
                 setState(() {});

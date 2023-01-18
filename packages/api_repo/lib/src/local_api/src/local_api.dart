@@ -361,8 +361,8 @@ class LocalApi extends Api {
   }
 
   @override
-  ApiResult<List<CvdForm>> getCvdForms() {
-    return _cvdFormsRepo.getCvdForms();
+  Future<ApiResult<List<CvdModel>>> getCvdUrls() {
+    return _cvdFormsRepo.getCvdUrls();
   }
 
   @override
@@ -458,7 +458,8 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<String>> createStripeSession() async {
+  Future<ApiResult<String>> createStripeSession(
+      String priceId, String paymentMode) async {
     return const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     );
@@ -474,6 +475,13 @@ class LocalApi extends Api {
   Future<ApiResult<bool>> uploadCvdForm(CvdForm file, String? pic,
       {ProgressCallback? onReceiveProgress,
       ProgressCallback? onSendProgress}) async {
+    return const ApiResult.failure(
+      error: NetworkExceptions.defaultError('Not available in offline mode'),
+    );
+  }
+
+  @override
+  Future<ApiResult<PlanDetailsModel>> getPlanDetails() async {
     return const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     );

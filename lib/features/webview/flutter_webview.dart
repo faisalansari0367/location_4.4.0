@@ -7,9 +7,10 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class Webview extends StatefulWidget {
   final String url, title;
+  final ValueChanged<NavigationRequest>? onNavigationRequest;
 
   // ignore: use_key_in_widget_constructors
-  const Webview({required this.url, this.title = ''});
+  const Webview({required this.url, this.title = '', this.onNavigationRequest});
   @override
   WebviewState createState() => WebviewState();
 }

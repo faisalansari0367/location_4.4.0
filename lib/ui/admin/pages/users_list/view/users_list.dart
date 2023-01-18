@@ -2,30 +2,50 @@ import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/intent_service.dart';
 import 'package:bioplus/theme/color_constants.dart';
+import 'package:bioplus/ui/admin/pages/users_list/cubit/users_cubit.dart';
+import 'package:bioplus/ui/admin/pages/users_list/cubit/users_state.dart';
 import 'package:bioplus/ui/admin/pages/users_list/view/roles_sheet.dart';
+import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/expanded_tile.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
+import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
-import '../../../../../widgets/bottom_sheet/bottom_sheet_service.dart';
-import '../../../../../widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
-import '../../../../../widgets/text_fields/text_formatters/input_formatters.dart';
-import '../cubit/users_cubit.dart';
-import '../cubit/users_state.dart';
-
 class UsersView extends StatelessWidget {
-  const UsersView({Key? key}) : super(key: key);
+  const UsersView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<UsersCubit>();
     return Scaffold(
-      appBar: const MyAppBar(title: Text('Users')),
+      appBar: MyAppBar(
+        title: const Text('Users'),
+        actions: [
+          const Icon(Icons.account_circle_outlined),
+          Gap(10.w),
+          BlocBuilder<UsersCubit, UsersState>(
+            builder: (context, state) {
+              return Center(
+                child: Text(
+                  state.users.length.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              );
+            },
+          ),
+          Gap(20.w),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
@@ -79,17 +99,27 @@ class UsersView extends StatelessWidget {
                               color: Colors.grey,
                             ),
                           ),
-                          ...['First Name', 'Last Name', 'Property Name', 'Town', 'Pic']
+                          ...[
+                            'First Name',
+                            'Last Name',
+                            'Property Name',
+                            'Town',
+                            'Pic'
+                          ]
                               .map(
                                 (e) => Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 5.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 5.w),
                                   child: InputChip(
                                     selected: e == (state.filter ?? ''),
                                     backgroundColor: Colors.grey.shade200,
-                                    selectedColor: context.theme.primaryColor.withOpacity(0.2),
+                                    selectedColor: context.theme.primaryColor
+                                        .withOpacity(0.2),
                                     // elevation: 5,
                                     onPressed: () => cubit.setFilter(e),
-                                    label: Text(e.replaceAll('_', ' ').capitalize!),
+                                    label: Text(
+                                      e.replaceAll('_', ' ').capitalize!,
+                                    ),
                                   ),
                                 ),
                               )
@@ -104,7 +134,7 @@ class UsersView extends StatelessWidget {
           ),
           // MyListView(),
           BlocBuilder<UsersCubit, UsersState>(
-            builder: (_context, state) {
+            builder: (context, state) {
               return Expanded(
                 child: InfiniteList(
                   onFetchData: () {},
@@ -211,19 +241,20 @@ class UsersView extends StatelessWidget {
           const Divider(),
           Row(
             children: [
-              Text('Delete User'),
+              const Text('Delete User'),
               const Spacer(),
               IconButton(
                 onPressed: () {
                   DialogService.showDialog(
                     child: DeleteDialog(
                       msg: 'Are you sure you want to delete this user?',
-                      onConfirm: () => context.read<UsersCubit>().deleteUser(user.id!),
+                      onConfirm: () =>
+                          context.read<UsersCubit>().deleteUser(user.id!),
                       onCancel: Get.back,
                     ),
                   );
                 },
-                icon: Icon(Icons.delete_forever),
+                icon: const Icon(Icons.delete_forever),
                 color: Colors.red,
               ),
             ],
@@ -250,7 +281,7 @@ class UsersView extends StatelessWidget {
 
 class _StatusWidget extends StatefulWidget {
   final UserData user;
-  const _StatusWidget({Key? key, required this.user}) : super(key: key);
+  const _StatusWidget({required this.user});
 
   @override
   State<_StatusWidget> createState() => __StatusWidgetState();
@@ -344,11 +375,11 @@ class PopupMenu<T> extends StatelessWidget {
   final Widget? child;
   final Function(UserStatus)? onSelected;
   const PopupMenu({
-    Key? key,
+    super.key,
     this.options = const [],
     this.child,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -392,7 +423,11 @@ class PopupMenu<T> extends StatelessWidget {
 class UserStatusWidget extends StatelessWidget {
   final UserStatus status;
   final EdgeInsets? margin;
-  const UserStatusWidget({Key? key, this.status = UserStatus.inactive, this.margin}) : super(key: key);
+  const UserStatusWidget({
+    super.key,
+    this.status = UserStatus.inactive,
+    this.margin,
+  });
 
   @override
   Widget build(BuildContext context) {

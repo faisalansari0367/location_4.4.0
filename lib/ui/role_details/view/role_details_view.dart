@@ -190,6 +190,15 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           label: name,
           controller: controller,
         );
+      case 'emergencyMobileContact':
+        controller.text = userData['phoneNumber'] ?? '';
+        return PhoneTextField(
+          // controller: controller,
+          hintText: name,
+          onChanged: (number, countryCode) {
+            map[name.toCamelCase] = countryCode + number;
+          },
+        );
       case 'phoneNumber':
       case 'contactNumber':
       case 'mobile':
@@ -329,7 +338,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         return MyTextField(
           hintText: name,
           controller: controller,
-          validator: Validator.text,
+          validator: context.read<RoleDetailsCubit>().role == 'Visitor'
+              ? Validator.none
+              : Validator.text,
           inputFormatters: [CapitalizeAllInputFormatter()],
         );
 

@@ -1,12 +1,11 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/features/drawer/cubit/my_drawer_controller.dart';
+import 'package:bioplus/features/drawer/view/drawer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../cubit/my_drawer_controller.dart';
-import 'drawer_view.dart';
-
 class DrawerPage extends StatelessWidget {
-  const DrawerPage({Key? key}) : super(key: key);
+  const DrawerPage({super.key});
 
   @override
   Widget build(BuildContext context) {

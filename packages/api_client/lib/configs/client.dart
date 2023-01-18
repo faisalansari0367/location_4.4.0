@@ -204,7 +204,7 @@ class Client {
     final dio = headers.setUrlEncoded().build();
     final fromFile =
         await MultipartFile.fromFile(file.path, filename: fileName);
-    final FormData formData = FormData.fromMap({"file": fromFile});
+    final FormData formData = FormData.fromMap({"photo": fromFile});
     formData.fields.add(MapEntry("file", fileName));
     formData.fields.addAll(fields);
     final result = await dio.post<T>(

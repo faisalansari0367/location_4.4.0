@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/countries.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:country_codes/country_codes.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +7,18 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../constants/countries.dart';
-
 class PhoneTextField extends StatefulWidget {
+  final String? hintText;
   final ValueChanged<String>? onCountryChanged;
   final void Function(String number, String countryCode)? onChanged;
   final TextEditingController? controller;
-  const PhoneTextField({Key? key, this.onChanged, this.controller, this.onCountryChanged}) : super(key: key);
+  const PhoneTextField({
+    super.key,
+    this.onChanged,
+    this.hintText,
+    this.controller,
+    this.onCountryChanged,
+  });
 
   @override
   State<PhoneTextField> createState() => _PhoneTextFieldState();
@@ -32,7 +38,8 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
   }
 
   Future<void> _init() async {
-    await CountryCodes.init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
+    await CountryCodes
+        .init(); // Optionally, you may provide a `Locale` to get countrie's localizadName
     _countryDetails = CountryCodes.detailsForLocale();
     _getCountryCode();
     setState(() {});
@@ -50,13 +57,18 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
     //   return;
     // }
 
-    final country = countryList.where((element) => '+${element.phoneCode}'.compareTo(user.countryCode!) == 0);
+    final country = countryList.where(
+      (element) => '+${element.phoneCode}'.compareTo(user.countryCode!) == 0,
+    );
     if (country.isEmpty) return;
     if (country.length > 1) {
       print('More than one country found for ${user.countryCode}');
       if (user.countryOfResidency != null) {
-        final finalCountry =
-            country.where((element) => element.name.toLowerCase() == user.countryOfResidency!.toLowerCase());
+        final finalCountry = country.where(
+          (element) =>
+              element.name.toLowerCase() ==
+              user.countryOfResidency!.toLowerCase(),
+        );
         if (finalCountry.isEmpty) return;
         countryCode = finalCountry.first.isoCode;
 
@@ -77,12 +89,12 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
         fontWeight: FontWeight.bold,
         // color
       ),
-      decoration: const InputDecoration(
-        counter: SizedBox.shrink(),
-        labelText: Strings.mobile,
+      decoration: InputDecoration(
+        counter: const SizedBox.shrink(),
+        labelText: widget.hintText ?? Strings.mobile,
         border: MyDecoration.inputBorder,
         contentPadding: kInputPadding,
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           // color: theme.iconTheme.color,
           fontWeight: FontWeight.bold,
           // color
@@ -93,13 +105,19 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
       onCountryChanged: print,
       onChanged: (phone) {
         print(phone.completeNumber);
-        if (widget.onChanged != null) widget.onChanged!(phone.number, phone.countryCode);
+        if (widget.onChanged != null) {
+          widget.onChanged!(phone.number, phone.countryCode);
+        }
         // print(_countryDetails);
-        final countries = countryList.where((element) => element.isoCode == phone.countryISOCode).toList();
+        final countries = countryList
+            .where((element) => element.isoCode == phone.countryISOCode)
+            .toList();
         if (countries.isEmpty) return;
         final country = countries.first;
 
-        if (widget.onCountryChanged != null) widget.onCountryChanged!(country.name);
+        if (widget.onCountryChanged != null) {
+          widget.onCountryChanged!(country.name);
+        }
       },
     );
   }

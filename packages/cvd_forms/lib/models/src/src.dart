@@ -11,3 +11,4 @@ export 'transporter_details_model.dart';
 export 'vendor_details_model.dart';
 export 'witholding_period_model.dart';
 export './cvd_form.dart';
+export './cvd_model.dart';

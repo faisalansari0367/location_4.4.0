@@ -8,17 +8,26 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class PaymentSheetPage extends StatelessWidget {
   /// {@macro payment_sheet_page}
-  const PaymentSheetPage({super.key});
+  const PaymentSheetPage({super.key, required this.role});
+
+  final String role;
 
   /// The static route for PaymentSheetPage
-  static Route<dynamic> route() {
-    return MaterialPageRoute<dynamic>(builder: (_) => const PaymentSheetPage());
-  }
+  // static Route<dynamic> route() {
+  //   return MaterialPageRoute<dynamic>(
+  //     builder: (_) => PaymentSheetPage(
+  //       role: role,
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => PaymentSheetNotifier(context),
+      create: (context) => PaymentSheetNotifier(
+        context,
+        role: role,
+      ),
       // child: const PaymentSheetBody(),
       child: const Scaffold(
         appBar: MyAppBar(),

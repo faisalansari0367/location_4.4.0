@@ -53,7 +53,7 @@ dependencies:
   google_maps_flutter: ^2.2.0
   # poly_geofence_service: ^1.5.8
   # geofence_service: ^3.4.8
-  permission_handler: ^10.0.0
+  permission_handler: ^10.2.0
   email_validator: ^2.1.17
   firebase_crashlytics: ^2.8.6
   firebase_core: ^1.20.0
@@ -132,6 +132,7 @@ dependencies:
   lint: ^2.0.1
   in_app_update: ^4.0.1
   stripe_checkout: ^1.0.0
+  flutter_sms: ^2.3.3
   # background_location: ^0.8.1
   # workmanager: ^0.5.1
   # background_locator: ^1.6.12
@@ -209,7 +210,7 @@ flutter:
     - assets/icons/dashboard/
 
     - assets/countries/
-    # - assets/json/
+    - assets/json/
     # - assets/csv/
 
   # fonts:

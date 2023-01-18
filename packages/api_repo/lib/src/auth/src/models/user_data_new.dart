@@ -314,6 +314,6 @@
 //     }
 //     return 
 //         status.name.replaceFirst(status.name.characters.first,
-//             status.name.characters.first.toUpperCase())
+//             status.name.characters.first.toUpperCase());
 //   }
 // }

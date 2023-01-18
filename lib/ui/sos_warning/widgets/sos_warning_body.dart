@@ -19,7 +19,6 @@ class SosWarningBody extends StatelessWidget {
         return Padding(
           padding: kPadding,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
@@ -52,7 +51,6 @@ class SosWarningBody extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    flex: 1,
                     child: MyElevatedButton(
                       text: 'Cancel',
                       color: Colors.black,
@@ -65,11 +63,11 @@ class SosWarningBody extends StatelessWidget {
                   // Spacer(),
                   Gap(20.w),
                   Expanded(
-                    flex: 1,
                     child: MyElevatedButton(
                       text: 'Yes',
                       color: Colors.red,
                       onPressed: () async {
+                        Get.back();
                         await context.read<SosWarningCubit>().sendSos();
                       },
                     ),

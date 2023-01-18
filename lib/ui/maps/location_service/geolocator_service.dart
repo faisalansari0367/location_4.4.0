@@ -22,7 +22,9 @@ class GeolocatorService {
         throw Future.error('Location services not enabled');
       }
 
-      final position = await instance.getCurrentPosition(locationSettings: _getLocationSettings);
+      final position = await instance.getCurrentPosition(
+        locationSettings: _getLocationSettings,
+      );
       return position;
     } catch (e) {
       print('error from get current position $e');
@@ -31,11 +33,11 @@ class GeolocatorService {
   }
 
   static Future<Position?> getLastKnownPosition() async {
-    return await instance.getLastKnownPosition();
+    return instance.getLastKnownPosition();
   }
 
   static Future<bool> openLocationSettings() async {
-    return  instance.openLocationSettings();
+    return instance.openLocationSettings();
   }
 
   static Future<bool> locationPermission() async {
@@ -68,12 +70,12 @@ class GeolocatorService {
   }
 
   static Future<Stream<Position>> getLocationUpdates() async {
-    final _location = location.Location();
-    await _location.enableBackgroundMode(enable: true);
-    await _location.changeSettings(distanceFilter: 0, accuracy: location.LocationAccuracy.high);
-    final isBackgroundMode = await _location.isBackgroundModeEnabled();
+    final l = location.Location();
+    await l.enableBackgroundMode();
+    // await l.changeSettings();
+    final isBackgroundMode = await l.isBackgroundModeEnabled();
     print('isBackgroundMode $isBackgroundMode');
-    final stream = _location.onLocationChanged.map(_getPosition);
+    final stream = l.onLocationChanged.map(_getPosition);
     return stream;
   }
 
@@ -97,13 +99,11 @@ class GeolocatorService {
 
     if (Platform.isAndroid) {
       locationSettings = AndroidSettings(
-        intervalDuration: const Duration(),
+        intervalDuration: Duration.zero,
       );
     } else if (Platform.isIOS) {
       locationSettings = AppleSettings(
-        pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
-        accuracy: LocationAccuracy.best,
       );
     } else {
       locationSettings = const LocationSettings(

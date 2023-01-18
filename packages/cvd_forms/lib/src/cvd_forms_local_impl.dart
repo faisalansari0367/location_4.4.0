@@ -23,14 +23,10 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
   }
 
   @override
-  ApiResult<List<CvdForm>> getCvdForms() {
-    try {
-      final forms = storage.getCvdForms();
-      return ApiResult.success(data: forms);
-    } catch (e) {
-      return const ApiResult.failure(
-          error: NetworkExceptions.defaultError('Failed to get forms'));
-    }
+  Future<ApiResult<List<CvdModel>>> getCvdUrls() {
+    return Future.value(const ApiResult.failure(
+      error: NetworkExceptions.defaultError('Not available in offline mode'),
+    ));
   }
 
   @override

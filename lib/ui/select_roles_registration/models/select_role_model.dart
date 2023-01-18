@@ -1,13 +1,14 @@
-
 class SelectRoleModel {
   final String role;
   bool isSelected;
+  final bool isPaidRole;
   SelectRoleModel({
+    required this.isPaidRole,
     required this.role,
     this.isSelected = false,
   });
 
-  setSelect(bool value) {
+  void setSelect(bool value) {
     isSelected = value;
   }
 }

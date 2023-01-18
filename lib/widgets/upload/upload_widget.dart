@@ -52,15 +52,19 @@ class _ProgressWidget extends StatelessWidget {
         child: Row(
           children: [
             const SizedBox(width: 10),
-            const Expanded(
-              child: ProgressIndicatorWidget(
-                downloadProgress: 0.5,
-                isFetching: true,
-                isUploading: false,
+            Expanded(
+              child: Consumer<SyncCvdController>(
+                builder: (context, value, child) => ProgressIndicatorWidget(
+                  downloadProgress: value.progress,
+                  isFetching: value.uploadStatus == UploadStatus.startingUpload,
+                  isUploading: value.uploadStatus == UploadStatus.uploading,
+                  isUploaded: value.uploadStatus == UploadStatus.uploaded,
+                ),
               ),
             ),
             // const SizedBox(width: 20),
             const Spacer(),
+
             const ProgressText(),
             const Spacer(),
 
@@ -83,28 +87,40 @@ class ProgressText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<SyncCvdController>();
+    // final provider = context.read<SyncCvdController>();
+    final provider = Provider.of<SyncCvdController>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Uploading File: ${provider.currentFile}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-          ),
-          // style: ,
-        ),
-        Gap(5.h),
-        Text(
-          'Total Files: ${provider.totalFiles}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 13,
-          ),
-        ),
-      ],
+      children: provider.uploadStatus == UploadStatus.uploaded
+          ? [
+              const Text(
+                'Upload Completed',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+                // style: ,
+              ),
+            ]
+          : [
+              Text(
+                'Uploading File: ${provider.currentFile}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+                // style: ,
+              ),
+              Gap(5.h),
+              Text(
+                'Total Files: ${provider.totalFiles}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                ),
+              ),
+            ],
     );
   }
 }
@@ -115,11 +131,13 @@ class ProgressIndicatorWidget extends StatelessWidget {
     required this.downloadProgress,
     required this.isUploading,
     required this.isFetching,
+    required this.isUploaded,
   });
 
   final double downloadProgress;
   final bool isUploading;
   final bool isFetching;
+  final bool isUploaded;
 
   @override
   Widget build(BuildContext context) {
@@ -134,13 +152,20 @@ class ProgressIndicatorWidget extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               Center(
-                child: Text(
-                  isFetching ? '' : '${(progress * 100).toStringAsFixed(0)}%',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
+                child: isUploaded
+                    ? const Icon(
+                        Icons.check,
+                        color: Colors.white,
+                      )
+                    : Text(
+                        isFetching
+                            ? ''
+                            : '${(progress * 100).toStringAsFixed(0)}%',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
               ),
               CircularProgressIndicator(
                 backgroundColor: isUploading

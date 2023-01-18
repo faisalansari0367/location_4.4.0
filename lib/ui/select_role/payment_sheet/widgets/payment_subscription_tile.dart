@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/select_role/payment_sheet/provider/payment_sheet_provider.dart';
@@ -8,7 +9,7 @@ class PaymentSubscriptionTile extends StatelessWidget {
   final double amount;
   final Subscriptions subscription;
   final bool? isSelected;
-  final ValueChanged<Subscriptions> onChanged;
+  final VoidCallback onChanged;
 
   const PaymentSubscriptionTile({
     super.key,
@@ -27,7 +28,7 @@ class PaymentSubscriptionTile extends StatelessWidget {
     //     !(isSelected ?? false) ? context.theme.primaryColor : Colors.white;
 
     return InkWell(
-      onTap: () => onChanged.call(subscription),
+      onTap: onChanged,
       child: AnimatedContainer(
         duration: kDuration,
         curve: kCurve,
@@ -123,7 +124,7 @@ class PaymentSubscriptionTile extends StatelessWidget {
       value: isSelected,
       groupValue: true,
       onChanged: (s) {
-        onChanged(subscription);
+        onChanged.call();
       },
     );
   }

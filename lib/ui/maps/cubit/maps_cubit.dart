@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/services/notifications/push_notifications.dart';
 import 'package:bioplus/ui/maps/location_service/geofence_service.dart';
 import 'package:bioplus/ui/maps/location_service/geolocator_service.dart';
 import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
@@ -14,8 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import '../../../services/notifications/push_notifications.dart';
 
 // import '../models/polygon_model.dart';
 
@@ -30,13 +29,14 @@ class MapsCubit extends BaseModel {
   // final MapsRepo _mapsRepo;
   final PolygonsService _polygonsService;
   final GeofenceService geofenceService;
+  @override
   final Api api;
   // final MapsRepoLocal mapsRepoLocal;
   // late MapsRepo mapsRepo;
   // late TrackPolygons trackPolygons;
 
   MapsCubit(
-    BuildContext context,
+    super.context,
     // this._notificationService,
     // this._mapsRepo,
     this._polygonsService,
@@ -44,14 +44,14 @@ class MapsCubit extends BaseModel {
     this.api, {
     required this.geofenceService,
     this.polygonId,
-  }) : super(context) {
+  }) {
     // init();
   }
   static const _latLng = LatLng(-25.185575842417077, 134.68900724218238);
   MapsState state = const MapsState(currentLocation: _latLng);
 
   final Completer<GoogleMapController> controller = Completer();
-  Future<GoogleMapController> get mapController async => await controller.future;
+  Future<GoogleMapController> get mapController async => controller.future;
 
   Future<void> init() async {
     geofenceService.init(geofenceRepo, localApi);
@@ -66,6 +66,10 @@ class MapsCubit extends BaseModel {
     polylinesStream();
   }
 
+  void setMyLocationEnabled(bool value) {
+    emit(state.copyWith(myLocationEnabled: value));
+  }
+
   void polygonsStream() {
     geofenceRepo.polygonStream.listen((event) {
       emit(state.copyWith(polygons: event.toSet()));
@@ -78,7 +82,7 @@ class MapsCubit extends BaseModel {
     });
   }
 
-  void moveToSelectedPolygon(PolygonModel model) async {
+  Future<void> moveToSelectedPolygon(PolygonModel model) async {
     (await mapController).animateCamera(
       MapsToolkitService.boundsFromLatLngList(model.points),
     );
@@ -116,9 +120,11 @@ class MapsCubit extends BaseModel {
   }
 
   void updatePolygon(PolygonModel polygon) {
-    emit(state.copyWith(
-      currentPolygon: polygon,
-    ));
+    emit(
+      state.copyWith(
+        currentPolygon: polygon,
+      ),
+    );
   }
 
   // @override
@@ -129,7 +135,13 @@ class MapsCubit extends BaseModel {
   }
 
   void startEditPolygon(PolygonModel polygon) {
-    emit(state.copyWith(isEditingFence: true, polylines: polygon.points, currentPolygon: polygon));
+    emit(
+      state.copyWith(
+        isEditingFence: true,
+        polylines: polygon.points,
+        currentPolygon: polygon,
+      ),
+    );
     _polygonsService.addPolygon(polygon.points);
   }
 
@@ -159,7 +171,7 @@ class MapsCubit extends BaseModel {
     emit(state.copyWith(polygonColor: color));
   }
 
-  void addPolygon(String name, {String? companyOwner}) async {
+  Future<void> addPolygon(String name, {String? companyOwner}) async {
     final model = PolygonModel(
       name: name,
       color: state.selectedColor,
@@ -192,7 +204,7 @@ class MapsCubit extends BaseModel {
     );
   }
 
-  void changeMapType(MapType type) async {
+  Future<void> changeMapType(MapType type) async {
     emit(state.copyWith(mapType: type));
   }
 
@@ -201,26 +213,44 @@ class MapsCubit extends BaseModel {
     if (!permission) {
       return null;
     }
+
     final result = await GeolocatorService.getLastKnownPosition();
+
     if (result != null) {
-      final _lastPosition = LatLng(result.latitude, result.longitude);
+      final lastPosition = LatLng(result.latitude, result.longitude);
       // animateCamera(_lastPosition);
       if (!mounted) return null;
       (await controller.future).moveCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            target: _lastPosition,
+            target: lastPosition,
             zoom: 20.151926040649414,
           ),
         ),
       );
-      emit(state.copyWith(currentLocation: _lastPosition));
-      return _lastPosition;
+      emit(state.copyWith(currentLocation: lastPosition));
+      return lastPosition;
+    } else {
+      GeolocatorService.getCurrentPosition().then((value) async {
+        final lastPosition = LatLng(value.latitude, value.longitude);
+        // animateCamera(_lastPosition);
+        if (!mounted) return null;
+        (await controller.future).moveCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: lastPosition,
+              zoom: 20.151926040649414,
+            ),
+          ),
+        );
+        emit(state.copyWith(currentLocation: lastPosition));
+        return lastPosition;
+      });
     }
     return null;
   }
 
-  void animateCamera(LatLng latLng) async {
+  Future<void> animateCamera(LatLng latLng) async {
     if (!mounted) return;
     (await controller.future).animateCamera(
       CameraUpdate.newCameraPosition(
@@ -241,10 +271,10 @@ class MapsCubit extends BaseModel {
   }
 
   Future<void> getLocationUpdates() async {
-    print('waiting for polygons to complete');
+    // print('waiting for polygons to complete');
     await _getAllPolygon();
     // await mapsRepo.polygonsCompleter;
-    print('polygons completed');
+    // print('polygons completed');
     // notifyListeners();
 
     geofenceService.getLocationUpdates((event) {
@@ -261,7 +291,6 @@ class MapsCubit extends BaseModel {
 
   @override
   Future<void> dispose() async {
-  
     _polygonsService.clear();
     super.dispose();
   }

@@ -8,8 +8,8 @@ import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
 import 'package:bioplus/ui/login/view/login_page.dart';
 import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
-import 'package:bioplus/ui/maps/location_service/geolocator_service.dart';
 import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
+import 'package:bioplus/ui/maps/location_service/permission_service.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/maps/view/widgets/add_fence.dart';
 import 'package:bioplus/ui/maps/view/widgets/add_polygon_details.dart';
@@ -24,13 +24,10 @@ import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/error.dart';
-import 'package:bioplus/widgets/dialogs/location_permission_dialog.dart';
-import 'package:bioplus/widgets/dialogs/while_using_app_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MapsView extends StatefulWidget {
   final bool fromDrawer;
@@ -48,21 +45,31 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     dev.log(state.name);
     switch (state) {
       case AppLifecycleState.detached:
-        print('AppLifecycleState.detached');
+        debugPrint('AppLifecycleState.detached');
         break;
       case AppLifecycleState.resumed:
-        print('AppLifecycleState.resumed');
+        debugPrint('AppLifecycleState.resumed');
         final controller = await cubit.controller.future;
         cubit.onMapCreated(controller);
         break;
       case AppLifecycleState.paused:
-        print('AppLifecycleState.paused');
+        debugPrint('AppLifecycleState.paused');
 
         break;
       case AppLifecycleState.inactive:
         break;
       default:
     }
+  }
+
+  void onPermissionDenied() {
+    context.read<Api>().logout();
+    Get.offAll(() => const LoginPage());
+  }
+
+  void onPermissionGranted() {
+    cubit.setMyLocationEnabled(true);
+    cubit.init();
   }
 
   @override
@@ -85,104 +92,10 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         );
       }
 
-      // final isLimitedPermission = await Permission.location.isLimited;
-      // if (isLimitedPermission) {
-      //   BottomSheetService.showSheet(
-      //     child: LocationPermissionDialog(
-      //       onPressed: () => Permission.location.request(),
-      //     ),
-      //   );
-      // }
-      final isPermissionGranted = await Permission.location.isGranted;
-      // print(await Permission.location.isLimited);
-      // print(await Permission.location.isDenied);
-      // print(await Permission.location.isRestricted);
-      // print(Permission.location.isBlank);
-
-      if (!isPermissionGranted) {
-        // final status = await Permission.location.request();
-        // if (status.isGranted) {
-        //   // Get.back();
-        //   _allowAllTheTime();
-        // }
-        BottomSheetService.showSheet(
-          child: WhileUsingAppPermission(
-            buttonText: 'Ask Permission',
-            onPressed: () async {
-              final status = await Permission.location.request();
-              if (status.isGranted) {
-                Get.back();
-                _allowAllTheTime();
-                return;
-              }
-
-              if (status.isDenied) {
-                Get.back();
-                _permissionDenied(api);
-                return;
-              }
-            },
-          ),
-        );
-      } else if (await Permission.location.isPermanentlyDenied) {
-        _permissionDenied(api);
-      } else if (await Permission.location.isDenied) {
-        _permissionDenied(api);
-      } else {
-        _allowAllTheTime();
-      }
-
-      // if(status.)
-
-      // await _allowAllTheTime();
+      await PermissionService(onPermissionDenied, onPermissionGranted)
+          .handlePermission();
     });
     super.initState();
-  }
-
-  void _permissionDenied(Api api) {
-    DialogService.showDialog(
-      child: ErrorDialog(
-        message:
-            'You have denied the location permission therefore we regret to inform you that we cannot proceed further\n\nPlease go to app settings and allow the permission to use this app',
-        onTap: () {
-          Get.back();
-          // Get.reset();
-          api.logout();
-          Get.offAll(() => const LoginPage());
-        },
-      ),
-    );
-  }
-
-  Future<void> _allowAllTheTime() async {
-    final result = await GeolocatorService.locationPermission();
-    if (result) {
-      final status = await Permission.locationAlways.status;
-      final isNotGranted = PermissionStatus.granted != status;
-      if (isNotGranted) {
-        BottomSheetService.showSheet(
-          child: LocationPermissionDialog(
-            onPressed: () async {
-              final result = await Permission.locationAlways.request();
-              final cubit = context.read<MapsCubit>();
-              if (result.isGranted) {
-                Get.back();
-                await cubit.init();
-              } else {
-                Get.back();
-                _permissionDenied(cubit.api);
-              }
-            },
-          ),
-        );
-      } else {
-        await cubit.init();
-      }
-    } else {
-      // await cubit.init();
-      // await 3.seconds.delay();
-      // await DialogService.showDialog(child: const LocationPermissionDialog());
-    }
   }
 
   @override
@@ -385,7 +298,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     return Consumer<MapsCubit>(
       builder: (context, snapshot, child) {
         final state = snapshot.state;
-        print('rebuilding maps');
+        // print('rebuilding maps');
         return GoogleMap(
           initialCameraPosition:
               CameraPosition(target: state.currentLocation, zoom: 5),
@@ -393,7 +306,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
           mapType: state.mapType,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
-          myLocationEnabled: true,
+          myLocationEnabled: state.myLocationEnabled,
           onLongPress: (s) => dev.log(s.toString()),
           polylines: _polylines(state, state.polylines),
           markers: _markers(state.polylines, state.currentLocation),

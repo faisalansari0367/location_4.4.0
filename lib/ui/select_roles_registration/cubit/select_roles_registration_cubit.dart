@@ -3,22 +3,30 @@ import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/features/drawer/view/drawer_page.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
+import 'package:bioplus/ui/select_role/payment_sheet/view/payment_sheet_page.dart';
 import 'package:bioplus/ui/select_roles_registration/cubit/select_roles_registration_state.dart';
 import 'package:bioplus/ui/select_roles_registration/models/select_role_model.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../widgets/dialogs/dialog_service.dart';
 
 class RolesRegistrationCubit extends BaseModel {
   final bool isFromRegistration;
   final VoidCallback? onRoleUpdated;
-  var state = SelectRolesRegistrationState(
+  SelectRolesRegistrationState state = SelectRolesRegistrationState(
     rolesList: [],
   );
 
-  RolesRegistrationCubit(BuildContext context, {this.isFromRegistration = true, this.onRoleUpdated}) : super(context) {
+  RolesRegistrationCubit(
+    super.context, {
+    this.isFromRegistration = true,
+    this.onRoleUpdated,
+  }) {
     getRoles();
+  }
+
+  Future<void> buyServiceRole(SelectRoleModel role) async {
+    Get.to(() => PaymentSheetPage(role: role.role));
   }
 
   Future<void> updateRole() async {
@@ -27,8 +35,8 @@ class RolesRegistrationCubit extends BaseModel {
       if (selectedRoles.isEmpty) {
         // DialogService.error('Please select at least one role');
         // return;
-        Get.offAll(() => DrawerPage());
-        Get.to(() => MapsPage());
+        Get.offAll(() => const DrawerPage());
+        Get.to(() => const MapsPage());
       }
       final user = api.getUserData() ?? UserData();
 
@@ -42,6 +50,7 @@ class RolesRegistrationCubit extends BaseModel {
             _onRoleUpdated();
           }
           // onRoleUpdated?.call() ??  _onRoleUpdated;
+          // Get.to(() => PaymentSheetPage(role: user.role!));
         },
         failure: (error) => DialogService.failure(error: error),
       );
@@ -51,8 +60,8 @@ class RolesRegistrationCubit extends BaseModel {
   }
 
   void _onRoleUpdated() {
-    Get.offAll(() => DrawerPage());
-    if (isFromRegistration) Get.to(() => MapsPage());
+    Get.offAll(() => const DrawerPage());
+    if (isFromRegistration) Get.to(() => const MapsPage());
   }
 
   void emit(SelectRolesRegistrationState state) {
@@ -68,12 +77,26 @@ class RolesRegistrationCubit extends BaseModel {
       result.when(
         success: (data) {
           final roles = data.data..remove('Visitor');
+          final userData = api.getUserData();
+          final allowedRoles = userData?.allowedRoles ?? [];
           emit(
             state.copyWith(
-              rolesList: roles.map((e) => SelectRoleModel(role: e, isSelected: e == 'Visitor')).toList(),
+              rolesList: roles
+                  .map(
+                    (e) => SelectRoleModel(
+                      role: e,
+                      isSelected: allowedRoles.contains(e) || e == 'Visitor',
+                      isPaidRole: ![
+                        'Visitor',
+                        'Employee',
+                        'International Traveller'
+                      ].contains(e),
+                    ),
+                  )
+                  .toList(),
             ),
           );
-          _fillRoles();
+          // _fillRoles();
         },
         failure: (error) => DialogService.failure(error: error),
       );
@@ -84,10 +107,10 @@ class RolesRegistrationCubit extends BaseModel {
 
   void _fillRoles() {
     final userData = api.getUserData();
-    final _allowedRoles = userData?.allowedRoles ?? [];
-    if (_allowedRoles.isEmpty) return;
+    final allowedRoles = userData?.allowedRoles ?? [];
+    if (allowedRoles.isEmpty) return;
     for (final role in state.rolesList) {
-      final roleIsSelected = _allowedRoles.contains(role.role);
+      final roleIsSelected = allowedRoles.contains(role.role);
       if (roleIsSelected) {
         role.isSelected = true;
       }

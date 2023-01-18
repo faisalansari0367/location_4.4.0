@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class CvdUploadModel {
+class CvdModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String buyerName;
@@ -9,7 +9,7 @@ class CvdUploadModel {
   final String? pdfUrl;
   final int? id;
 
-  CvdUploadModel({
+  CvdModel({
     this.createdAt,
     this.updatedAt,
     required this.buyerName,
@@ -43,15 +43,15 @@ class CvdUploadModel {
   //   ];
   // }
 
-  factory CvdUploadModel.fromJson(Map<String, dynamic> map) {
-    return CvdUploadModel(
+  factory CvdModel.fromJson(Map<String, dynamic> map) {
+    return CvdModel(
       createdAt: _parseDate(map['createdAt'] as String?),
       updatedAt: _parseDate(map['updatedAt'] as String?),
-      buyerName: map['buyerName'] as String,
+      buyerName: map['buyerName'] as String? ?? '',
       pic: map['pic'] as String?,
-      transporter: map['transporter'] as String,
-      cvdName: map['cvdName'] as String,
-      pdfUrl: map['pdfUrl'] as String,
+      transporter: map['transporter'] as String? ?? '',
+      cvdName: map['cvdName'] as String? ?? '',
+      pdfUrl: map['pdfUrl'] as String? ?? '',
       id: map['id'] as int,
     );
   }

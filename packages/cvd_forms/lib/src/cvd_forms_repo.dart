@@ -5,8 +5,9 @@ import 'package:api_client/api_client.dart';
 import '../models/models.dart';
 
 abstract class CvdFormsRepo {
+  //  Future<ApiResult<List<CvdModel>>> getCvdUrls();
   Future<ApiResult<List<WitholdingPeriodModel>>> getWitholdingPeriodsList();
-  ApiResult<List<CvdForm>> getCvdForms();
+  Future<ApiResult<List<CvdModel>>> getCvdUrls();
   Future<ApiResult<CvdForm>> addCvdForm(CvdForm cvdForm);
   Future<ApiResult<CvdForm>> updateCvdForm(CvdForm cvdForm);
   CvdForm? getCurrentForm();

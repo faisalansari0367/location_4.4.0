@@ -85,7 +85,11 @@ class SelectRoleView extends StatelessWidget {
                         itemBuilder: (context, index) => MyListTile(
                           text: state.roles[index].role,
                           onTap: () async {
-                            // Get.to(() => const PaymentSheetPage());
+                            // Get.to(
+                            //   () => PaymentSheetPage(
+                            //     role: state.roles[index].role,
+                            //   ),
+                            // );
                             // BottomSheetService.showSheet(
                             //   child: const PaymentSheetPage(),
                             // );

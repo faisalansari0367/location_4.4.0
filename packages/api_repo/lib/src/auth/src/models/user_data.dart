@@ -70,6 +70,13 @@ class UserData {
   String? countryOfResidency;
   String? employerCompany;
   String? temporaryOwner;
+  String? emergencyMobileContact;
+
+  dynamic stripeCusId;
+  int? geofenceLimit;
+  bool isSubscribed = false;
+  DateTime? subscriptionStartDate;
+  DateTime? subscriptionEndDate;
 
   DateTime? startDate;
   DateTime? endDate;
@@ -88,6 +95,7 @@ class UserData {
   UserData({
     this.species = const <String>[],
     this.employerCompany,
+    this.emergencyMobileContact,
     this.temporaryOwner,
     this.delegationEndDate,
     this.delegationStartDate,
@@ -147,6 +155,12 @@ class UserData {
     this.nlisPassword,
     this.msaNumber,
     this.nfasAccreditationNumber,
+    this.stripeCusId,
+    this.geofenceLimit,
+    this.isSubscribed = false,
+    this.subscriptionStartDate,
+    this.subscriptionEndDate,
+    this.createdAt,
   });
 
   UserData.fromJson(Map<String, dynamic> json) {
@@ -155,6 +169,7 @@ class UserData {
     temporaryOwner = json['temporaryOwner'];
     allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
     countryOfResidency = json['countryOfResidency'];
+    emergencyMobileContact = json['emergencyMobileContact'];
 
     status = getStatus(json['status']);
     ngr = json['ngr'];
@@ -217,6 +232,12 @@ class UserData {
     contactNumber = json['contactNumber'];
 
     edec = json['edec'];
+    stripeCusId = json['stripeCusId'];
+    geofenceLimit = json['geofenceLimit'];
+    isSubscribed = json['isSubscribed'] ?? false;
+
+    subscriptionStartDate = _parseDate(json['subscriptionStartDate']);
+    subscriptionEndDate = _parseDate(json['subscriptionEndDate']);
     createdAt = _parseDate(json['createdAt']);
     updatedAt = _parseDate(json['updatedAt']);
     startDate = _parseDate(json['startDate']);
@@ -225,36 +246,6 @@ class UserData {
     endDate = _parseDate(json['endDate']);
     delegationEndDate = _parseDate(json['delegationEndDate']);
     delegationStartDate = _parseDate(json['delegationStartDate']);
-  }
-
-  static _parseDate(String? date) {
-    if (date == null) return null;
-    return DateTime.tryParse(date)?.toLocal();
-  }
-
-  static UserStatus getStatus(String? status) {
-    final result = UserStatus.values.where(
-        (element) => element.name == (status ?? 'inactive').toLowerCase());
-    if (result.isEmpty) return UserStatus.inactive;
-    return result.first;
-  }
-
-  String get fullName => '$firstName $lastName';
-  bool get isTemporaryOwner =>
-      temporaryOwner != null && temporaryOwner!.isNotEmpty;
-
-  Map<String, dynamic> updateStatus() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['status'] = status!.name.replaceFirst(status!.name.characters.first,
-        status!.name.characters.first.toUpperCase());
-    return data;
-  }
-
-  Map<String, dynamic> updateAllowedRoles() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['allowedRoles'] = allowedRoles;
-    return data;
   }
 
   Map<String, dynamic> toJson() {
@@ -267,6 +258,7 @@ class UserData {
         : status!.name.replaceFirst(status!.name.characters.first,
             status!.name.characters.first.toUpperCase());
     data['firstName'] = firstName;
+    data['emergencyMobileContact'] = emergencyMobileContact;
     data['lastName'] = lastName;
     data['countryOfResidency'] = countryOfResidency;
     data['email'] = email;
@@ -322,6 +314,12 @@ class UserData {
     data['contactNumber'] = contactNumber;
     data['edec'] = edec;
 
+    data['stripeCusId'] = stripeCusId;
+    data['geofenceLimit'] = geofenceLimit;
+    data['isSubscribed'] = isSubscribed;
+    data['subscriptionStartDate'] = subscriptionStartDate?.toIso8601String();
+    data['subscriptionEndDate'] = subscriptionEndDate?.toIso8601String();
+
     data['createdAt'] = createdAt?.toIso8601String();
     data['updatedAt'] = updatedAt?.toIso8601String();
     data['startDate'] = startDate?.toIso8601String();
@@ -333,57 +331,33 @@ class UserData {
     return data;
   }
 
-  // create a merge constructor
-  UserData merge(UserData other) {
-    return UserData(
-      firstName: other.firstName ?? firstName,
-      lastName: other.lastName ?? lastName,
-      email: other.email ?? email,
-      phoneNumber: other.phoneNumber ?? phoneNumber,
-      countryCode: other.countryCode ?? countryCode,
-      role: other.role ?? role,
-      pic: other.pic ?? pic,
-      propertyName: other.propertyName ?? propertyName,
-      state: other.state ?? state,
-      street: other.street ?? street,
-      town: other.town ?? town,
-      postcode: other.postcode ?? postcode,
-      id: other.id ?? id,
-      signature: other.signature ?? signature,
-      logOn: other.logOn ?? logOn,
-      employeeNumber: other.employeeNumber ?? employeeNumber,
-      driversLicense: other.driversLicense ?? driversLicense,
-      ddt: other.ddt ?? ddt,
-      persons: other.persons ?? persons,
-      contactDetails: other.contactDetails ?? contactDetails,
-      reasonForVisit: other.reasonForVisit ?? reasonForVisit,
-      serviceRole: other.serviceRole ?? serviceRole,
-      ohsRequirements: other.ohsRequirements ?? ohsRequirements,
-      questionnaire: other.questionnaire ?? questionnaire,
-      region: other.region ?? region,
-      company: other.company ?? company,
-      picVisiting: other.picVisiting ?? picVisiting,
-      reason: other.reason ?? reason,
-      worksafeQuestionsForm:
-          other.worksafeQuestionsForm ?? worksafeQuestionsForm,
-      countryOfOrigin: other.countryOfOrigin ?? countryOfOrigin,
-      countryVisiting: other.countryVisiting ?? countryVisiting,
-      entryDate: other.entryDate ?? entryDate,
-      exitDate: other.exitDate ?? exitDate,
-      passport: other.passport ?? passport,
-      ngr: other.ngr ?? ngr,
-      businessName: other.businessName ?? businessName,
-      sector: other.sector ?? sector,
-      contactName: other.contactName ?? contactName,
-      eventName: other.eventName ?? eventName,
-      contactEmail: other.contactEmail ?? contactEmail,
-      contactNumber: other.contactNumber ?? contactNumber,
-      startDate: other.startDate ?? startDate,
-      endDate: other.endDate ?? endDate,
-      edec: other.edec ?? edec,
-      lpaPassword: other.lpaPassword ?? lpaPassword,
-      lpaUsername: other.lpaUsername ?? lpaUsername,
-      nlisPassword: other.nlisPassword ?? nlisPassword,
-    );
+  static _parseDate(String? date) {
+    if (date == null) return null;
+    return DateTime.tryParse(date)?.toLocal();
+  }
+
+  static UserStatus getStatus(String? status) {
+    final result = UserStatus.values.where(
+        (element) => element.name == (status ?? 'inactive').toLowerCase());
+    if (result.isEmpty) return UserStatus.inactive;
+    return result.first;
+  }
+
+  String get fullName => '$firstName $lastName';
+  bool get isTemporaryOwner =>
+      temporaryOwner != null && temporaryOwner!.isNotEmpty;
+
+  Map<String, dynamic> updateStatus() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+
+    data['status'] = status!.name.replaceFirst(status!.name.characters.first,
+        status!.name.characters.first.toUpperCase());
+    return data;
+  }
+
+  Map<String, dynamic> updateAllowedRoles() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['allowedRoles'] = allowedRoles;
+    return data;
   }
 }

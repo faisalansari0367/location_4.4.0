@@ -17,6 +17,7 @@ class Endpoints {
   static const String notifyProperyManager = '$users/notify-property-manager';
 
   static const payment = '/payment', createSession = '$payment/create-session';
+  static const planDetails = '/default';
 
   static const String signUp = '$auth/signup',
       verifyOtp = '$auth/verify',
@@ -37,7 +38,8 @@ class Endpoints {
       // users
       getFields = '$users/fields',
       updateMe = '$users/me',
-      createCvd = '$users/cvd',
+      createCvd = '$users/createCvd',
+      cvd = '$users/cvd',
       // updateUser = '$users/users',
       usersForms = '$users/forms',
       exportLogRecords = '$users/export-log-records';

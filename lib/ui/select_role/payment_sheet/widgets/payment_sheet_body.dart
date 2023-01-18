@@ -22,21 +22,34 @@ class PaymentSheetBody extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _selectLocationHeader(context),
+              _chooseYourPlan(context),
               Gap(20.h),
-              PaymentSubscriptionTile(
-                amount: state.monthlyPrice,
-                subscription: Subscriptions.monthly,
-                isSelected: state.subscription?.isMonthly,
-                onChanged: state.setSubscription,
+
+              ...state.plans.map(
+                (plan) => Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: PaymentSubscriptionTile(
+                    amount: (plan.amount ?? 0.0).toDouble(),
+                    subscription: plan.paymentType,
+                    isSelected: state.selectedPlan?.id == plan.id,
+                    onChanged: () => state.setPlan(plan),
+                  ),
+                ),
               ),
-              Gap(20.h),
-              PaymentSubscriptionTile(
-                amount: state.yearlyPrice,
-                subscription: Subscriptions.yearly,
-                isSelected: state.subscription?.isYearly,
-                onChanged: state.setSubscription,
-              ),
+
+              // PaymentSubscriptionTile(
+              //   amount: state.monthlyPrice,
+              //   subscription: Subscriptions.monthly,
+              //   isSelected: state.subscription?.isMonthly,
+              //   onChanged: state.setPlan,
+              // ),
+              // Gap(20.h),
+              // PaymentSubscriptionTile(
+              //   amount: state.yearlyPrice,
+              //   subscription: Subscriptions.yearly,
+              //   isSelected: state.subscription?.isYearly,
+              //   onChanged: state.setPlan,
+              // ),
               // Gap(20.h),
               const Spacer(),
               _checkoutButton(state),
@@ -50,7 +63,7 @@ class PaymentSheetBody extends StatelessWidget {
 
   ElevatedButton _checkoutButton(PaymentSheetNotifier state) {
     return ElevatedButton(
-      onPressed: state.subscription == null ? null : state.createSubscription,
+      onPressed: state.selectedPlan == null ? null : state.createSubscription,
       style: ElevatedButton.styleFrom(
         shape: const StadiumBorder(),
         minimumSize: Size(60.width, 5.height),
@@ -74,7 +87,7 @@ class PaymentSheetBody extends StatelessWidget {
     );
   }
 
-  Row _selectLocationHeader(BuildContext context) {
+  Row _chooseYourPlan(BuildContext context) {
     return Row(
       children: [
         Text(

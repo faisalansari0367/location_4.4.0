@@ -6,6 +6,7 @@ part of 'maps_cubit.dart';
 class MapsState extends Equatable {
   final bool insideFence;
   final bool isEditingFence;
+  final bool myLocationEnabled;
   final LatLng currentLocation;
   final MapType mapType;
   final List<LatLng> polylines;
@@ -20,6 +21,7 @@ class MapsState extends Equatable {
   final bool isTracking;
 
   const MapsState({
+    this.myLocationEnabled = false,
     this.isTracking = true,
     this.isConnected = true,
     this.selectedColor = Colors.blue,
@@ -37,6 +39,7 @@ class MapsState extends Equatable {
   });
 
   MapsState copyWith({
+    bool? myLocationEnabled,
     bool? insideFence,
     bool? isConnected,
     LatLng? currentLocation,
@@ -53,6 +56,7 @@ class MapsState extends Equatable {
     bool? isTracking,
   }) {
     return MapsState(
+      myLocationEnabled: myLocationEnabled ?? this.myLocationEnabled,
       isTracking: isTracking ?? this.isTracking,
       isConnected: isConnected ?? this.isConnected,
       insideFence: insideFence ?? this.insideFence,
@@ -66,7 +70,7 @@ class MapsState extends Equatable {
       fieldAsset: fieldAsset ?? this.fieldAsset,
       zoom: zoom ?? this.zoom,
       currentPolygon: currentPolygon ?? this.currentPolygon,
-      selectedColor: polygonColor ?? this.selectedColor,
+      selectedColor: polygonColor ?? selectedColor,
     );
   }
 
@@ -75,6 +79,7 @@ class MapsState extends Equatable {
         insideFence,
         currentLocation,
         mapType,
+        myLocationEnabled,
         // latLngs,
         polygons, isTracking,
         isEditingFence,
