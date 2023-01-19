@@ -1,9 +1,8 @@
+import 'package:bioplus/ui/links_page/links_view.dart';
 import 'package:flutter/material.dart';
 
-import 'links_view.dart';
-
 class LinksPage extends StatelessWidget {
-  const LinksPage({Key? key}) : super(key: key);
+  const LinksPage({super.key});
 
   @override
   Widget build(BuildContext context) {

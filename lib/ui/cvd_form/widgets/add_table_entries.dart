@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
 
 class AddTableEntries extends StatefulWidget {
   final ValueChanged<ChemicalTable>? onChanged;
-  const AddTableEntries({Key? key, this.onChanged}) : super(key: key);
+  const AddTableEntries({super.key, this.onChanged});
 
   @override
   State<AddTableEntries> createState() => _AddTableEntriesState();
 }
 
 class _AddTableEntriesState extends State<AddTableEntries> {
-  var list = <WitholdingPeriodModel>[];
+  List<WitholdingPeriodModel> list = <WitholdingPeriodModel>[];
   WitholdingPeriodModel? selected;
   final formKey = GlobalKey<FormState>();
   final productName = TextEditingController();
@@ -33,9 +33,9 @@ class _AddTableEntriesState extends State<AddTableEntries> {
     super.initState();
   }
 
-  void _readTable() async {
-    final CvdFormsRepo _cvdFormsRepo = context.read<Api>();
-    final result = await _cvdFormsRepo.getWitholdingPeriodsList();
+  Future<void> _readTable() async {
+    final CvdFormsRepo cvdFormsRepo = context.read<Api>();
+    final result = await cvdFormsRepo.getWitholdingPeriodsList();
     result.when(
       success: (data) {
         list = data;
@@ -72,8 +72,8 @@ class _AddTableEntriesState extends State<AddTableEntries> {
           MyTextField(
             hintText: 'Chemical Applied',
             controller: productName,
-            decoration: InputDecoration(
-              labelText: ('Chemical Applied'),
+            decoration: const InputDecoration(
+              labelText: 'Chemical Applied',
             ),
           ),
           Gap(10.h),
@@ -86,7 +86,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
                   textInputType: TextInputType.number,
                   validator: Validator.none,
 
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Rate',
                   ),
                 ),
@@ -102,7 +102,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
                   // value: '',
                   // options: ['ml', 'g/kg', 'g/l', 'g'],
                   validator: Validator.none,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Unit',
                     hintText: "ml , g/kg , g/l , g",
                   ),
@@ -117,16 +117,16 @@ class _AddTableEntriesState extends State<AddTableEntries> {
             onChanged: (s) {
               applicationDate.text = s;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Application date',
-              suffixIcon: const Icon(Icons.date_range_outlined),
+              suffixIcon: Icon(Icons.date_range_outlined),
             ),
           ),
           Gap(10.h),
           MyTextField(
             hintText: 'WHP/ ESI/ EAFI',
             controller: whpDays,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'WHP / ESI / EAFI',
             ),
           ),
@@ -140,7 +140,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
               final chemicalTableModel = ChemicalTable(
                 applicationDate: MyDecoration.formatDate(DateTime.parse(applicationDate.text)),
                 chemicalName: productName.text,
-                rate: rateController.text + ' ' + unitController.text,
+                rate: '${rateController.text} ${unitController.text}',
                 wHP: whpDays.text,
               );
 
@@ -172,7 +172,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
   }
 
   Widget _optionsViewBuilder(BuildContext context, AutocompleteOnSelected<WitholdingPeriodModel> onSelected,
-      Iterable<WitholdingPeriodModel> options) {
+      Iterable<WitholdingPeriodModel> options,) {
     return Align(
       alignment: Alignment.topLeft,
       child: Material(
@@ -192,8 +192,8 @@ class _AddTableEntriesState extends State<AddTableEntries> {
                 },
                 dense: true,
                 title: Text(option.aPVMARegisteredProductName!),
-                subtitle: Text('ESI DAYS ' + option.eSIDays!),
-                trailing: Text('WHP DAYS ' + option.wHPDays!),
+                subtitle: Text('ESI DAYS ${option.eSIDays!}'),
+                trailing: Text('WHP DAYS ${option.wHPDays!}'),
               );
             },
           ),
@@ -207,7 +207,7 @@ class _AddTableEntriesState extends State<AddTableEntries> {
   }
 
   Widget _fieldViewBuilder(BuildContext context, TextEditingController textEditingController, FocusNode focusNode,
-      VoidCallback onFieldSubmitted) {
+      VoidCallback onFieldSubmitted,) {
     return TextField(
       controller: textEditingController,
       focusNode: focusNode,

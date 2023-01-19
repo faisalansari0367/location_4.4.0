@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/view/create_declaration_form_pdf.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -8,11 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../constants/index.dart';
-
 class LogbookDetails extends StatefulWidget {
   final LogbookEntry item;
-  const LogbookDetails({Key? key, required this.item}) : super(key: key);
+  const LogbookDetails({super.key, required this.item});
 
   @override
   State<LogbookDetails> createState() => _LogbookDetailsState();
@@ -37,7 +36,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
               logbookFormPrinter.createPdf();
               // CreatePDf.printDeclarationForm(item);
             },
-            icon: Icon(Icons.picture_as_pdf),
+            icon: const Icon(Icons.picture_as_pdf),
           ),
           Gap(20.w),
         ],
@@ -67,7 +66,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
     ];
   }
 
-  _buildChildrens() {
+  List<Widget> _buildChildrens() {
     final form = widget.item.form!;
     return [
       _userInfo(context),
@@ -96,9 +95,9 @@ class _LogbookDetailsState extends State<LogbookDetails> {
   Container _card(String key, String? value2) {
     if (value2 == null) return Container();
     return Container(
-      decoration: MyDecoration.decoration(shadow: false, color: Color.fromARGB(255, 242, 242, 242)),
+      decoration: MyDecoration.decoration(shadow: false, color: const Color.fromARGB(255, 242, 242, 242)),
       padding: kPadding,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -135,7 +134,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
           Gap(20.h),
           _buildRow(
             'Phone Number',
-            (widget.item.user?.countryCode ?? '') + ' ' + (widget.item.user?.phoneNumber ?? ''),
+            '${widget.item.user?.countryCode ?? ''} ${widget.item.user?.phoneNumber ?? ''}',
             'Expected Departure Time',
             getDateTime(widget.item.form?.expectedDepartureDate),
           )
@@ -151,7 +150,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
           flex: 2,
           child: _buildText(field1, value1),
         ),
-        Spacer(),
+        const Spacer(),
         Expanded(
           flex: 2,
           child: _buildText(field2, value2),
@@ -175,7 +174,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
         AutoSizeText(
           value,
           maxLines: 2,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),

@@ -1,11 +1,10 @@
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../constants/index.dart';
-
 class ShimmerAnimation extends StatelessWidget {
   final double? width, height;
-  const ShimmerAnimation({Key? key, this.width, this.height}) : super(key: key);
+  const ShimmerAnimation({super.key, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {

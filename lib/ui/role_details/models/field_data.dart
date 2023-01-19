@@ -1,13 +1,12 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/role_details/models/field_types.dart';
+import 'package:bioplus/ui/role_details/widgets/property_address.dart';
 import 'package:bioplus/ui/role_details/widgets/species.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
-import '../widgets/property_address.dart';
 
 class FieldData {
   final String name;

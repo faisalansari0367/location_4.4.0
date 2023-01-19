@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/api_constants.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../../constants/api_constants.dart';
 
 part 'visitor_check_in_state.dart';
 

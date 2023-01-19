@@ -1,12 +1,11 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:bioplus/ui/cvd_form/view/cvd_form_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/cvd_cubit.dart';
-
 class CvdFormPage extends StatelessWidget {
-  const CvdFormPage({Key? key}) : super(key: key);
+  const CvdFormPage({super.key});
 
   @override
   Widget build(BuildContext context) {

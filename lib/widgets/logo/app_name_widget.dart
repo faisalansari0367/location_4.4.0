@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class AppName extends StatelessWidget {
   final double? fontSize;
-  const AppName({Key? key, this.fontSize}) : super(key: key);
+  const AppName({super.key, this.fontSize});
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,10 @@
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/index.dart';
 
 class RoleTile extends StatefulWidget {
   final String role;
   final Future<void> Function() onTap;
-  const RoleTile({Key? key, required this.role, required this.onTap}) : super(key: key);
+  const RoleTile({super.key, required this.role, required this.onTap});
 
   @override
   State<RoleTile> createState() => _RoleTileState();

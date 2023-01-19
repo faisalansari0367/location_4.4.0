@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:api_client/api_client.dart';
+import 'package:api_client/api_client.dart' as dio;
 import 'package:api_client/configs/client.dart';
 import 'package:cvd_forms/models/models.dart';
 import 'package:cvd_forms/src/cvd_form_utils.dart';
@@ -49,21 +50,29 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
     }
   }
 
+  // @override
+  // ApiResult<List<CvdForm>> getCvdForms() {
+  //   try {
+  //     final forms = storage.getCvdForms();
+  //     return ApiResult.success(data: forms);
+  //   } catch (e) {
+  //     return const ApiResult.failure(
+  //         error: NetworkExceptions.defaultError('Failed to get forms'));
+  //   }
+  // }
+
   @override
-  ApiResult<List<CvdForm>> getCvdForms() {
-    try {
-      final forms = storage.getCvdForms();
-      return ApiResult.success(data: forms);
-    } catch (e) {
-      return const ApiResult.failure(
-          error: NetworkExceptions.defaultError('Failed to get forms'));
-    }
+  Future<Directory> getCvdDownloadsDir() async {
+    final dir =
+        await FormsHelper(cachePath: cacheDir.path).getCvdDownloadsDir();
+    return dir;
   }
 
   @override
   Future<ApiResult<File>> submitCvdForm(CvdForm cvdForm,
       {ProgressCallback? onReceiveProgress}) async {
     try {
+      cvdForm.createdAt = DateTime.now();
       final Uint8List pdf = await _generatePdf(cvdForm.toFormJson());
       final FormsHelper formsHelper = FormsHelper(cachePath: cacheDir.path);
       final file = await formsHelper.createCvdFile(cvdForm.fileName);
@@ -72,7 +81,9 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
       await addCvdForm(form);
       return ApiResult.success(data: file);
     } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+      return ApiResult.failure(
+        error: NetworkExceptions.defaultError(e.toString()),
+      );
     }
   }
 
@@ -126,6 +137,36 @@ class CvdFormsRepoImpl implements CvdFormsRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
+  @override
+  Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd,
+      {ProgressCallback? onReceiveProgress}) async {
+    try {
+      final result = await client.build(logging: false).get(
+            cvd.pdfUrl!,
+            onReceiveProgress: onReceiveProgress,
+            options: dio.Options(responseType: ResponseType.bytes),
+          );
+      final FormsHelper formsHelper = FormsHelper(cachePath: cacheDir.path);
+      const startingUrl = 'https://d1nbrjjzukxc8j.cloudfront.net/';
+      final fileName = cvd.pdfUrl!.replaceFirst(startingUrl, '');
+      final file = await formsHelper.downloadCvd(fileName);
+      await file.writeAsBytes(result.data);
+      return ApiResult.success(data: file);
+      // await storage.addCvdForms(cvdForms);
+    } on FileSystemException catch (e) {
+      return ApiResult.failure(
+          error: NetworkExceptions.defaultError(e.message));
+    }
+  }
+
+  // File? isCvdFormExists(CvdModel fileName) {
+  //   final file = File('$cacheDir/$fileName');
+  //   if (file.existsSync()) {
+  //     return file;
+  //   }
+  //   return null;
+  // }
 
   @override
   Future<ApiResult<bool>> uploadCvdForm(CvdForm file, String? pic,

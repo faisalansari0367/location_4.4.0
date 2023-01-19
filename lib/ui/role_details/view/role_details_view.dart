@@ -193,8 +193,9 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       case 'emergencyMobileContact':
         controller.text = userData['phoneNumber'] ?? '';
         return PhoneTextField(
-          // controller: controller,
+          controller: controller,
           hintText: name,
+          // controller: ,
           onChanged: (number, countryCode) {
             map[name.toCamelCase] = countryCode + number;
           },

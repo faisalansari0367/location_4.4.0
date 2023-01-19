@@ -1,6 +1,8 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/features/drawer/cubit/my_drawer_controller.dart';
+import 'package:bioplus/features/drawer/models/drawer_item.dart';
 import 'package:bioplus/features/drawer/models/drawer_items.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../cubit/my_drawer_controller.dart';
-import '../../models/drawer_item.dart';
-
 class DrawerMenu extends StatefulWidget {
   // final List<DrawerItem> items;
   final Function(int) onItemSelected;
   final int selectedIndex;
 
-  const DrawerMenu({Key? key, required this.onItemSelected, required this.selectedIndex}) : super(key: key);
+  const DrawerMenu({super.key, required this.onItemSelected, required this.selectedIndex});
 
   @override
   State<DrawerMenu> createState() => _DrawerMenuState();
@@ -70,7 +69,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
             child: _buildCopyright(context),
           ),
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
@@ -119,7 +118,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           return StreamBuilder<User?>(
             stream: (snapshot.data ?? false) ? api.userStream : api.userStream,
             builder: (context, snapshot) {
-              final hasName = !([null, ''].contains(snapshot.data?.role));
+              final hasName = ![null, ''].contains(snapshot.data?.role);
               final role = hasName ? snapshot.data?.role : '';
               return Text(
                 role ?? '',
@@ -151,7 +150,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                   ),
             ),
             Gap(5.w),
-            Icon(
+            const Icon(
               Icons.copyright_outlined,
               color: Colors.white,
             ),
@@ -180,7 +179,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   }
 
   Widget _leading(String? image, Color color, IconData iconData) {
-    final size = 22.0;
+    const size = 22.0;
     return image != null
         ? Image.asset(
             image,

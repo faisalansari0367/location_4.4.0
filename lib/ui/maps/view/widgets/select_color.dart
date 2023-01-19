@@ -35,7 +35,7 @@ final colors = [
 class SelectColor extends StatelessWidget {
   // final MapsCubit cubit;
   final ValueChanged<Color> onColorSelected;
-  const SelectColor({Key? key, required this.onColorSelected}) : super(key: key);
+  const SelectColor({super.key, required this.onColorSelected});
 
   @override
   Widget build(BuildContext context) {

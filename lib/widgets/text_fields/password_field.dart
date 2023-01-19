@@ -1,7 +1,6 @@
+import 'package:bioplus/helpers/validator.dart';
+import 'package:bioplus/widgets/text_fields/my_text_field.dart';
 import 'package:flutter/material.dart';
-
-import '../../helpers/validator.dart';
-import 'my_text_field.dart';
 
 class PasswordField extends StatefulWidget {
   final void Function(String)? onChanged, onSubmitted;
@@ -10,14 +9,14 @@ class PasswordField extends StatefulWidget {
   final String? hintText;
   final TextInputAction textInputAction;
   const PasswordField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.onSubmitted,
     this.controller,
     this.validator,
     this.hintText,
     this.textInputAction = TextInputAction.done,
-  }) : super(key: key);
+  });
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();

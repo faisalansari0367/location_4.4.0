@@ -6,7 +6,7 @@ class States extends StatelessWidget {
   final bool Function(String)? filterStates;
   final String? header;
 
-  const States({Key? key, required this.onChanged, this.filterStates, this.header}) : super(key: key);
+  const States({super.key, required this.onChanged, this.filterStates, this.header});
 
   @override
   Widget build(BuildContext context) {

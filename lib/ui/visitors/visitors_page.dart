@@ -2,7 +2,7 @@ import 'package:bioplus/ui/visitor_check_in/view/visitor_check_in_page.dart';
 import 'package:flutter/material.dart';
 
 class VisitorsPage extends StatefulWidget {
-  const VisitorsPage({Key? key}) : super(key: key);
+  const VisitorsPage({super.key});
 
   @override
   State<VisitorsPage> createState() => _VisitorsPageState();
@@ -11,7 +11,7 @@ class VisitorsPage extends StatefulWidget {
 class _VisitorsPageState extends State<VisitorsPage> {
   @override
   Widget build(BuildContext context) {
-    return VisitorCheckInPage();
+    return const VisitorCheckInPage();
 
     //   return DefaultTabController(
     //     length: 2,

@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VisitorCheckInView extends StatelessWidget {
-  const VisitorCheckInView({Key? key}) : super(key: key);
+  const VisitorCheckInView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,6 @@ class VisitorCheckInView extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.black,
                             width: 2.width,
                             strokeAlign: StrokeAlign.outside,
                           ),

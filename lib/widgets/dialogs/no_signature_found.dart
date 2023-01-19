@@ -11,12 +11,12 @@ class NoSignatureFound extends StatelessWidget {
   // final VoidCallback onRetry;
   final VoidCallback? onTap;
   const NoSignatureFound({
-    Key? key,
+    super.key,
     required this.message,
     this.subtitle,
     required this.buttonText,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

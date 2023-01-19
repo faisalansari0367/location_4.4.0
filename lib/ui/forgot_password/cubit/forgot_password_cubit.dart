@@ -3,9 +3,8 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/forgot_password/cubit/forgot_password_state.dart';
 import 'package:bioplus/ui/forgot_password/view/reset_password.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/mail_sent_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../widgets/dialogs/mail_sent_dialog.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final AuthRepo authRepo;

@@ -1,10 +1,10 @@
+import 'package:bioplus/constants/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import 'constans.dart';
-
+// ignore: avoid_classes_with_only_static_members
 class MyDecoration {
   static const inputRadius = 50.0;
   static final inputBorderRadius = BorderRadius.circular(inputRadius);
@@ -72,7 +72,7 @@ class MyDecoration {
   }
 
   static BoxDecoration bottomButtonShadow() {
-    return BoxDecoration(
+    return const BoxDecoration(
       boxShadow: [
         BoxShadow(
           color: Color.fromARGB(255, 255, 255, 255),

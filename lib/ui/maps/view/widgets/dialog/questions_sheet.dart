@@ -1,15 +1,14 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/constants/strings.dart';
+import 'package:bioplus/widgets/my_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../constants/constans.dart';
-import '../../../../../constants/strings.dart';
-import '../../../../../widgets/my_elevated_button.dart';
-
 class QuestionsSheet extends StatelessWidget {
   final PolygonModel polygonModel;
-  const QuestionsSheet({Key? key, required this.polygonModel}) : super(key: key);
+  const QuestionsSheet({super.key, required this.polygonModel});
 
   @override
   Widget build(BuildContext context) {

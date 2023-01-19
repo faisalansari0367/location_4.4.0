@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EnvdListItem extends StatelessWidget {
   final Items items;
-  const EnvdListItem({Key? key, required this.items}) : super(key: key);
+  const EnvdListItem({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class EnvdListItem extends StatelessWidget {
           Row(
             children: [
               _buildText('Status', items.status!),
-              Spacer(),
+              const Spacer(),
               _buildPdfButton(context),
             ],
           ),
@@ -60,7 +60,7 @@ class EnvdListItem extends StatelessWidget {
   }
 
   String _getAccredentials() {
-    List<String> availableTypes = [];
+    final List<String> availableTypes = [];
     final ahsType = 'HS${items.species!.characters.first}';
     final msaType = 'MSA${items.species!.characters.first}';
     final nfasType = 'NFAS${items.species!.characters.first}';
@@ -87,7 +87,7 @@ class EnvdListItem extends StatelessWidget {
           flex: 2,
           child: _buildText(field1, value1),
         ),
-        Spacer(),
+        const Spacer(),
         Expanded(
           flex: 2,
           child: _buildText(field2, value2),
@@ -134,7 +134,7 @@ class EnvdListItem extends StatelessWidget {
         AutoSizeText(
           value,
           maxLines: 1,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -151,15 +151,15 @@ class EnvdListItem extends StatelessWidget {
     }
     switch (type) {
       case 'LPAG2':
-        return Color(0xffDC4233);
+        return const Color(0xffDC4233);
       case 'LPAC1':
-        return Color(0XFFFAE26C);
+        return const Color(0XFFFAE26C);
       case 'LPASL1':
-        return Color(0xff90519B);
+        return const Color(0xff90519B);
       case 'LPABC1':
-        return Color(0XFF388068);
+        return const Color(0XFF388068);
       case 'EUC1':
-        return Color(0xffAACE74);
+        return const Color(0xffAACE74);
       default:
         return Colors.transparent;
     }

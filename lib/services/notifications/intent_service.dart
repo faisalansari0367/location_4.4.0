@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class IntentService {
   static void noAppAvailable({String? msg}) {
     Fluttertoast.showToast(msg: msg ?? 'No app available to open this link');
@@ -15,10 +16,10 @@ class IntentService {
     if (body != null) q += '&body=$body';
 
     final emailLaunchUri = Uri(scheme: 'mailto', path: email, query: q);
-    final _email = emailLaunchUri.toString();
-    final result = await canLaunchUrlString(_email);
+    // final email = emailLaunchUri.toString();
+    final result = await canLaunchUrlString(emailLaunchUri.toString());
     try {
-      await launchUrl(Uri.parse(_email));
+      await launchUrl(emailLaunchUri);
     } catch (e) {
       noAppAvailable();
     }

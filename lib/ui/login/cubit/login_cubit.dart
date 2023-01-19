@@ -1,6 +1,6 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:bioplus/constants/strings.dart';
 import 'package:bioplus/features/drawer/view/drawer_page.dart';
+import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
@@ -8,8 +8,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import '../../../services/notifications/connectivity/connectivity_service.dart';
 
 part 'login_state.dart';
 
@@ -57,7 +55,6 @@ class LoginCubit extends Cubit<LoginState> {
           DialogService.showDialog(
             child: NetworkErrorDialog(
               message: NetworkExceptions.getErrorMessage(error),
-              buttonText: Strings.ok,
               onCancel: Get.back,
             ),
           );

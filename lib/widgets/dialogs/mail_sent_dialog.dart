@@ -6,7 +6,7 @@ class MailSentDialog extends StatelessWidget {
   final String message;
   final VoidCallback onContinue;
 
-  const MailSentDialog({Key? key, required this.message, required this.onContinue}) : super(key: key);
+  const MailSentDialog({super.key, required this.message, required this.onContinue});
 
   @override
   Widget build(BuildContext context) {

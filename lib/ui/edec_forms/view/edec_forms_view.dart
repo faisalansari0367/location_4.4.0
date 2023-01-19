@@ -2,22 +2,21 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/cvd_form/view/cvd_from_page.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/coming_soon.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../widgets/dialogs/coming_soon.dart';
-import '../../../widgets/dialogs/dialog_service.dart';
-
 class EdecFormsView extends StatelessWidget {
-  const EdecFormsView({Key? key}) : super(key: key);
+  const EdecFormsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        title: const Text('eDEC Forms'),
+      appBar: const MyAppBar(
+        title: Text('eDEC Forms'),
       ),
       body: Padding(
         padding: kPadding,
@@ -34,7 +33,7 @@ class EdecFormsView extends StatelessWidget {
               text: Strings.livestockWaybillDeclaration,
               onTap: () async {
                 // comingSoon();
-                Get.to(() => LivestockWaybillPage());
+                Get.to(() => const LivestockWaybillPage());
               },
             ),
             MyListTile(

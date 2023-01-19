@@ -19,11 +19,11 @@ class GlobalQuestionnaireFormPage extends StatelessWidget {
       create: (context) => GlobalQuestionnaireFormNotifier(context, zoneId: zoneId, logrecordId: logrecordId),
       child: Scaffold(
         appBar: MyAppBar(
-          title: Text('Declaration'),
+          title: const Text('Declaration'),
           elevation: 3,
           backgroundColor: context.theme.primaryColor,
         ),
-        body: GlobalQuestionnaireFormView(),
+        body: const GlobalQuestionnaireFormView(),
       ),
     );
   }
@@ -40,6 +40,6 @@ class GlobalQuestionnaireFormView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constrains) {
       return const GlobalQuestionnaireFormBody();
-    });
+    },);
   }
 }

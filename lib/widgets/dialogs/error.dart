@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/widgets/my_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
-import '../my_elevated_button.dart';
-import 'dialog_layout.dart';
 
 class ErrorDialog extends StatelessWidget {
   final String message;
@@ -16,12 +15,12 @@ class ErrorDialog extends StatelessWidget {
   final bool showCloseButton;
 
   const ErrorDialog({
-    Key? key,
+    super.key,
     required this.message,
     this.buttonText,
     required this.onTap,
     this.showCloseButton = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

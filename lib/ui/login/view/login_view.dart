@@ -1,20 +1,19 @@
 import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/constants/strings.dart';
 import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/forgot_password/view/forgot_password.dart';
+import 'package:bioplus/ui/login/cubit/login_cubit.dart';
 import 'package:bioplus/ui/sign_up/view/sign_up_page.dart';
 import 'package:bioplus/widgets/logo/app_name_widget.dart';
+import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../../constants/strings.dart';
-import '../../../gen/assets.gen.dart';
-import '../../../widgets/widgets.dart';
-import '../cubit/login_cubit.dart';
-
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   _LoginViewState createState() => _LoginViewState();

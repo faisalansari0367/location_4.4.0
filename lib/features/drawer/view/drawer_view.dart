@@ -1,15 +1,14 @@
 import 'package:animations/animations.dart';
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/features/drawer/cubit/my_drawer_controller.dart';
 import 'package:bioplus/features/drawer/models/drawer_items.dart';
+import 'package:bioplus/features/drawer/view/widgets/drawer_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../cubit/my_drawer_controller.dart';
-import 'widgets/drawer_menu.dart';
-
 class DrawerView extends StatefulWidget {
-  const DrawerView({Key? key}) : super(key: key);
+  const DrawerView({super.key});
 
   @override
   State<DrawerView> createState() => _DrawerViewState();

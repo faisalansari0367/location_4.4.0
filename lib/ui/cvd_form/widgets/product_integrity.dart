@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 
 class ProductIntegrity extends StatefulWidget {
   final ProductIntegrityDetailsModel productIntegrityDetails;
-  const ProductIntegrity({Key? key, required this.productIntegrityDetails}) : super(key: key);
+  const ProductIntegrity({super.key, required this.productIntegrityDetails});
 
   @override
   State<ProductIntegrity> createState() => _ProductIntegrityState();
@@ -24,8 +24,8 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
   void initState() {
     form = widget.productIntegrityDetails;
     final cubit = context.read<CvdCubit>();
-    final _map = cubit.map[cubit.stepNames[cubit.state.currentStep]];
-    final data = _map ?? {};
+    final map = cubit.map[cubit.stepNames[cubit.state.currentStep]];
+    final data = map ?? {};
     if (data.isNotEmpty) {
       data.forEach((key, value) {
         formData[key] = value.toSet();
@@ -65,7 +65,7 @@ class _ProductIntegrityState extends State<ProductIntegrity> {
           qna(form!.gmoCheck!, 2),
           CommonButtons(
             onContinue: () {
-              for (var item in form!.toJson().values) {
+              for (final item in form!.toJson().values) {
                 if (item['value'] == null) {
                   DialogService.error(
                     'Please fill ${item['field']}',

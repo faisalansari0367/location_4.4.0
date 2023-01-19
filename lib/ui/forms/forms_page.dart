@@ -5,8 +5,6 @@ import 'package:bioplus/ui/forms/global_questionnaire_form/global_questionnaire_
 import 'package:bioplus/ui/forms/warakirri_entry_form/warakirri_entry_form.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../maps/models/polygon_model.dart';
-
 class FormsPage extends StatelessWidget {
   final String zoneId;
   final int? logRecordId;

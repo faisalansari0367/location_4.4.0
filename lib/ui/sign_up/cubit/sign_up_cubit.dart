@@ -59,7 +59,7 @@ class SignUpCubit extends Cubit<SignUpState> {
       phoneNumber: int.parse(state.phoneNumber),
       password: state.password,
       countryCode: state.countryCode,
-      countryOfResidency: state.countryOfResidency
+      countryOfResidency: state.countryOfResidency,
     );
     final result = await authRepo.signUp(data: model);
     result.when(

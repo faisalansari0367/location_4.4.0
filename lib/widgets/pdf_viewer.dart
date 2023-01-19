@@ -14,9 +14,6 @@ class PdfViewer extends StatelessWidget {
         title: Text(title),
       ),
       body: PDF(
-        enableSwipe: true,
-        swipeHorizontal: false,
-        autoSpacing: true,
         pageFling: false,
         fitPolicy: FitPolicy.HEIGHT,
         onError: (error) {

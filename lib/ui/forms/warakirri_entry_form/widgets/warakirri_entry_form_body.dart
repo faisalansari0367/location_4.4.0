@@ -1,13 +1,12 @@
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/forms/models/global_form_model.dart';
 import 'package:bioplus/ui/forms/warakirri_entry_form/provider/provider.dart';
+import 'package:bioplus/ui/forms/widget/add_list.dart';
+import 'package:bioplus/ui/forms/widget/form_card.dart';
+import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../constants/index.dart';
-import '../../../../widgets/auto_spacing.dart';
-import '../../../../widgets/dialogs/dialog_service.dart';
-import '../../models/global_form_model.dart';
-import '../../widget/add_list.dart';
-import '../../widget/form_card.dart';
 
 /// {@template warakirri_entry_form_body}
 /// Body of the WarakirriEntryFormPage.
@@ -60,7 +59,7 @@ class WarakirriEntryFormBody extends StatelessWidget {
                 _buildZoneName(state),
                 _buildTextField('Full Name', state.userData?.fullName),
                 _buildTextField(
-                    'Phone Number', (state.userData?.countryCode ?? '') + '' + (state.userData?.phoneNumber ?? '')),
+                    'Phone Number', '${state.userData?.countryCode ?? ''}${state.userData?.phoneNumber ?? ''}',),
                 _buildTextField('Company Name', state.userData?.company),
                 _additionalInfo(context, state),
                 _buildSignOff(context),
@@ -68,7 +67,6 @@ class WarakirriEntryFormBody extends StatelessWidget {
                 _selfDeclaration(state),
                 MyElevatedButton(
                   text: 'Submit',
-                  isLoading: false,
                   onPressed: () async => await state.submit(),
                 ),
               ],
@@ -93,7 +91,6 @@ class WarakirriEntryFormBody extends StatelessWidget {
     return GestureDetector(
       onTap: () => state.pickDateTime(state.model.expectedDepartureDate, context),
       child: AbsorbPointer(
-        absorbing: true,
         child: MyDateField(
           label: state.model.expectedDepartureDate.question,
           date: state.model.expectedDepartureDate.value,
@@ -147,7 +144,7 @@ class WarakirriEntryFormBody extends StatelessWidget {
 
   CheckboxListTile _selfDeclaration(WarakirriEntryFormNotifier state) {
     return CheckboxListTile(
-      title: Text(
+      title: const Text(
         'I understand and commit to the above',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
@@ -188,8 +185,8 @@ class WarakirriEntryFormBody extends StatelessWidget {
     return Container(
       height: 7,
       width: 7,
-      margin: EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.only(top: 10),
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.black,
       ),

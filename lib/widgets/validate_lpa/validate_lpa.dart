@@ -1,15 +1,14 @@
+import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/constants/my_decoration.dart';
+import 'package:bioplus/widgets/animations/animated_button.dart';
+import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../constants/constans.dart';
-import '../../constants/my_decoration.dart';
-import '../animations/animated_button.dart';
-import '../widgets.dart';
-
 class ValidateLpa extends StatefulWidget {
-  const ValidateLpa({Key? key}) : super(key: key);
+  const ValidateLpa({super.key});
 
   @override
   State<ValidateLpa> createState() => _ValidateLpaState();
@@ -62,11 +61,11 @@ class _ValidateLpaState extends State<ValidateLpa> {
           ),
           gap,
           gap,
-          MyTextField(hintText: 'LPA Username'),
+          const MyTextField(hintText: 'LPA Username'),
           gap,
-          MyTextField(hintText: 'LPA Password'),
+          const MyTextField(hintText: 'LPA Password'),
           gap,
-          MyElevatedButton(text: 'Validate'),
+          const MyElevatedButton(text: 'Validate'),
         ],
       ),
     );

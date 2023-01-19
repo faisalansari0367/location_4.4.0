@@ -3,6 +3,7 @@ import 'dart:io';
 // ignore: unused_import
 import 'package:flutter/foundation.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class ApiConstants {
   static const String localUrl = 'http://13.55.174.146:3000';
   static const String liveUrl = 'https://app.itrakassets.com';

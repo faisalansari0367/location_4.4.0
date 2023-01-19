@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:api_client/api_client.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:cvd_forms/src/cvd_form_utils.dart';
+import 'package:cvd_forms/src/forms_storage_helper.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../storage/cvd_forms_storage.dart';
 
 class CvdFormsLocalImpl implements CvdFormsRepo {
   final CvdFormsStorage storage;
-  CvdFormsLocalImpl({required Box box}) : storage = CvdFormsStorage(box);
+  final Directory cacheDir;
+  CvdFormsLocalImpl(this.cacheDir, {required Box box}) : storage = CvdFormsStorage(box);
 
   @override
   Future<ApiResult<CvdForm>> addCvdForm(CvdForm cvdForm) async {
@@ -92,5 +94,18 @@ class CvdFormsLocalImpl implements CvdFormsRepo {
     return Future.value(const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     ));
+  }
+
+  @override
+  Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd,
+      {ProgressCallback? onReceiveProgress}) {
+    return Future.value(const ApiResult.failure(
+      error: NetworkExceptions.defaultError('Not available in offline mode'),
+    ));
+  }
+  
+  @override
+  Future<Directory> getCvdDownloadsDir() {
+    return FormsHelper(cachePath: cacheDir.path).getCvdDownloadsDir();
   }
 }

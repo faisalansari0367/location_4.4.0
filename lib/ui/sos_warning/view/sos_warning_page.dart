@@ -24,7 +24,7 @@ class SosWarningPage extends StatelessWidget {
       // child: const Scaffold(
       //   body: SosWarningView(),
       // ),
-      child: SosWarningView(),
+      child: const SosWarningView(),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmergencyWarningDialog extends StatelessWidget {
   final String message;
-  const EmergencyWarningDialog({Key? key, this.message = ''}) : super(key: key);
+  const EmergencyWarningDialog({super.key, this.message = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class EmergencyWarningDialog extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: context.textTheme.bodyLarge?.copyWith(
-                color: Color.fromARGB(255, 55, 55, 55),
+                color: const Color.fromARGB(255, 55, 55, 55),
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -45,7 +45,7 @@ class EmergencyWarningDialog extends StatelessWidget {
               },
               color: Colors.redAccent,
               width: 30.width,
-              text: ('OK'),
+              text: 'OK',
             ),
           ],
         ),

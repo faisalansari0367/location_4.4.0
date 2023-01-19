@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyScaleTransition extends StatefulWidget {
   final Widget child;
-  const MyScaleTransition({Key? key, required this.child}) : super(key: key);
+  const MyScaleTransition({super.key, required this.child});
 
   @override
   State<MyScaleTransition> createState() => _MyScaleTransitionState();

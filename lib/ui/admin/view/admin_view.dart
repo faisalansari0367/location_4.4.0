@@ -1,11 +1,11 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/admin/cubit/admin_cubit.dart';
+import 'package:bioplus/ui/admin/cubit/admin_state.dart';
 import 'package:bioplus/ui/admin/pages/users_list/view/users_page.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
 import 'package:bioplus/ui/forms/warakirri_entry_form/view/warakirri_entry_form_page.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/select_role/view/select_role_page.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
@@ -16,10 +16,8 @@ import 'package:bioplus/widgets/pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/admin_state.dart';
-
 class AdminView extends StatelessWidget {
-  const AdminView({Key? key}) : super(key: key);
+  const AdminView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,7 @@ class AdminView extends StatelessWidget {
             child: AutoSpacing(
               spacing: Gap(2.5.height),
               children: [
-                Center(child: const AppLogo()),
+                const Center(child: AppLogo()),
                 MyListTile(
                   text: 'Users',
                   onTap: () async => Get.to(() => const UsersPage()),
@@ -49,7 +47,7 @@ class AdminView extends StatelessWidget {
                 MyListTile(
                   text: 'Locations',
                   onTap: () async {
-                    Get.to(() => MapsPage());
+                    Get.to(() => const MapsPage());
                   },
                 ),
                 MyListTile(

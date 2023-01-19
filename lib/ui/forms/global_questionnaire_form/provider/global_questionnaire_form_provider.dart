@@ -1,15 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/constans.dart';
 import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/ui/forms/models/global_form_model.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/no_signature_found.dart';
+import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../constants/constans.dart';
-import '../../../../widgets/dialogs/dialog_service.dart';
-import '../../../../widgets/dialogs/no_signature_found.dart';
-import '../../../../widgets/signature/signature_widget.dart';
-import '../../models/global_form_model.dart';
 
 class GlobalQuestionnaireFormNotifier extends BaseModel {
   late FormQuestionDataModel model;
@@ -17,13 +16,13 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
   final String zoneId;
   final int? logrecordId;
 
-  GlobalQuestionnaireFormNotifier(BuildContext context, {this.logrecordId, required this.zoneId}) : super(context) {
+  GlobalQuestionnaireFormNotifier(super.context, {this.logrecordId, required this.zoneId}) {
     model = FormQuestionDataModel.fromLocal();
   }
   final formKey = GlobalKey<FormState>();
   final sc = ScrollController();
 
-  void pickDateTime(QuestionData questionData, BuildContext context) async {
+  Future<void> pickDateTime(QuestionData questionData, BuildContext context) async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -95,7 +94,7 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
         return;
       }
       final data = model.toJson();
-      for (var element in data.entries) {
+      for (final element in data.entries) {
         if (element.value == null) {
           DialogService.error('Please fill Question ${model.question(element.key)}');
           return;

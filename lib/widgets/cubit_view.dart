@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CubitView<T> extends StatefulWidget {
   final Cubit<T> cubit;
   final Widget child;
-  const CubitView({Key? key,required this.cubit, required this.child}) : super(key: key);
+  const CubitView({super.key,required this.cubit, required this.child});
 
   @override
   State<CubitView> createState() => _CubitViewState();

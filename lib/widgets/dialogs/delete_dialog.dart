@@ -1,14 +1,13 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-import 'dialog_layout.dart';
-
 class DeleteDialog extends StatelessWidget {
   final String? msg;
   final VoidCallback? onConfirm, onCancel;
-  const DeleteDialog({Key? key, this.onConfirm, this.onCancel, this.msg}) : super(key: key);
+  const DeleteDialog({super.key, this.onConfirm, this.onCancel, this.msg});
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +111,13 @@ class DeleteDialog extends StatelessWidget {
     Color side = Colors.black38,
   }) {
     return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: const StadiumBorder(),
+        side: BorderSide(color: side),
+        minimumSize: Size(100.w, 50.h),
+      ),
       child: Text(
         title,
         style: TextStyle(
@@ -119,13 +125,6 @@ class DeleteDialog extends StatelessWidget {
           fontSize: 16.w,
           fontWeight: FontWeight.w600,
         ),
-      ),
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: StadiumBorder(),
-        side: BorderSide(color: side),
-        minimumSize: Size(100.w, 50.h),
       ),
     );
   }

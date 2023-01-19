@@ -1,6 +1,8 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/theme/color_constants.dart';
+import 'package:bioplus/ui/admin/pages/visitor_log_book/cubit/logbook_cubit.dart';
+import 'package:bioplus/ui/admin/pages/visitor_log_book/cubit/logbook_state.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
@@ -13,11 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../cubit/logbook_cubit.dart';
-import '../cubit/logbook_state.dart';
-
 class LogbookView extends StatefulWidget {
-  const LogbookView({Key? key}) : super(key: key);
+  const LogbookView({super.key});
 
   @override
   State<LogbookView> createState() => _LogbookViewState();
@@ -75,7 +74,7 @@ class _LogbookViewState extends State<LogbookView> {
                   ),
                   onPressed: context.read<LogBookCubit>().generatePDf,
                 ),
-              Gap(10),
+              const Gap(10),
               if (!state.isLoading)
                 IconButton(
                   icon: Image.asset(
@@ -107,10 +106,10 @@ class _LogbookViewState extends State<LogbookView> {
                   }
 
                   if (snapshot.hasData && snapshot.data!.isEmpty) {
-                    return Center(
+                    return const Center(
                       heightFactor: 2,
                       widthFactor: 1.1,
-                      child: const EmptyScreen(
+                      child: EmptyScreen(
                         message: 'No Log Records Found',
                       ),
                     );
@@ -132,7 +131,7 @@ class _LogbookViewState extends State<LogbookView> {
   }
 
   List<DataRow> _buildRows(List<LogbookEntry> data, LogBookState state) {
-    List<DataRow> rows = [];
+    final List<DataRow> rows = [];
     for (var i = 0; i < data.length; i++) {
       rows.add(_dataRow(data[i], i, state));
     }
@@ -156,9 +155,9 @@ class _LogbookViewState extends State<LogbookView> {
         _dataCell(_dateAndTime(item.exitDate)),
         _dataCell(item.geofence?.name ?? ''),
         _dataCell(item.geofence?.pic ?? item.user?.ngr ?? '',
-            color: item.geofence?.color, isPic: item.geofence?.pic != null),
-        _dataCell((item.user?.postcode == null ? '' : (item.user?.postcode).toString()),
-            color: item.geofence?.color, isPic: false),
+            color: item.geofence?.color, isPic: item.geofence?.pic != null,),
+        _dataCell(item.user?.postcode == null ? '' : (item.user?.postcode).toString(),
+            color: item.geofence?.color,),
         _buildFormButton(item),
       ],
     );
@@ -193,15 +192,6 @@ class _LogbookViewState extends State<LogbookView> {
     return Center(
       child: TextButton(
         onPressed: onPressed,
-        child: Text(
-          text.toUpperCase(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: color,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
         style: TextButton.styleFrom(
           foregroundColor: color,
           alignment: Alignment.center,
@@ -209,6 +199,15 @@ class _LogbookViewState extends State<LogbookView> {
           backgroundColor: (color ?? kPrimaryColor).withOpacity(0.1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        child: Text(
+          text.toUpperCase(),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 12,
+            color: color,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
@@ -247,6 +246,7 @@ class _LogbookViewState extends State<LogbookView> {
                   Expanded(
                     child: MyElevatedButton(
                       onPressed: () async => Get.back(),
+                      color: const Color.fromARGB(255, 0, 0, 0),
                       // child: const Text('No'),
                       child: Text(
                         'No',
@@ -256,7 +256,6 @@ class _LogbookViewState extends State<LogbookView> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                   Gap(20.w),
@@ -346,7 +345,7 @@ class _LogbookViewState extends State<LogbookView> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
       margin: EdgeInsets.only(right: 5.w),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.red,
         shape: BoxShape.circle,
       ),
@@ -355,11 +354,10 @@ class _LogbookViewState extends State<LogbookView> {
 
   DataColumn _dataColumn(String name) {
     return DataColumn(
-      numeric: false,
       label: Text(
         name,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),

@@ -14,7 +14,7 @@ class MyElevatedButton extends StatefulWidget {
   final EdgeInsets? padding;
   final double? width;
   const MyElevatedButton({
-    Key? key,
+    super.key,
     this.child,
     this.onPressed,
     this.isLoading = false,
@@ -23,7 +23,7 @@ class MyElevatedButton extends StatefulWidget {
     this.padding,
     this.color,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   State<MyElevatedButton> createState() => _MyElevatedButtonState();
@@ -39,7 +39,7 @@ class _MyElevatedButtonState extends State<MyElevatedButton> {
     });
   }
 
-  void onTap() async {
+  Future<void> onTap() async {
     if (widget.onPressed != null) {
       FocusScope.of(context).requestFocus(FocusNode());
       setLoading(true);

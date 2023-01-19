@@ -60,7 +60,7 @@ abstract class BaseModel extends ChangeNotifier {
   }
 
   void _emit(BaseModelState state) {
-    this.baseState = state;
+    baseState = state;
     if (mounted) notifyListeners();
   }
 

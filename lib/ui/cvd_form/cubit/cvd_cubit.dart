@@ -153,7 +153,7 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   Future<void> centerStep(int step) {
-    final stepSize = stepController.position.maxScrollExtent / 2;
+    // final stepSize = stepController.position.maxScrollExtent / 2;
     // final currentScrollExtent = stepController.offset;
 
     return stepController.animateTo(
@@ -164,13 +164,13 @@ class CvdCubit extends Cubit<CvdState> {
   }
 
   void listenToScrollPosition() {
-    stepController.addListener(() {
-      print(stepController.offset);
-    });
+    // stepController.addListener(() {
+    //   print(stepController.offset);
+    // });
   }
 
   Future<void> saveFormData() async =>
-      await cvdFormsRepo.updateCvdForm(cvdForm);
+       cvdFormsRepo.updateCvdForm(cvdForm);
 
   void moveToPage(int page) {
     if (page != 0) {

@@ -1,7 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/theme/color_constants.dart';
-import 'package:bioplus/ui/select_role/payment_sheet/provider/payment_sheet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

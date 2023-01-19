@@ -1,6 +1,5 @@
+import 'package:bioplus/ui/admin/cubit/admin_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'admin_state.dart';
 
 class AdminCubit extends Cubit<AdminState> {
   AdminCubit()

@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:bioplus/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'bottom_navbar_item.dart';
 
 class BottomNavbar extends StatefulWidget {
   final Color color;
   final List<BottomNavbarItem> items;
-  const BottomNavbar({Key? key, required this.items, this.color = Colors.white}) : super(key: key);
+  const BottomNavbar({super.key, required this.items, this.color = Colors.white});
 
   @override
   State<BottomNavbar> createState() => _BottomNavbarState();

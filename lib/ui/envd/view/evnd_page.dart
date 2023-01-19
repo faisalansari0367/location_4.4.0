@@ -6,7 +6,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
 class EnvdPage extends StatelessWidget {
-  const EnvdPage({Key? key}) : super(key: key);
+  const EnvdPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class EnvdPage extends StatelessWidget {
       client: GraphQlClient().client,
       child: ChangeNotifierProvider(
         create: (context) => EnvdCubit(context),
-        child: EnvdView(),
+        child: const EnvdView(),
       ),
     );
   }

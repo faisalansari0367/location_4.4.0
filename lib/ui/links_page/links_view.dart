@@ -153,7 +153,7 @@ class LinksView extends StatelessWidget {
       success: (s) async {
         final directory = await getApplicationDocumentsDirectory();
         final file = File(
-            '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
+            '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf',);
         await file.writeAsBytes(s);
         await OpenFile.open(file.path);
       },

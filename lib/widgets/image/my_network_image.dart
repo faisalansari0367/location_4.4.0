@@ -1,9 +1,8 @@
+import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/constants/my_decoration.dart';
 import 'package:bioplus/widgets/image/shimmer_animation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/constans.dart';
-import '../../constants/my_decoration.dart';
 
 class MyNetworkImage extends StatelessWidget {
   final String? urlToImage;
@@ -12,7 +11,7 @@ class MyNetworkImage extends StatelessWidget {
   final double? height, width;
   final BoxFit fit;
   const MyNetworkImage({
-    Key? key,
+    super.key,
     this.isLoading = false,
     this.isCircle = false,
     this.autoHeight = false,
@@ -23,7 +22,7 @@ class MyNetworkImage extends StatelessWidget {
     this.onLongPress,
     this.fit = BoxFit.cover,
     this.width,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

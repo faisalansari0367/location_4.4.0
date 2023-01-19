@@ -12,14 +12,14 @@ class BottomNavbarItem extends StatelessWidget {
   final Color? color;
 
   const BottomNavbarItem({
-    Key? key,
+    super.key,
     this.onTap,
     this.icon,
     required this.title,
     this.isSelected = false,
     this.iconData,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

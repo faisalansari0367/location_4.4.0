@@ -8,7 +8,7 @@ class MapTypeWidget extends StatelessWidget {
   final MapsCubit cubit;
   // final ValueChanged<MapType> onPressed;
   // final MapType selectedType;
-  const MapTypeWidget({Key? key, required this.cubit}) : super(key: key);
+  const MapTypeWidget({super.key, required this.cubit});
 
   @override
   Widget build(BuildContext context) {

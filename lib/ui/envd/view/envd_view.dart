@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/envd/cubit/graphql_query_strings.dart';
+import 'package:bioplus/ui/envd/models/envd_model.dart';
 import 'package:bioplus/ui/envd/view/envd_list_item.dart';
 import 'package:bioplus/widgets/dialogs/error.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -10,23 +12,20 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../cubit/graphql_query_strings.dart';
-import '../models/envd_model.dart';
-
 class EnvdView extends StatefulWidget {
-  const EnvdView({Key? key}) : super(key: key);
+  const EnvdView({super.key});
 
   @override
   State<EnvdView> createState() => _EnvdViewState();
 }
 
 class _EnvdViewState extends State<EnvdView> {
-  var list = <Items>[];
+  List<Items> list = <Items>[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: Text('eNVDs'),
+        title: const Text('eNVDs'),
         elevation: 3,
         actions: [
           IconButton(
@@ -122,7 +121,7 @@ class _EnvdViewState extends State<EnvdView> {
         )
         .toList();
     rows.insert(0, newHeaders);
-    final data = await ListToCsvConverter().convert(rows);
+    final data = const ListToCsvConverter().convert(rows);
     final String directory = (await getApplicationSupportDirectory()).path;
     final path = "$directory/envd_csv-${DateTime.now()}.csv";
     print(path);

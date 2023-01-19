@@ -1,3 +1,4 @@
+import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
 import 'package:bioplus/ui/maps/location_service/polygons_service.dart';
 import 'package:bioplus/ui/maps/view/widgets/add_polygon_details.dart';
@@ -7,11 +8,9 @@ import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../gen/assets.gen.dart';
-
 class AddFence extends StatelessWidget {
   final MapsCubit cubit;
-  const AddFence({Key? key, required this.cubit}) : super(key: key);
+  const AddFence({super.key, required this.cubit});
 
   @override
   Widget build(BuildContext context) {

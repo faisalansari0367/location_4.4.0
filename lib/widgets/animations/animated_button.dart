@@ -5,11 +5,11 @@ class AnimatedButton extends StatefulWidget {
   final VoidCallback? onTap;
   final double? scale;
   const AnimatedButton({
-    Key? key,
+    super.key,
     required this.child,
     this.onTap,
     this.scale,
-  }) : super(key: key);
+  });
 
   @override
   _AnimatedButtonState createState() => _AnimatedButtonState();
@@ -40,7 +40,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
 
   void _onTapUp(TapUpDetails details) => _controller.reverse();
 
-  void _onTap() async {
+  Future<void> _onTap() async {
     await _controller.forward();
     await _controller.reverse();
     if (widget.onTap != null) {

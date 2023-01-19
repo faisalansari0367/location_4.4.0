@@ -1,9 +1,8 @@
+import 'package:bioplus/constants/strings.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/provider/provider.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/widgets/livestock_waybill_body.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../constants/strings.dart';
 
 /// {@template livestock_waybill_page}
 /// A description for LivestockWaybillPage
@@ -25,7 +24,7 @@ class LivestockWaybillPage extends StatelessWidget {
         appBar: MyAppBar(
           title: Text(Strings.livestockWaybillDeclaration),
         ),
-        body: LivestockWaybillView(),
+        body: const LivestockWaybillView(),
       ),
     );
   }

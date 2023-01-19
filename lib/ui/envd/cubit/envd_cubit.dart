@@ -16,8 +16,8 @@ class EnvdCubit extends BaseModel {
     try {
       final data = await DefaultAssetBundle.of(context).loadString('assets/json/envd_data.json');
       final map = jsonDecode(data);
-      final _response = EnvdResponseModel.fromJson(map);
-      items = _response.data!.consignments!.items!;
+      final response = EnvdResponseModel.fromJson(map);
+      items = response.data!.consignments!.items!;
     } on Exception {
       setLoading(false);
     }

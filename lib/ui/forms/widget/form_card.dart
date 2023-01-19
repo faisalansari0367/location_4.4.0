@@ -1,8 +1,7 @@
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/widgets/my_radio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../constants/index.dart';
 
 class QuestionCard extends StatelessWidget {
   final String question;
@@ -10,11 +9,11 @@ class QuestionCard extends StatelessWidget {
   final ValueChanged<bool>? onChanged;
 
   const QuestionCard({
-    Key? key,
+    super.key,
     required this.question,
     this.selectedValue,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

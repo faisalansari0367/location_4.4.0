@@ -1,6 +1,7 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/constans.dart';
 import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/ui/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:bioplus/ui/forgot_password/cubit/forgot_password_state.dart';
 import 'package:bioplus/ui/otp/otp/otp_countdown.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -12,14 +13,12 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../cubit/forgot_password_cubit.dart';
-
 class ForgotPasswordOtpScreen extends StatefulWidget {
   // final ForgotPasswordCubit cubit;
   // final Api authRepo;
   // final SignUpModel data;
   final String email;
-  const ForgotPasswordOtpScreen({Key? key, required this.email}) : super(key: key);
+  const ForgotPasswordOtpScreen({super.key, required this.email});
 
   @override
   _ForgotPasswordOtpScreenState createState() => _ForgotPasswordOtpScreenState();

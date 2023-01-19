@@ -1,6 +1,5 @@
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
 import 'package:bioplus/ui/emergency_warning_page/widgets/emergency_warning_page_body.dart';
-import 'package:bioplus/ui/maps/location_service/maps_repo.dart';
 import 'package:flutter/material.dart';
 
 /// {@template emergency_warning_page_page}

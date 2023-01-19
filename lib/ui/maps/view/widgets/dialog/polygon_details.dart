@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/delete_dialog.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
@@ -8,18 +9,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../location_service/map_toolkit_utils.dart';
-
 class PolygonDetails extends StatelessWidget {
   final PolygonModel polygonModel;
   final bool canEdit;
   final VoidCallback onTap;
   const PolygonDetails({
-    Key? key,
+    super.key,
     required this.polygonModel,
     this.canEdit = false,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +70,14 @@ class PolygonDetails extends StatelessWidget {
               if (canEdit)
                 _customTile(
                   'Edit Field Area',
-                  icon: (Icons.edit),
+                  icon: Icons.edit,
                   onTap: onTap,
                 ),
               if (canEdit)
                 _customTile(
                   'Delete Geofence',
                   showDivider: false,
-                  icon: (Icons.delete),
+                  icon: Icons.delete,
                   onTap: () {
                     DialogService.showDialog(
                       child: DeleteDialog(
@@ -101,7 +100,6 @@ class PolygonDetails extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: ListTile(
-        enabled: true,
         onTap: onTap,
         trailing: icon != null
             ? Icon(icon)

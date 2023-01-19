@@ -13,7 +13,7 @@ import 'package:gap/gap.dart';
 
 class CommodityDetails extends StatefulWidget {
   final CommodityDetailsModel commodityDetails;
-  const CommodityDetails({Key? key, required this.commodityDetails}) : super(key: key);
+  const CommodityDetails({super.key, required this.commodityDetails});
 
   @override
   State<CommodityDetails> createState() => _CommodityDetailsState();

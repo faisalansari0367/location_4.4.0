@@ -11,14 +11,14 @@ class CountDown extends StatefulWidget {
   final bool showCountdown;
 
   const CountDown({
-    Key? key,
+    super.key,
     this.timeout = 30,
     this.onTimeout,
     required this.child,
     // this.isRetrying = false,
     // this.isTimeout = false,
     this.showCountdown = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CountDown> createState() => _CountDownState();

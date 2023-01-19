@@ -1,22 +1,21 @@
+import 'package:bioplus/constants/constans.dart';
+import 'package:bioplus/constants/my_decoration.dart';
 import 'package:bioplus/ui/forms/global_questionnaire_form/provider/provider.dart';
+import 'package:bioplus/ui/forms/models/global_form_model.dart';
+import 'package:bioplus/ui/forms/widget/add_list.dart';
+import 'package:bioplus/ui/forms/widget/form_card.dart';
+import 'package:bioplus/widgets/auto_spacing.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/my_elevated_button.dart';
+import 'package:bioplus/widgets/signature/signature_widget.dart';
+import 'package:bioplus/widgets/text_fields/date_field.dart';
+import 'package:bioplus/widgets/text_fields/my_dropdown_field.dart';
+import 'package:bioplus/widgets/text_fields/my_text_field.dart';
+import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
-import '../../../../constants/constans.dart';
-import '../../../../constants/my_decoration.dart';
-import '../../../../widgets/auto_spacing.dart';
-import '../../../../widgets/dialogs/dialog_service.dart';
-import '../../../../widgets/my_elevated_button.dart';
-import '../../../../widgets/signature/signature_widget.dart';
-import '../../../../widgets/text_fields/date_field.dart';
-import '../../../../widgets/text_fields/my_dropdown_field.dart';
-import '../../../../widgets/text_fields/my_text_field.dart';
-import '../../../../widgets/text_fields/text_formatters/input_formatters.dart';
-import '../../models/global_form_model.dart';
-import '../../widget/add_list.dart';
-import '../../widget/form_card.dart';
 
 /// {@template global_questionnaire_form_body}
 /// Body of the GlobalQuestionnaireFormPage.
@@ -46,7 +45,7 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                       DialogService.error('Consider the safety of others before you enter this zone.');
                     }
                     state.onChanged(state.model.isFluSymptoms, value);
-                  }),
+                  },),
                   _card(
                     state,
                     state.model.isOverSeaVisit,
@@ -81,7 +80,6 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                   GestureDetector(
                     onTap: () => state.pickDateTime(state.model.expectedDepartureDate, context),
                     child: AbsorbPointer(
-                      absorbing: true,
                       child: MyDateField(
                         label: state.model.expectedDepartureDate.question,
                         date: state.model.expectedDepartureDate.value,
@@ -111,8 +109,8 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                     decoration: MyDecoration.decoration(),
                     padding: EdgeInsets.symmetric(vertical: 10.h),
                     child: CheckboxListTile(
-                      title: Text(
-                          'I declare that any animals/products I am transporting are accompanied by correct movement documentation.'),
+                      title: const Text(
+                          'I declare that any animals/products I am transporting are accompanied by correct movement documentation.',),
                       value: state.selfDeclaration,
                       onChanged: (s) {
                         state.onChangeDecalration(s ?? false);
@@ -121,7 +119,6 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                   ),
                   MyElevatedButton(
                     text: 'Submit',
-                    isLoading: false,
                     onPressed: () async => state.submit(),
                   ),
                 ],
@@ -130,7 +127,7 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
           );
         },
       );
-    });
+    },);
   }
 
   Widget _card(GlobalQuestionnaireFormNotifier state, QuestionData data, {ValueChanged<bool>? onChanged}) {

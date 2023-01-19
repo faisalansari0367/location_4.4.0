@@ -48,15 +48,15 @@ class UsersCubit extends Cubit<UsersState> {
     fetchUsers();
   }
 
-  void setStatus(String status, int id) {
-    final _status = state.status;
-    final result = UserStatus.values.where((element) => element.name == status.toLowerCase());
-    if (result.isEmpty) _status[id] = UserStatus.inactive;
-    _status[id] = result.first;
-    emit(state.copyWith(status: _status));
+  void setStatus(String s, int id) {
+    final status = state.status;
+    final result = UserStatus.values.where((element) => element.name == s.toLowerCase());
+    if (result.isEmpty) status[id] = UserStatus.inactive;
+    status[id] = result.first;
+    emit(state.copyWith(status: status));
   }
 
-  void getRoles() async {
+  Future<void> getRoles() async {
     final result = await api.getRoles();
 
     result.when(

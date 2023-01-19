@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/constans.dart';
 import 'package:bioplus/constants/strings.dart';
 import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/features/drawer/view/drawer_page.dart';
 import 'package:bioplus/ui/login/view/login_page.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/sign_up/view/sign_up_page.dart';
 import 'package:bioplus/widgets/logo/app_name_widget.dart';
 import 'package:bioplus/widgets/widgets.dart';
@@ -14,12 +17,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:local_auth_repo/local_auth.dart';
 
-import '../../constants/constans.dart';
-import '../../features/drawer/view/drawer_page.dart';
-import '../maps/view/maps_page.dart';
-
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -36,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
       final isLoggedIn = event;
       log('isLoggedIn $isLoggedIn');
-      if (!isLoggedIn) return Get.off(() => LoginPage());
+      if (!isLoggedIn) return Get.off(() => const LoginPage());
       final user = context.read<Api>().getUser()!;
       final localAuth = LocalAuth();
       final result = await localAuth.authenticate();
@@ -45,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         // await _init();
         Get.offAll(() => const DrawerPage());
-        Get.to(() => MapsPage());
+        Get.to(() => const MapsPage());
       }
     });
     final duration = (kSplashDuration.inMilliseconds - 1000).milliseconds;
@@ -54,11 +53,11 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
       final isLoggedIn = api.isLoggedIn;
 
-      if (!isLoggedIn) return Get.off(() => LoginPage());
+      if (!isLoggedIn) return Get.off(() => const LoginPage());
       final user = context.read<Api>().getUser()!;
       if (kDebugMode) {
         Get.offAll(() => const DrawerPage());
-        Get.to(() => MapsPage());
+        Get.to(() => const MapsPage());
         return;
       }
       final localAuth = LocalAuth();
@@ -68,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         // await _init();
         Get.offAll(() => const DrawerPage());
-        Get.to(() => MapsPage());
+        Get.to(() => const MapsPage());
       }
     });
 
@@ -80,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final size = 13.width;
 
     return Scaffold(
-      backgroundColor: Color(0XFF79C351),
+      backgroundColor: const Color(0XFF79C351),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Column(

@@ -29,5 +29,5 @@ class WorkSafetyState extends Equatable {
 /// {@endtemplate}
 class WorkSafetyInitial extends WorkSafetyState {
   /// {@macro work_safety_initial}
-  const WorkSafetyInitial({required UserData userData}) : super(userData: userData);
+  const WorkSafetyInitial({required super.userData});
 }

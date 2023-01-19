@@ -1,17 +1,16 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
+import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/maps/widgets/geofences_list/geofences_view.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/empty_screen.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-
-import '../../../constants/index.dart';
-import '../../../widgets/dialogs/dialog_layout.dart';
-import '../../../widgets/dialogs/dialog_service.dart';
-import '../../../widgets/empty_screen.dart';
-import '../../../widgets/my_appbar.dart';
-import '../../maps/view/maps_page.dart';
 
 /// {@template emergency_warning_page_body}
 /// Body of the EmergencyWarningPagePage.
@@ -57,6 +56,8 @@ class EmergencyWarningPageBody extends StatelessWidget {
         child: EmptyScreen(
           message: 'You have not created any geofences.\nPlease contact the owner',
           subWidget: MyElevatedButton(
+            width: 50.width,
+            onPressed: () async => Get.to(() => const MapsPage()),
             child: Text(
               'OK',
               style: TextStyle(
@@ -65,8 +66,6 @@ class EmergencyWarningPageBody extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            width: 50.width,
-            onPressed: () async => Get.to(() => MapsPage()),
           ),
         ),
       ),
@@ -160,7 +159,7 @@ class EmergencyWarningPageBody extends StatelessWidget {
                   ),
                 ),
                 Gap(20.w),
-                Icon(
+                const Icon(
                   Icons.send,
                   color: Colors.white,
                   size: 40,
@@ -291,7 +290,7 @@ class EmergencyWarningPageBody extends StatelessWidget {
                                             Gap(20.h),
                                             Expanded(
                                               child: ListView.separated(
-                                                separatorBuilder: (context, index) => Divider(height: 1),
+                                                separatorBuilder: (context, index) => const Divider(height: 1),
                                                 itemBuilder: (context, index) {
                                                   return ListTile(
                                                     title: Text(data[index].fullName),

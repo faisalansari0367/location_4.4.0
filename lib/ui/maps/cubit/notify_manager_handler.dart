@@ -2,13 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/ui/maps/view/widgets/dialog/notify_manager.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import '../../../widgets/dialogs/dialog_service.dart';
-import '../location_service/maps_repo.dart';
-import '../models/polygon_model.dart';
-import '../view/widgets/dialog/notify_manager.dart';
 
 class NotifyManagerHandler {
   late GeofencesRepo mapsRepo;
@@ -21,7 +18,7 @@ class NotifyManagerHandler {
   LatLng? position;
   PolygonModel? polygon;
   Timer? logger;
-  late Duration duration = Duration(seconds: 180);
+  late Duration duration = const Duration(seconds: 180);
 
   static final NotifyManagerHandler _instance = NotifyManagerHandler._internal();
 

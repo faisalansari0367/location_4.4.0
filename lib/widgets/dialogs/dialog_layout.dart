@@ -1,11 +1,10 @@
+import 'package:bioplus/constants/my_decoration.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants/my_decoration.dart';
 
 class DialogLayout extends StatelessWidget {
   final Widget child;
 
-  const DialogLayout({Key? key, required this.child}) : super(key: key);
+  const DialogLayout({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

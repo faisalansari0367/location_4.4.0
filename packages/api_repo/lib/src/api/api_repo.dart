@@ -3,7 +3,6 @@ import 'package:api_repo/src/functions/functions_repo.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../payment/payment_repo.dart';
 
 abstract class Api
     with

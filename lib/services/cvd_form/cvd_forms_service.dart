@@ -1,6 +1,5 @@
+import 'package:bioplus/constants/hive_boxes.dart';
 import 'package:hive_flutter/adapters.dart';
-
-import '../../constants/hive_boxes.dart';
 
 class CvdFormsService {
   late Box _box;

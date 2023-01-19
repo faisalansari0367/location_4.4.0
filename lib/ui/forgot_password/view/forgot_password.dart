@@ -5,6 +5,7 @@ import 'package:bioplus/extensions/size_config.dart';
 import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/forgot_password/view/forgot_password_screen.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/mail_sent_dialog.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-import '../../../widgets/dialogs/mail_sent_dialog.dart';
-
 class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+  const ForgotPassword({super.key});
 
   @override
   State<ForgotPassword> createState() => _ForgotPasswordState();

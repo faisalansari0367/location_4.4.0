@@ -6,7 +6,7 @@ class GeofenceDelegationState extends Equatable {
   final DateTime startDate;
   final DateTime? endDate;
 
-  GeofenceDelegationState({
+  const GeofenceDelegationState({
     this.email = '',
     required this.startDate,
     this.endDate,

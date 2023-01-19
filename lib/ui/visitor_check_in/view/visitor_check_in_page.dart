@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VisitorCheckInPage extends StatelessWidget {
-  const VisitorCheckInPage({Key? key}) : super(key: key);
+  const VisitorCheckInPage({super.key});
 
   @override
   Widget build(BuildContext context) {

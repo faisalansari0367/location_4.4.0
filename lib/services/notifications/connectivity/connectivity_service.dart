@@ -27,7 +27,7 @@ class MyConnectivity {
     _subscription.cancel();
   }
 
-  void initConnectivity() async {
+  Future<void> initConnectivity() async {
     _isInited = true;
     _subscription = Connectivity().onConnectivityChanged.listen(listener);
     await _checkConnectivity();
@@ -58,7 +58,7 @@ class MyConnectivity {
   }
 
   static final _debouncer = CallbackDebouncer(200.milliseconds);
-  void listener(ConnectivityResult event) async {
+  Future<void> listener(ConnectivityResult event) async {
     log(event.toString());
     if (_first) {
       _first = false;
@@ -67,7 +67,7 @@ class MyConnectivity {
     _debouncer.call(_checkConnectivity);
   }
 
-  void _show({
+  Future<void> _show({
     required String title,
     required String msg,
     required Color bgColor,

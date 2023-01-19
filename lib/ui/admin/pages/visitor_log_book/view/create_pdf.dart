@@ -23,7 +23,7 @@ class CreatePDf {
               children: [
                 pw.Text('Log Records',
                     style: pw.TextStyle(
-                        fontSize: 20, fontWeight: pw.FontWeight.bold)),
+                        fontSize: 20, fontWeight: pw.FontWeight.bold,),),
               ],
             ),
           ),
@@ -38,7 +38,7 @@ class CreatePDf {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File(
-          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf',);
       await file.writeAsBytes(await pdf.save());
       await OpenFile.open(file.path);
     } catch (e) {
@@ -65,21 +65,21 @@ class CreatePDf {
                       pw.Text(
                         'Geofence Name: ${data.geofence!.name}',
                         style: pw.TextStyle(
-                            fontSize: 16, fontWeight: pw.FontWeight.bold),
+                            fontSize: 16, fontWeight: pw.FontWeight.bold,),
                       ),
                     pw.SizedBox(height: 10),
                     if (data.geofence?.pic != null)
                       pw.Text(
                         'Geofence PIC: ${data.geofence!.pic}',
                         style: pw.TextStyle(
-                            fontSize: 16, fontWeight: pw.FontWeight.bold),
+                            fontSize: 16, fontWeight: pw.FontWeight.bold,),
                       ),
                     pw.SizedBox(height: 10),
                     if (data.user?.fullName != null)
                       pw.Text(
                         'Visitor Name: ${data.user?.fullName}',
                         style: pw.TextStyle(
-                            fontSize: 16, fontWeight: pw.FontWeight.bold),
+                            fontSize: 16, fontWeight: pw.FontWeight.bold,),
                       ),
                     pw.SizedBox(height: 20),
                     pw.Divider(),
@@ -101,7 +101,7 @@ class CreatePDf {
       final directory = await getApplicationDocumentsDirectory();
       // final file = File('${directory.path}/${DateTime.now().millisecondsSinceEpoch}.pdf');
       final file = File(
-          '${directory.path}/${MyDecoration.formatDate(data.createdAt)} ${data.user!.fullName}.pdf');
+          '${directory.path}/${MyDecoration.formatDate(data.createdAt)} ${data.user!.fullName}.pdf',);
 
       await file.writeAsBytes(await pdf.save());
       await OpenFile.open(file.path);

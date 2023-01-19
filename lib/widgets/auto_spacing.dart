@@ -8,13 +8,13 @@ class AutoSpacing extends StatelessWidget {
   final bool removeLast;
 
   const AutoSpacing({
-    Key? key,
+    super.key,
     required this.children,
     this.spacing,
     this.startSpacing,
     this.removeLast = false,
     this.crossAxisAlignment = CrossAxisAlignment.start,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

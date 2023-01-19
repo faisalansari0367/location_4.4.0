@@ -32,7 +32,7 @@ class MyTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
 
   const MyTextField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.readOnly = false,
     this.initialValue,
@@ -61,7 +61,7 @@ class MyTextField extends StatelessWidget {
     this.minLine,
     this.filled = false,
     this.decoration,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,7 @@ class MyTextField extends StatelessWidget {
   }
 
   Widget? _buildCounter(BuildContext context,
-      {required int currentLength, required bool isFocused, required int? maxLength}) {
+      {required int currentLength, required bool isFocused, required int? maxLength,}) {
     return const SizedBox.shrink();
   }
 }

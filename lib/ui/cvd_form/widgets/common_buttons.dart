@@ -1,20 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-
-import '../cubit/cvd_cubit.dart';
 
 class CommonButtons extends StatelessWidget {
   final VoidCallback onContinue;
   final VoidCallback? onBack;
 
   const CommonButtons({
-    Key? key,
+    super.key,
     required this.onContinue,
     this.onBack,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class CommonButtons extends StatelessWidget {
                   shape: const StadiumBorder(),
                   minimumSize: Size(50.w, 50.h),
                 ),
-                child: Text('Back'),
+                child: const Text('Back'),
               ),
             ),
             Gap(20.w),
@@ -51,7 +50,7 @@ class CommonButtons extends StatelessWidget {
                   FocusScope.of(context).requestFocus(FocusNode());
                   onContinue();
                 },
-                child: Text(
+                child: const Text(
                   'Continue',
                   // style: TextStyle(
                   //   fontSize: 18.w,

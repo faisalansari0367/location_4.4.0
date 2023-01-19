@@ -30,7 +30,7 @@ class LogbookEntryHandler {
     isExiting = null;
   }
 
-  void _logbookEntry([bool isExiting = false]) async {
+  Future<void> _logbookEntry([bool isExiting = false]) async {
     // log('isExiting $isExiting \n polygonModel ${polygonModel?.toJson()}');
     if (polygonModel == null) return;
     if (isExiting) {
@@ -56,8 +56,8 @@ class LogbookEntryHandler {
   }
 
   Future<void> update(bool isInside, PolygonModel polygonModel) async {
-    if (this.isExiting == isInside && this.polygonModel == polygonModel) return;
-    this.isExiting = isInside;
+    if (isExiting == isInside && this.polygonModel == polygonModel) return;
+    isExiting = isInside;
     this.polygonModel = polygonModel;
     log('user is exiting ${!isInside}');
     _logbookEntry(!isInside);
@@ -69,7 +69,7 @@ class MarkExitHandler {
   bool isExiting;
   final Api api;
   Timer? timer;
-  final _duration = Duration(seconds: 20);
+  final _duration = const Duration(seconds: 20);
 
   Timer? logger;
 
@@ -102,7 +102,7 @@ class MarkExitHandler {
     timer?.cancel();
   }
 
-  void markExit() async {
+  Future<void> markExit() async {
     final result = await api.markExit(model!.id!);
     result.when(
       success: (s) {

@@ -8,12 +8,12 @@ class QuestionWithCheckbox extends StatefulWidget {
   final List<String> options;
   final bool multipleSelection;
   const QuestionWithCheckbox({
-    Key? key,
+    super.key,
     required this.field,
     required this.questionNo,
     required this.options,
     this.multipleSelection = false, this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<QuestionWithCheckbox> createState() => _QuestionWithCheckboxState();

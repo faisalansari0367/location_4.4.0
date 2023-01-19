@@ -1,6 +1,5 @@
+import 'package:bioplus/constants/my_decoration.dart';
 import 'package:flutter/material.dart';
-
-import '../../../constants/my_decoration.dart';
 
 class EnvdResponseModel {
   EnvdData? data;
@@ -8,11 +7,11 @@ class EnvdResponseModel {
   EnvdResponseModel({this.data});
 
   EnvdResponseModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new EnvdData.fromJson(json['data']) : null;
+    data = json['data'] != null ? EnvdData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -26,13 +25,13 @@ class EnvdData {
   EnvdData({this.consignments});
 
   EnvdData.fromJson(Map<String, dynamic> json) {
-    consignments = json['consignments'] != null ? new Consignments.fromJson(json['consignments']) : null;
+    consignments = json['consignments'] != null ? Consignments.fromJson(json['consignments']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.consignments != null) {
-      data['consignments'] = this.consignments!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (consignments != null) {
+      data['consignments'] = consignments!.toJson();
     }
     return data;
   }
@@ -49,16 +48,16 @@ class Consignments {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+        items!.add(Items.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['totalCount'] = this.totalCount;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['totalCount'] = totalCount;
+    if (items != null) {
+      data['items'] = items!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -96,14 +95,14 @@ class Items {
       this.origin,
       this.declaration,
       this.questions,
-      this.answers});
+      this.answers,});
 
   Items.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     if (json['forms'] != null) {
       forms = <Forms>[];
       json['forms'].forEach((v) {
-        forms!.add(new Forms.fromJson(v));
+        forms!.add(Forms.fromJson(v));
       });
     }
     pdfUrl = json['pdfUrl'];
@@ -112,63 +111,63 @@ class Items {
     updatedBy = json['updatedBy'];
     status = json['status'];
     species = json['species'];
-    owner = json['owner'] != null ? new Owner.fromJson(json['owner']) : null;
-    destination = json['destination'] != null ? new Owner.fromJson(json['destination']) : null;
-    consignee = json['consignee'] != null ? new Owner.fromJson(json['consignee']) : null;
-    origin = json['origin'] != null ? new Owner.fromJson(json['origin']) : null;
-    declaration = json['declaration'] != null ? new Declaration.fromJson(json['declaration']) : null;
+    owner = json['owner'] != null ? Owner.fromJson(json['owner']) : null;
+    destination = json['destination'] != null ? Owner.fromJson(json['destination']) : null;
+    consignee = json['consignee'] != null ? Owner.fromJson(json['consignee']) : null;
+    origin = json['origin'] != null ? Owner.fromJson(json['origin']) : null;
+    declaration = json['declaration'] != null ? Declaration.fromJson(json['declaration']) : null;
     if (json['questions'] != null) {
       questions = <Questions>[];
       json['questions'].forEach((v) {
-        questions!.add(new Questions.fromJson(v));
+        questions!.add(Questions.fromJson(v));
       });
     }
     if (json['answers'] != null) {
       answers = <Answers>[];
       json['answers'].forEach((v) {
-        answers!.add(new Answers.fromJson(v));
+        answers!.add(Answers.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['number'] = this.number;
-    if (this.forms != null) {
-      data['forms'] = this.forms!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['number'] = number;
+    if (forms != null) {
+      data['forms'] = forms!.map((v) => v.toJson()).toList();
     }
-    data['pdfUrl'] = this.pdfUrl;
-    data['submittedAt'] = this.submittedAt;
-    data['updatedAt'] = this.updatedAt;
-    data['updatedBy'] = this.updatedBy;
-    data['status'] = this.status;
-    data['species'] = this.species;
-    if (this.owner != null) {
-      data['owner'] = this.owner!.toJson();
+    data['pdfUrl'] = pdfUrl;
+    data['submittedAt'] = submittedAt;
+    data['updatedAt'] = updatedAt;
+    data['updatedBy'] = updatedBy;
+    data['status'] = status;
+    data['species'] = species;
+    if (owner != null) {
+      data['owner'] = owner!.toJson();
     }
-    if (this.destination != null) {
-      data['destination'] = this.destination!.toJson();
+    if (destination != null) {
+      data['destination'] = destination!.toJson();
     }
-    if (this.consignee != null) {
-      data['consignee'] = this.consignee!.toJson();
+    if (consignee != null) {
+      data['consignee'] = consignee!.toJson();
     }
-    if (this.origin != null) {
-      data['origin'] = this.origin!.toJson();
+    if (origin != null) {
+      data['origin'] = origin!.toJson();
     }
-    if (this.declaration != null) {
-      data['declaration'] = this.declaration!.toJson();
+    if (declaration != null) {
+      data['declaration'] = declaration!.toJson();
     }
-    if (this.questions != null) {
-      data['questions'] = this.questions!.map((v) => v.toJson()).toList();
+    if (questions != null) {
+      data['questions'] = questions!.map((v) => v.toJson()).toList();
     }
-    if (this.answers != null) {
-      data['answers'] = this.answers!.map((v) => v.toJson()).toList();
+    if (answers != null) {
+      data['answers'] = answers!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 
   String getAccredentials() {
-    List<String> availableTypes = [];
+    final List<String> availableTypes = [];
     final ahsType = 'HS${species!.characters.first}';
     final msaType = 'MSA${species!.characters.first}';
     final nfasType = 'NFAS${species!.characters.first}';
@@ -217,9 +216,9 @@ class Forms {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['serialNumber'] = this.serialNumber;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['serialNumber'] = serialNumber;
     return data;
   }
 }
@@ -232,18 +231,18 @@ class Owner {
   Owner({this.address, this.name, this.pic});
 
   Owner.fromJson(Map<String, dynamic> json) {
-    address = json['address'] != null ? new Address.fromJson(json['address']) : null;
+    address = json['address'] != null ? Address.fromJson(json['address']) : null;
     name = json['name'];
     pic = json['pic'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.address != null) {
-      data['address'] = this.address!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (address != null) {
+      data['address'] = address!.toJson();
     }
-    data['name'] = this.name;
-    data['pic'] = this.pic;
+    data['name'] = name;
+    data['pic'] = pic;
     return data;
   }
 }
@@ -264,11 +263,11 @@ class Address {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['line1'] = this.line1;
-    data['postcode'] = this.postcode;
-    data['state'] = this.state;
-    data['town'] = this.town;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['line1'] = line1;
+    data['postcode'] = postcode;
+    data['state'] = state;
+    data['town'] = town;
     return data;
   }
 }
@@ -291,11 +290,11 @@ class Declaration {
       this.email,
       this.fullName,
       this.phone,
-      this.signature});
+      this.signature,});
 
   Declaration.fromJson(Map<String, dynamic> json) {
     accept = json['accept'];
-    address = json['address'] != null ? new Address.fromJson(json['address']) : null;
+    address = json['address'] != null ? Address.fromJson(json['address']) : null;
     certificateNumber = json['certificateNumber'];
     date = json['date'];
     email = json['email'];
@@ -305,17 +304,17 @@ class Declaration {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['accept'] = this.accept;
-    if (this.address != null) {
-      data['address'] = this.address!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['accept'] = accept;
+    if (address != null) {
+      data['address'] = address!.toJson();
     }
-    data['certificateNumber'] = this.certificateNumber;
-    data['date'] = this.date;
-    data['email'] = this.email;
-    data['fullName'] = this.fullName;
-    data['phone'] = this.phone;
-    data['signature'] = this.signature;
+    data['certificateNumber'] = certificateNumber;
+    data['date'] = date;
+    data['email'] = email;
+    data['fullName'] = fullName;
+    data['phone'] = phone;
+    data['signature'] = signature;
     return data;
   }
 }
@@ -338,28 +337,28 @@ class Questions {
     if (json['acceptableAnswers'] != null) {
       acceptableAnswers = <AcceptableAnswers>[];
       json['acceptableAnswers'].forEach((v) {
-        acceptableAnswers!.add(new AcceptableAnswers.fromJson(v));
+        acceptableAnswers!.add(AcceptableAnswers.fromJson(v));
       });
     }
     if (json['childQuestions'] != null) {
       childQuestions = <ChildQuestions>[];
       json['childQuestions'].forEach((v) {
-        childQuestions!.add(new ChildQuestions.fromJson(v));
+        childQuestions!.add(ChildQuestions.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['text'] = this.text;
-    data['help'] = this.help;
-    data['type'] = this.type;
-    if (this.acceptableAnswers != null) {
-      data['acceptableAnswers'] = this.acceptableAnswers!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['text'] = text;
+    data['help'] = help;
+    data['type'] = type;
+    if (acceptableAnswers != null) {
+      data['acceptableAnswers'] = acceptableAnswers!.map((v) => v.toJson()).toList();
     }
-    if (this.childQuestions != null) {
-      data['childQuestions'] = this.childQuestions!.map((v) => v.toJson()).toList();
+    if (childQuestions != null) {
+      data['childQuestions'] = childQuestions!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -377,9 +376,9 @@ class AcceptableAnswers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['displayName'] = this.displayName;
-    data['value'] = this.value;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['displayName'] = displayName;
+    data['value'] = value;
     return data;
   }
 }
@@ -402,28 +401,28 @@ class ChildQuestions {
     if (json['acceptableAnswers'] != null) {
       acceptableAnswers = <AcceptableAnswers>[];
       json['acceptableAnswers'].forEach((v) {
-        acceptableAnswers!.add(new AcceptableAnswers.fromJson(v));
+        acceptableAnswers!.add(AcceptableAnswers.fromJson(v));
       });
     }
     if (json['triggers'] != null) {
       triggers = <Triggers>[];
       json['triggers'].forEach((v) {
-        triggers!.add(new Triggers.fromJson(v));
+        triggers!.add(Triggers.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['text'] = this.text;
-    data['help'] = this.help;
-    data['type'] = this.type;
-    if (this.acceptableAnswers != null) {
-      data['acceptableAnswers'] = this.acceptableAnswers!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['text'] = text;
+    data['help'] = help;
+    data['type'] = type;
+    if (acceptableAnswers != null) {
+      data['acceptableAnswers'] = acceptableAnswers!.map((v) => v.toJson()).toList();
     }
-    if (this.triggers != null) {
-      data['triggers'] = this.triggers!.map((v) => v.toJson()).toList();
+    if (triggers != null) {
+      data['triggers'] = triggers!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -441,9 +440,9 @@ class Triggers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['questionId'] = this.questionId;
-    data['value'] = this.value;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['questionId'] = questionId;
+    data['value'] = value;
     return data;
   }
 }
@@ -462,10 +461,10 @@ class Answers {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['questionId'] = this.questionId;
-    data['value'] = this.value;
-    data['index'] = this.index;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['questionId'] = questionId;
+    data['value'] = value;
+    data['index'] = index;
     return data;
   }
 }

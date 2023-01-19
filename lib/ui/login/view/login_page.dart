@@ -1,13 +1,12 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/ui/login/cubit/login_cubit.dart';
+import 'package:bioplus/ui/login/view/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/login_cubit.dart';
-import 'login_view.dart';
-
 class LoginPage extends StatelessWidget {
   final String? email;
-  const LoginPage({Key? key, this.email}) : super(key: key);
+  const LoginPage({super.key, this.email});
 
   @override
   Widget build(BuildContext context) {

@@ -1,18 +1,17 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/login/view/login_page.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/mail_sent_dialog.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../constants/index.dart';
-import '../../../gen/assets.gen.dart';
-import '../../../widgets/dialogs/dialog_service.dart';
-import '../../../widgets/dialogs/mail_sent_dialog.dart';
-import '../../../widgets/my_appbar.dart';
 
 class ResetPassword extends StatefulWidget {
   final String email;
   final String otp;
-  const ResetPassword({Key? key, required this.email, required this.otp}) : super(key: key);
+  const ResetPassword({super.key, required this.email, required this.otp});
 
   @override
   State<ResetPassword> createState() => _ResetPasswordState();

@@ -22,9 +22,9 @@ class PolygonsService {
   }
 
   void updateMarkers(LatLng latLng, int index) {
-    final _list = latLngs;
-    _list[index] = latLng;
-    _controller.add(_list);
+    final list = latLngs;
+    list[index] = latLng;
+    _controller.add(list);
   }
 
   void clear() => _controller.add([]);

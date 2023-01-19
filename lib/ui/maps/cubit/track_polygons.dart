@@ -5,15 +5,14 @@ import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
+import 'package:bioplus/ui/maps/cubit/logbook_entry_handler.dart';
+import 'package:bioplus/ui/maps/cubit/notify_manager_handler.dart';
+import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
+import 'package:bioplus/ui/maps/view/widgets/dialog/enter_property.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../../../widgets/dialogs/dialog_service.dart';
-import '../location_service/map_toolkit_utils.dart';
-import '../view/widgets/dialog/enter_property.dart';
-import 'logbook_entry_handler.dart';
-import 'notify_manager_handler.dart';
 
 /// 1. hide pop up after 30 seconds
 /// if user did not fill out the form in 30 seconds, the pop up will be hidden
@@ -116,7 +115,7 @@ class TrackPolygons {
   //   return difference.inMinutes;
   // }
 
-  void showPopup(LatLng position) async {
+  Future<void> showPopup(LatLng position) async {
     if (currentPolygon == null) return;
     if (attemptOfShowingPopUp >= 3) return;
     if (attemptOfShowingPopUp == 2) {
@@ -145,7 +144,7 @@ class TrackPolygons {
     hidePopUp();
   }
 
-  void _userIsInside(Set<PolygonModel> polygons, LatLng currentPosition) async {
+  Future<void> _userIsInside(Set<PolygonModel> polygons, LatLng currentPosition) async {
     final userIsInside = polygons.where(
       (element) => MapsToolkitService.isInsidePolygon(
         latLng: currentPosition,
@@ -160,7 +159,7 @@ class TrackPolygons {
         attemptOfShowingPopUp = 0;
       }
       currentPolygon = userIsInside.first;
-      this.polygonsInCoverage.add({currentPolygon!});
+      polygonsInCoverage.add({currentPolygon!});
       logbookEntryHandler.update(true, currentPolygon!);
     } else {
       api.previousZoneExitDateChecker();

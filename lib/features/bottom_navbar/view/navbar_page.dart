@@ -1,11 +1,10 @@
+import 'package:bioplus/features/bottom_navbar/cubit/navbar_cubit.dart';
+import 'package:bioplus/features/bottom_navbar/view/navbar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubit/navbar_cubit.dart';
-import 'navbar_view.dart';
-
 class NavbarPage extends StatelessWidget {
-  const NavbarPage({Key? key}) : super(key: key);
+  const NavbarPage({super.key});
 
   @override
   Widget build(BuildContext context) {

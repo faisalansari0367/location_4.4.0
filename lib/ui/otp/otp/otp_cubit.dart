@@ -1,12 +1,11 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/features/drawer/view/drawer_page.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/otp/otp/otp_state.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/mail_sent_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import '../../../features/drawer/view/drawer_page.dart';
-import '../../../widgets/dialogs/mail_sent_dialog.dart';
 
 class OtpCubit extends Cubit<OtpState> {
   final AuthRepo authRepo;

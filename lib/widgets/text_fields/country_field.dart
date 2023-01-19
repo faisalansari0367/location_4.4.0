@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/countries.dart';
 import 'package:bioplus/extensions/size_config.dart';
 import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
@@ -9,8 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../constants/countries.dart';
-
 class CountryField extends StatefulWidget {
   final TextEditingController? controller;
   final ValueChanged<String> onCountryChanged;
@@ -18,14 +17,14 @@ class CountryField extends StatefulWidget {
   final String? label;
   final bool isOriginCountry, showCity;
   const CountryField({
-    Key? key,
+    super.key,
     required this.onCountryChanged,
     this.countryName,
     this.label,
     this.controller,
     this.isOriginCountry = false,
     this.showCity = false,
-  }) : super(key: key);
+  });
 
   @override
   State<CountryField> createState() => _CountryFieldState();
@@ -150,7 +149,7 @@ class _CountryFieldState extends State<CountryField> {
 class CountrySelection extends StatefulWidget {
   // FUNCITON TO CHANGE COUNTRY
   final ValueChanged<Country> onCountryChanged;
-  const CountrySelection({Key? key, required this.onCountryChanged}) : super(key: key);
+  const CountrySelection({super.key, required this.onCountryChanged});
 
   @override
   State<CountrySelection> createState() => _CountrySelectionState();

@@ -1,12 +1,10 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/ui/forms/models/global_form_model.dart';
 import 'package:bioplus/ui/forms/warakirri_entry_form/models/warakirri_form_model.dart';
-import 'package:bioplus/ui/maps/models/polygon_model.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../widgets/dialogs/dialog_service.dart';
-import '../../models/global_form_model.dart';
 
 class WarakirriEntryFormNotifier extends BaseModel {
   final String zoneId;
@@ -63,7 +61,7 @@ class WarakirriEntryFormNotifier extends BaseModel {
     // }
   }
 
-  void pickDateTime(QuestionData questionData, BuildContext context) async {
+  Future<void> pickDateTime(QuestionData questionData, BuildContext context) async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -103,7 +101,7 @@ class WarakirriEntryFormNotifier extends BaseModel {
       }
 
       final data = model.toJson();
-      for (var element in data.entries) {
+      for (final element in data.entries) {
         if (element.value == null) {
           DialogService.error('Please fill the field ${model.question(element.key)}');
           return;

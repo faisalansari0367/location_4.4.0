@@ -10,7 +10,7 @@ class SignatureWidget extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final bool isEditable;
   final String? signature;
-  const SignatureWidget({Key? key, this.onChanged, this.signature, this.isEditable = true}) : super(key: key);
+  const SignatureWidget({super.key, this.onChanged, this.signature, this.isEditable = true});
 
   @override
   State<SignatureWidget> createState() => _SignatureWidgetState();
@@ -128,7 +128,7 @@ class _SignatureWidgetState extends State<SignatureWidget> {
 
 class CreateSignature extends StatefulWidget {
   final Function(String? signature) onDone;
-  const CreateSignature({Key? key, required this.onDone}) : super(key: key);
+  const CreateSignature({super.key, required this.onDone});
 
   @override
   State<CreateSignature> createState() => _CreateSignatureState();
@@ -162,7 +162,7 @@ class _CreateSignatureState extends State<CreateSignature> {
     super.dispose();
   }
 
-  void onDone() async {
+  Future<void> onDone() async {
     final image = await _controller.toPngBytes();
     if (image != null) {
       widget.onDone(base64Encode(image));

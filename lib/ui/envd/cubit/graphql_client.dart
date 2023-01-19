@@ -1,18 +1,16 @@
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/configs/client.dart';
 import 'package:bioplus/constants/api_constants.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_storage.dart';
+import 'package:bioplus/ui/envd/view/evnd_page.dart';
+import 'package:bioplus/ui/select_role/view/select_role_page.dart';
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
-
-import '../../../widgets/dialogs/dialogs.dart';
-import '../../select_role/view/select_role_page.dart';
-import '../view/evnd_page.dart';
 
 class GraphQlClient {
   // static const _envdProdUrl = 'https://auth.integritysystems.com.au/connect/token';
@@ -24,8 +22,6 @@ class GraphQlClient {
   static final _instance = GraphQlClient._();
   late UserData _userData;
 
-  GraphQlClient._();
-
   factory GraphQlClient({UserData? userData}) {
     if (userData != null) {
       _instance._userData = userData;
@@ -33,6 +29,8 @@ class GraphQlClient {
 
     return _instance;
   }
+
+  GraphQlClient._();
 
   late Dio dio = Dio();
   late Box<Map<dynamic, dynamic>?> box;
@@ -102,7 +100,7 @@ class GraphQlClient {
 
   Future<bool> validateCreds() async {
     if (!hasCredentials()) {
-      final message = "Please provide valid LPA credentials in your role settings to use this feature.";
+      const message = "Please provide valid LPA credentials in your role settings to use this feature.";
       await Get.dialog(
         StatusDialog(
           lottieAsset: 'assets/animations/error.json',

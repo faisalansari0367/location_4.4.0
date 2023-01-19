@@ -24,11 +24,11 @@ class _ViewSentNotificationsState extends State<ViewSentNotifications> {
   Future<List<SentNotification>> _refresh() async {
     var data = <SentNotification>[];
     final result = await context.read<Api>().getSentNotifications();
-    await result.when(success: (d) {
+    result.when(success: (d) {
       data = d.data!;
     }, failure: (e) {
       DialogService.failure(error: e);
-    });
+    },);
     //  setState(() {
 
     //  });
@@ -63,9 +63,9 @@ class _ViewSentNotificationsState extends State<ViewSentNotifications> {
 
   Widget _itemBuilder(SentNotification item) {
     return ExpandedTile(
-      subtitle: SizedBox.shrink(),
+      subtitle: const SizedBox.shrink(),
       title: Text(
-        MyDecoration.formatDate(item.notificationDate) + '\n' + MyDecoration.formatTime(item.notificationDate),
+        '${MyDecoration.formatDate(item.notificationDate)}\n${MyDecoration.formatTime(item.notificationDate)}',
       ),
       trailing: Column(
         children: [
@@ -76,7 +76,7 @@ class _ViewSentNotificationsState extends State<ViewSentNotifications> {
       children: (item.user ?? [])
           .map(
             (e) => Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               color: Colors.grey.shade200,
               child: Text(e),
             ),

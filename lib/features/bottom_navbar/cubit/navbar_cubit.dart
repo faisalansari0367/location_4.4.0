@@ -1,11 +1,10 @@
+import 'package:bioplus/features/bottom_navbar/cubit/navbar_state.dart';
 import 'package:bioplus/ui/dashboard/dashboard.dart';
 import 'package:bioplus/ui/scan_qr/scan_qr.dart';
 import 'package:bioplus/ui/select_role/view/select_role_page.dart';
 import 'package:bioplus/ui/settings/view/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'navbar_state.dart';
 
 class NavbarCubit extends Cubit<NavbarState> {
   NavbarCubit() : super(const NavbarState());

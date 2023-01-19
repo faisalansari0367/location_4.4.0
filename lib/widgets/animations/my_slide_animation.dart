@@ -1,7 +1,6 @@
+import 'package:bioplus/constants/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
-import '../../constants/constans.dart';
 
 class MySlideAnimation extends StatelessWidget {
   final Widget child;
@@ -9,13 +8,13 @@ class MySlideAnimation extends StatelessWidget {
   final Curve curve;
   final double? horizontalOffset, verticalOffset;
   const MySlideAnimation({
-    Key? key,
+    super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 500),
     this.curve = Curves.easeIn,
     this.horizontalOffset,
     this.verticalOffset,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

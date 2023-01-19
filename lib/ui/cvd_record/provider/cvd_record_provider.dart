@@ -19,15 +19,20 @@ class CvdRecordNotifier extends BaseModel {
   List<FileSystemEntity> get files => _files;
   late SyncCvdController cvdController;
 
-  // DateTime getDateTime(FileSystemEntity file) {
-  //   return DateTime.parse(file.path.split('CVD Form ').last);
-  // }
+  // final offlineRecords = [
+  //   CvdPopupModel(
+  //     title: 'Share',
+  //     icon: Icons.share,
+  //     value: 0,
+  //   ),
+  //   CvdPopupModel(
+  //     title: 'Delete',
+  //     icon: Icons.share,
+  //     value: 1,
+  //   ),
+  // ];
 
   Future<void> init() async {
-    // final forms = FormsStorageService(api);
-    // _files = await forms.getCvdForms();
-    // _files.sort(_sortByDateAdded);
-    // notifyListeners();
     getOnlineForms();
     _listen();
     cvdController = SyncService().syncCvdController

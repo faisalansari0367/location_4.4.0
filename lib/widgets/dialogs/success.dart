@@ -7,7 +7,7 @@ import 'package:lottie/lottie.dart';
 class SuccessDialog extends StatelessWidget {
   final VoidCallback onTap;
   final String? message;
-  const SuccessDialog({Key? key, required this.onTap, this.message}) : super(key: key);
+  const SuccessDialog({super.key, required this.onTap, this.message});
 
   @override
   Widget build(BuildContext context) {

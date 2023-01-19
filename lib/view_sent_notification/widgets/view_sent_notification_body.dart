@@ -1,12 +1,11 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/view_sent_notification/provider/provider.dart';
+import 'package:bioplus/widgets/expanded_tile.dart';
+import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../constants/index.dart';
-import '../../widgets/expanded_tile.dart';
-import '../../widgets/listview/my_listview.dart';
 
 /// {@template view_sent_notification_body}
 /// Body of the ViewSentNotificationPage.
@@ -51,9 +50,9 @@ class ViewSentNotificationBody extends StatelessWidget {
 
   Widget _itemBuilder(SentNotification item) {
     return ExpandedTile(
-      subtitle: SizedBox.shrink(),
+      subtitle: const SizedBox.shrink(),
       title: Text(
-        MyDecoration.formatDate(item.notificationDate) + '\n' + MyDecoration.formatTime(item.notificationDate),
+        '${MyDecoration.formatDate(item.notificationDate)}\n${MyDecoration.formatTime(item.notificationDate)}',
       ),
       trailing: Column(
         children: [
@@ -64,7 +63,7 @@ class ViewSentNotificationBody extends StatelessWidget {
       children: (item.user ?? [])
           .map(
             (e) => Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               color: Colors.grey.shade200,
               child: Text(e),
             ),

@@ -15,7 +15,7 @@ class SyncService {
   late FormsStorageService formsStorageService;
   late final MyConnectivity _connectivity = MyConnectivity();
   bool _isSyncing = false;
-  bool _isCvdSyncing = false;
+  final bool _isCvdSyncing = false;
   late SyncCvdController syncCvdController;
 
   // singleton

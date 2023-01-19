@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/cubit/logbook_state.dart';
 import 'package:bioplus/ui/admin/pages/visitor_log_book/view/create_pdf.dart';
@@ -13,13 +14,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../../../constants/index.dart';
-
 class LogBookCubit extends BaseModel {
   final refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   bool isGetting = false;
 
-  LogBookCubit(BuildContext context) : super(context) {
+  LogBookCubit(super.context) {
     // apiService.getLogbookRecords();
     // if (baseState.isConnected) {
     //   sync();
@@ -71,14 +70,14 @@ class LogBookCubit extends BaseModel {
     final rows = state.entries
         .map(
           (item) => [
-            if (kDebugMode) (item.id.toString()),
+            if (kDebugMode) item.id.toString(),
             ('${item.user!.firstName!} ${item.user!.lastName}'),
             ('${MyDecoration.formatTime(item.enterDate)}\n${MyDecoration.formatDate(item.enterDate)}'),
             ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
             (item.geofence?.name ?? ''),
             item.geofence?.pic ?? item.user?.ngr ?? '',
-            (item.user?.postcode == null) ? '' : (item.user?.postcode).toString(),
-            (item.form?.isNotEmpty ?? false) ? 'Registered'.toUpperCase() : 'Unregistered'.toUpperCase()
+            if (item.user?.postcode == null) '' else (item.user?.postcode).toString(),
+            if (item.form?.isNotEmpty ?? false) 'Registered'.toUpperCase() else 'Unregistered'.toUpperCase()
           ],
         )
         .toList();
@@ -118,7 +117,7 @@ class LogBookCubit extends BaseModel {
     final newHeaders = list.map((e) => e.toUpperCase()).toList();
     final rows = _generateRows();
     rows.insert(0, newHeaders);
-    final data = await ListToCsvConverter().convert(rows);
+    final data = const ListToCsvConverter().convert(rows);
     final String directory = (await getApplicationSupportDirectory()).path;
     final path = "$directory/csv-${DateTime.now()}.csv";
     final File file = File(path);

@@ -1,7 +1,6 @@
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../constants/index.dart';
 
 class MyListTile extends StatefulWidget {
   final String text;
@@ -9,12 +8,12 @@ class MyListTile extends StatefulWidget {
   final Future<void> Function() onTap;
   final Widget? trailing, title;
   const MyListTile({
-    Key? key,
+    super.key,
     required this.text,
     required this.onTap,
     this.trailing,
     this.title, this.style,
-  }) : super(key: key);
+  });
 
   @override
   State<MyListTile> createState() => _MyListTileState();

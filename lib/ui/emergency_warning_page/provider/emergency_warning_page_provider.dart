@@ -3,10 +3,10 @@ import 'dart:core';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/maps/widgets/geofences_list/cubit/geofence_controller.dart';
 
-import '../../../widgets/dialogs/dialog_service.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 
 class EmergencyWarningPageNotifier extends GeofenceController {
-  final selectedZones = Set<int>();
+  final selectedZones = <int>{};
   // FilterType filterType = FilterType.created_by_me;
   // bool hasPolygon = false;
   // UserData? userData;

@@ -12,14 +12,14 @@ class MyDateField extends StatefulWidget {
   final String? Function(String?)? validator;
 
   const MyDateField({
-    Key? key,
+    super.key,
     this.onChanged,
     required this.label,
     this.date,
     this.decoration,
     this.validator,
     this.showTime = false,
-  }) : super(key: key);
+  });
 
   @override
   State<MyDateField> createState() => _MyDateFieldState();
@@ -81,6 +81,6 @@ class _MyDateFieldState extends State<MyDateField> {
 
   // create a function to format date
   String formatDate(DateTime date) => widget.showTime
-      ? MyDecoration.formatDate(date) + '  :  ' + MyDecoration.formatTime(date)
+      ? '${MyDecoration.formatDate(date)}  :  ${MyDecoration.formatTime(date)}'
       : MyDecoration.formatDate(date);
 }

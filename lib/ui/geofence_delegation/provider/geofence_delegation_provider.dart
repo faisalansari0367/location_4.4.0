@@ -1,10 +1,9 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/provider/base_model.dart';
+import 'package:bioplus/ui/geofence_delegation/provider/geofence_delegation_state.dart';
 import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:flutter/material.dart';
-
-import 'geofence_delegation_state.dart';
 
 class GeofenceDelegationNotifier extends BaseModel {
   UserData? _userData;
@@ -97,7 +96,7 @@ class GeofenceDelegationNotifier extends BaseModel {
           delegationEndDate: state.endDate!,
         );
         final result = await api.temporaryOwner(params);
-        await result.when(
+        result.when(
           success: (data) {
             DialogService.success('Success', onCancel: Get.back);
             updateMe();
@@ -115,7 +114,7 @@ class GeofenceDelegationNotifier extends BaseModel {
     setLoading(true);
     final params = TemporaryOwnerParams(email: null, delegationStartDate: null, delegationEndDate: null);
     final result = await api.removeTemporaryOwner(params);
-    await result.when(
+    result.when(
       success: (data) {
         DialogService.success(
           'Success',

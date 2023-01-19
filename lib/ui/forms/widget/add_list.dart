@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddList extends StatefulWidget {
   final ValueChanged<List<String>>? onChanged;
-  const AddList({Key? key, this.onChanged}) : super(key: key);
+  const AddList({super.key, this.onChanged});
 
   @override
   State<AddList> createState() => _AddListState();
@@ -64,6 +64,7 @@ class _AddListState extends State<AddList> {
     return Row(
       children: [
         Expanded(
+          flex: 4,
           child: Focus(
             onFocusChange: (b) {
               if (!b) {
@@ -82,10 +83,9 @@ class _AddListState extends State<AddList> {
               },
             ),
           ),
-          flex: 4,
         ),
         IconButton(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: value.isEmpty
               ? null
               : () {

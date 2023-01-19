@@ -1,9 +1,8 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/services/notifications/intent_service.dart';
 import 'package:bioplus/ui/work_safety/cubit/cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../services/notifications/intent_service.dart';
 
 /// {@template work_safety_body}
 /// Body of the WorkSafetyPage.

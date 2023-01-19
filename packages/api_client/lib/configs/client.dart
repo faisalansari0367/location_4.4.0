@@ -139,7 +139,7 @@ class Client {
     };
 
     if (!logging) {
-      _dio!.interceptors.remove(dioPrinter);
+      _dio!.interceptors.removeWhere((element) => element is PrettyDioLogger);
     }
 
     return _dio!;

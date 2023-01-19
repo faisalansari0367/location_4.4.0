@@ -1,19 +1,18 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../constants/index.dart';
 
 class GeofenceCard extends StatelessWidget {
   final PolygonModel item;
   final bool isSelected;
   final VoidCallback? onTap;
   const GeofenceCard({
-    Key? key,
+    super.key,
     required this.item,
     this.onTap,
     this.isSelected = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

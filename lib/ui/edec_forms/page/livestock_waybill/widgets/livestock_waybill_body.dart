@@ -37,11 +37,10 @@ class LivestockWaybillBody extends StatelessWidget {
       itemCount: state.pdfs.keys.length,
       padding: kPadding,
       itemBuilder: (context, index) {
-        final _state = state.pdfs.keys.elementAt(index);
+        final item = state.pdfs.keys.elementAt(index);
         return MyListTile(
-          text: _state.toUpperCase(),
-          onTap: () async => await state.selectState(_state),
-          
+          text: item.toUpperCase(),
+          onTap: () async => state.selectState(item),
         );
       },
     );
@@ -51,7 +50,9 @@ class LivestockWaybillBody extends StatelessWidget {
     return States(
       header: 'Please select origin state',
       onChanged: state.selectState,
-      filterStates: (p0) => state.pdfs.keys.map((e) => e.toLowerCase()).contains(p0.toLowerCase()),
+      filterStates: (p0) => state.pdfs.keys
+          .map((e) => e.toLowerCase())
+          .contains(p0.toLowerCase()),
     );
   }
 
@@ -59,7 +60,7 @@ class LivestockWaybillBody extends StatelessWidget {
     return Container();
   }
 
-  _buildHeader(LivestockWaybillNotifier state, BuildContext context) {
+  Text _buildHeader(LivestockWaybillNotifier state, BuildContext context) {
     return Text(
       'Please select Origin State',
       style: context.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),

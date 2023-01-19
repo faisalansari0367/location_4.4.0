@@ -6,19 +6,30 @@ import 'package:api_repo/src/log/src/local_log_records_impl.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 class LocalApi extends Api {
   late StorageService storage;
   late LocalLogRecordsImpl _logRecordsImpl;
   late GeofencesRepo _geofencesRepoLocalImpl;
   late CvdFormsRepo _cvdFormsRepo;
+  late Directory _cacheDir;
 
   @override
   Future<void> init({required String baseUrl, required Box box}) async {
     _logRecordsImpl = LocalLogRecordsImpl(box: box);
-    _cvdFormsRepo = CvdFormsLocalImpl(box: box);
+    _cacheDir = await _getUserCacheDir(box);
+    _cvdFormsRepo = CvdFormsLocalImpl(_cacheDir, box: box);
     storage = StorageService(box: box);
     _geofencesRepoLocalImpl = GeofencesRepoLocalImpl(box: box);
+  }
+
+  Future<Directory> _getUserCacheDir(Box box) async {
+    final storage = StorageService(box: box);
+    final cacheDir = await getApplicationDocumentsDirectory();
+    final email = storage.getUser()?.email ?? '';
+    _cacheDir = Directory('${cacheDir.path}/$email');
+    return _cacheDir;
   }
 
   @override
@@ -485,5 +496,18 @@ class LocalApi extends Api {
     return const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     );
+  }
+
+  @override
+  Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd,
+      {ProgressCallback? onReceiveProgress}) async {
+    return const ApiResult.failure(
+      error: NetworkExceptions.defaultError('Not available in offline mode'),
+    );
+  }
+
+  @override
+  Future<Directory> getCvdDownloadsDir() {
+    return _cvdFormsRepo.getCvdDownloadsDir();
   }
 }

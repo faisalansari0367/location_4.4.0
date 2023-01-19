@@ -1,12 +1,11 @@
 import 'package:bioplus/extensions/size_config.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
+import 'package:bioplus/widgets/my_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
-import '../my_elevated_button.dart';
 
 class NetworkErrorDialog extends StatelessWidget {
   final String message;
@@ -16,12 +15,12 @@ class NetworkErrorDialog extends StatelessWidget {
   final VoidCallback onCancel;
 
   const NetworkErrorDialog({
-    Key? key,
+    super.key,
     required this.message,
     required this.onCancel,
     this.subtitle,
     this.buttonText = 'Ok',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
+import 'package:bioplus/widgets/text_fields/my_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../../widgets/text_fields/my_text_field.dart';
 
 class CvdTextField extends StatefulWidget {
   final String? name;
@@ -16,7 +15,7 @@ class CvdTextField extends StatefulWidget {
 
   // final TextEditingController controller;
   const CvdTextField({
-    Key? key,
+    super.key,
     this.name,
     this.value,
     this.onChanged,
@@ -26,7 +25,7 @@ class CvdTextField extends StatefulWidget {
     this.inputFormatters,
     this.textCapitalization = TextCapitalization.sentences,
     this.maxLength,
-  }) : super(key: key);
+  });
 
   @override
   State<CvdTextField> createState() => _CvdTextFieldState();

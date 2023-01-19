@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 
 class NotifyManagerDialog extends StatelessWidget {
   final String? message;
-  const NotifyManagerDialog({Key? key, this.message}) : super(key: key);
+  const NotifyManagerDialog({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,6 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/helpers/validator.dart';
 import 'package:flutter/cupertino.dart';
-
-import '../../../../helpers/validator.dart';
 
 class UpdatePolygonDetails extends StatefulWidget {
   // final MapsCubit cubit;
@@ -10,11 +9,11 @@ class UpdatePolygonDetails extends StatefulWidget {
 
   final void Function(String name, String? companyOwnerName) onDone;
   const UpdatePolygonDetails({
-    Key? key,
+    super.key,
     required this.onDone,
     this.name,
     this.companyOwner,
-  }) : super(key: key);
+  });
 
   @override
   State<UpdatePolygonDetails> createState() => _UpdatePolygonDetailsState();

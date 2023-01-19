@@ -514,4 +514,14 @@ class ApiRepo implements Api {
   Future<ApiResult<PlanDetailsModel>> getPlanDetails() {
     return _paymentRepo.getPlanDetails();
   }
+  
+  @override
+  Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd, {ProgressCallback? onReceiveProgress}) {
+    return _cvdFormsRepo.saveOnlineCvd(cvd, onReceiveProgress: onReceiveProgress);
+  }
+  
+  @override
+  Future<Directory> getCvdDownloadsDir() {
+    return _cvdFormsRepo.getCvdDownloadsDir();
+  }
 }

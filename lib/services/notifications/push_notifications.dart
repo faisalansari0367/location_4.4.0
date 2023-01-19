@@ -5,14 +5,13 @@ import 'dart:developer';
 import 'dart:math' show Random;
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:bioplus/constants/my_decoration.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/emergency_warning_dialog.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../constants/my_decoration.dart';
 
 // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   await showNotification(
@@ -26,7 +25,7 @@ class PushNotificationService {
   // final NotificationService localNotificationService;
   static late AwesomeNotifications _notifications;
   static bool _initialized = false;
-  static Completer<void> _completer = Completer<void>();
+  static final Completer<void> _completer = Completer<void>();
   PushNotificationService() {
     _notifications = AwesomeNotifications();
     init();
@@ -95,14 +94,14 @@ class PushNotificationService {
     );
   }
 
-  void handleMessage(RemoteMessage message, {bool inBackground = false}) async {
+  Future<void> handleMessage(RemoteMessage message, {bool inBackground = false}) async {
     final title = message.notification?.title;
     switch (title) {
       case 'WARNING!':
         _handleWarningMessage(inBackground, message);
         break;
       case 'USER ENTERED':
-        await _handleUserVisit(message, isEntered: true);
+        await _handleUserVisit(message);
         break;
       case 'USER EXITED':
         await _handleUserVisit(message, isEntered: false);

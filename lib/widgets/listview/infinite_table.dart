@@ -1,8 +1,7 @@
+import 'package:bioplus/helpers/callback_debouncer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-
-import '../../helpers/callback_debouncer.dart';
 
 class InfiniteTable extends StatefulWidget {
   final Widget table;
@@ -10,8 +9,7 @@ class InfiniteTable extends StatefulWidget {
   final Future<void> Function() onRefresh;
   final bool hasReachedMax;
   const InfiniteTable(
-      {Key? key, required this.table, this.controller, required this.onRefresh, this.hasReachedMax = false})
-      : super(key: key);
+      {super.key, required this.table, this.controller, required this.onRefresh, this.hasReachedMax = false,});
 
   @override
   State<InfiniteTable> createState() => _InfiniteTableState();
@@ -46,7 +44,6 @@ class _InfiniteTableState extends State<InfiniteTable> {
       scrollDirection: Axis.horizontal,
       child: SingleChildScrollView(
         controller: _controller,
-        scrollDirection: Axis.vertical,
         child: widget.table,
       ),
     );

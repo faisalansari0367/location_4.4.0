@@ -9,7 +9,7 @@ part 'work_safety_state.dart';
 class WorkSafetyCubit extends Cubit<WorkSafetyState> {
   final Api api;
 
-  WorkSafetyCubit({required this.api}) : super(WorkSafetyInitial(userData: api.getUserData()!)) {}
+  WorkSafetyCubit({required this.api}) : super(WorkSafetyInitial(userData: api.getUserData()!));
 
   FutureOr<void> yourCustomFunction() {
     // TODO: Add Logic

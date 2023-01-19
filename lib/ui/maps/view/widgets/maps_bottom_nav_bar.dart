@@ -7,17 +7,16 @@ import 'package:bioplus/gen/assets.gen.dart';
 import 'package:bioplus/ui/emergency_warning_page/provider/provider.dart';
 import 'package:bioplus/ui/maps/cubit/maps_cubit.dart';
 import 'package:bioplus/ui/maps/view/widgets/add_fence.dart';
+import 'package:bioplus/ui/maps/view/widgets/map_type_widget.dart';
 import 'package:bioplus/widgets/bottom_navbar/bottom_navbar.dart';
 import 'package:bioplus/widgets/bottom_navbar/bottom_navbar_item.dart';
 import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:flutter/material.dart';
 
-import 'map_type_widget.dart';
-
 class MapsBottomNavbar extends StatefulWidget {
   final MapsCubit cubit;
-  const MapsBottomNavbar({Key? key, required this.cubit}) : super(key: key);
+  const MapsBottomNavbar({super.key, required this.cubit});
 
   @override
   State<MapsBottomNavbar> createState() => _MapsBottomNavbarState();
@@ -64,10 +63,10 @@ class _MapsBottomNavbarState extends State<MapsBottomNavbar> {
   }
 
   double get height {
-    const _kHeight = 60;
+    const kHeight = 60;
     final padding = MediaQuery.of(context).viewPadding.bottom;
     final bottomPadding = Platform.isIOS ? min(padding, 20) : padding;
-    return (_kHeight + bottomPadding).toDouble();
+    return (kHeight + bottomPadding).toDouble();
   }
 
   AnimatedPositioned _positioned({double? left = 0, required Widget child}) {

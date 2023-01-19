@@ -10,7 +10,7 @@ class EnterProperty extends StatefulWidget {
   final Stream<Set<PolygonModel>> stream;
   final VoidCallback? onNO;
   final ValueChanged<PolygonModel> onTap;
-  const EnterProperty({Key? key, required this.stream, this.onNO, required this.onTap}) : super(key: key);
+  const EnterProperty({super.key, required this.stream, this.onNO, required this.onTap});
 
   @override
   State<EnterProperty> createState() => _EnterPropertyState();
@@ -37,8 +37,9 @@ class _EnterPropertyState extends State<EnterProperty> {
             StreamBuilder<Set<PolygonModel>>(
               stream: widget.stream,
               builder: (context, snapshot) {
-                if (!snapshot.hasData || snapshot.data!.isEmpty)
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
+                }
                 return AnimatedSize(
                   duration: 300.milliseconds,
                   child: AutoSpacing(
@@ -77,14 +78,6 @@ class _EnterPropertyState extends State<EnterProperty> {
                 //   },
                 // ),
                 ElevatedButton(
-                  child: Text(
-                    Strings.no,
-                    style: TextStyle(
-                      fontSize: 20.h,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     // shape: RoundedRectangleBorder(
@@ -95,6 +88,14 @@ class _EnterPropertyState extends State<EnterProperty> {
                     Navigator.of(context).pop(false);
                     if (widget.onNO != null) widget.onNO!();
                   },
+                  child: Text(
+                    Strings.no,
+                    style: TextStyle(
+                      fontSize: 20.h,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),

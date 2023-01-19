@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/helpers/callback_debouncer.dart';
+import 'package:bioplus/models/enum/filter_type.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
-import '../../../../../helpers/callback_debouncer.dart';
-import '../../../../../models/enum/filter_type.dart';
 
 abstract class GeofenceController extends BaseModel {
   FilterType filterType = FilterType.created_by_me;

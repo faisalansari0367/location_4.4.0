@@ -116,16 +116,16 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   PreferredSizeWidget _bottom() {
     return showDivider
         ? PreferredSize(
+            preferredSize: const Size.fromHeight(4.0),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 25.w),
               color: Colors.grey.withOpacity(0.2),
               height: 1.0,
             ),
-            preferredSize: const Size.fromHeight(4.0),
           )
-        : const PreferredSize(child: SizedBox(), preferredSize: Size.fromHeight(0));
+        : const PreferredSize(preferredSize: Size.fromHeight(0), child: SizedBox());
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(58);
+  Size get preferredSize => const Size.fromHeight(58);
 }

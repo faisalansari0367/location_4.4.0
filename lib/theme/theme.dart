@@ -1,9 +1,8 @@
+import 'package:bioplus/theme/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'color_constants.dart';
 
 // Our light/Primary Theme
 

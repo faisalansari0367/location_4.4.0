@@ -50,7 +50,7 @@ class EnvdDownloadController extends DownloadController with ChangeNotifier {
     _downloadStatus = DownloadStatus.downloading;
     notifyListeners();
     final file = await service.saveEnvdPdf(_downloadUrl!, _consignmentNo!,
-        onReceiveProgress: _onReceiveProgress);
+        onReceiveProgress: _onReceiveProgress,);
     _downloadedFile = file;
     _downloadStatus = DownloadStatus.downloaded;
     notifyListeners();

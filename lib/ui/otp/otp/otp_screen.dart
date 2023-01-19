@@ -16,7 +16,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class OtpScreen extends StatefulWidget {
   final Api authRepo;
   final SignUpModel data;
-  const OtpScreen({Key? key, required this.data, required this.authRepo}) : super(key: key);
+  const OtpScreen({super.key, required this.data, required this.authRepo});
 
   @override
   _OtpScreenState createState() => _OtpScreenState();

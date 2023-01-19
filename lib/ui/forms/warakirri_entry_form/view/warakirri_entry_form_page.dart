@@ -42,14 +42,13 @@ class WarakirriEntryFormPage extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: MyAppBar(
-          showBackButton: true,
           elevation: 3,
           backgroundColor: context.theme.primaryColor,
-          title: Text(
+          title: const Text(
             'Warakirri Declaration Form',
           ),
         ),
-        body: WarakirriEntryFormView(),
+        body: const WarakirriEntryFormView(),
       ),
     );
   }

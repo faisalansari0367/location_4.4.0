@@ -1,4 +1,7 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
+import 'package:bioplus/ui/cvd_form/widgets/common_buttons.dart';
+import 'package:bioplus/ui/cvd_form/widgets/cvd_textfield.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:bioplus/widgets/widgets.dart';
@@ -8,13 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../cubit/cvd_cubit.dart';
-import '../widgets/common_buttons.dart';
-import '../widgets/cvd_textfield.dart';
-
 class VendorDetails extends StatefulWidget {
   final VendorDetailsModel vendorDetailsModel;
-  const VendorDetails({Key? key, required this.vendorDetailsModel}) : super(key: key);
+  const VendorDetails({super.key, required this.vendorDetailsModel});
 
   @override
   State<VendorDetails> createState() => _VendorDetailsState();

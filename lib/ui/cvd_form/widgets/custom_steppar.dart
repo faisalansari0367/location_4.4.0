@@ -1,12 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/theme/color_constants.dart';
+import 'package:bioplus/ui/cvd_form/cubit/cvd_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-
-import '../cubit/cvd_cubit.dart';
 
 const todoColor = Colors.grey;
 // final _processIndex = 0;
@@ -17,12 +16,12 @@ class CustomSteppar extends StatelessWidget {
   final bool isCompleted;
   final int currentStep;
   const CustomSteppar({
-    Key? key,
+    super.key,
     required this.stepper,
     this.currentStep = 0,
     required this.onChanged,
     this.isCompleted = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

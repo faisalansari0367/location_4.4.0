@@ -1,8 +1,7 @@
+import 'package:bioplus/models/enum/filter_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../models/enum/filter_type.dart';
 
 class FilterWidget extends StatelessWidget {
   final FilterType selectedFilter;

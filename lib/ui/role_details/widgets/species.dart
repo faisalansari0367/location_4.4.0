@@ -9,10 +9,10 @@ class SpeciesWidget extends StatefulWidget {
   final List<String> selectedSpecies;
 
   const SpeciesWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.selectedSpecies = const [],
-  }) : super(key: key);
+  });
 
   @override
   State<SpeciesWidget> createState() => _SpeciesWidgetState();

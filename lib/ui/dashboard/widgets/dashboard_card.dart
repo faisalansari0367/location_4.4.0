@@ -1,8 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bioplus/widgets/animations/animated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../widgets/animations/animated_button.dart';
 
 class DashboardCard extends StatelessWidget {
   final VoidCallback? onTap;
@@ -13,21 +12,21 @@ class DashboardCard extends StatelessWidget {
   final String? image;
   final double? size;
   const DashboardCard({
-    Key? key,
+    super.key,
     required this.text,
-    this.color = Colors.red,
+    this.color = Colors.white,
     this.iconData,
     this.onTap,
     this.image,
     this.imagecolor,
     this.size,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    const _color = Color.fromARGB(255, 255, 255, 255);
+    // const color = Color.fromARGB(255, 255, 255, 255);
     // const _color = kPrimaryColor;
-    final _size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     // final imageSize = size ?? _size.height * 0.05;
     final imageSize = size ?? 40.w;
     return AnimatedButton(
@@ -37,7 +36,7 @@ class DashboardCard extends StatelessWidget {
           // boxShadow: kBoxShadow,
           border: Border.all(color: Colors.grey.shade300),
           borderRadius: BorderRadius.circular(20),
-          color: _color,
+          color: color,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

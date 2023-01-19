@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CurrentLocation extends StatefulWidget {
   final Future<void> Function() onPressed;
-  const CurrentLocation({Key? key, required this.onPressed}) : super(key: key);
+  const CurrentLocation({super.key, required this.onPressed});
 
   @override
   State<CurrentLocation> createState() => _CurrentLocationState();

@@ -7,11 +7,11 @@ class DrawerMenuIcon extends StatelessWidget {
 
   // final Animation<double> controller;
 
-  const DrawerMenuIcon({Key? key, this.iconColor}) : super(key: key);
+  const DrawerMenuIcon({super.key, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
-    final drawer = Provider.of<DrawerCubit>(context, listen: true);
+    final drawer = Provider.of<DrawerCubit>(context);
     return Padding(
       padding: const EdgeInsets.all(0),
       child: IconButton(
@@ -28,7 +28,7 @@ class DrawerMenuIcon extends StatelessWidget {
     );
   }
 
-  void _onPressedIcon(BuildContext context) async {
+  Future<void> _onPressedIcon(BuildContext context) async {
     FocusScope.of(context).unfocus();
     final drawer = Provider.of<DrawerCubit>(context, listen: false);
     drawer.isOpen ? drawer.closeDrawer() : drawer.openDrawer();

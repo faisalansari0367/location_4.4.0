@@ -12,7 +12,7 @@ class ExpandedTile extends StatefulWidget {
   final bool isExpanded, hideArrow;
 
   const ExpandedTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.trailing,
@@ -20,7 +20,7 @@ class ExpandedTile extends StatefulWidget {
     this.children = const [],
     this.hideArrow = false,
     this.crossAxisAlignment = CrossAxisAlignment.start,
-  }) : super(key: key);
+  });
 
   @override
   State<ExpandedTile> createState() => _ExpandedTileState();

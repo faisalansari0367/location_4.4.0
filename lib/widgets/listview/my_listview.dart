@@ -14,7 +14,7 @@ class MyListview<T> extends StatelessWidget {
   final EdgeInsets? padding;
 
   const MyListview({
-    Key? key,
+    super.key,
     this.isLoading = false,
     this.isAnimated = true,
     this.emptyWidget,
@@ -26,7 +26,7 @@ class MyListview<T> extends StatelessWidget {
     this.onRetry,
     this.padding,
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

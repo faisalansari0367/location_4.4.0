@@ -10,11 +10,11 @@ class MyTimeField extends StatefulWidget {
   final String? date;
 
   const MyTimeField({
-    Key? key,
+    super.key,
     this.onChanged,
     required this.label,
     this.date,
-  }) : super(key: key);
+  });
 
   @override
   State<MyTimeField> createState() => _MyTimeFieldState();
@@ -47,7 +47,7 @@ class _MyTimeFieldState extends State<MyTimeField> {
     );
   }
 
-  void _timePicker() async {
+  Future<void> _timePicker() async {
     final pickedDate = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),

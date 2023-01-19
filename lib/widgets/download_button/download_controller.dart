@@ -7,6 +7,13 @@ enum DownloadStatus {
   downloaded,
 }
 
+extension DownloadStatusExtension on DownloadStatus {
+  bool get isNotDownloaded => this == DownloadStatus.notDownloaded;
+  bool get isDownloading => this == DownloadStatus.downloading;
+  bool get isFetching => this == DownloadStatus.fetchingDownload;
+  bool get isDownloaded => this == DownloadStatus.downloaded;
+}
+
 abstract class DownloadController implements ChangeNotifier {
   DownloadStatus get downloadStatus;
   double get progress;
@@ -16,7 +23,8 @@ abstract class DownloadController implements ChangeNotifier {
   void openDownload();
 }
 
-class SimulatedDownloadController extends DownloadController with ChangeNotifier {
+class SimulatedDownloadController extends DownloadController
+    with ChangeNotifier {
   SimulatedDownloadController({
     DownloadStatus downloadStatus = DownloadStatus.notDownloaded,
     double progress = 0.0,

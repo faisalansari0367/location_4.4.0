@@ -4,12 +4,11 @@ import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
+import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../widgets/dialogs/dialog_service.dart';
-
 class ViewSentNotificationNotifier extends BaseModel {
-  var data = <SentNotification>[];
+  List<SentNotification> data = <SentNotification>[];
 
   ViewSentNotificationNotifier(super.context) {
     getSentNotifications();
@@ -18,7 +17,7 @@ class ViewSentNotificationNotifier extends BaseModel {
   Future<void> getSentNotifications() async {
     setLoading(true);
     final result = await api.getSentNotifications();
-    await result.when(
+    result.when(
       success: (d) {
         data = d.data!;
         setLoading(false);
@@ -39,7 +38,7 @@ class ViewSentNotificationNotifier extends BaseModel {
             MyDecoration.formatDate(e.createdAt),
             MyDecoration.formatTime(e.createdAt),
             e.geofence?.name ?? '',
-            (e.user?.isEmpty ?? true) ? 'No one to notify' : e.user!.join(', '),
+            if (e.user?.isEmpty ?? true) 'No one to notify' else e.user!.join(', '),
           ],
         )
         .toList();

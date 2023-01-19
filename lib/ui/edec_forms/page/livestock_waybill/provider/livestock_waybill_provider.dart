@@ -48,7 +48,7 @@ class LivestockWaybillNotifier extends BaseModel {
     try {
       final result = await apiService.downloadPdf(url);
       final file = await _formsStorageService.downloadPdf(
-          bytes: result, fileName: '$selectedState Waybill');
+          bytes: result, fileName: '$selectedState Waybill',);
       OpenFile.open(file.path);
     } catch (e) {
       DialogService.error('Something went wrong');

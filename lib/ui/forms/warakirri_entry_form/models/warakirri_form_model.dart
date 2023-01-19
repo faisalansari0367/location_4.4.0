@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:api_repo/api_repo.dart';
 
-import '../../models/global_form_model.dart';
+import 'package:bioplus/ui/forms/models/global_form_model.dart';
 
 class WarakirriFormModel {
   final QuestionData arePeopleTravelingWith;

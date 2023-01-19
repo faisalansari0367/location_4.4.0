@@ -7,7 +7,7 @@ class EmptyScreen extends StatelessWidget {
   final bool messsageOnTop;
   final String? message;
   final Widget? subWidget;
-  const EmptyScreen({Key? key, this.message, this.messsageOnTop = false, this.subWidget}) : super(key: key);
+  const EmptyScreen({super.key, this.message, this.messsageOnTop = false, this.subWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,6 @@ class EmptyScreen extends StatelessWidget {
     );
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (messsageOnTop) messageWidget,

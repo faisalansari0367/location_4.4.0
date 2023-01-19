@@ -8,12 +8,12 @@ class MyRadioButton extends StatelessWidget {
   final bool? selectedValue;
   final ValueChanged<bool?>? onChanged;
   const MyRadioButton({
-    Key? key,
+    super.key,
     this.text,
     this.value,
     this.selectedValue,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

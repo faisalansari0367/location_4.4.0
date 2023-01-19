@@ -6,7 +6,7 @@ class RolesSheet extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final String title;
 
-  const RolesSheet({Key? key, required this.onChanged, this.options = const [], required this.title}) : super(key: key);
+  const RolesSheet({super.key, required this.onChanged, this.options = const [], required this.title});
 
   @override
   Widget build(BuildContext context) {

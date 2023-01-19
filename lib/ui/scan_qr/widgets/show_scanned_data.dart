@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShowScannedData extends StatelessWidget {
   final String data;
-  const ShowScannedData({Key? key, required this.data}) : super(key: key);
+  const ShowScannedData({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

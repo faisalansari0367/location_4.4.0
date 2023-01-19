@@ -1,15 +1,14 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/ui/cvd_record/cvd_record.dart';
 import 'package:bioplus/view_sent_notification/view_sent_notification.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../widgets/my_appbar.dart';
-import '../admin/pages/visitor_log_book/view/logbook_page.dart';
-
 class RecordsPage extends StatefulWidget {
-  const RecordsPage({Key? key}) : super(key: key);
+  const RecordsPage({super.key});
 
   @override
   State<RecordsPage> createState() => _RecordsPageState();
@@ -19,8 +18,8 @@ class _RecordsPageState extends State<RecordsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        title: const Text(Strings.records),
+      appBar: const MyAppBar(
+        title: Text(Strings.records),
         elevation: 5,
       ),
       body: ListView(
@@ -32,7 +31,7 @@ class _RecordsPageState extends State<RecordsPage> {
               fontSize: 18.sp,
             ),
             onTap: () async {
-              Get.to(() => CvdRecordPage());
+              Get.to(() => const CvdRecordPage());
             },
           ),
           Gap(20.h),
@@ -42,7 +41,7 @@ class _RecordsPageState extends State<RecordsPage> {
               fontSize: 18.sp,
             ),
             onTap: () async {
-              Get.to(() => LogbookPage());
+              Get.to(() => const LogbookPage());
             },
           ),
           Gap(20.h),
@@ -52,7 +51,7 @@ class _RecordsPageState extends State<RecordsPage> {
               fontSize: 18.sp,
             ),
             onTap: () async {
-              Get.to(() => ViewSentNotificationPage());
+              Get.to(() => const ViewSentNotificationPage());
             },
           )
         ],

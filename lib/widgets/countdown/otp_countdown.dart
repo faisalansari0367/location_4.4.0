@@ -1,21 +1,20 @@
+import 'package:bioplus/widgets/countdown/countdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import 'countdown.dart';
 
 class OtpCountDown extends StatelessWidget {
   final bool showCountdown;
   final VoidCallback? onTimeout, onRetry;
 
   const OtpCountDown({
-    Key? key,
+    super.key,
     // this.isTimeout = false,
     // this.isRetrying = false,
     this.onTimeout,
     this.onRetry,
     this.showCountdown = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

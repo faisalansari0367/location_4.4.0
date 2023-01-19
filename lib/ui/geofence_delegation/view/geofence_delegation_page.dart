@@ -24,7 +24,7 @@ class GeofenceDelegationPage extends StatelessWidget {
         appBar: MyAppBar(
           title: Text(Strings.geofenceDelegation),
         ),
-        body: GeofenceDelegationView(),
+        body: const GeofenceDelegationView(),
       ),
     );
   }

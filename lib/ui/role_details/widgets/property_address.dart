@@ -6,11 +6,10 @@ import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/role_details/widgets/states.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
+import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../../../widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 
 class Address {
   String? postcode;
@@ -58,7 +57,7 @@ class PropertyAddress extends StatefulWidget {
   final ValueChanged<Address>? onChanged;
 
   const PropertyAddress({
-    Key? key,
+    super.key,
     this.onChanged,
     this.showStreet = true,
     this.showTown = true,
@@ -66,7 +65,7 @@ class PropertyAddress extends StatefulWidget {
     this.showPostcode = true,
     this.address,
     this.title,
-  }) : super(key: key);
+  });
 
   @override
   State<PropertyAddress> createState() => _PropertyAddressState();
