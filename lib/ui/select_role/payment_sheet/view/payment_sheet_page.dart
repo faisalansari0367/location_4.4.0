@@ -29,9 +29,11 @@ class PaymentSheetPage extends StatelessWidget {
         role: role,
       ),
       // child: const PaymentSheetBody(),
-      child: const Scaffold(
-        appBar: MyAppBar(),
-        body: PaymentSheetView(),
+      child: Scaffold(
+        appBar: MyAppBar(
+          title: Text(role),
+        ),
+        body: const PaymentSheetView(),
       ),
     );
   }

@@ -78,6 +78,7 @@ class PaymentSheetNotifier extends BaseModel {
         Get.back();
         Get.back();
         Get.back();
+        
       },
       failure: (e) => DialogService.failure(error: e),
     );
@@ -92,8 +93,6 @@ class PaymentSheetNotifier extends BaseModel {
           child: SuccessDialog(
             onTap: () {
               Get.back();
-              // Get.back();
-              // Get.back();
             },
             message: 'Payment Successful',
           ),
@@ -141,6 +140,9 @@ class PaymentSheetNotifier extends BaseModel {
     final json = jsonDecode(result) as Map<String, dynamic>;
     _addPicAndGeofence(plan);
     json.forEach((key, value) {
+
+      
+
       if (plan[key] ?? false) {
         planData.addAll({key: value});
       }

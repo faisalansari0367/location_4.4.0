@@ -7,6 +7,7 @@ class Strings {
 
   static const name = 'Name',
       warakirri = 'Warakirri',
+      sos = 'SOS',
       email = 'Email',
       first = 'First',
       last = 'Last',
@@ -155,4 +156,6 @@ class Strings {
 
   static String get cvdForm => 'CVD $form'.toUpperCase();
   static String get cvdForms => 'CVD ${form}s';
+
+  static String get sosRecords => '$sos $records';
 }

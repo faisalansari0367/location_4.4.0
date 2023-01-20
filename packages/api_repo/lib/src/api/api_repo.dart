@@ -1,5 +1,5 @@
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/src/functions/functions_repo.dart';
+import 'package:api_repo/src/functions/src/functions_repo.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

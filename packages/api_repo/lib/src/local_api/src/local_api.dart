@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:api_repo/src/functions/models/sos_notification_model.dart';
 import 'package:api_repo/src/log/src/local_log_records_impl.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
@@ -501,6 +502,10 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd,
       {ProgressCallback? onReceiveProgress}) async {
+    return _notAvailable();
+  }
+
+  ApiResult<File> _notAvailable() {
     return const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     );
@@ -509,5 +514,11 @@ class LocalApi extends Api {
   @override
   Future<Directory> getCvdDownloadsDir() {
     return _cvdFormsRepo.getCvdDownloadsDir();
+  }
+
+  @override
+  Future<ApiResult<List<SosNotification>>> getSosNotification() {
+    // return .getSosNotification();
+    throw _notAvailable();
   }
 }

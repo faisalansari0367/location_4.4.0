@@ -62,6 +62,11 @@ class TrackPolygons {
   //p
   static const String _formsPage = '/FormsPage';
   static const String _signaturePage = '/CreateSignature';
+
+  // static const showPopupOnRoutes = [
+  //   ''
+  // ];
+
   // static const String _mapsPage = '/MapsPage';
   bool get isDialogOpen => Get.isDialogOpen ?? false;
   bool get isFormsPage => Get.currentRoute == _signaturePage;

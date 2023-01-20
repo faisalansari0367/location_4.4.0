@@ -54,6 +54,7 @@ class Endpoints {
       '$functions/send-emergency-notification';
   static const getSentNotifications = '$functions/getNotificationRecord';
   static const sendSos = '$functions/send-sos';
+  static const getSosRecord = '$functions/getSosRecord';
 
   // static String user(int id) => '/user/$id';
 }

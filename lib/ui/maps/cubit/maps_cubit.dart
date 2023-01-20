@@ -26,6 +26,8 @@ class MapsCubit extends BaseModel {
   // ignore: unused_field
   final PushNotificationService _pushNotificationService;
   final PolygonModel? polygonId;
+
+  final LatLng? latLng;
   // final MapsRepo _mapsRepo;
   final PolygonsService _polygonsService;
   final GeofenceService geofenceService;
@@ -34,6 +36,7 @@ class MapsCubit extends BaseModel {
   // final MapsRepoLocal mapsRepoLocal;
   // late MapsRepo mapsRepo;
   // late TrackPolygons trackPolygons;
+  late MapsState state;
 
   MapsCubit(
     super.context,
@@ -42,13 +45,18 @@ class MapsCubit extends BaseModel {
     this._polygonsService,
     this._pushNotificationService,
     this.api, {
+    this.latLng,
     required this.geofenceService,
     this.polygonId,
   }) {
     // init();
+
+    state = const MapsState(currentLocation: _latLng);
   }
   static const _latLng = LatLng(-25.185575842417077, 134.68900724218238);
-  MapsState state = const MapsState(currentLocation: _latLng);
+  // MapsState state = const MapsState(
+  //   currentLocation: _latLng,
+  // );
 
   final Completer<GoogleMapController> controller = Completer();
   Future<GoogleMapController> get mapController async => controller.future;
@@ -60,7 +68,11 @@ class MapsCubit extends BaseModel {
     if (state.polygons.isEmpty) {
       await _getAllPolygon();
     }
-    updateCurrentLocation();
+    if (latLng == null) {
+      updateCurrentLocation();
+    } else {
+      animateCamera(latLng!);
+    }
     getLocationUpdates();
     polygonsStream();
     polylinesStream();

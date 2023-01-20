@@ -26,7 +26,8 @@ class RolesRegistrationCubit extends BaseModel {
   }
 
   Future<void> buyServiceRole(SelectRoleModel role) async {
-    Get.to(() => PaymentSheetPage(role: role.role));
+    await Get.to(() => PaymentSheetPage(role: role.role));
+    onRoleUpdated?.call();
   }
 
   Future<void> updateRole() async {
@@ -69,6 +70,13 @@ class RolesRegistrationCubit extends BaseModel {
     notifyListeners();
   }
 
+  final List<String> freeRoles = [
+    'Visitor',
+    'Employee',
+    'International Traveller',
+    'Transporter',
+  ];
+
   Future<void> getRoles() async {
     setLoading(true);
     try {
@@ -86,11 +94,7 @@ class RolesRegistrationCubit extends BaseModel {
                     (e) => SelectRoleModel(
                       role: e,
                       isSelected: allowedRoles.contains(e) || e == 'Visitor',
-                      isPaidRole: ![
-                        'Visitor',
-                        'Employee',
-                        'International Traveller'
-                      ].contains(e),
+                      isPaidRole: !freeRoles.contains(e),
                     ),
                   )
                   .toList(),
@@ -103,19 +107,6 @@ class RolesRegistrationCubit extends BaseModel {
     } catch (e) {
       setLoading(false);
     }
-  }
-
-  void _fillRoles() {
-    final userData = api.getUserData();
-    final allowedRoles = userData?.allowedRoles ?? [];
-    if (allowedRoles.isEmpty) return;
-    for (final role in state.rolesList) {
-      final roleIsSelected = allowedRoles.contains(role.role);
-      if (roleIsSelected) {
-        role.isSelected = true;
-      }
-    }
-    notifyListeners();
   }
 
   // void selectRole(Role role) {

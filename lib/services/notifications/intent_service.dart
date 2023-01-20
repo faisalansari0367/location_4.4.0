@@ -10,7 +10,11 @@ class IntentService {
     Fluttertoast.showToast(msg: msg ?? 'No app available to open this link');
   }
 
-  static Future<bool> emailIntent(String? email, {String? subject, String? body}) async {
+  static Future<bool> emailIntent(
+    String? email, {
+    String? subject,
+    String? body,
+  }) async {
     var q = '';
     if (subject != null) q += 'subject=$subject';
     if (body != null) q += '&body=$body';
@@ -24,6 +28,17 @@ class IntentService {
       noAppAvailable();
     }
     return result;
+  }
+
+  static Future<void> openMap(String url) async {
+    try {
+      final uri = Uri.parse(
+        url,
+      );
+      await launchUrl(uri);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   static Future<bool> dialIntent(String phoneNumber) async {

@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:api_repo/src/functions/functions_repo.dart';
+import 'package:api_repo/src/functions/src/functions_repo.dart';
+import 'package:api_repo/src/functions/models/sos_notification_model.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -523,5 +524,10 @@ class ApiRepo implements Api {
   @override
   Future<Directory> getCvdDownloadsDir() {
     return _cvdFormsRepo.getCvdDownloadsDir();
+  }
+
+  @override
+  Future<ApiResult<List<SosNotification>>> getSosNotification() {
+    return _functionsRepo.getSosNotification();
   }
 }
