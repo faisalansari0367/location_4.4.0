@@ -25,8 +25,8 @@ class PlanDetailsModel {
 
   List<Plan>? getPlanByRole(String role) {
     if (data != null) {
-      final Iterable<Plan>? plans =
-          data!.where((element) => element.role == role);
+      final Iterable<Plan>? plans = data!.where(
+          (element) => element.role?.toLowerCase() == role.toLowerCase());
       if (plans?.isNotEmpty ?? false) {
         // final Plan? plan = plans?.first;
         // if (plan != null) {

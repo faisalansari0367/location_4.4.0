@@ -27,7 +27,6 @@ class PaymentGetStarted extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 00.w, vertical: 5.h),
                 decoration: BoxDecoration(
-                  // color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -41,7 +40,8 @@ class PaymentGetStarted extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${value.plan?.amount ?? 0}.00',
+                // '\$${value.plan?.amount ?? 0}.00',
+                value.price,
                 style: const TextStyle(
                   fontSize: 40,
                   color: Colors.black,

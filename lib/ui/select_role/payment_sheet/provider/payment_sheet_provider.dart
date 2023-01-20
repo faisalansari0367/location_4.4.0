@@ -62,6 +62,16 @@ class PaymentSheetNotifier extends BaseModel {
     notifyListeners();
   }
 
+  String get price {
+    if (plan == null) {
+      return '0.00\$';
+    }
+    if (role.toLowerCase() == 'corporate') {
+      return 'P.O.A';
+    }
+    return '${plan!.amount!.toStringAsFixed(2)}\$';
+  }
+
   Future<void> createSubscription() async {
     final result = await api.createStripeSession(
       selectedPlan!.priceId!,
@@ -78,7 +88,6 @@ class PaymentSheetNotifier extends BaseModel {
         Get.back();
         Get.back();
         Get.back();
-        
       },
       failure: (e) => DialogService.failure(error: e),
     );
@@ -109,7 +118,7 @@ class PaymentSheetNotifier extends BaseModel {
         );
       }
     }
-    print('allowing navigation to $request');
+
     return NavigationDecision.navigate;
   }
 
@@ -140,9 +149,6 @@ class PaymentSheetNotifier extends BaseModel {
     final json = jsonDecode(result) as Map<String, dynamic>;
     _addPicAndGeofence(plan);
     json.forEach((key, value) {
-
-      
-
       if (plan[key] ?? false) {
         planData.addAll({key: value});
       }
