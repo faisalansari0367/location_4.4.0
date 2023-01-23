@@ -136,7 +136,7 @@ class LogRecordsImpl implements LogRecordsRepo {
 
   @override
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId,
-      {String? form}) async {
+      {LogbookFormModel? form}) async {
     try {
       final data2 = {'form': form, 'geofenceID': geofenceId};
       if (form == null) data2.remove('form');
@@ -220,7 +220,7 @@ class LogRecordsImpl implements LogRecordsRepo {
     // String pic,
     String geofenceId, {
     bool isExiting = false,
-    String? form,
+    LogbookFormModel? form,
   }) async {
     try {
       // get the latest entry from the logRecords

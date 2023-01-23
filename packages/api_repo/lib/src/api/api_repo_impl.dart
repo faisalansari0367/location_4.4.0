@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:api_repo/src/functions/src/functions_repo.dart';
-import 'package:api_repo/src/functions/models/sos_notification_model.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -272,7 +270,7 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId,
-      {String? form}) {
+      {LogbookFormModel? form}) {
     return _logRecordsRepo.createLogRecord(geofenceId);
   }
 
@@ -294,7 +292,7 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId,
-      {bool isExiting = false, String? form}) {
+      {bool isExiting = false, LogbookFormModel? form}) {
     return _logRecordsRepo.logBookEntry(
       geofenceId,
       isExiting: isExiting,
@@ -494,8 +492,8 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<String>> createStripeSession(
-      String priceId, String paymentMode) {
-    return _paymentRepo.createStripeSession(priceId, paymentMode);
+      String priceId, String paymentMode, {String? governmentCode, String? role}) {
+    return _paymentRepo.createStripeSession(priceId, paymentMode, governmentCode: governmentCode, role: role);
   }
 
   @override
@@ -515,12 +513,14 @@ class ApiRepo implements Api {
   Future<ApiResult<PlanDetailsModel>> getPlanDetails() {
     return _paymentRepo.getPlanDetails();
   }
-  
+
   @override
-  Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd, {ProgressCallback? onReceiveProgress}) {
-    return _cvdFormsRepo.saveOnlineCvd(cvd, onReceiveProgress: onReceiveProgress);
+  Future<ApiResult<File>> saveOnlineCvd(CvdModel cvd,
+      {ProgressCallback? onReceiveProgress}) {
+    return _cvdFormsRepo.saveOnlineCvd(cvd,
+        onReceiveProgress: onReceiveProgress);
   }
-  
+
   @override
   Future<Directory> getCvdDownloadsDir() {
     return _cvdFormsRepo.getCvdDownloadsDir();

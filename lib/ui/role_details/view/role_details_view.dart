@@ -144,6 +144,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         map[name.toCamelCase] = 'Government';
 
         return MyDropdownField(
+          hintText: 'Please select Sector',
           options: const ['Government', 'Water', 'Gas', 'Power', 'Waste'],
           value: map[name.toCamelCase],
           onChanged: (value) {

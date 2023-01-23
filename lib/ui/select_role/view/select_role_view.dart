@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/select_role/cubit/select_role_cubit.dart';
@@ -19,101 +20,52 @@ class SelectRoleView extends StatelessWidget {
 
     return Scaffold(
       appBar: MyAppBar(
-        // elevation: 2,
         showBackButton: showBackArrow,
         title: BlocBuilder<SelectRoleCubit, SelectRoleState>(
           builder: (context, state) =>
               Text('Hi, ${state.user.firstName?.capitalize! ?? 'User'}'),
         ),
-        // actions: [
-        //   InkWell(
-        //     onTap: () {
-        //       cubit.api.logout();
-        //       Get.offAll(() => SplashScreen());
-        //     },
-        //     child: Row(
-        //       children: [
-        //         Icon(Icons.exit_to_app),
-        //         Gap(10.w),
-        //         Text(
-        //           'Logout',
-        //           style: context.textTheme.subtitle2,
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Gap(10.w),
-        // ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: const Icon(Icons.payment),
-      //   onPressed: () async {
-      //     Get.to(() => const BuyServiceRoleView(serviceRole: 'Producer'));
-      //     // final result = await context.read<Api>().createStripeSession();
-      //     // result.when(
-      //     //   success: (data) {
-      //     //     Get.to(
-      //     //       () => Webview(url: data),
-      //     //     );
-      //     //   },
-      //     //   failure: (e) => DialogService.failure(error: e),
-      //     // );
-      //   },
-      // ),
       body: Container(
         color: context.theme.backgroundColor,
-        padding: kPadding,
-        child: Stack(
+        padding: kPadding.copyWith(bottom: 5.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // padding: kPadding,
-              children: [
-                // Gap(10.height),
-                Text(
-                  // Strings.selectYourRole,
-                  'Update Your Details\nor Select Additional Roles',
-                  style: context.textTheme.headline5,
-                ),
-                Gap(2.height),
-                BlocBuilder<SelectRoleCubit, SelectRoleState>(
-                  builder: (context, state) {
-                    return Expanded(
-                      child: MyListview(
-                        isLoading: state.isLoading,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => MyListTile(
-                          text: state.roles[index].role,
-                          onTap: () async {
-                            // Get.to(
-                            //   () => PaymentSheetPage(
-                            //     role: state.roles[index].role,
-                            //   ),
-                            // );
-                            // BottomSheetService.showSheet(
-                            //   child: const PaymentSheetPage(),
-                            // );
-                            cubit.updateRole(state.roles[index]);
-                          },
-                        ),
-                        data: state.roles,
-                        onRetry: cubit.getRoles,
-                      ),
-                    );
-                  },
-                ),
-
-                Gap(2.height),
-              ],
+            Text(
+              'Update Your Details\nor Select Additional Roles',
+              style: context.textTheme.headline5,
             ),
+            Gap(2.height),
+            _buildSubscriptionUpdate(context),
+            Gap(2.height),
+            BlocBuilder<SelectRoleCubit, SelectRoleState>(
+              builder: (context, state) {
+                return Expanded(
+                  child: MyListview(
+                    isLoading: state.isLoading,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => MyListTile(
+                      text: state.roles[index].role,
+                      onTap: () async {
+                        cubit.updateRole(state.roles[index]);
+                      },
+                    ),
+                    data: state.roles,
+                    onRetry: cubit.getRoles,
+                  ),
+                );
+              },
+            ),
+            Gap(2.height),
             BlocBuilder<SelectRoleCubit, SelectRoleState>(
               builder: (context, state) {
                 return Visibility(
-                  // visible: state.user.role! != 'Admin',
                   child: _selectRoleButton(context),
                 );
               },
             ),
+            Gap(1.height),
           ],
         ),
       ),
@@ -125,10 +77,9 @@ class SelectRoleView extends StatelessWidget {
       bottom: 10,
       left: 3.width,
       right: 3.width,
-      // width: 80.width,
       child: Container(
         padding: EdgeInsets.only(top: 15.w),
-        decoration: MyDecoration.bottomButtonShadow(),
+        // decoration: MyDecoration.bottomButtonShadow(),
         child: Column(
           children: [
             AutoSizeText(
@@ -147,7 +98,6 @@ class SelectRoleView extends StatelessWidget {
                     onRoleUpdated: () {
                       Get.back();
                       context.read<SelectRoleCubit>().getRoles();
-                      // Get.to(page)
                     },
                   ),
                 );
@@ -155,6 +105,53 @@ class SelectRoleView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSubscriptionUpdate(BuildContext context) {
+    final api = context.read<Api>();
+    final endDate = api.getUserData()?.subscriptionEndDate;
+    final date = MyDecoration.formatDate(endDate);
+
+    return Container(
+      padding: kPadding,
+      decoration: MyDecoration.decoration(
+        shadow: false,
+        color: context.theme.primaryColor.withOpacity(0.2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'Subscribed',
+                style: context.textTheme.headline6,
+              ),
+              // Gap(2.width),
+              const Spacer(),
+              const Icon(Icons.check_circle, color: Colors.teal),
+            ],
+          ),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Subscription renew date: ',
+                  style: context.textTheme.subtitle2,
+                ),
+                TextSpan(
+                  text: date,
+                  style: context.textTheme.subtitle2?.copyWith(
+                    color: context.theme.primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

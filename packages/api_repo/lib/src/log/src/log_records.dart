@@ -5,7 +5,7 @@ import '../models/models.dart';
 
 abstract class LogRecordsRepo {
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100});
-  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form});
+  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {LogbookFormModel? form});
   // Future<ApiResult<LogbookEntry>> updateLogRecord(int logId, String geofenceId);
   Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId});
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId);
@@ -17,7 +17,7 @@ abstract class LogRecordsRepo {
     // String pic,
     String geofenceId, {
     bool isExiting = false,
-    String? form,
+    LogbookFormModel? form,
   });
 
   Future<bool> synchronizeLogRecords();

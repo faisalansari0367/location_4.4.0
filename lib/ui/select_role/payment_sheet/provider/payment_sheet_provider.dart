@@ -5,6 +5,7 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/ui/select_role/payment_sheet/payment_sheet.dart';
+import 'package:bioplus/ui/select_role/payment_sheet/widgets/government_code.dart';
 import 'package:bioplus/ui/select_role/payment_sheet/widgets/payment_get_started.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/success.dart';
@@ -27,12 +28,14 @@ class PaymentSheetNotifier extends BaseModel {
   final planData = <String, dynamic>{};
   Plan? plan;
   PlanDetailsModel? planDetailsModel;
+  String? governmentCode;
 
   Plan? selectedPlan;
 
   final pages = const <Widget>[
     PaymentGetStarted(),
     PaymentSheetBody(),
+    GovernmentCode(),
   ];
 
   final bool _showPlanSelection = false;
@@ -40,7 +43,22 @@ class PaymentSheetNotifier extends BaseModel {
 
   List<Plan> get plans => planDetailsModel?.getPlanByRole(role) ?? [];
 
+  void setGovernmentCode(String code) {
+    governmentCode = code;
+    notifyListeners();
+  }
+
   void setShowPlanSelection() {
+    if (role == 'Government') {
+      selectedPlan = plan;
+      pageController.animateToPage(
+        2,
+        duration: const Duration(milliseconds: 1000),
+        curve: kCurve,
+      );
+      return;
+    }
+
     pageController.animateToPage(
       1,
       duration: const Duration(milliseconds: 1000),
@@ -64,21 +82,30 @@ class PaymentSheetNotifier extends BaseModel {
 
   String get price {
     if (plan == null) {
-      return '0.00\$';
+      return '\$0.00';
     }
-    if (role.toLowerCase() == 'corporate') {
-      return 'P.O.A';
+    if (['corporate', 'government'].contains(role.toLowerCase())) {
+      return 'P.O.A.';
     }
-    return '${plan!.amount!.toStringAsFixed(2)}\$';
+    return '\$${plan!.amount!.toStringAsFixed(2)}';
   }
+
+  bool get isRoleGovernment => role == 'Government';
 
   Future<void> createSubscription() async {
     final result = await api.createStripeSession(
       selectedPlan!.priceId!,
       selectedPlan!.paymentMode!,
+      role: role,
+      governmentCode: governmentCode,
     );
     result.when(
       success: (data) async {
+        if (isRoleGovernment) {
+          Get.back();
+          Get.snackbar('Success', 'Government Role Added');
+        }
+
         await Get.to(
           () => Webview(
             url: data,
@@ -127,9 +154,10 @@ class PaymentSheetNotifier extends BaseModel {
     final result = await api.getPlanDetails();
     result.when(
       success: (data) async {
-        final monthlyPlan = data
-            .getPlanByRole(role)
-            ?.where((element) => element.paymentType.isMonthly);
+        final monthlyPlan = data.getPlanByRole(role)?.where((element) {
+          if (element.role == 'Government') return true;
+          return element.paymentType.isMonthly;
+        });
         if (monthlyPlan?.isNotEmpty ?? false) {
           plan = monthlyPlan?.first;
         }
@@ -162,7 +190,7 @@ class PaymentSheetNotifier extends BaseModel {
       planData.addAll({
         'pic': {
           'title': '${this.plan?.pic} PICS',
-          'description': 'You will get ${this.plan?.pic} PICS per month',
+          'description': 'You will get ${this.plan?.pic} PICS',
         }
       });
     }
@@ -171,8 +199,7 @@ class PaymentSheetNotifier extends BaseModel {
       planData.addAll({
         'geofence': {
           'title': '${this.plan?.geofence} Geofences',
-          'description':
-              'You will get ${this.plan?.geofence} Geofences per month',
+          'description': 'You will get ${this.plan?.geofence} Geofences',
         }
       });
     }

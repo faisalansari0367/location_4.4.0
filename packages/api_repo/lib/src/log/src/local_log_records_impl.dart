@@ -35,10 +35,12 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   Future<bool> synchronizeLogRecords() async => false;
 
   List<LogbookEntry> get _logRecords => _logRecordsLocalService.logRecords;
-  Stream<List<LogbookEntry>> get logRecordsToSync => _logRecordsLocalService.offlineLogRecords.logbookRecordsStream;
+  Stream<List<LogbookEntry>> get logRecordsToSync =>
+      _logRecordsLocalService.offlineLogRecords.logbookRecordsStream;
 
   @override
-  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId, {String? form}) async {
+  Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId,
+      {LogbookFormModel? form}) async {
     // final geofence = _logRecordsLocalService.getLogRecord(geofenceId);
     try {
       // await _mapsStorageService.polygonsCompleter;
@@ -50,19 +52,20 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       final index = geofences.indexWhere((element) => element.id == geofenceId);
 
       if (index == -1) {
-        return const ApiResult.failure(error: NetworkExceptions.defaultError('Geofence not found'));
+        return const ApiResult.failure(
+            error: NetworkExceptions.defaultError('Geofence not found'));
       }
 
       final geofence = geofences[index];
-      final _id = _logRecords.isEmpty ? 0 : _logRecords.first.id ?? 0;
+      final id = _logRecords.isEmpty ? 0 : _logRecords.first.id ?? 0;
       await exitFromPreviousZone();
       // await _logRecordsLocalService.offlineLogRecords.clearOfflineRecords();
 
       final LogbookEntry logRecord = LogbookEntry(
-        form: null,
+        form: form,
         // id: (_logRecords.first.id ?? 0) + 1,
         isOffline: true,
-        id: Random().nextInt(10000000) + _id,
+        id: Random().nextInt(10000000) + id,
         createdAt: currentUtcTime,
         enterDate: currentUtcTime,
         user: _storageService.getUserData(),
@@ -74,7 +77,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
           createdAt: geofence.createdAt?.toIso8601String(),
           pic: geofence.pic,
           points: Points(
-            coordinates: geofence.points.map((e) => [e.latitude, e.longitude]).toList(),
+            coordinates:
+                geofence.points.map((e) => [e.latitude, e.longitude]).toList(),
             type: 'Polygon',
           ),
         ),
@@ -82,20 +86,23 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       final records = _logRecordsLocalService.logRecords;
       records.insert(0, logRecord);
       final responseModel = LogbookResponseModel(data: records);
-      await _logRecordsLocalService.offlineLogRecords.addOfflineRecord(logRecord);
+      await _logRecordsLocalService.offlineLogRecords
+          .addOfflineRecord(logRecord);
       await _logRecordsLocalService.saveLogbookRecords(responseModel);
       log('logRecord created: ${logRecord.toJson()}');
       return ApiResult.success(data: logRecord);
     } catch (e) {
       log(e.toString());
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('No polygons found'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('No polygons found'));
     }
   }
 
   Future<void> exitFromPreviousZone() async {
     final userId = _storageService.getUser()?.id;
     final records = _logRecordsLocalService.logRecords;
-    final recordsByUser = records.where((element) => element.user?.id == userId);
+    final recordsByUser =
+        records.where((element) => element.user?.id == userId);
     final recordsPast15Minutes = recordsByUser.where((element) {
       if (element.exitDate == null) {
         return true;
@@ -106,10 +113,12 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
     if (recordsPast15Minutes.isNotEmpty) {
       final record = recordsPast15Minutes.first;
       record.exitDate = currentUtcTime;
-      final index = logbookRecords.indexWhere((element) => element.id == record.id);
+      final index =
+          logbookRecords.indexWhere((element) => element.id == record.id);
       if (index == -1) return;
       logbookRecords[index] = record;
-      await _logRecordsLocalService.saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
+      await _logRecordsLocalService
+          .saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
       await _logRecordsLocalService.offlineLogRecords.update(record);
     }
   }
@@ -124,31 +133,52 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
     // _sortById();
 
     /// records of this geofence
-    final geofenceRecords = _logRecords.where((element) => element.geofence?.id == int.parse(geofenceId));
+    final geofenceRecords = _logRecords
+        .where((element) => element.geofence?.id == int.parse(geofenceId));
 
     if (kDebugMode) {
       print('geofence $geofenceId records: ${geofenceRecords.length}');
     }
 
     // records created by the current user for this geofence
-    final recordsByUser = geofenceRecords.where((element) => element.user?.id == userId);
+    final recordsByUser =
+        geofenceRecords.where((element) => element.user?.id == userId);
     if (kDebugMode) {
       print('recordsByUser length: ${recordsByUser.length}');
     }
 
     // records created by the current user for this geofence in the last 15 minutes
     final recordsPast15Minutes = recordsByUser.where((element) {
+      final entryDifference = DateTime.now().difference(element.enterDate!);
+
+      if (element.enterDate != null &&
+          element.exitDate != null &&
+          (element.form?.isNotEmpty ?? false)) {
+        return entryDifference.inHours <= 24;
+      }
+
       if (element.form?.isEmpty ?? true) {
-        return DateTime.now().difference(element.enterDate!).inHours <= 24;
+        return entryDifference.inHours <= 24;
       }
       if (element.exitDate == null) {
         return true;
       }
 
-      return DateTime.now().difference(element.enterDate!).inMinutes <= 30;
+      if (element.updatedAt != null) {
+        return DateTime.now().difference(element.updatedAt!).inMinutes <= 30;
+      }
+
+      // if(element.enterDate != null && element.exitDate == null && (element.form?.isNotEmpty ?? false)) {
+      //   return DateTime.now().difference(element.enterDate!).inMinutes <= 30;
+      // }
+
+      return entryDifference.inMinutes <= 30;
     });
 
     if (kDebugMode) {
+      for (var element in recordsByUser) {
+        print('record: ${element.id}');
+      }
       print('records in last 15 minutes: ${recordsPast15Minutes.length}');
     }
 
@@ -161,7 +191,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookResponseModel>> getLogbookRecords({int page = 1, int limit = 100}) async {
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords(
+      {int page = 1, int limit = 100}) async {
     final records = _logRecordsLocalService.getLogbookRecords();
     if (!_completer.isCompleted) {
       _completer.complete();
@@ -170,7 +201,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId, {bool isExiting = false, String? form}) async {
+  Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId,
+      {bool isExiting = false, LogbookFormModel? form}) async {
     try {
       // get the latest entry from the logRecords
       final hasEntry = await getLogRecord(geofenceId);
@@ -183,8 +215,20 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       // if has entry
       final hasExitDate = hasEntry.exitDate?.microsecond != null;
       if (hasExitDate) {
-        final entryExitDifference = DateTime.now().difference(hasEntry.exitDate!).inMinutes.abs();
-        if (entryExitDifference > 30) {
+        final now = DateTime.now();
+        final entryExitDifference =
+            now.difference(hasEntry.exitDate!).inMinutes.abs();
+
+        if (entryExitDifference > 10) {
+          // final entryExitDifference =
+          if (hasEntry.form?.isNotEmpty ?? false) {
+            final daysDifference =
+                now.difference(hasEntry.enterDate!).inDays.abs();
+            if (daysDifference < 1) {
+              return await createLogRecord(geofenceId, form: hasEntry.form);
+            }
+          }
+          //     DateTime.now().difference(hasEntry.enterDate!).inDays.abs();
           return await createLogRecord(geofenceId, form: form);
         } else {
           return ApiResult.failure(
@@ -211,15 +255,18 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   Future<void> previousZoneExitDateChecker() async {
     final userId = _storageService.getUser()?.id;
     final records = _logRecordsLocalService.logRecords;
-    final recordsByUser = records.where((element) => element.user?.id == userId);
+    final recordsByUser =
+        records.where((element) => element.user?.id == userId);
     if (recordsByUser.isNotEmpty) {
       final record = recordsByUser.first;
       if (record.exitDate != null) return;
       record.exitDate = currentUtcTime;
-      final index = logbookRecords.indexWhere((element) => element.id == record.id);
+      final index =
+          logbookRecords.indexWhere((element) => element.id == record.id);
       if (index == -1) return;
       logbookRecords[index] = record;
-      await _logRecordsLocalService.saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
+      await _logRecordsLocalService
+          .saveLogbookRecords(LogbookResponseModel(data: logbookRecords));
       await _logRecordsLocalService.offlineLogRecords.update(record);
     }
   }
@@ -228,26 +275,32 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   List<LogbookEntry> get logbookRecords => _logRecords;
 
   @override
-  Stream<List<LogbookEntry>> get logbookRecordsStream => _logRecordsLocalService.logbookRecordsStream;
+  Stream<List<LogbookEntry>> get logbookRecordsStream =>
+      _logRecordsLocalService.logbookRecordsStream;
 
   @override
   Future<ApiResult<LogbookEntry>> markExit(String geofenceId) async {
     try {
       LogbookEntry? hasEntry = await getLogRecord(geofenceId);
       if (hasEntry == null) {
-        return const ApiResult.failure(error: NetworkExceptions.defaultError('No log record found'));
+        return const ApiResult.failure(
+            error: NetworkExceptions.defaultError('No log record found'));
       }
       hasEntry.exitDate = currentUtcTime.subtract(const Duration(seconds: 20));
-      final index = _logRecords.indexWhere((element) => element.id == hasEntry.id);
+      final index =
+          _logRecords.indexWhere((element) => element.id == hasEntry.id);
       if (index == -1) {
-        return const ApiResult.failure(error: NetworkExceptions.defaultError('No log record found'));
+        return const ApiResult.failure(
+            error: NetworkExceptions.defaultError('No log record found'));
       }
       _logRecords[index] = hasEntry;
-      await _logRecordsLocalService.saveLogbookRecords(LogbookResponseModel(data: _logRecords));
+      await _logRecordsLocalService
+          .saveLogbookRecords(LogbookResponseModel(data: _logRecords));
       _logRecordsLocalService.offlineLogRecords.update(hasEntry);
       return ApiResult.success(data: hasEntry);
     } catch (e) {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('error marking exit'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('error marking exit'));
     }
   }
 
@@ -257,14 +310,17 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
   }
 
   @override
-  Future<ApiResult<LogbookEntry>> udpateForm(String geofenceId, Map<String, dynamic> form, {int? logId}) async {
+  Future<ApiResult<LogbookEntry>> udpateForm(
+      String geofenceId, Map<String, dynamic> form,
+      {int? logId}) async {
     try {
       if (logId != null) {
         return await _patchForm(logId, form);
       } else {
         final logRecord = await getLogRecord(geofenceId);
         if (logRecord == null) {
-          return const ApiResult.failure(error: NetworkExceptions.defaultError('no log record found'));
+          return const ApiResult.failure(
+              error: NetworkExceptions.defaultError('no log record found'));
         }
         return await _patchForm(logRecord.id!, form);
       }
@@ -272,25 +328,30 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       if (kDebugMode) {
         print('error updating form: $e');
       }
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('error updating form'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('error updating form'));
     }
   }
 
-  Future<ApiResult<LogbookEntry>> _patchForm(int logRecordId, Map<String, dynamic> formData) async {
-    final index = _logRecords.indexWhere((element) => element.id == logRecordId);
+  Future<ApiResult<LogbookEntry>> _patchForm(
+      int logRecordId, Map<String, dynamic> formData) async {
+    final index =
+        _logRecords.indexWhere((element) => element.id == logRecordId);
     if (index != -1) {
       final form = LogbookFormModel.fromJson(formData);
       final logRecord = _logRecords[index];
       logRecord.form = form;
       // logRecord.updatedAt = currentUtcTime.toUtc();
       // save the updated form in the local database
-      await _logRecordsLocalService.saveLogbookRecords(LogbookResponseModel(data: _logRecords));
+      await _logRecordsLocalService
+          .saveLogbookRecords(LogbookResponseModel(data: _logRecords));
       // update the form in the offline log records
       await _logRecordsLocalService.offlineLogRecords.update(logRecord);
 
       return ApiResult.success(data: logRecord);
     } else {
-      return const ApiResult.failure(error: NetworkExceptions.defaultError('log record not found'));
+      return const ApiResult.failure(
+          error: NetworkExceptions.defaultError('log record not found'));
     }
   }
 

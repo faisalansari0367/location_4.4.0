@@ -25,13 +25,13 @@ class PlanDetailsModel {
 
   List<Plan>? getPlanByRole(String role) {
     if (data != null) {
-      final Iterable<Plan>? plans = data!.where(
-          (element) => element.role?.toLowerCase() == role.toLowerCase());
-      if (plans?.isNotEmpty ?? false) {
+      final Iterable<Plan> plans = (data ?? []).where(
+          (element) =>  element.role?.toLowerCase() == role.toLowerCase());
+      if (plans.isNotEmpty) {
         // final Plan? plan = plans?.first;
         // if (plan != null) {
         // data.addAll(plan.toJson());
-        return plans!.toList();
+        return plans.toList();
         // }
       }
     }

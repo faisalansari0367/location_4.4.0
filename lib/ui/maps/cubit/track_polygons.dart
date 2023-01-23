@@ -101,11 +101,17 @@ class TrackPolygons {
           if (entry != null) {
             // final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
             if (entry.form?.isNotEmpty ?? false) {
+              final difference = DateTime.now().difference(entry.enterDate!).inDays;
+              if (difference >= 1) {
+                log('difference is $difference');
+                // log('calling hide pop up timer function');
+                dontShowAgain.call(() => showPopup(currentPosition));
+              }
               return;
             }
           }
         }
-        print('calling hide pop up timer function');
+        // print('calling hide pop up timer function');
         dontShowAgain.call(() => showPopup(currentPosition));
       },
     );

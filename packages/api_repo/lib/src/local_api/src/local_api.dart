@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
-import 'package:api_repo/src/functions/models/sos_notification_model.dart';
 import 'package:api_repo/src/log/src/local_log_records_impl.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
@@ -248,7 +247,7 @@ class LocalApi extends Api {
 
   @override
   Future<ApiResult<LogbookEntry>> createLogRecord(String geofenceId,
-      {String? form}) {
+      {LogbookFormModel? form}) async {
     return _logRecordsImpl.createLogRecord(geofenceId, form: form);
   }
 
@@ -265,7 +264,7 @@ class LocalApi extends Api {
 
   @override
   Future<ApiResult<LogbookEntry>> logBookEntry(String geofenceId,
-      {bool isExiting = false, String? form}) {
+      {bool isExiting = false, LogbookFormModel? form}) {
     return _logRecordsImpl.logBookEntry(geofenceId,
         isExiting: isExiting, form: form);
   }
@@ -471,7 +470,7 @@ class LocalApi extends Api {
 
   @override
   Future<ApiResult<String>> createStripeSession(
-      String priceId, String paymentMode) async {
+      String priceId, String paymentMode,  {String? governmentCode, String? role}) async {
     return const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     );

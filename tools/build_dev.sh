@@ -4,6 +4,7 @@ APKPATH="build/app/outputs/flutter-apk/$NAME"
 echo "Building $NAME"
 flutter build apk --target=lib/main_dev.dart
 cd build/app/outputs/flutter-apk
+open .
 echo "Changing to $NAME"
 mv app-release.apk "$NAME"
 
@@ -14,4 +15,4 @@ cd ../../../../
 
 echo "$NAME Link:"
 echo $APKPATH
-python3 tools/we_transfer.py upload "$APKPATH"
+open $APKPATH

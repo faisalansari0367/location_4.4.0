@@ -6,7 +6,12 @@ class States extends StatelessWidget {
   final bool Function(String)? filterStates;
   final String? header;
 
-  const States({super.key, required this.onChanged, this.filterStates, this.header});
+  const States({
+    super.key,
+    required this.onChanged,
+    this.filterStates,
+    this.header,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +55,7 @@ class States extends StatelessWidget {
     if (filterStates != null) {
       return states.where(filterStates!).toList();
     }
+    states.add('ALL');
     return states;
   }
 }

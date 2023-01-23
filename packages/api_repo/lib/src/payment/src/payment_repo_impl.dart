@@ -9,15 +9,22 @@ class PaymentRepoImpl implements PaymentRepo {
 
   @override
   Future<ApiResult<String>> createStripeSession(
-      String priceId, String paymentMode) async {
+      String priceId, String paymentMode,
+      {String? governmentCode, String? role}) async {
     try {
       final session = await client.post(
         Endpoints.createSession,
         data: {
           'priceId': priceId,
           'mode': paymentMode.toLowerCase(),
+          'governmentCode': governmentCode,
+          'role': role,
         },
       );
+      if (governmentCode != null && role != null) {
+        return ApiResult.success(data: session.data['status']);
+      }
+
       return ApiResult.success(data: session.data['url']);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
