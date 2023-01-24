@@ -28,109 +28,124 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, c) {
-      return Consumer<GlobalQuestionnaireFormNotifier>(
-        builder: (context, state, child) {
-          return Form(
-            key: state.formKey,
-            child: SingleChildScrollView(
-              controller: state.sc,
-              padding: kPadding,
-              child: AutoSpacing(
-                children: [
-                  _addList(state, state.model.arePeopleTravelingWith),
-                  _card(state, state.model.isQfeverVaccinated),
-                  _card(state, state.model.isFluSymptoms, onChanged: (value) {
-                    if (value) {
-                      DialogService.error('Consider the safety of others before you enter this zone.');
-                    }
-                    state.onChanged(state.model.isFluSymptoms, value);
-                  },),
-                  _card(
-                    state,
-                    state.model.isOverSeaVisit,
-                    onChanged: (s) {
-                      if (s) {
-                        DialogService.error('Make sure you contact the owner before entering the Property.');
-                      }
-                      state.onChanged(state.model.isOverSeaVisit, s);
-                    },
-                  ),
-                  _card(state, state.model.isAllMeasureTaken),
-                  _card(state, state.model.isOwnerNotified),
-                  MyTextField(
-                    hintText: state.model.rego.question,
-                    inputFormatters: [CapitalizeAllInputFormatter()],
-                    // onChanged: (value) {
-                    //   state.model.rego.value = value;
-                    // },
-                    onChanged: (value) {
-                      state.onChanged(state.model.rego, value);
-                    },
-                  ),
-                  MyDropdownField(
-                    onChanged: (s) {
-                      // model.riskRating.value = s;
-                      state.onChanged(state.model.riskRating, s);
-                    },
-                    hintText: state.model.riskRating.question,
-                    value: state.model.riskRating.value,
-                    options: ['Low', 'Medium', 'High'].map((e) => e.toUpperCase()).toList(),
-                  ),
-                  GestureDetector(
-                    onTap: () => state.pickDateTime(state.model.expectedDepartureDate, context),
-                    child: AbsorbPointer(
-                      child: MyDateField(
-                        label: state.model.expectedDepartureDate.question,
-                        date: state.model.expectedDepartureDate.value,
-                        showTime: true,
-                        // onChanged: (s) {
-                        //   state.pickDateTime(state.model.expectedDepartureDate, context);
-                        // },
-                      ),
-                    ),
-                  ),
-                  // MyTimeField(
-                  //   label: state.model.expectedDepartureTime.question,
-                  //   date: state.model.expectedDepartureTime.value,
-                  //   onChanged: (s) {
-                  //     state.onChanged(state.model.expectedDepartureTime, s);
-                  //   },
-                  // ),
-                  SignatureWidget(
-                    signature: state.model.signature.value,
-                    onChanged: (s) async {
-                      state.onChanged(state.model.signature, s);
-                      await 500.milliseconds.delay();
-                      state.scrollToEnd();
-                    },
-                  ),
-                  Container(
-                    decoration: MyDecoration.decoration(),
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: CheckboxListTile(
-                      title: const Text(
-                          'I declare that any animals/products I am transporting are accompanied by correct movement documentation.',),
-                      value: state.selfDeclaration,
-                      onChanged: (s) {
-                        state.onChangeDecalration(s ?? false);
+    return LayoutBuilder(
+      builder: (context, c) {
+        return Consumer<GlobalQuestionnaireFormNotifier>(
+          builder: (context, state, child) {
+            return Form(
+              key: state.formKey,
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                controller: state.sc,
+                padding: kPadding,
+                child: AutoSpacing(
+                  children: [
+                    _addList(state, state.model.arePeopleTravelingWith),
+                    _card(state, state.model.isQfeverVaccinated),
+                    _card(
+                      state,
+                      state.model.isFluSymptoms,
+                      onChanged: (value) {
+                        if (value) {
+                          DialogService.error(
+                              'Consider the safety of others before you enter this zone.');
+                        }
+                        state.onChanged(state.model.isFluSymptoms, value);
                       },
                     ),
-                  ),
-                  MyElevatedButton(
-                    text: 'Submit',
-                    onPressed: () async => state.submit(),
-                  ),
-                ],
+                    _card(
+                      state,
+                      state.model.isOverSeaVisit,
+                      onChanged: (s) {
+                        if (s) {
+                          DialogService.error(
+                              'Make sure you contact the owner before entering the Property.');
+                        }
+                        state.onChanged(state.model.isOverSeaVisit, s);
+                      },
+                    ),
+                    _card(state, state.model.isAllMeasureTaken),
+                    _card(state, state.model.isOwnerNotified),
+                    MyTextField(
+                      hintText: state.model.rego.question,
+                      inputFormatters: [CapitalizeAllInputFormatter()],
+                      // onChanged: (value) {
+                      //   state.model.rego.value = value;
+                      // },
+                      onChanged: (value) {
+                        state.onChanged(state.model.rego, value);
+                      },
+                    ),
+                    MyDropdownField(
+                      onChanged: (s) {
+                        // model.riskRating.value = s;
+                        state.onChanged(state.model.riskRating, s);
+                      },
+                      hintText: state.model.riskRating.question,
+                      value: state.model.riskRating.value,
+                      options: ['Low', 'Medium', 'High']
+                          .map((e) => e.toUpperCase())
+                          .toList(),
+                    ),
+                    GestureDetector(
+                      onTap: () => state.pickDateTime(
+                          state.model.expectedDepartureDate, context),
+                      child: AbsorbPointer(
+                        child: MyDateField(
+                          label: state.model.expectedDepartureDate.question,
+                          date: state.model.expectedDepartureDate.value,
+                          showTime: true,
+                          // onChanged: (s) {
+                          //   state.pickDateTime(state.model.expectedDepartureDate, context);
+                          // },
+                        ),
+                      ),
+                    ),
+                    // MyTimeField(
+                    //   label: state.model.expectedDepartureTime.question,
+                    //   date: state.model.expectedDepartureTime.value,
+                    //   onChanged: (s) {
+                    //     state.onChanged(state.model.expectedDepartureTime, s);
+                    //   },
+                    // ),
+                    SignatureWidget(
+                      signature: state.model.signature.value,
+                      onChanged: (s) async {
+                        state.onChanged(state.model.signature, s);
+                        await 500.milliseconds.delay();
+                        state.scrollToEnd();
+                      },
+                    ),
+                    Container(
+                      decoration: MyDecoration.decoration(),
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      child: CheckboxListTile(
+                        title: const Text(
+                          'I declare that any animals/products I am transporting are accompanied by correct movement documentation.',
+                        ),
+                        value: state.selfDeclaration,
+                        onChanged: (s) {
+                          state.onChangeDecalration(s ?? false);
+                        },
+                      ),
+                    ),
+                    MyElevatedButton(
+                      text: 'Submit',
+                      onPressed: () async => state.submit(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
-      );
-    },);
+            );
+          },
+        );
+      },
+    );
   }
 
-  Widget _card(GlobalQuestionnaireFormNotifier state, QuestionData data, {ValueChanged<bool>? onChanged}) {
+  Widget _card(GlobalQuestionnaireFormNotifier state, QuestionData data,
+      {ValueChanged<bool>? onChanged}) {
     return Container(
       decoration: MyDecoration.decoration(),
       child: QuestionCard(

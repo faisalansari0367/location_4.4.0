@@ -32,9 +32,11 @@ class TrackPolygons {
   bool isManagerNotified = false;
   static bool isShowingPopUp = false;
 
-  final CallRestricter hidePopUpTimer = CallRestricter(duration: 60.seconds, callback: hidePopUp);
+  final CallRestricter hidePopUpTimer =
+      CallRestricter(duration: 60.seconds, callback: hidePopUp);
   NotifyManagerHandler notifyManager = NotifyManagerHandler();
-  final CallRestricter dontShowAgain = CallRestricter(duration: 240.seconds, callback: () {});
+  final CallRestricter dontShowAgain =
+      CallRestricter(duration: 600.seconds, callback: () {});
   late LogbookEntryHandler logbookEntryHandler;
   int attemptOfShowingPopUp = 0;
 
@@ -101,7 +103,8 @@ class TrackPolygons {
           if (entry != null) {
             // final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
             if (entry.form?.isNotEmpty ?? false) {
-              final difference = DateTime.now().difference(entry.enterDate!).inDays;
+              final difference =
+                  DateTime.now().difference(entry.enterDate!).inDays;
               if (difference >= 1) {
                 log('difference is $difference');
                 // log('calling hide pop up timer function');
@@ -155,7 +158,8 @@ class TrackPolygons {
     hidePopUp();
   }
 
-  Future<void> _userIsInside(Set<PolygonModel> polygons, LatLng currentPosition) async {
+  Future<void> _userIsInside(
+      Set<PolygonModel> polygons, LatLng currentPosition) async {
     final userIsInside = polygons.where(
       (element) => MapsToolkitService.isInsidePolygon(
         latLng: currentPosition,

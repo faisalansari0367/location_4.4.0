@@ -21,10 +21,10 @@
     },
     "isWorkSaftey": {
         "title": "Work Safety",
-        "description": "Access to our complete record of all movements of Grain, Stockfeed or Fodder. All records are stored as a PDF or CSV and can be transferred easily"
+        "description": "Link to register for work safety on our GPS vehicle tracking site."
     },
     "isDesktopAccess": {
         "title": "Web Access",
-        "description": "Available in Feburary"
+        "description": "Web Access for corporate administrators."
     }
 }

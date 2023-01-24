@@ -104,6 +104,7 @@ class PaymentSheetNotifier extends BaseModel {
         if (isRoleGovernment) {
           Get.back();
           Get.snackbar('Success', 'Government Role Added');
+          return;
         }
 
         await Get.to(

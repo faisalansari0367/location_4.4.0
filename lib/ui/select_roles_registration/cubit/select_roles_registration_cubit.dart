@@ -95,6 +95,7 @@ class RolesRegistrationCubit extends BaseModel {
                       role: e,
                       isSelected: allowedRoles.contains(e) || e == 'Visitor',
                       isPaidRole: !freeRoles.contains(e),
+                      isSubscribed: allowedRoles.contains(e),
                     ),
                   )
                   .toList(),

@@ -72,39 +72,34 @@ class SelectRoleView extends StatelessWidget {
     );
   }
 
-  Positioned _selectRoleButton(BuildContext context) {
-    return Positioned(
-      bottom: 10,
-      left: 3.width,
-      right: 3.width,
-      child: Container(
-        padding: EdgeInsets.only(top: 15.w),
-        // decoration: MyDecoration.bottomButtonShadow(),
-        child: Column(
-          children: [
-            AutoSizeText(
-              'Hint: not found the role tap button to add new role',
-              maxLines: 1,
-              style: context.textTheme.subtitle2?.copyWith(
-                color: Colors.grey.shade600,
-              ),
+  Container _selectRoleButton(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 15.w),
+      // decoration: MyDecoration.bottomButtonShadow(),
+      child: Column(
+        children: [
+          AutoSizeText(
+            'Hint: not found the role tap button to add new role',
+            maxLines: 1,
+            style: context.textTheme.subtitle2?.copyWith(
+              color: Colors.grey.shade600,
             ),
-            Gap(5.h),
-            MyElevatedButton(
-              text: 'Select Role',
-              onPressed: () async {
-                Get.to(
-                  () => SelectRolesRegistrationPage(
-                    onRoleUpdated: () {
-                      Get.back();
-                      context.read<SelectRoleCubit>().getRoles();
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+          ),
+          Gap(5.h),
+          MyElevatedButton(
+            text: 'Select Role',
+            onPressed: () async {
+              Get.to(
+                () => SelectRolesRegistrationPage(
+                  onRoleUpdated: () {
+                    Get.back();
+                    context.read<SelectRoleCubit>().getRoles();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
