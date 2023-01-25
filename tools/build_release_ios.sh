@@ -1,16 +1,3 @@
 
-# NAME="Bioplus Prod.apk"
-APKPATH="build/app/outputs/flutter-apk/$NAME"
-echo "Building $NAME"
 flutter build ipa --target=lib/main_prod.dart
-
-# cd build/app/outputs/flutter-apk
-# echo "Changing to $NAME"
-# mv app-release.apk $NAME
-
-# open $APKPATH
-# # mv "app-release.apk" "Hoho Staff.apk";
-# # cp $NAME /Users/mohdfaisal/Desktop/GoGoGoGoa;   
-
-# echo "$NAME Link:"
-# python3 tools/we_transfer.py upload $APKPATH
+xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey CKWL7742M7 --apiIssuer d9def15f-16e9-4b53-a4c4-6abcbda2ff25
