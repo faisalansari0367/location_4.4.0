@@ -41,4 +41,15 @@ class PaymentRepoImpl implements PaymentRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
+  @override
+  Future<ApiResult<String>> createPortal() async {
+    try {
+      final session = await client.post(Endpoints.createPortal);
+      final url = session.data['url'];
+      return ApiResult.success(data: url);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
 }

@@ -76,6 +76,7 @@ class UserRepoImpl extends UserRepo {
           headers: {'Content-Type': 'application/json'},
         ),
       );
+
       final model = UserData.fromJson(result.data['data']);
       await storage.setUserData(model);
       // storage.setRoleData(role, data);

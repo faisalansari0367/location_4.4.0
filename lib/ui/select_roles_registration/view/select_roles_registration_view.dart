@@ -25,73 +25,42 @@ class SelectRolesRegistrationView extends StatelessWidget {
     RolesRegistrationCubit value,
     Widget? child,
   ) {
-    return Stack(
-      children: [
-        Container(
-          color: Colors.white,
-          padding: kPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // note one role is required to proceed further
-              Gap(10.h),
-              Container(
-                // color: Colors.white,
-                child: Text(
-                  'Choose Service Roles',
-                  style: context.textTheme.headline6,
-                ),
-              ),
-              Gap(20.h),
-              Expanded(
-                child: InfiniteList(
-                  isLoading: value.baseState.isLoading,
-                  onFetchData: () {},
-                  separatorBuilder: (context) => Gap(10.h),
-                  itemBuilder: itemBuilder,
-                  itemCount: value.state.rolesList.length,
-                ),
-              ),
-
-              Gap(60.h),
-              // Gap(20.h),
-              // Gap(20.h),
-              // Gap(20.h),
-              // Gap(20.h),
-            ],
+    return Container(
+      color: Colors.white,
+      padding: kPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // note one role is required to proceed further
+          Gap(10.h),
+          Text(
+            'Choose Service Roles',
+            style: context.textTheme.headline6,
           ),
-        ),
-        Positioned(
-          bottom: 0,
-          width: 100.width,
-          child: Container(
-            // LINEAR GRADIENT
-            padding: EdgeInsets.symmetric(vertical: 10.h),
-            decoration: const BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  blurRadius: 15,
-                  offset: Offset(10, 50),
-                  spreadRadius: 60,
-                ),
-              ],
+          Gap(20.h),
+          Expanded(
+            child: InfiniteList(
+              isLoading: value.baseState.isLoading,
+              onFetchData: () {},
+              separatorBuilder: (context) => Gap(10.h),
+              itemBuilder: itemBuilder,
+              itemCount: value.state.rolesList.length,
             ),
-            child: SizedBox(
-              height: 70.h,
-              child: Center(
-                child: MyElevatedButton(
-                  width: 80.width,
+          ),
+          Gap(20.h),
 
-                  onPressed: () async => await value.updateRole(),
-                  text: Strings.continue_,
-                  // text: 'Next',
-                ),
+          SizedBox(
+            child: Center(
+              child: MyElevatedButton(
+                width: 80.width,
+                onPressed: value.updateRole,
+                text: Strings.continue_,
+                // text: 'Next',
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

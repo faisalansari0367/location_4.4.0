@@ -150,6 +150,8 @@ class PaymentSheetNotifier extends BaseModel {
     return NavigationDecision.navigate;
   }
 
+  
+
   Future<void> getPlanDetails() async {
     setLoading(true);
     final result = await api.getPlanDetails();

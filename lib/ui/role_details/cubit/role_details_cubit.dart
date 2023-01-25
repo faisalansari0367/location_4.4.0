@@ -71,23 +71,23 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
   Map<String, dynamic> get userRoleDetails => state.userRoleDetails;
 
   Future<void> getRoleDetails() async {
-    // emit(state.copyWith(userRoleDetails: api.getUserData()?.toJson()));
+    emit(state.copyWith(userRoleDetails: api.getUserData()?.toJson()));
     // emit(state.copyWith(isLoading: true));
-    final data = await apiService.getRoleData(role);
-    data.when(
-      success: (data) {
-        final userData = api.getUserData();
-        userData!.signature = data['data']['signature'];
-        api.setUserData(userData);
-        emit(
-          state.copyWith(
-            userRoleDetails: Map<String, dynamic>.from(data['data']),
-            isLoading: false,
-          ),
-        );
-      },
-      failure: _failure,
-    );
+    // final data = await apiService.getRoleData(role);
+    // data.when(
+    //   success: (data) {
+    //     final userData = api.getUserData();
+    //     userData!.signature = data['data']['signature'];
+    //     api.setUserData(userData);
+    //     emit(
+    //       state.copyWith(
+    //         userRoleDetails: Map<String, dynamic>.from(data['data']),
+    //         isLoading: false,
+    //       ),
+    //     );
+    //   },
+    //   failure: _failure,
+    // );
   }
 
   Future<void> getSpecies() async {

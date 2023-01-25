@@ -530,4 +530,9 @@ class ApiRepo implements Api {
   Future<ApiResult<List<SosNotification>>> getSosNotification() {
     return _functionsRepo.getSosNotification();
   }
+  
+  @override
+  Future<ApiResult<String>> createPortal() {
+    return _paymentRepo.createPortal();
+  }
 }

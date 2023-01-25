@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/services/notifications/push_notifications.dart';
 import 'package:bioplus/ui/role_details/view/role_details_page.dart';
@@ -67,6 +68,14 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     //   success: (data) => Get.to(() => RoleDetailsPage(userRole: userRole)),
     //   failure: (error) => DialogService.failure(error: error),
     // );
+  }
+
+  Future<void> createPortal() async {
+    final result = await api.createPortal();
+    result.when(
+      success: (data) => Get.to(() => Webview(url: data)),
+      failure: (error) => DialogService.failure(error: error),
+    );
   }
 
   Future<void> getRoles() async {

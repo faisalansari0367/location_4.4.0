@@ -102,7 +102,9 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final result = await client.patch(Endpoints.updateMe, data: isUpdate ? user.updateUser() : {});
       final model = User.fromJson(result.data['data']);
+      final signature = storage.getUserData()?.signature;
       UserData userData = UserData.fromJson(result.data['data']);
+      userData.signature ??= signature;
       await Future.wait(
         [
           storage.setUserData(userData),

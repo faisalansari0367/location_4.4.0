@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user_data.g.dart';
 
 enum UserStatus { active, inactive, delete, unknown }
 
@@ -18,7 +21,9 @@ extension UserStatusExt on UserStatus {
   }
 }
 
+@JsonSerializable()
 class UserData {
+  @JsonKey(fromJson: _parseInt)
   int? postcode;
   int? id;
   String? firstName;
@@ -32,6 +37,7 @@ class UserData {
   String? state;
   String? street;
   String? town;
+  String? city;
   String? signature;
   String? logOn;
   String? employeeNumber;
@@ -40,9 +46,10 @@ class UserData {
   String? persons;
   String? contactDetails;
   String? reasonForVisit;
-  String? serviceRole;
+  // String? serviceRole;
   String? ohsRequirements;
   String? questionnaire;
+  String? location;
   String? region;
   String? company;
   String? picVisiting;
@@ -70,27 +77,57 @@ class UserData {
   String? countryOfResidency;
   String? employerCompany;
   String? temporaryOwner;
+
+  @JsonKey(defaultValue: false)
+  bool isTemporaryOwner = false;
+
   String? emergencyMobileContact;
-
-  dynamic stripeCusId;
+  String? emergencyEmailContact;
+  String? stripeCusId;
+  String? officeName;
+  String? titleName;
   int? geofenceLimit;
+
+  @JsonKey(defaultValue: false)
   bool isSubscribed = false;
-  DateTime? subscriptionStartDate;
-  DateTime? subscriptionEndDate;
 
-  DateTime? startDate;
-  DateTime? endDate;
-  DateTime? delegationStartDate;
-  DateTime? delegationEndDate;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-
+  @JsonKey(defaultValue: [])
   List<String> allowedRoles = const [];
+
+  @JsonKey(defaultValue: [])
   List<String> species = const <String>[];
+
+  @JsonKey(defaultValue: [])
   List<String> cvdForms = const [];
 
   String? registrationToken;
+
+  @JsonKey(fromJson: getStatus, toJson: statusToJson)
   UserStatus? status;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? subscriptionStartDate;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? subscriptionEndDate;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? startDate;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? endDate;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? delegationStartDate;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? delegationEndDate;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? createdAt;
+
+  @JsonKey(fromJson: _parseDate)
+  DateTime? updatedAt;
 
   UserData({
     this.species = const <String>[],
@@ -121,7 +158,7 @@ class UserData {
     this.persons,
     this.contactDetails,
     this.reasonForVisit,
-    this.serviceRole,
+    // this.serviceRole,
     this.ohsRequirements,
     this.questionnaire,
     this.region,
@@ -161,175 +198,21 @@ class UserData {
     this.subscriptionStartDate,
     this.subscriptionEndDate,
     this.createdAt,
+    this.emergencyEmailContact,
+    this.isTemporaryOwner = false,
+    this.city,
+    this.location,
   });
 
-  UserData.fromJson(Map<String, dynamic> json) {
-    species = List<String>.from(json['species'] ?? []);
-    employerCompany = json['employerCompany'] ?? '';
-    temporaryOwner = json['temporaryOwner'];
-    allowedRoles = List<String>.from(json['allowedRoles'] ?? []);
-    countryOfResidency = json['countryOfResidency'];
-    emergencyMobileContact = json['emergencyMobileContact'];
-
-    status = getStatus(json['status']);
-    ngr = json['ngr'];
-    cvdForms = json['cvdForms'] ?? [];
-
-    id = json['id'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    phoneNumber = json['phoneNumber'];
-    countryCode = json['countryCode'];
-    role = json['role'];
-    pic = json['pic'];
-    propertyName = json['propertyName'];
-    state = json['state'];
-    street = json['street'];
-    town = json['town'];
-    postcode = int.tryParse(json['postcode'].toString());
-    signature = json['signature'];
-    logOn = json['logOn'];
-    employeeNumber = json['employeeNumber'];
-    driversLicense = json['driversLicense'];
-    ddt = json['ddt'];
-    persons = json['persons'];
-    contactDetails = json['contactDetails'];
-    reasonForVisit = json['reasonForVisit'];
-    serviceRole = json['serviceRole'];
-    ohsRequirements = json['ohsRequirements'];
-    questionnaire = json['questionnaire'];
-    region = json['region'];
-    company = json['company'];
-    picVisiting = json['picVisiting'];
-    reason = json['reason'];
-    worksafeQuestionsForm = json['worksafeQuestionsForm'];
-    countryOfOrigin = json['countryOfOrigin'];
-    countryVisiting = json['countryVisiting'];
-    entryDate = json['entryDate'];
-    exitDate = json['exitDate'];
-    passport = json['passport'];
-    registrationToken = json['registrationToken'];
-    businessName = json['businessName'];
-    sector = json['sector'];
-    contactName = json['contactName'];
-    eventName = json['eventName'];
-    contactEmail = json['contactEmail'];
-    contactNumber = json['contactNumber'];
-    edec = json['edec'];
-
-    lpaUsername = json['lpaUsername'];
-    lpaPassword = json['lpaPassword'];
-    nlisUsername = json['nlisUsername'];
-    nlisPassword = json['nlisPassword'];
-    msaNumber = json['msaNumber'];
-    nfasAccreditationNumber = json['nfasAccreditationNumber'];
-    businessName = json['businessName'];
-    sector = json['sector'];
-    contactName = json['contactName'];
-    eventName = json['eventName'];
-    contactEmail = json['contactEmail'];
-    contactNumber = json['contactNumber'];
-
-    edec = json['edec'];
-    stripeCusId = json['stripeCusId'];
-    geofenceLimit = json['geofenceLimit'];
-    isSubscribed = json['isSubscribed'] ?? false;
-
-    subscriptionStartDate = _parseDate(json['subscriptionStartDate']);
-    subscriptionEndDate = _parseDate(json['subscriptionEndDate']);
-    createdAt = _parseDate(json['createdAt']);
-    updatedAt = _parseDate(json['updatedAt']);
-    startDate = _parseDate(json['startDate']);
-    endDate = _parseDate(json['endDate']);
-    startDate = _parseDate(json['startDate']);
-    endDate = _parseDate(json['endDate']);
-    delegationEndDate = _parseDate(json['delegationEndDate']);
-    delegationStartDate = _parseDate(json['delegationStartDate']);
+  factory UserData.fromJson(Map<String, dynamic> json) {
+    return _$UserDataFromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['species'] = List<String>.from(species);
-    data['employerCompany'] = employerCompany;
-    data['allowedRoles'] = allowedRoles;
-    data['status'] = status == null
-        ? null
-        : status!.name.replaceFirst(status!.name.characters.first,
-            status!.name.characters.first.toUpperCase());
-    data['firstName'] = firstName;
-    data['emergencyMobileContact'] = emergencyMobileContact;
-    data['lastName'] = lastName;
-    data['countryOfResidency'] = countryOfResidency;
-    data['email'] = email;
-    data['phoneNumber'] = phoneNumber;
-    data['id'] = id;
-    data['countryCode'] = countryCode;
-    data['role'] = role;
-    data['pic'] = pic;
-    data['propertyName'] = propertyName;
-    data['state'] = state;
-    data['street'] = street;
-    data['town'] = town;
-    data['postcode'] = postcode;
-    data['signature'] = signature;
-    data['logOn'] = logOn;
-    data['employeeNumber'] = employeeNumber;
-    data['driversLicense'] = driversLicense;
-    data['ddt'] = ddt;
-    data['persons'] = persons;
-    data['contactDetails'] = contactDetails;
-    data['reasonForVisit'] = reasonForVisit;
-    data['serviceRole'] = serviceRole;
-    data['ohsRequirements'] = ohsRequirements;
-    data['questionnaire'] = questionnaire;
-    data['region'] = region;
-    data['company'] = company;
-    data['picVisiting'] = picVisiting;
-    data['reason'] = reason;
-    data['worksafeQuestionsForm'] = worksafeQuestionsForm;
-    data['countryOfOrigin'] = countryOfOrigin;
-    data['countryVisiting'] = countryVisiting;
-    data['entryDate'] = entryDate;
-    data['exitDate'] = exitDate;
-    data['passport'] = passport;
-    data['registrationToken'] = registrationToken;
-
-    data['ngr'] = ngr;
-
-    data['lpaUsername'] = lpaUsername;
-    data['lpaPassword'] = lpaPassword;
-
-    data['nlisUsername'] = nlisUsername;
-    data['nlisPassword'] = nlisPassword;
-
-    data['msaNumber'] = msaNumber;
-    data['nfasAccreditationNumber'] = nfasAccreditationNumber;
-
-    data['businessName'] = businessName;
-    data['sector'] = sector;
-    data['contactName'] = contactName;
-    data['eventName'] = eventName;
-    data['contactEmail'] = contactEmail;
-    data['contactNumber'] = contactNumber;
-    data['edec'] = edec;
-
-    data['stripeCusId'] = stripeCusId;
-    data['geofenceLimit'] = geofenceLimit;
-    data['isSubscribed'] = isSubscribed;
-    data['subscriptionStartDate'] = subscriptionStartDate?.toIso8601String();
-    data['subscriptionEndDate'] = subscriptionEndDate?.toIso8601String();
-
-    data['createdAt'] = createdAt?.toIso8601String();
-    data['updatedAt'] = updatedAt?.toIso8601String();
-    data['startDate'] = startDate?.toIso8601String();
-    data['endDate'] = endDate?.toIso8601String();
-    data['delegationStartDate'] = delegationStartDate?.toIso8601String();
-    data['delegationEndDate'] = delegationEndDate?.toIso8601String();
-    data['temporaryOwner'] = temporaryOwner;
-
-    return data;
+    return _$UserDataToJson(this);
   }
+
+  static _parseInt(dynamic value) => int.tryParse(value.toString());
 
   static _parseDate(String? date) {
     if (date == null) return null;
@@ -343,9 +226,13 @@ class UserData {
     return result.first;
   }
 
+  static statusToJson(UserStatus? status) {
+    if (status == null) return null;
+    return status.name.replaceFirst(status.name.characters.first,
+        status.name.characters.first.toUpperCase());
+  }
+
   String get fullName => '$firstName $lastName';
-  bool get isTemporaryOwner =>
-      temporaryOwner != null && temporaryOwner!.isNotEmpty;
 
   Map<String, dynamic> updateStatus() {
     final Map<String, dynamic> data = <String, dynamic>{};

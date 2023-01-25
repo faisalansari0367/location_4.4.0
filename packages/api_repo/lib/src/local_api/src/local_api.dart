@@ -470,7 +470,8 @@ class LocalApi extends Api {
 
   @override
   Future<ApiResult<String>> createStripeSession(
-      String priceId, String paymentMode,  {String? governmentCode, String? role}) async {
+      String priceId, String paymentMode,
+      {String? governmentCode, String? role}) async {
     return const ApiResult.failure(
       error: NetworkExceptions.defaultError('Not available in offline mode'),
     );
@@ -518,6 +519,11 @@ class LocalApi extends Api {
   @override
   Future<ApiResult<List<SosNotification>>> getSosNotification() {
     // return .getSosNotification();
+    throw _notAvailable();
+  }
+
+  @override
+  Future<ApiResult<String>> createPortal() async {
     throw _notAvailable();
   }
 }

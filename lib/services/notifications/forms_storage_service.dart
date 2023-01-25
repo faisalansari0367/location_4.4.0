@@ -13,6 +13,7 @@ class FormsStorageService {
   static const _envd = 'envds';
   static const _csvs = 'csvs';
   static const _pdfs = 'pdfs';
+  static const csvs = 'csvs';
 
   static Directory? _appDir;
   late User user;
@@ -34,13 +35,13 @@ class FormsStorageService {
 
   Future<Directory> _createOrCheckCvdFolder() async {
     // final directory = await _getAppDir();
-    final directory = await _getUserDir();
+    final directory = await getUserDir();
     final dir = Directory('${directory.path}/$_cvdFolder');
     if (!(await dir.exists())) dir.create();
     return dir;
   }
 
-  Future<Directory> _getUserDir() async {
+  Future<Directory> getUserDir() async {
     final appDir = await _getAppDir();
     final path = '${appDir.path}/${user.email}';
     await Permission.storage.request();
@@ -49,8 +50,17 @@ class FormsStorageService {
     return userDir;
   }
 
+  Future<Directory> getCsvsDir() async {
+    final appDir = await _getAppDir();
+    final path = '${appDir.path}/${user.email}/$_csvs';
+    await Permission.storage.request();
+    final csv = Directory(path);
+    if (!(await csv.exists())) csv.create(recursive: true);
+    return csv;
+  }
+
   Future<Directory> _createEnvdsDir() async {
-    final appDir = await _getUserDir();
+    final appDir = await getUserDir();
     final path = '${appDir.path}/$_envd';
     final envdDir = Directory(path);
     if (!(await envdDir.exists())) envdDir.create();
@@ -96,8 +106,6 @@ class FormsStorageService {
     // OpenFile.open(file.path);
   }
 
-  
-
   Future<File> _createCvdFile(
     String path,
     String date,
@@ -131,7 +139,7 @@ class FormsStorageService {
   }
 
   Future<Directory> getCvdDir() async {
-    final userDir = await _getUserDir();
+    final userDir = await getUserDir();
     final cvdDir = Directory('${userDir.path}/$_cvdFolder');
     if (!(await cvdDir.exists())) cvdDir.create();
     return cvdDir;
@@ -157,7 +165,7 @@ class FormsStorageService {
   }) async {
     rows.insert(0, headers);
     final data = const ListToCsvConverter().convert(rows);
-    final String directory = (await _getUserDir()).path;
+    final String directory = (await getUserDir()).path;
     final csvDir = Directory('$directory/$_csvs');
     if (!(await csvDir.exists())) csvDir.create();
     final date = MyDecoration.formatDate(DateTime.now());
@@ -172,7 +180,7 @@ class FormsStorageService {
     required Uint8List bytes,
     required LogbookEntry entry,
   }) async {
-    final String directory = (await _getUserDir()).path;
+    final String directory = (await getUserDir()).path;
     final pdfDir = Directory('$directory/$_pdfs');
     if (!(await pdfDir.exists())) pdfDir.create();
     final file = File(
@@ -183,7 +191,7 @@ class FormsStorageService {
   }
 
   Future<File> downloadPdf({String? fileName, required Uint8List bytes}) async {
-    final String directory = (await _getUserDir()).path;
+    final String directory = (await getUserDir()).path;
     final pdfDir = Directory('$directory/$_pdfs');
     if (!(await pdfDir.exists())) pdfDir.create();
     final file =

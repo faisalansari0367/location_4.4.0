@@ -89,16 +89,18 @@ class RolesRegistrationCubit extends BaseModel {
           final allowedRoles = userData?.allowedRoles ?? [];
           emit(
             state.copyWith(
-              rolesList: roles
-                  .map(
-                    (e) => SelectRoleModel(
-                      role: e,
-                      isSelected: allowedRoles.contains(e) || e == 'Visitor',
-                      isPaidRole: !freeRoles.contains(e),
-                      isSubscribed: allowedRoles.contains(e),
-                    ),
-                  )
-                  .toList(),
+              rolesList: roles.map(
+                (e) {
+                  final isSubscribed = allowedRoles.contains(e);
+                  
+                  return SelectRoleModel(
+                    role: e,
+                    isSelected: allowedRoles.contains(e) || e == 'Visitor',
+                    isPaidRole: !freeRoles.contains(e),
+                    isSubscribed: isSubscribed,
+                  );
+                },
+              ).toList(),
             ),
           );
           // _fillRoles();

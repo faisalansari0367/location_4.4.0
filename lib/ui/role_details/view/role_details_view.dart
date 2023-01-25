@@ -41,6 +41,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     return Scaffold(
       appBar: MyAppBar(title: Text(cubit.role)),
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: kPadding,
         child: BlocBuilder<RoleDetailsCubit, RoleDetailsState>(
           builder: (context, state) {
@@ -59,14 +60,12 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                     child: AutoSpacing(
                       spacing: const SizedBox.shrink(),
                       children: [
-                        ...sortedFields(state.fields)
-                            .map(
-                              (e) => Padding(
-                                padding: EdgeInsets.only(bottom: 15.h),
-                                child: itemBuilder(e, state),
-                              ),
-                            )
-                            .toList(),
+                        ...sortedFields(state.fields).map(
+                          (e) => Padding(
+                            padding: EdgeInsets.only(bottom: 15.h),
+                            child: itemBuilder(e, state),
+                          ),
+                        ),
                         if (state.userSpecies != null)
                           SpeciesWidget(
                             data: state.userSpecies!,
@@ -113,6 +112,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     if (hasSignature) {
       _fields.remove('Signature');
       _fields.add('Signature');
+
+
     }
     return _fields;
   }
@@ -160,6 +161,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                 : state.licenseCategories.first);
         return MyDropdownField(
           options: state.licenseCategories,
+          hintText: name,
           value: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             map[name.toCamelCase] = value;
@@ -192,13 +194,13 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           controller: controller,
         );
       case 'emergencyMobileContact':
-        controller.text = userData['phoneNumber'] ?? '';
+        controller.text = userData['emergencyMobileContact'] ?? '';
         return PhoneTextField(
           controller: controller,
           hintText: name,
           // controller: ,
           onChanged: (number, countryCode) {
-            map[name.toCamelCase] = countryCode + number;
+            map[name.toCamelCase] = number;
           },
         );
       case 'phoneNumber':
@@ -243,7 +245,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           date: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             controller.text = value;
-            print(map);
           },
         );
 
@@ -257,7 +258,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           date: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             controller.text = value;
-            print(map);
           },
         );
       case 'startDate':
@@ -268,7 +268,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           date: map[name.toCamelCase] ?? '',
           onChanged: (value) {
             controller.text = value;
-            print(map);
           },
         );
 
@@ -278,7 +277,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
           selectedValue: controller.text.toLowerCase() == 'Yes'.toLowerCase(),
           onChanged: (s) {
             controller.text = s ? 'Yes' : 'No';
-            print(map[name.toCamelCase]);
             setState(() {});
           },
         );

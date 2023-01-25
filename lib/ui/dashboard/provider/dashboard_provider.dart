@@ -23,12 +23,13 @@ class DashboardNotifier extends BaseModel {
     api.setIsInit(true);
     SyncService().init(localApi, api);
     // final mapsApi = context.read<MapsRepo>();
-    final notificationService = context.read<PushNotificationService>();
+    // final notificationService = context.read<PushNotificationService>();
 
     final user = api.getUser();
     if (user != null) {
-      user.registerationToken = await notificationService.getFCMtoken();
+      // user.registerationToken = await notificationService.getFCMtoken();
       await api.updateMe(user: user);
+      // await api.getRoleData(user.role!);
       await InAppUpdateService().checkUpdate();
     }
     await geofenceRepo.getAllPolygon();

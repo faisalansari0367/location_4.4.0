@@ -15,13 +15,17 @@ class SosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => SosNotifier(context),
-      child: Scaffold(
-        appBar: MyAppBar(
-          title: Text(Strings.sosRecords),
-          elevation: 5,
-        ),
-        body: const SosView(),
-      ),
+      child: const SosView(),
+      // child: Scaffold(
+      //   appBar: MyAppBar(
+      //     title: Text(Strings.sosRecords),
+      //     actions: [
+
+      //     ],
+      //     elevation: 5,
+      //   ),
+      //   body: const SosView(),
+      // ),
     );
   }
 }
@@ -35,6 +39,22 @@ class SosView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SosBody();
+    return Scaffold(
+      appBar: MyAppBar(
+        title: Text(Strings.sosRecords),
+        actions: [
+          IconButton(
+            onPressed: () => context.read<SosNotifier>().generateCsv(),
+            icon: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Image.asset(
+                'assets/icons/export.png',
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: const SosBody(),
+    );
   }
 }

@@ -27,9 +27,11 @@ class PhoneTextField extends StatefulWidget {
 class _PhoneTextFieldState extends State<PhoneTextField> {
   CountryDetails? _countryDetails;
   String? countryCode;
+  
 
   @override
   void initState() {
+
     // _getCountryCode();
     _init();
     // final countryCode = WidgetsBinding.instance.window.locale.countryCode;
@@ -104,10 +106,8 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
       // showDropdownIcon: false,
       onCountryChanged: print,
       onChanged: (phone) {
-        print(phone.completeNumber);
-        if (widget.onChanged != null) {
-          widget.onChanged!(phone.number, phone.countryCode);
-        }
+        // print(phone.completeNumber);
+        widget.onChanged?.call(phone.number, phone.countryCode);
         // print(_countryDetails);
         final countries = countryList
             .where((element) => element.isoCode == phone.countryISOCode)
@@ -116,7 +116,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
         final country = countries.first;
 
         if (widget.onCountryChanged != null) {
-          widget.onCountryChanged!(country.name);
+          widget.onCountryChanged?.call(country.name);
         }
       },
     );

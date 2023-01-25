@@ -60,7 +60,8 @@ class RoleDetailsState extends Equatable {
     );
   }
 
-  factory RoleDetailsState.fromJson(Map<String, dynamic> json) => _$RoleDetailsStateFromJson(json);
+  factory RoleDetailsState.fromJson(Map<String, dynamic> json) =>
+      _$RoleDetailsStateFromJson(json);
 
   Map<String, dynamic> toJson() => _$RoleDetailsStateToJson(this);
 }

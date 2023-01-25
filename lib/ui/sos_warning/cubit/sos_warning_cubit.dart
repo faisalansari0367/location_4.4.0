@@ -11,6 +11,8 @@ import 'package:flutter_sms/flutter_sms.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
+import '../../../services/csv_service.dart';
+
 part 'sos_warning_state.dart';
 
 class SosWarningCubit extends Cubit<SosWarningState> {
@@ -36,7 +38,6 @@ class SosWarningCubit extends Cubit<SosWarningState> {
     if (contact == null) {
       return;
     }
-
     try {
       final mapUrl =
           'https://maps.google.com/?q=${latLng.latitude},${latLng.longitude}';
@@ -47,8 +48,6 @@ class SosWarningCubit extends Cubit<SosWarningState> {
     } on PlatformException catch (error) {
       DialogService.error(error.message ?? 'Unable to send sms.');
     }
-
-    // print(result);
   }
 
   Object? failure(NetworkExceptions error) {
@@ -56,7 +55,7 @@ class SosWarningCubit extends Cubit<SosWarningState> {
     return null;
   }
 
-  Object? success(data) {
+  Object? success(dynamic data) {
     Get.back();
     DialogService.showDialog(
       child: MailSentDialog(
@@ -66,4 +65,6 @@ class SosWarningCubit extends Cubit<SosWarningState> {
     );
     return null;
   }
+
+ 
 }

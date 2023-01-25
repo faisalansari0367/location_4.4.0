@@ -17,6 +17,7 @@ class Endpoints {
   static const String notifyProperyManager = '$users/notify-property-manager';
 
   static const payment = '/payment', createSession = '$payment/create-session';
+  static const String createPortal = '$payment/create-portal-session';
   static const planDetails = '/default';
 
   static const String signUp = '$auth/signup',

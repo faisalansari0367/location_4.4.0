@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/select_role/cubit/select_role_cubit.dart';
 import 'package:bioplus/ui/select_roles_registration/view/select_roles_registration_page.dart';
+import 'package:bioplus/widgets/animations/animations.dart';
 import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
@@ -32,39 +33,43 @@ class SelectRoleView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Update Your Details\nor Select Additional Roles',
-              style: context.textTheme.headline5,
-            ),
-            Gap(2.height),
-            _buildSubscriptionUpdate(context),
-            Gap(2.height),
-            BlocBuilder<SelectRoleCubit, SelectRoleState>(
-              builder: (context, state) {
-                return Expanded(
-                  child: MyListview(
-                    isLoading: state.isLoading,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => MyListTile(
-                      text: state.roles[index].role,
-                      onTap: () async {
-                        cubit.updateRole(state.roles[index]);
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Update Your Details\nor Select Additional Roles',
+                      style: context.textTheme.headline5,
+                    ),
+                    Gap(2.height),
+                    AnimatedButton(
+                      child: _buildSubscriptionUpdate(context),
+                      onTap: () => cubit.createPortal(),
+                    ),
+                    Gap(2.height),
+                    BlocBuilder<SelectRoleCubit, SelectRoleState>(
+                      builder: (context, state) {
+                        return MyListview(
+                          isLoading: state.isLoading,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => MyListTile(
+                            text: state.roles[index].role,
+                            onTap: () async {
+                              cubit.updateRole(state.roles[index]);
+                            },
+                          ),
+                          data: state.roles,
+                          onRetry: cubit.getRoles,
+                        );
                       },
                     ),
-                    data: state.roles,
-                    onRetry: cubit.getRoles,
-                  ),
-                );
-              },
+                    Gap(2.height),
+                  ],
+                ),
+              ),
             ),
-            Gap(2.height),
-            BlocBuilder<SelectRoleCubit, SelectRoleState>(
-              builder: (context, state) {
-                return Visibility(
-                  child: _selectRoleButton(context),
-                );
-              },
-            ),
+            _selectRoleButton(context),
             Gap(1.height),
           ],
         ),
@@ -129,22 +134,35 @@ class SelectRoleView extends StatelessWidget {
               const Icon(Icons.check_circle, color: Colors.teal),
             ],
           ),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Subscription renew date: ',
-                  style: context.textTheme.subtitle2,
-                ),
-                TextSpan(
-                  text: date,
-                  style: context.textTheme.subtitle2?.copyWith(
-                    color: context.theme.primaryColor,
-                    fontWeight: FontWeight.bold,
+          Gap(1.height),
+          Row(
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Subscription renew date: ',
+                        style: context.textTheme.subtitle2?.copyWith(
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: date,
+                        style: context.textTheme.subtitle2?.copyWith(
+                          color: context.theme.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              const Icon(
+                Icons.chevron_right_outlined,
+              ),
+            ],
           ),
         ],
       ),

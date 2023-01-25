@@ -222,9 +222,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
         if (entryExitDifference > 10) {
           // final entryExitDifference =
           if (hasEntry.form?.isNotEmpty ?? false) {
-            final daysDifference =
-                now.difference(hasEntry.enterDate!).inDays.abs();
-            if (daysDifference < 1) {
+            final isSameDay = hasEntry.enterDate!.day == now.day;
+            if (isSameDay) {
               return await createLogRecord(geofenceId, form: hasEntry.form);
             }
           }
