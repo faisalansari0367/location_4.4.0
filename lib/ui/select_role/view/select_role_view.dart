@@ -3,7 +3,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/select_role/cubit/select_role_cubit.dart';
 import 'package:bioplus/ui/select_roles_registration/view/select_roles_registration_page.dart';
-import 'package:bioplus/widgets/animations/animations.dart';
 import 'package:bioplus/widgets/listview/my_listview.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';
@@ -43,11 +42,11 @@ class SelectRoleView extends StatelessWidget {
                       style: context.textTheme.headline5,
                     ),
                     Gap(2.height),
-                    AnimatedButton(
-                      child: _buildSubscriptionUpdate(context),
-                      onTap: () => cubit.createPortal(),
-                    ),
-                    Gap(2.height),
+                    // AnimatedButton(
+                    //   child: _buildSubscriptionUpdate(context),
+                    //   onTap: () => cubit.createPortal(),
+                    // ),
+                    // Gap(2.height),
                     BlocBuilder<SelectRoleCubit, SelectRoleState>(
                       builder: (context, state) {
                         return MyListview(

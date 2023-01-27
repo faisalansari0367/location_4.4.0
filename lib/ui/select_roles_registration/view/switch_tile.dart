@@ -19,14 +19,14 @@ class _MySwitchTileState extends State<MySwitchTile> {
     return MyListTile(
       text: widget.model.role,
       onTap: () async {
-        if (widget.model.isPaidRole && !widget.model.isSubscribed) {
-          widget.onTap?.call();
-        } else if (widget.model.isSubscribed) {
-          // widget.onTap?.call();
-        } else {
-          widget.model.setSelect(!widget.model.isSelected);
-          setState(() {});
-        }
+        // if (widget.model.isPaidRole && !widget.model.isSubscribed) {
+        //   widget.onTap?.call();
+        // } else if (widget.model.isSubscribed) {
+        //   // widget.onTap?.call();
+        // } else {
+        widget.model.setSelect(!widget.model.isSelected);
+        setState(() {});
+        // }
       },
       trailing: _buildTag(),
     );
@@ -36,20 +36,20 @@ class _MySwitchTileState extends State<MySwitchTile> {
     final isPaid = widget.model.isPaidRole;
     final isSubscribed = widget.model.isSubscribed;
 
-    if (isPaid && !isSubscribed) {
-      return _buildPaidRole();
-    } else if (isSubscribed) {
-      return _tag('Subscribed', color: Colors.teal.withOpacity(1));
-    } else {
-      return Switch(
-        value: widget.model.isSelected,
-        activeColor: context.theme.primaryColor,
-        onChanged: (v) {
-          widget.model.setSelect(v);
-          setState(() {});
-        },
-      );
-    }
+    // if (isPaid && !isSubscribed) {
+    //   return _buildPaidRole();
+    // } else if (isSubscribed) {
+    //   return _tag('Subscribed', color: Colors.teal.withOpacity(1));
+    // } else {
+    return Switch(
+      value: widget.model.isSelected,
+      activeColor: context.theme.primaryColor,
+      onChanged: (v) {
+        widget.model.setSelect(v);
+        setState(() {});
+      },
+    );
+    // }
   }
 
   Widget _buildPaidRole() {

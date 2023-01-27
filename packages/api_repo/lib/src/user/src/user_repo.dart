@@ -93,8 +93,9 @@ class UserRepoImpl extends UserRepo {
   Future<ApiResult<Map<String, dynamic>>> getRoleData(String role) async {
     try {
       final result = await client.get(Endpoints.updateMe);
-      final data = (result.data);
-      storage.setRoleData(role, data);
+      final data = result.data;
+      await storage.setUserData(UserData.fromJson(data['data']));
+      await storage.setRoleData(role, data);
       return ApiResult.success(data: data);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

@@ -21,22 +21,33 @@ class FormsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final company = polygon?.companyOwner;
+    final company = polygon?.companyOwner?.toLowerCase().trim();
     log('zone company name $company');
-    switch (company?.trim().toLowerCase()) {
-      case 'aurora':
-      case 'warakirri':
-        return WarakirriEntryFormPage(
-          zoneId: zoneId,
-          logrecordId: logRecordId,
-          polygon: polygon!,
-        );
+    final isAurora = company?.contains('aurora') ?? false;
+    final iswarakirri = company?.contains('warakirri') ?? false;
 
-      default:
-        return GlobalQuestionnaireFormPage(
-          zoneId: zoneId,
-          logrecordId: logRecordId,
-        );
+    if (isAurora || iswarakirri) {
+      return WarakirriEntryFormPage(
+        zoneId: zoneId,
+        logrecordId: logRecordId,
+        polygon: polygon,
+      );
+    } else {
+      return GlobalQuestionnaireFormPage(
+        zoneId: zoneId,
+        logrecordId: logRecordId,
+      );
     }
+
+    // switch (company?.trim().toLowerCase()) {
+    //   case 'aurora':
+    //   case 'warakirri':
+
+    //   default:
+    //     return GlobalQuestionnaireFormPage(
+    //       zoneId: zoneId,
+    //       logrecordId: logRecordId,
+    //     );
+    // }
   }
 }

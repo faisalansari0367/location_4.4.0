@@ -29,7 +29,7 @@ class DashboardNotifier extends BaseModel {
     if (user != null) {
       // user.registerationToken = await notificationService.getFCMtoken();
       await api.updateMe(user: user);
-      // await api.getRoleData(user.role!);
+      await api.getRoleData(user.role!);
       await InAppUpdateService().checkUpdate();
     }
     await geofenceRepo.getAllPolygon();
