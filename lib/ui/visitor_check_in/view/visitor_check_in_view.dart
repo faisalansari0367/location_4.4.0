@@ -31,7 +31,8 @@ class VisitorCheckInView extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: Border.all(
                             width: 2.width,
-                            strokeAlign: StrokeAlign.outside,
+                            // strokeAlign: StrokeAlign.outside,
+                            
                           ),
                           borderRadius: kBorderRadius,
                         ),
