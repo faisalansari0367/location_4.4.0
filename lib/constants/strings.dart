@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class Strings {
 // AppName
   static const String appName = 'BIOPLUS';
-  static const String appVersion = '1.0.5';
+  static const String appVersion = '1.0.6';
 
   static const name = 'Name',
       warakirri = 'Warakirri',
