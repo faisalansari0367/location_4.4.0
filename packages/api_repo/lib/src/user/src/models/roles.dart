@@ -10,14 +10,18 @@ enum Roles {
   consignee,
   processor,
   feedlotter,
+  government,
   saleYard,
   admin
 }
 
 extension RolesString on String {
   Roles get getRole {
-    final result =
-        Roles.values.firstWhere((element) => element.name.toLowerCase() == replaceAll(' ', '').toLowerCase());
+    final result = Roles.values.firstWhere(
+      (element) =>
+          element.name.toLowerCase() == replaceAll(' ', '').toLowerCase(),
+      orElse: () => Roles.visitor,
+    );
     return result;
   }
 }

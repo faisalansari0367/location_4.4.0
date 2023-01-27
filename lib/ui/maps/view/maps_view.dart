@@ -185,8 +185,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
       Roles.consignee,
       Roles.admin
     ];
-    final isAllowed =
-        allowedRoles.contains(cubit.userData?.role?.camelCase?.getRole);
+    final isAllowed = allowedRoles.contains(cubit.userData?.role?.getRole);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
