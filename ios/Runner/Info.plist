@@ -72,5 +72,7 @@
 		<string>comgooglemaps</string>
 		<string>googlechromes</string>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>

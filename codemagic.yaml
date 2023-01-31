@@ -126,14 +126,14 @@ workflows:
       # See the following link for details about email publishing - https://docs.codemagic.io/publishing-yaml/distribution/#email
       email:
         recipients:
-          - user_1@example.com
-          - user_2@example.com
+          
+          - faisal.hiyaz@outlook.com
         notify:
           success: true # To receive a notification when a build succeeds
           failure: false # To not receive a notification when a build fails
       slack:
         # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
-        channel: "#builds"
+        channel: "#itrak-poc"
         notify_on_build_start: true # To receive a notification when a build starts
         notify:
           success: true # To receive a notification when a build succeeds
