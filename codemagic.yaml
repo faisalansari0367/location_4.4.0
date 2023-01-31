@@ -96,12 +96,11 @@ workflows:
           pod install;
           cd ..;
           # find . -name "Podfile" -execdir pod install \;
-            - keychain initialize
-            - app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE
-              --create
-            - keychain add-certificates
-            - xcode-project use-profiles
-            # - flutter build ipa --export-options-plist ~/export_options.plist -t main_prod.dart
+          keychain initialize;
+          app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE --create;
+          keychain add-certificates;
+          xcode-project use-profiles;
+          # - flutter build ipa --export-options-plist ~/export_options.plist -t main_prod.dart
       # - name: Flutter analyze
       #   script: |
       #     flutter analyze
@@ -139,7 +138,7 @@ workflows:
       slack:
         # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
         channel: "#itrak-poc"
-        notify_on_build_start: true # To receive a notification when a build starts
+        notify_on_build_start: false # To receive a notification when a build starts
         notify:
           success: true # To receive a notification when a build succeeds
           failure: false # To not receive a notification when a build fails
