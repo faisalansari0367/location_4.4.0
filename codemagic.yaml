@@ -110,7 +110,7 @@ workflows:
 
       - name: Build IPA
         script: |
-          echo $APP_STORE_CONNECT_PRIVATE_KEY
+
           flutter pub get;
           cd ios;
           pod install;
@@ -124,7 +124,7 @@ workflows:
           $APP_STORE_CONNECT_PRIVATE_KEY
           EOF    
           flutter build ipa --target=lib/main_prod.dart --release --obfuscate --split-debug-info=build/bioplus;
-          xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
+          # xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
       # - name: Flutter analyze
       #   script: |
       #     flutter analyze
