@@ -110,6 +110,7 @@ workflows:
 
       - name: Build IPA
         script: |
+          echo $APP_STORE_CONNECT_PRIVATE_KEY
           flutter pub get;
           cd ios;
           pod install;
@@ -119,6 +120,9 @@ workflows:
           # app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE --create;
           # keychain add-certificates;
           # xcode-project use-profiles;
+          cat >> "$CM_BUILD_DIR/private_keys/AuthKey_8Z52QQ4824.p8" <<EOF
+          $APP_STORE_CONNECT_PRIVATE_KEY
+          EOF    
           flutter build ipa --target=lib/main_prod.dart --release --obfuscate --split-debug-info=build/bioplus;
           xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
       # - name: Flutter analyze
