@@ -13,13 +13,13 @@ workflows:
       #   GOOGLE_PLAY_TRACK: "alpha"
       flutter: stable
 
-    triggering:
-      events:
-        - push
-      branch_patterns:
-        - pattern: "development"
-          include: true
-          source: true
+    # triggering:
+    #   events:
+    #     - push
+    #   branch_patterns:
+    #     - pattern: "development"
+    #       include: true
+    #       source: true
     cache:
       cache_paths:
         - $HOME/.gradle/caches
@@ -88,11 +88,11 @@ workflows:
     # integrations:
     #   app_store_connect: codemagin
     environment:
-      groups:
-        - ios_credentials
-      # ios_signing:
-      #   distribution_type: app_store
-      #   bundle_identifier: com.itrakassets.bioplus
+      # groups:
+      #   - ios_credentials
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.itrakassets.bioplus
       vars:
         APP_STORE_CONNECT_ISSUER_ID: d9def15f-16e9-4b53-a4c4-6abcbda2ff25
         APP_ID: 6444330345 # <-- Put your APP ID here
@@ -134,17 +134,17 @@ workflows:
           app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE --create;
           keychain add-certificates;
           xcode-project use-profiles;
-          cat >> "$CM_BUILD_DIR/private_keys/AuthKey_8Z52QQ4824.p8" <<EOF
-          $APP_STORE_CONNECT_PRIVATE_KEY
-          EOF
+          # cat >> "$CM_BUILD_DIR/private_keys/AuthKey_8Z52QQ4824.p8" <<EOF
+          # $APP_STORE_CONNECT_PRIVATE_KEY
+          # EOF
 
           # flutter build ipa --target=lib/main_prod.dart --release --obfuscate --split-debug-info=build/bioplus;
           # xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
 
-      - name: Build IPA with Flutter
-        script: |
-          flutter build ipa --target=lib/main_prod.dart;
-          # xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
+      # - name: Build IPA with Flutter
+      #   script: |
+      #     flutter build ipa --target=lib/main_prod.dart;
+      #     # xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
       # - name: Flutter analyze
       #   script: |
       #     flutter analyze
@@ -152,14 +152,14 @@ workflows:
       #   script: |
       #     flutter test
       #   ignore_failure: true
-      # - name: Flutter build ipa and automatic versioning
-      #   script: |
-      #     flutter build ipa --release \
-      #       --obfuscate --split-debug-info=build/bioplus \
-      #       --target=lib/main_prod.dart \
-      #       --build-name=1.0.0 \
-      #       --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
-      #       --export-options-plist=/Users/builder/export_options.plist
+      - name: Flutter build ipa and automatic versioning
+        script: |
+          flutter build ipa --release \
+            --obfuscate --split-debug-info=build/bioplus \
+            --target=lib/main_prod.dart \
+            --build-name=1.0.0 \
+            --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
+            --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
