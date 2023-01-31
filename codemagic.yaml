@@ -6,6 +6,7 @@ workflows:
       # android_signing:
       groups:
         - keystore_credentials
+        - google_credentials
       #   - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS)
       # vars:
       #   PACKAGE_NAME: "io.codemagic.flutteryaml" # <-- Put your package name here
@@ -54,18 +55,19 @@ workflows:
 
     # cache:
 
-    # publishing:
-    # email:
-    # recipients:
-    #   - user_1@example.com
-    #   - user_2@example.com
-    # notify:
-    #   success: true
-    #   failure: false
-    # google_play:
-    #   credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-    #   track: $GOOGLE_PLAY_TRACK
-    #   submit_as_draft: true
+    publishing:
+      # email:
+      # recipients:
+      #   - user_1@example.com
+      #   - user_2@example.com
+      # notify:
+      #   success: true
+      #   failure: false
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        # track: productino
+        submit_as_draft: true
   ios-workflow:
     name: iOS Workflow
     max_build_duration: 60
@@ -79,13 +81,7 @@ workflows:
         APP_STORE_CONNECT_ISSUER_ID: d9def15f-16e9-4b53-a4c4-6abcbda2ff25
         APP_ID: 6444330345 # <-- Put your APP ID here
         APP_STORE_CONNECT_KEY_IDENTIFIER: 8Z52QQ4824
-        APP_STORE_CONNECT_PRIVATE_KEY: |
-          -----BEGIN PRIVATE KEY-----
-          MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgrMLs5JlXfwgp1A+N
-          ww7y7AuwmkolX35B6picikEDRFmgCgYIKoZIzj0DAQehRANCAASjoaAPGoq/iOCz
-          OgKdHEXsBWTB1/r8INkNBNzKj9iT6r/dwYfqpuffSBh+vyJLJI8DByhKgLTKAp+r
-          jVJSIhCT
-          -----END PRIVATE KEY-----
+        APP_STORE_CONNECT_PRIVATE_KEY: -----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgrMLs5JlXfwgp1A+N\nww7y7AuwmkolX35B6picikEDRFmgCgYIKoZIzj0DAQehRANCAASjoaAPGoq/iOCz\nOgKdHEXsBWTB1/r8INkNBNzKj9iT6r/dwYfqpuffSBh+vyJLJI8DByhKgLTKAp+r\njVJSIhCT\n-----END PRIVATE KEY-----
       flutter: stable
       xcode: latest
       cocoapods: default
