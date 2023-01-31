@@ -68,7 +68,7 @@ workflows:
     #   submit_as_draft: true
   ios-workflow:
     name: iOS Workflow
-    max_build_duration: 120
+    max_build_duration: 60
     integrations:
       app_store_connect: codemagin
     environment:
@@ -90,6 +90,12 @@ workflows:
       - name: Install pods
         script: |
           find . -name "Podfile" -execdir pod install \;
+            - keychain initialize
+            - app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE
+              --create
+            - keychain add-certificates
+            - xcode-project use-profiles
+            - flutter build ipa --export-options-plist ~/export_options.plist -t main_prod.dart
       # - name: Flutter analyze
       #   script: |
       #     flutter analyze
@@ -125,6 +131,9 @@ workflows:
           failure: false # To not receive a notification when a build fails
       app_store_connect:
         auth: integration
+        api_key: Encrypted(Z0FBQUFBQmoyS0NNRlhuMGFhV2ZrQXFPMDlUSWVxaEZUaXl2dzkwMHlCakdSbWpxXzZMU1lZTlB1UGxibUxBc0YtVTVKMm4waUhQTmJJRTI2RWdiMy1vdnZ0YXIyTjZSa251RHNLeDJaenQ3enZfbG02NkVSY2tkeDJ1eDM4eXBNSVNwbjJRUmJuSGpLQkV0UkVJX3E1YUFsYmZYM3NHeVgydXpiYnc4MGw1d3hxSmhuMGM5MWxIZVNiMlUtQ3pXXzNheC1qSjZyMGdJMV9PMERLQjIzaGJEeFgzb0pyeWRKUVlsT1lUclgwMllRVGgxOWlDdkNieUZDaWJxYlNJUEtjYmtESVJ1bU9ZMEkwc09TR1Uxa0tTQmU2TkUtdmZPQzVWUExxeEtsT29TcDBjRVBDdC1TdUtCb3padVprQnA0b21XZTgyLW1GRnhLRFNRYk9ONEgzVjNhdWRYVDF1a3FnY2tiOHhJTDJVdlhaTG0xeHRaUE5VX2Eyb0xyRUxIcVFBVGdNYmVJTHRlU2ljLXFEU0VVSlg2blpDTlhmdTV2bWNqVTJXRm5wRm5VX1FQOHJidVotVT0=)
+        key_id: 8Z52QQ4824
+        issuer_id: d9def15f-16e9-4b53-a4c4-6abcbda2ff25
 
         # Configuration related to TestFlight (optional)
         # Note: This action is performed during post-processing.
