@@ -12,6 +12,14 @@ workflows:
       #   PACKAGE_NAME: "io.codemagic.flutteryaml" # <-- Put your package name here
       #   GOOGLE_PLAY_TRACK: "alpha"
       flutter: stable
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: "development"
+          include: true
+          source: true
     cache:
       cache_paths:
         - $HOME/.gradle/caches
@@ -39,18 +47,17 @@ workflows:
       #   script: |
       #     flutter test
       #   ignore_failure: true
-      - name:
-          Build AAB with Flutter
-          # BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))
-          # flutter build appbundle --release \
-          #   --build-name=1.0.$BUILD_NUMBER \
-          #   --build-number=$BUILD_NUMBER
+      - name: Build AAB with Flutter
         script: |
-
           flutter build appbundle --obfuscate --split-debug-info=build/bioplus --target=lib/main_prod.dart
+
+      - name: Build APK with Flutter
+        script: |
+          flutter build apk --obfuscate --split-debug-info=build/bioplus --target=lib/main_prod.dart
 
     artifacts:
       - build/**/outputs/**/*.aab
+      - build/**/outputs/**/*.apk
       - build/**/outputs/**/mapping.txt
 
     # cache:
@@ -68,6 +75,13 @@ workflows:
         track: internal
         # track: productino
         submit_as_draft: true
+      slack:
+        # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
+        channel: "#itrak-poc"
+        notify_on_build_start: false # To receive a notification when a build starts
+        notify:
+          success: true # To receive a notification when a build succeeds
+          failure: false # To not receive a notification when a build fails
   ios-workflow:
     name: iOS Workflow
     max_build_duration: 60
@@ -108,7 +122,7 @@ workflows:
       #   script: |
       #     flutter packages pub get
 
-      - name: Build IPA
+      - name: Install dependencies and setup private key
         script: |
 
           flutter pub get;
@@ -122,8 +136,14 @@ workflows:
           # xcode-project use-profiles;
           cat >> "$CM_BUILD_DIR/private_keys/AuthKey_8Z52QQ4824.p8" <<EOF
           $APP_STORE_CONNECT_PRIVATE_KEY
-          EOF    
-          flutter build ipa --target=lib/main_prod.dart --release --obfuscate --split-debug-info=build/bioplus;
+          EOF
+
+          # flutter build ipa --target=lib/main_prod.dart --release --obfuscate --split-debug-info=build/bioplus;
+          # xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
+
+      - name: Build IPA with Flutter
+        script: |
+          flutter build ipa --target=lib/main_prod.dart;
           # xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $APP_STORE_CONNECT_KEY_IDENTIFIER --apiIssuer $APP_STORE_CONNECT_ISSUER_ID;
       # - name: Flutter analyze
       #   script: |
