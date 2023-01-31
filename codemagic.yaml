@@ -119,7 +119,7 @@ workflows:
           app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE --create;
           keychain add-certificates;
           xcode-project use-profiles;
-          # - flutter build ipa --export-options-plist ~/export_options.plist -t main_prod.dart
+          - flutter build ipa --target=lib/main_prod.dart --export-options-plist ~/export_options.plist 
       # - name: Flutter analyze
       #   script: |
       #     flutter analyze
@@ -127,14 +127,14 @@ workflows:
       #   script: |
       #     flutter test
       #   ignore_failure: true
-      - name: Flutter build ipa and automatic versioning
-        script: |
-          flutter build ipa --release \
-            --obfuscate --split-debug-info=build/bioplus \
-            --target=lib/main_prod.dart \
-            --build-name=1.0.0 \
-            --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
-            --export-options-plist=/Users/builder/export_options.plist
+      # - name: Flutter build ipa and automatic versioning
+      #   script: |
+      #     flutter build ipa --release \
+      #       --obfuscate --split-debug-info=build/bioplus \
+      #       --target=lib/main_prod.dart \
+      #       --build-name=1.0.0 \
+      #       --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
+      #       --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
