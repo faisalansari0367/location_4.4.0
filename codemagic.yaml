@@ -74,6 +74,8 @@ workflows:
     # integrations:
     #   app_store_connect: codemagin
     environment:
+      groups:
+        - ios_credentials
       # ios_signing:
       #   distribution_type: app_store
       #   bundle_identifier: com.itrakassets.bioplus
@@ -81,7 +83,8 @@ workflows:
         APP_STORE_CONNECT_ISSUER_ID: d9def15f-16e9-4b53-a4c4-6abcbda2ff25
         APP_ID: 6444330345 # <-- Put your APP ID here
         APP_STORE_CONNECT_KEY_IDENTIFIER: 8Z52QQ4824
-        APP_STORE_CONNECT_PRIVATE_KEY: -----BEGIN PRIVATE KEY-----\nMIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgrMLs5JlXfwgp1A+N\nww7y7AuwmkolX35B6picikEDRFmgCgYIKoZIzj0DAQehRANCAASjoaAPGoq/iOCz\nOgKdHEXsBWTB1/r8INkNBNzKj9iT6r/dwYfqpuffSBh+vyJLJI8DByhKgLTKAp+r\njVJSIhCT\n-----END PRIVATE KEY-----
+
+        APP_STORE_CONNECT_API_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
       flutter: stable
       xcode: latest
       cocoapods: default
