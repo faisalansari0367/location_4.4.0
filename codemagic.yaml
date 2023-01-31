@@ -78,6 +78,7 @@ workflows:
       vars:
         APP_STORE_CONNECT_ISSUER_ID: d9def15f-16e9-4b53-a4c4-6abcbda2ff25
         APP_ID: 6444330345 # <-- Put your APP ID here
+        APP_STORE_CONNECT_KEY_IDENTIFIER: 8Z52QQ4824
       flutter: stable
       xcode: latest
       cocoapods: default
@@ -130,7 +131,6 @@ workflows:
       # See the following link for details about email publishing - https://docs.codemagic.io/publishing-yaml/distribution/#email
       email:
         recipients:
-          
           - faisal.hiyaz@outlook.com
         notify:
           success: true # To receive a notification when a build succeeds
