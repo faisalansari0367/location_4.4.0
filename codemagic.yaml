@@ -88,8 +88,10 @@ workflows:
       - name: Get Flutter packages
         script: |
           flutter packages pub get
+
       - name: Install pods
         script: |
+          fluter pub get;
           find . -name "Podfile" -execdir pod install \;
             - keychain initialize
             - app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE
