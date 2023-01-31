@@ -76,6 +76,7 @@ workflows:
       #   distribution_type: app_store
       #   bundle_identifier: com.itrakassets.bioplus
       vars:
+        APP_STORE_CONNECT_ISSUER_ID: d9def15f-16e9-4b53-a4c4-6abcbda2ff25
         APP_ID: 6444330345 # <-- Put your APP ID here
       flutter: stable
       xcode: latest
@@ -106,6 +107,8 @@ workflows:
       - name: Flutter build ipa and automatic versioning
         script: |
           flutter build ipa --release \
+            --obfuscate --split-debug-info=build/bioplus \
+            --target=lib/main_prod.dart \
             --build-name=1.0.0 \
             --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1)) \
             --export-options-plist=/Users/builder/export_options.plist
