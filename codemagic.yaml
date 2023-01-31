@@ -72,9 +72,9 @@ workflows:
     # integrations:
     #   app_store_connect: codemagin
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.itrakassets.bioplus
+      # ios_signing:
+      #   distribution_type: app_store
+      #   bundle_identifier: com.itrakassets.bioplus
       vars:
         APP_ID: 6444330345 # <-- Put your APP ID here
       flutter: stable
