@@ -82,6 +82,13 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: "development"
+          include: true
+          source: true
     scripts:
       - name: Set up code signing settings on Xcode project
         script: |
