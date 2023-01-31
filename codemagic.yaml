@@ -70,11 +70,11 @@ workflows:
       # notify:
       #   success: true
       #   failure: false
-      google_play:
-        credentials: $GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: internal
-        # track: productino
-        submit_as_draft: true
+      # google_play:
+      #   credentials: $GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS
+      #   track: internal
+      #   # track: productino
+      #   submit_as_draft: true
       slack:
         # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
         channel: "#itrak-poc"
@@ -130,10 +130,10 @@ workflows:
           pod install;
           cd ..;
           # # find . -name "Podfile" -execdir pod install \;
-          # keychain initialize;
-          # app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE --create;
-          # keychain add-certificates;
-          # xcode-project use-profiles;
+          keychain initialize;
+          app-store-connect fetch-signing-files "com.itrakassets.bioplus" --type IOS_APP_STORE --create;
+          keychain add-certificates;
+          xcode-project use-profiles;
           cat >> "$CM_BUILD_DIR/private_keys/AuthKey_8Z52QQ4824.p8" <<EOF
           $APP_STORE_CONNECT_PRIVATE_KEY
           EOF
