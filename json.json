@@ -1,0 +1,94 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 1,
+            "type": "global",
+            "formKeys": [
+                {
+                    "key": "userTravelingAlong",
+                    "description": "Are other people travelling onto the property with you?",
+                    "index": 1,
+                    "dataType": "boolean",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "isQfeverVaccinated",
+                    "description": "Have all visitors had a Q Fever vaccination?",
+                    "index": 2,
+                    "dataType": "boolean",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "isFluSymptoms",
+                    "description": "Do you have cold or flu symptoms?",
+                    "dataType": "boolean",
+                    "index": 3,
+                    "acceptableValue": null
+                },
+                {
+                    "key": "isOverSeaVisit",
+                    "description": "Have any visitors been overseas in the last 7 days?",
+                    "index": 4,
+                    "dataType": "boolean",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "isAllMeasureTaken",
+                    "description": "Have you taken all reasonable measures to ensure that shoes, clothing and equipment are free from potential weed and disease contaminants:",
+                    "index": 5,
+                    "dataType": "boolean",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "isOwnerNotified",
+                    "description": "Have you made reasonable attempts to notify the owner/manager of the property that you are visiting today?",
+                    "index": 6,
+                    "dataType": "boolean",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "rego",
+                    "description": "Rego",
+                    "index": 7,
+                    "dataType": "string",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "riskRating",
+                    "description": "Risk Rating",
+                    "index": 8,
+                    "dataType": "enum",
+                    "acceptableValue": [
+                        "LOW",
+                        "MEDIUM",
+                        "HIGH"
+                    ]
+                },
+                {
+                    "key": "expectedDepartureTime",
+                    "description": "Expected Departure Time",
+                    "index": 9,
+                    "dataType": "date",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "expectedDepartureDate",
+                    "description": "Expected Departure Date",
+                    "index": 10,
+                    "dataType": "date",
+                    "acceptableValue": null
+                },
+                {
+                    "key": "signature",
+                    "description": "Signature",
+                    "index": 11,
+                    "dataType": "string",
+                    "acceptableValue": null
+                }
+            ],
+            "createdAt": "2023-02-01T05:11:52.133Z",
+            "updatedAt": "2023-02-01T05:11:52.133Z"
+        }
+    ]
+}

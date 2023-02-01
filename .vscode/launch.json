@@ -9,6 +9,12 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main_prod.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "target",
+                "lib/main_prod.dart"
+            ],
         },
         {
             "name": "Bioplus Production Release",
@@ -16,6 +22,12 @@
             "flutterMode": "release",
             "type": "dart",
             "program": "lib/main_prod.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "target",
+                "lib/main_prod.dart"
+            ],
         },
         {
             "name": "Bioplus Dev Release",
@@ -23,12 +35,24 @@
             "flutterMode": "release",
             "type": "dart",
             "program": "lib/main_dev.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "target",
+                "lib/main_dev.dart"
+            ],
         },
         {
             "name": "Bioplus Dev",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "target",
+                "lib/main_dev.dart"
+            ],
         },
         {
             "name": "Bioplus Dev Local",

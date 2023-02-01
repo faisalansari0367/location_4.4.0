@@ -98,7 +98,7 @@ workflows:
         APP_ID: 6444330345 # <-- Put your APP ID here
         APP_STORE_CONNECT_KEY_IDENTIFIER: 8Z52QQ4824
 
-        APP_STORE_CONNECT_API_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
+        APP_STORE_CONNECT_PRIVATE_KEY: $APP_STORE_CONNECT_PRIVATE_KEY
       flutter: stable
       xcode: latest
       cocoapods: default

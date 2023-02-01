@@ -75,7 +75,7 @@ class DashboardBody extends StatelessWidget {
             ),
             if (!state.isVisitor)
               DashboardCard(
-                text: 'My eDEC\nForms',
+                text: 'My DECs\nForms',
                 image: 'assets/icons/eDEC forms.png',
                 onTap: () {
                   Get.to(() => const EdecFormsPage());
@@ -88,7 +88,7 @@ class DashboardBody extends StatelessWidget {
             ),
             if (ApiConstants.isDegugMode)
               DashboardCard(
-                text: 'My Waybill',
+                text: 'My eNVD',
                 image: 'assets/icons/eNVD.jpg',
                 size: 65.w,
                 onTap: () async {

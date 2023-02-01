@@ -1,11 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
-import 'package:hive/hive.dart';
-
-// import '../../../api_result/api_result.dart';
-// import '../../../api_result/network_exceptions/network_exceptions.dart';
-// import '../../../configs/client.dart';
-// import '../../../configs/endpoint.dart';
+import 'package:hive_flutter/adapters.dart';
 
 abstract class UserRepo {
   Future<ApiResult<List<UserRoles>>> getUserRoles();
@@ -17,7 +12,7 @@ abstract class UserRepo {
   // Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
   Future<ApiResult<UsersResponseModel>> getUsers(
       {Map<String, dynamic>? queryParams});
-  Future<ApiResult<List<String>>> getFormQuestions();
+  Future<ApiResult<List<DeclarationForms>>> getDeclarationForms();
   Future<ApiResult<UserSpecies>> getUserSpecies();
   Future<ApiResult<UserFormsData>> getUserForms();
 
@@ -127,13 +122,15 @@ class UserRepoImpl extends UserRepo {
   }
 
   @override
-  Future<ApiResult<List<String>>> getFormQuestions() async {
+  Future<ApiResult<List<DeclarationForms>>> getDeclarationForms() async {
     try {
-      final result = await client.get(Endpoints.forms);
-      final forms = result.data['data']['forms'].first.first;
-      final list = (forms['questions']);
-      final data = List<String>.from(list);
-      return ApiResult.success(data: data);
+      final result = await client.get(Endpoints.getForms);
+      final forms = result.data['data'];
+      final model = forms
+          .map((e) => DeclarationForms.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+
+      return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

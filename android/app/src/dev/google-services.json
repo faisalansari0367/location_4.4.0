@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "588288193378",
+    "project_id": "bioplus-dev",
+    "storage_bucket": "bioplus-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588288193378:android:8de3621ae2517341c3723b",
+        "android_client_info": {
+          "package_name": "com.itrakassets.bioplus.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588288193378-2p50n4t0e43c4l3e8gt17p2n8vl48opa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgTQaqHLpCWXp5ja7xQdcKGd550f0xdWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588288193378-2p50n4t0e43c4l3e8gt17p2n8vl48opa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

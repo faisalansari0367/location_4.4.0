@@ -32,6 +32,7 @@ class Endpoints {
       licenceCategories = '$records/licenceCategories',
       fieldsRecords = '$records/fieldsRecord',
       forms = '$records/forms',
+      getForms = '$records/getForm',
       roles = '$records/roles',
       deleteUser = '$users/me',
       deleteUserById = users,

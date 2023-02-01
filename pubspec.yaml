@@ -119,7 +119,8 @@ dependencies:
   # open_file: ^3.2.1
   open_file_safe: ^3.2.3
   flutter_cached_pdfview: ^0.4.1
-  location: ^4.4.0
+  location:
+    # git: https://github.com/faisalansari0367/flutterlocation/tree/master/packages/location
   # very_good_analysis: ^2.4.0
   # lint: ^1.9.0
   graphql_flutter: ^5.1.0
@@ -166,11 +167,11 @@ dev_dependencies:
   # flutter packages pub run build_runner build
   flutter_gen_runner:
 # flutter pub run flutter_launcher_icons:main
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/images/play_store_512.png"
-  adaptive_icon_background: "#3E4893"
+# flutter_icons:
+#   android: "launcher_icon"
+#   ios: true
+#   image_path: "assets/images/play_store_512.png"
+#   adaptive_icon_background: "#3E4893"
   # adaptive_icon_background: "assets/icons/background.png"
 
 flutter_gen:
@@ -208,6 +209,7 @@ flutter:
     - assets/icons/bottom_navbar/
     - assets/icons/
     - assets/icons/dashboard/
+    - assets/images/logo_black.png
 
     - assets/countries/
     - assets/json/

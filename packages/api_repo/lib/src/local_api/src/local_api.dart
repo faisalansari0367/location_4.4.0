@@ -55,7 +55,7 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<List<String>>> getFormQuestions() {
+  Future<ApiResult<List<DeclarationForms>>> getDeclarationForms() {
     throw UnimplementedError();
   }
 

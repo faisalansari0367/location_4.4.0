@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/hive_boxes.dart';
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/firebase_options.dart';
 import 'package:bioplus/my_app.dart';
 import 'package:bioplus/services/notifications/push_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +24,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _setOrientation();
   await runZonedGuarded(() async {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp();
     await Hive.initFlutter();
     final box = await Hive.openBox(HiveBox.storage);
     final localApi = LocalApi();
@@ -47,7 +46,8 @@ Future<void> main() async {
       ),
     );
 
-    if (enableCrashlytics) FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    if (enableCrashlytics)
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }, (error, stackTrace) {
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });

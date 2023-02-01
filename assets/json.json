@@ -1,0 +1,23 @@
+{
+    "qNo": 1,
+    "qText": "What is the capital of India?",
+    "qType": "radio",
+    "qOptions": [
+        {
+            "qOption": "Delhi",
+            "qScore": 1
+        },
+        {
+            "qOption": "Mumbai",
+            "qScore": 0
+        },
+        {
+            "qOption": "Kolkata",
+            "qScore": 0
+        },
+        {
+            "qOption": "Chennai",
+            "qScore": 0
+        }
+    ]
+}

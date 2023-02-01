@@ -215,8 +215,8 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<List<String>>> getFormQuestions() {
-    return _userRepo.getFormQuestions();
+  Future<ApiResult<List<DeclarationForms>>> getDeclarationForms() {
+    return _userRepo.getDeclarationForms();
   }
 
   @override
@@ -492,8 +492,10 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<String>> createStripeSession(
-      String priceId, String paymentMode, {String? governmentCode, String? role}) {
-    return _paymentRepo.createStripeSession(priceId, paymentMode, governmentCode: governmentCode, role: role);
+      String priceId, String paymentMode,
+      {String? governmentCode, String? role}) {
+    return _paymentRepo.createStripeSession(priceId, paymentMode,
+        governmentCode: governmentCode, role: role);
   }
 
   @override
@@ -530,7 +532,7 @@ class ApiRepo implements Api {
   Future<ApiResult<List<SosNotification>>> getSosNotification() {
     return _functionsRepo.getSosNotification();
   }
-  
+
   @override
   Future<ApiResult<String>> createPortal() {
     return _paymentRepo.createPortal();
