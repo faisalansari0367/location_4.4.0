@@ -25,7 +25,12 @@ class WarakirriEntryFormNotifier extends BaseModel {
   bool _selfDeclaration = false;
   final formKey = GlobalKey<FormState>();
 
-  final warakirriFarms = ['Coradjil Place', 'Glenfarm', 'Poorinda', 'Welbourne'];
+  final warakirriFarms = [
+    'Coradjil Place',
+    'Glenfarm',
+    'Poorinda',
+    'Welbourne'
+  ];
 
   final decalations = [
     'All incidents, hazards or near miss events must be reported to a Warakirri representative',
@@ -61,7 +66,10 @@ class WarakirriEntryFormNotifier extends BaseModel {
     // }
   }
 
-  Future<void> pickDateTime(QuestionData questionData, BuildContext context) async {
+  Future<void> pickDateTime(
+    QuestionData questionData,
+    BuildContext context,
+  ) async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -72,7 +80,13 @@ class WarakirriEntryFormNotifier extends BaseModel {
       // Navigator.pop(context);
       final time = await _timePicker(context);
       if (time != null) {
-        final dt = DateTime(pickedDate.year, pickedDate.month, pickedDate.day, time.hour, time.minute);
+        final dt = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          time.hour,
+          time.minute,
+        );
         questionData.value = dt.toIso8601String();
         notifyListeners();
       }
@@ -103,11 +117,15 @@ class WarakirriEntryFormNotifier extends BaseModel {
       final data = model.toJson();
       for (final element in data.entries) {
         if (element.value == null) {
-          DialogService.error('Please fill the field ${model.question(element.key)}');
+          DialogService.error(
+            'Please fill the field ${model.question(element.key)}',
+          );
           return;
         }
       }
-      final result = await localApi.udpateForm(zoneId, logId: logrecordId, data);
+      data['type'] = DeclarationFormType.warakirri.name;
+      final result =
+          await localApi.udpateForm(zoneId, logId: logrecordId, data);
       result.when(
         success: success,
         failure: failure,
@@ -123,7 +141,10 @@ class WarakirriEntryFormNotifier extends BaseModel {
   }
 
   Object? success(LogbookEntry data) {
-    DialogService.success('Form submitted successfully', onCancel: () => Get.close(2));
+    DialogService.success(
+      'Form submitted successfully',
+      onCancel: () => Get.close(2),
+    );
     return null;
   }
 

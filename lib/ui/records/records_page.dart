@@ -1,7 +1,7 @@
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/ui/cvd_record/cvd_record.dart';
 import 'package:bioplus/ui/sos/sos.dart';
+import 'package:bioplus/ui/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/view_sent_notification/view_sent_notification.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/my_listTile.dart';

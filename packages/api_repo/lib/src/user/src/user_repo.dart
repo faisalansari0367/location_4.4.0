@@ -127,7 +127,8 @@ class UserRepoImpl extends UserRepo {
       final result = await client.get(Endpoints.getForms);
       final forms = result.data['data'];
       final model = forms
-          .map((e) => DeclarationForms.fromJson(Map<String, dynamic>.from(e)))
+          .map<DeclarationForms>(
+              (e) => DeclarationForms.fromJson(Map<String, dynamic>.from(e)))
           .toList();
 
       return ApiResult.success(data: model);

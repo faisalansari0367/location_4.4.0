@@ -1,11 +1,11 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/theme/color_constants.dart';
-import 'package:bioplus/ui/admin/pages/visitor_log_book/cubit/logbook_cubit.dart';
-import 'package:bioplus/ui/admin/pages/visitor_log_book/cubit/logbook_state.dart';
-import 'package:bioplus/ui/admin/pages/visitor_log_book/widget/logbook_details.dart';
 import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
+import 'package:bioplus/ui/visitor_log_book/cubit/logbook_cubit.dart';
+import 'package:bioplus/ui/visitor_log_book/cubit/logbook_state.dart';
+import 'package:bioplus/ui/visitor_log_book/widget/logbook_details.dart';
 import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:bioplus/widgets/empty_screen.dart';
 import 'package:bioplus/widgets/listview/infinite_table.dart';
@@ -37,10 +37,19 @@ class _LogbookViewState extends State<LogbookView> {
     ]);
     super.initState();
 
-    final cubit = context.read<LogBookCubit>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cubit = context.read<LogBookCubit>();
       cubit.refreshIndicatorKey.currentState?.show();
     });
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   // static const list = [
@@ -117,7 +126,9 @@ class _LogbookViewState extends State<LogbookView> {
 
                   return DataTable(
                     dataRowHeight: 60,
-                    columns: cubit.list.map((e) => _dataColumn(e.toUpperCase())).toList(),
+                    columns: cubit.list
+                        .map((e) => _dataColumn(e.toUpperCase()))
+                        .toList(),
                     rows: _buildRows(snapshot.data ?? [], state),
                     columnSpacing: 30,
                   );
@@ -138,9 +149,8 @@ class _LogbookViewState extends State<LogbookView> {
     return rows;
   }
 
-  Color _zebraColor(int index) {
-    return index % 2 == 0 ? Colors.grey.shade100 : Colors.white;
-  }
+  Color _zebraColor(int index) =>
+      (index % 2).isEven ? Colors.grey.shade100 : Colors.white;
 
   // DataRow _tableRow(data) {
   DataRow _dataRow(LogbookEntry item, int index, LogBookState state) {
@@ -154,10 +164,15 @@ class _LogbookViewState extends State<LogbookView> {
         _dataCell(_dateAndTime(item.enterDate)),
         _dataCell(_dateAndTime(item.exitDate)),
         _dataCell(item.geofence?.name ?? ''),
-        _dataCell(item.geofence?.pic ?? item.user?.ngr ?? '',
-            color: item.geofence?.color, isPic: item.geofence?.pic != null,),
-        _dataCell(item.user?.postcode == null ? '' : (item.user?.postcode).toString(),
-            color: item.geofence?.color,),
+        _dataCell(
+          item.geofence?.pic ?? item.user?.ngr ?? '',
+          color: item.geofence?.color,
+          isPic: item.geofence?.pic != null,
+        ),
+        _dataCell(
+          item.user?.postcode == null ? '' : (item.user?.postcode).toString(),
+          color: item.geofence?.color,
+        ),
         _buildFormButton(item),
       ],
     );
@@ -169,7 +184,7 @@ class _LogbookViewState extends State<LogbookView> {
 
   DataCell _buildFormButton(LogbookEntry item) {
     return DataCell(
-      (item.form?.isNotEmpty ?? false)
+      (item.form != null)
           ? _textButton(
               'View',
               onPressed: () => Get.to(() => LogbookDetails(item: item)),
@@ -197,9 +212,10 @@ class _LogbookViewState extends State<LogbookView> {
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           backgroundColor: (color ?? kPrimaryColor).withOpacity(0.1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(5),
+          // ),
+          shape: const StadiumBorder(),
         ),
         child: Text(
           text.toUpperCase(),
@@ -217,7 +233,8 @@ class _LogbookViewState extends State<LogbookView> {
   Future<void> _notAllowedDeclarationForm() {
     return DialogService.showDialog(
       child: ErrorDialog(
-        message: 'You are not allowed to complete declaration form for this user',
+        message:
+            'You are not allowed to complete declaration form for this user',
         onTap: Get.back,
       ),
     );
@@ -302,41 +319,43 @@ class _LogbookViewState extends State<LogbookView> {
     );
   }
 
-  bool isCurrentUser(context, int? id) => id == context.read<LogBookCubit>().state.user.id;
-
   // _datacell
-  DataCell _dataCell(String data, {Color? color = Colors.black, bool isPic = false, bool isOffline = false}) {
+  DataCell _dataCell(
+    String data, {
+    Color? color = Colors.black,
+    bool isPic = false,
+    bool isOffline = false,
+  }) {
     return DataCell(
-      Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: isPic ? 10.w : 0.w, vertical: 5.h),
-            decoration: isPic
-                ? BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(5),
-                  )
-                : null,
-            child: Row(
-              children: [
-                if (isOffline) _buildDot(),
-                Text(
-                  data,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: !isPic
-                        ? null
-                        : (color ?? Colors.transparent).computeLuminance() <= 0.5
-                            ? Colors.white
-                            : Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+      Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: isPic ? 10.w : 0.w,
+          vertical: 5.h,
+        ),
+        decoration: isPic
+            ? BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(50),
+              )
+            : null,
+        child: Row(
+          children: [
+            if (isOffline) _buildDot(),
+            Text(
+              data,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: !isPic
+                    ? null
+                    : (color ?? Colors.transparent).computeLuminance() <= 0.5
+                        ? Colors.white
+                        : Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -15,7 +15,8 @@ class EnvdListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final breeds = ((items.answers ?? []).where((element) => element.questionId == '1')).toList().toList();
+    final breeds = ((items.answers ?? [])
+        .where((element) => element.questionId == '1')).toList().toList();
     print(breeds);
     return Container(
       padding: kPadding,
@@ -35,17 +36,20 @@ class EnvdListItem extends StatelessWidget {
             items.number!,
             'Created',
             items.submittedAt != null || items.updatedAt != null
-                ? MyDecoration.formatDate(DateTime.parse(items.submittedAt ?? items.updatedAt!))
+                ? MyDecoration.formatDate(
+                    DateTime.parse(items.submittedAt ?? items.updatedAt!))
                 : '',
           ),
           _gap(),
-          _buildRow('From PIC', items.origin!.pic!, 'To PIC', items.destination!.pic!),
+          _buildRow('From PIC', items.origin!.pic!, 'To PIC',
+              items.destination!.pic!),
           _gap(),
           _buildRow('Species', items.species!, 'Quantity', _getQuantity()),
           _gap(),
-          _buildText('Accreditations', _getAccredentials()),
+          _buildText('Accreditations', items.getAccredentials()),
           _gap(),
-          _buildRow('Transporter', _findById('158')?.value ?? '', 'Mobile', _findById('160')?.value ?? ''),
+          _buildRow('Transporter', _findById('158')?.value ?? '', 'Mobile',
+              _findById('160')?.value ?? ''),
           _gap(),
           Row(
             children: [
@@ -65,11 +69,14 @@ class EnvdListItem extends StatelessWidget {
     final msaType = 'MSA${items.species!.characters.first}';
     final nfasType = 'NFAS${items.species!.characters.first}';
 
-    final ahsResults = items.forms!.where((element) => (element.type ?? '').contains(ahsType));
+    final ahsResults =
+        items.forms!.where((element) => (element.type ?? '').contains(ahsType));
     if (ahsResults.isNotEmpty) availableTypes.add('AHS');
-    final msaResults = items.forms!.where((element) => (element.type ?? '').contains(msaType));
+    final msaResults =
+        items.forms!.where((element) => (element.type ?? '').contains(msaType));
     if (msaResults.isNotEmpty) availableTypes.add('MSA');
-    final nfasResults = items.forms!.where((element) => (element.type ?? '').contains(nfasType));
+    final nfasResults = items.forms!
+        .where((element) => (element.type ?? '').contains(nfasType));
     if (nfasResults.isNotEmpty) availableTypes.add('NFAS');
     return availableTypes.join(' , ');
   }

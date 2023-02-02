@@ -3,7 +3,7 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/admin/cubit/admin_cubit.dart';
 import 'package:bioplus/ui/admin/cubit/admin_state.dart';
 import 'package:bioplus/ui/admin/pages/users_list/view/users_page.dart';
-import 'package:bioplus/ui/admin/pages/visitor_log_book/view/logbook_page.dart';
+import 'package:bioplus/ui/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
 import 'package:bioplus/ui/forms/warakirri_entry_form/view/warakirri_entry_form_page.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';

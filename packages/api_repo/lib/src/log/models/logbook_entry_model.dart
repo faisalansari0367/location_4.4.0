@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
+import 'package:api_repo/src/log/models/enum/declaration_form_type.dart';
 
 class LogbookResponseModel {
   String? status;
@@ -121,11 +122,17 @@ class LogbookEntry {
     isOffline = json['isOffline'] ?? false;
     exitDate = _getDateTime(json['exitDate']);
 
-    form = LogbookFormModel.fromJson(json);
+    form = json['declarationForm'] == null
+        ? null
+        : LogbookFormModel.fromJson(json['declarationForm']);
     createdAt = _getDateTime(json['createdAt']);
     updatedAt = _getDateTime(json['updatedAt']);
-    user = json['user'] != null ? UserData.fromJson(Map<String, dynamic>.from(json['user'])) : null;
-    geofence = json['geofence'] != null ? Geofence.fromJson(Map<String, dynamic>.from(json['geofence'])) : null;
+    user = json['user'] != null
+        ? UserData.fromJson(Map<String, dynamic>.from(json['user']))
+        : null;
+    geofence = json['geofence'] != null
+        ? Geofence.fromJson(Map<String, dynamic>.from(json['geofence']))
+        : null;
   }
 
   // Map<String, dynamic> _fromMap(map) => Map<String, dynamic>.from(map);
@@ -156,9 +163,10 @@ class LogbookEntry {
     data['exitDate'] = _toDateTime(exitDate);
     data['createdAt'] = _toDateTime(createdAt);
     data['updatedAt'] = _toDateTime(updatedAt);
-    if (form != null) {
-      data.addAll(form!.toJson());
-    }
+    data['declarationForm'] = form?.toJson();
+    // if (form != null) {
+    //   data.addAll(form!.toJson());
+    // }
     if (user != null) {
       data['user'] = user!.toJson();
     }
@@ -171,6 +179,7 @@ class LogbookEntry {
 }
 
 class LogbookFormModel {
+  final DeclarationFormType type;
   final bool? isPeopleTravelingWith;
   final List<String>? usersTravellingAlong;
   final bool? isQfeverVaccinated;
@@ -194,6 +203,7 @@ class LogbookFormModel {
   //     additionalInfo = 'additionalInfo';
 
   LogbookFormModel({
+    this.type = DeclarationFormType.global,
     required this.isPeopleTravelingWith,
     this.usersTravellingAlong = const [],
     required this.isQfeverVaccinated,
@@ -214,6 +224,7 @@ class LogbookFormModel {
 
   Map<String, dynamic> toJson() {
     final map = {
+      'type': type.name,
       'isPeopleTravelingWith': isPeopleTravelingWith,
       'userTravelingAlong': usersTravellingAlong,
       'isQfeverVaccinated': isQfeverVaccinated,
@@ -239,7 +250,11 @@ class LogbookFormModel {
   // fromJson
   LogbookFormModel.fromJson(Map<String, dynamic> json)
       : isPeopleTravelingWith = json['isPeopleTravelingWith'],
-        usersTravellingAlong = List<String>.from(json['userTravelingAlong'] ?? []),
+        type = DeclarationFormType.values.firstWhere(
+            (e) => e.name == json['type'],
+            orElse: () => DeclarationFormType.global),
+        usersTravellingAlong =
+            List<String>.from(json['userTravelingAlong'] ?? []),
         isQfeverVaccinated = json['isQfeverVaccinated'] ?? false,
         isFluSymptoms = json['isFluSymptoms'] ?? false,
         isOverSeaVisit = json['isOverSeaVisit'] ?? false,
@@ -255,14 +270,17 @@ class LogbookFormModel {
         additionalInfo = json['additionalInfo'],
         signature = json['signature'];
 
-  static DateTime? tryParse(String? date) => date != null ? DateTime.tryParse(date)?.toLocal() : null;
+  static DateTime? tryParse(String? date) =>
+      date != null ? DateTime.tryParse(date)?.toLocal() : null;
 
   final _model = GlobalDeclarationFormKeys();
   final _warakirriModel = WarakirriQuestionFormModel();
 
   GlobalDeclarationFormKeys get keys => _model;
   WarakirriQuestionFormModel get warakirriKeys => _warakirriModel;
-  String question(key) => warakirriFarm != null ? _warakirriModel.question(key) : _model.question(key);
+  String question(key) => warakirriFarm != null
+      ? _warakirriModel.question(key)
+      : _model.question(key);
 
   bool get isEmpty => isPeopleTravelingWith == null;
 
@@ -275,7 +293,9 @@ class LogbookFormModel {
   }
 
   String getVisitorsNames() {
-    return (usersTravellingAlong?.isEmpty ?? true) ? 'No' : usersTravellingAlong!.join(', ');
+    return (usersTravellingAlong?.isEmpty ?? true)
+        ? 'No'
+        : usersTravellingAlong!.join(', ');
   }
 
   bool get isNotEmpty => !isEmpty;
@@ -327,8 +347,12 @@ class Geofence {
     id = json['id'];
     name = json['name'];
     color = (json['color']) != null ? colorFromHex(json['color']) : null;
-    points = json['points'] != null ? Points.fromJson(_fromMap(json['points'])) : null;
-    center = json['center'] != null ? Origin.fromJson(_fromMap(json['center'])) : null;
+    points = json['points'] != null
+        ? Points.fromJson(_fromMap(json['points']))
+        : null;
+    center = json['center'] != null
+        ? Origin.fromJson(_fromMap(json['center']))
+        : null;
     pic = json['pic'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -356,7 +380,8 @@ class Geofence {
     return data;
   }
 
-  String colorToHex(Color color) => color.value.toRadixString(16).padLeft(6, '0');
+  String colorToHex(Color color) =>
+      color.value.toRadixString(16).padLeft(6, '0');
   Color colorFromHex(String hex) => Color(int.parse(hex, radix: 16));
 }
 

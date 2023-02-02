@@ -2,7 +2,7 @@ import 'package:api_repo/api_repo.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/services/notifications/forms_storage_service.dart';
-import 'package:bioplus/ui/admin/pages/visitor_log_book/view/create_declaration_form_pdf.dart';
+import 'package:bioplus/ui/visitor_log_book/view/create_declaration_form_pdf.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,11 @@ class _LogbookDetailsState extends State<LogbookDetails> {
     return Scaffold(
       appBar: MyAppBar(
         elevation: 5,
-        title: Text((widget.item.form?.isWarakirriFarm ?? false) ? 'Warakirri Entry Form' : 'Declaration Form'),
+        title: Text(
+          (widget.item.form?.isWarakirriFarm ?? false)
+              ? 'Warakirri Entry Form'
+              : 'Declaration Form',
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -45,12 +49,15 @@ class _LogbookDetailsState extends State<LogbookDetails> {
       ),
       body: ListView(
         padding: kPadding,
-        children: (widget.item.form?.isWarakirriFarm ?? false) ? _buildWarakirriForm() : _buildChildrens(),
+        children: (widget.item.form?.isWarakirriFarm ?? false)
+            ? _buildWarakirriForm()
+            : _buildChildrens(),
       ),
     );
   }
 
-  WarakirriQuestionFormModel get warakirriKeys => widget.item.form!.warakirriKeys;
+  WarakirriQuestionFormModel get warakirriKeys =>
+      widget.item.form!.warakirriKeys;
   LogbookFormModel get form => widget.item.form!;
 
   List<Widget> _buildWarakirriForm() {
@@ -95,7 +102,10 @@ class _LogbookDetailsState extends State<LogbookDetails> {
   Container _card(String key, String? value2) {
     if (value2 == null) return Container();
     return Container(
-      decoration: MyDecoration.decoration(shadow: false, color: const Color.fromARGB(255, 242, 242, 242)),
+      decoration: MyDecoration.decoration(
+        shadow: false,
+        color: const Color.fromARGB(255, 242, 242, 242),
+      ),
       padding: kPadding,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -127,10 +137,15 @@ class _LogbookDetailsState extends State<LogbookDetails> {
         children: [
           Text(
             'Entry Details',
-            style: context.textTheme.headline6,
+            style: context.textTheme.titleLarge,
           ),
           Gap(20.h),
-          _buildRow('Full Name', widget.item.user?.fullName ?? '', 'Company Name', widget.item.user?.company ?? ''),
+          _buildRow(
+            'Full Name',
+            widget.item.user?.fullName ?? '',
+            'Company Name',
+            widget.item.user?.company ?? '',
+          ),
           Gap(20.h),
           _buildRow(
             'Phone Number',

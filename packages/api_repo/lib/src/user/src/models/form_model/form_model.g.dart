@@ -9,7 +9,7 @@ part of 'form_model.dart';
 DeclarationForms _$DeclarationFormsFromJson(Map<String, dynamic> json) =>
     DeclarationForms(
       id: json['id'] as int,
-      type: json['type'] as String,
+      type: $enumDecode(_$DeclarationFormTypeEnumMap, json['type']),
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
       formKeys: (json['formKeys'] as List<dynamic>)
@@ -20,8 +20,14 @@ DeclarationForms _$DeclarationFormsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DeclarationFormsToJson(DeclarationForms instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'type': instance.type,
+      'type': _$DeclarationFormTypeEnumMap[instance.type]!,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'formKeys': instance.formKeys,
     };
+
+const _$DeclarationFormTypeEnumMap = {
+  DeclarationFormType.global: 'global',
+  DeclarationFormType.aurora: 'aurora',
+  DeclarationFormType.warakirri: 'warakirri',
+};

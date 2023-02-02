@@ -134,6 +134,7 @@ dependencies:
   in_app_update: ^4.0.1
   stripe_checkout: ^1.0.0
   flutter_sms: ^2.3.3
+  hydrated_bloc: ^9.0.0
   # background_location: ^0.8.1
   # workmanager: ^0.5.1
   # background_locator: ^1.6.12

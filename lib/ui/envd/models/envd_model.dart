@@ -25,7 +25,9 @@ class EnvdData {
   EnvdData({this.consignments});
 
   EnvdData.fromJson(Map<String, dynamic> json) {
-    consignments = json['consignments'] != null ? Consignments.fromJson(json['consignments']) : null;
+    consignments = json['consignments'] != null
+        ? Consignments.fromJson(json['consignments'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -80,22 +82,23 @@ class Items {
   List<Questions>? questions;
   List<Answers>? answers;
 
-  Items(
-      {this.number,
-      this.forms,
-      this.pdfUrl,
-      this.submittedAt,
-      this.updatedAt,
-      this.updatedBy,
-      this.status,
-      this.species,
-      this.owner,
-      this.destination,
-      this.consignee,
-      this.origin,
-      this.declaration,
-      this.questions,
-      this.answers,});
+  Items({
+    this.number,
+    this.forms,
+    this.pdfUrl,
+    this.submittedAt,
+    this.updatedAt,
+    this.updatedBy,
+    this.status,
+    this.species,
+    this.owner,
+    this.destination,
+    this.consignee,
+    this.origin,
+    this.declaration,
+    this.questions,
+    this.answers,
+  });
 
   Items.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -112,10 +115,15 @@ class Items {
     status = json['status'];
     species = json['species'];
     owner = json['owner'] != null ? Owner.fromJson(json['owner']) : null;
-    destination = json['destination'] != null ? Owner.fromJson(json['destination']) : null;
-    consignee = json['consignee'] != null ? Owner.fromJson(json['consignee']) : null;
+    destination = json['destination'] != null
+        ? Owner.fromJson(json['destination'])
+        : null;
+    consignee =
+        json['consignee'] != null ? Owner.fromJson(json['consignee']) : null;
     origin = json['origin'] != null ? Owner.fromJson(json['origin']) : null;
-    declaration = json['declaration'] != null ? Declaration.fromJson(json['declaration']) : null;
+    declaration = json['declaration'] != null
+        ? Declaration.fromJson(json['declaration'])
+        : null;
     if (json['questions'] != null) {
       questions = <Questions>[];
       json['questions'].forEach((v) {
@@ -172,11 +180,14 @@ class Items {
     final msaType = 'MSA${species!.characters.first}';
     final nfasType = 'NFAS${species!.characters.first}';
 
-    final ahsResults = forms!.where((element) => (element.type ?? '').contains(ahsType));
-    if (ahsResults.isNotEmpty) availableTypes.add('AHS');
-    final msaResults = forms!.where((element) => (element.type ?? '').contains(msaType));
+    final ahsResults =
+        forms!.where((element) => (element.type ?? '').contains(ahsType));
+    if (ahsResults.isNotEmpty) availableTypes.add('Animal Health Statement');
+    final msaResults =
+        forms!.where((element) => (element.type ?? '').contains(msaType));
     if (msaResults.isNotEmpty) availableTypes.add('MSA');
-    final nfasResults = forms!.where((element) => (element.type ?? '').contains(nfasType));
+    final nfasResults =
+        forms!.where((element) => (element.type ?? '').contains(nfasType));
     if (nfasResults.isNotEmpty) availableTypes.add('NFAS');
     return availableTypes.join(' , ');
   }
@@ -231,7 +242,8 @@ class Owner {
   Owner({this.address, this.name, this.pic});
 
   Owner.fromJson(Map<String, dynamic> json) {
-    address = json['address'] != null ? Address.fromJson(json['address']) : null;
+    address =
+        json['address'] != null ? Address.fromJson(json['address']) : null;
     name = json['name'];
     pic = json['pic'];
   }
@@ -282,19 +294,21 @@ class Declaration {
   String? phone;
   String? signature;
 
-  Declaration(
-      {this.accept,
-      this.address,
-      this.certificateNumber,
-      this.date,
-      this.email,
-      this.fullName,
-      this.phone,
-      this.signature,});
+  Declaration({
+    this.accept,
+    this.address,
+    this.certificateNumber,
+    this.date,
+    this.email,
+    this.fullName,
+    this.phone,
+    this.signature,
+  });
 
   Declaration.fromJson(Map<String, dynamic> json) {
     accept = json['accept'];
-    address = json['address'] != null ? Address.fromJson(json['address']) : null;
+    address =
+        json['address'] != null ? Address.fromJson(json['address']) : null;
     certificateNumber = json['certificateNumber'];
     date = json['date'];
     email = json['email'];
@@ -327,7 +341,13 @@ class Questions {
   List<AcceptableAnswers>? acceptableAnswers;
   List<ChildQuestions>? childQuestions;
 
-  Questions({this.id, this.text, this.help, this.type, this.acceptableAnswers, this.childQuestions});
+  Questions(
+      {this.id,
+      this.text,
+      this.help,
+      this.type,
+      this.acceptableAnswers,
+      this.childQuestions});
 
   Questions.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -355,7 +375,8 @@ class Questions {
     data['help'] = help;
     data['type'] = type;
     if (acceptableAnswers != null) {
-      data['acceptableAnswers'] = acceptableAnswers!.map((v) => v.toJson()).toList();
+      data['acceptableAnswers'] =
+          acceptableAnswers!.map((v) => v.toJson()).toList();
     }
     if (childQuestions != null) {
       data['childQuestions'] = childQuestions!.map((v) => v.toJson()).toList();
@@ -391,7 +412,13 @@ class ChildQuestions {
   List<AcceptableAnswers>? acceptableAnswers;
   List<Triggers>? triggers;
 
-  ChildQuestions({this.id, this.text, this.help, this.type, this.acceptableAnswers, this.triggers});
+  ChildQuestions(
+      {this.id,
+      this.text,
+      this.help,
+      this.type,
+      this.acceptableAnswers,
+      this.triggers});
 
   ChildQuestions.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -419,7 +446,8 @@ class ChildQuestions {
     data['help'] = help;
     data['type'] = type;
     if (acceptableAnswers != null) {
-      data['acceptableAnswers'] = acceptableAnswers!.map((v) => v.toJson()).toList();
+      data['acceptableAnswers'] =
+          acceptableAnswers!.map((v) => v.toJson()).toList();
     }
     if (triggers != null) {
       data['triggers'] = triggers!.map((v) => v.toJson()).toList();
