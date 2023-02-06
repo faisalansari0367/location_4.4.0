@@ -27,6 +27,7 @@ class UserData {
   int? postcode;
   int? id;
   String? firstName;
+  String? logo;
   String? lastName;
   String? email;
   String? phoneNumber;
@@ -170,6 +171,7 @@ class UserData {
     this.countryVisiting,
     this.entryDate,
     this.exitDate,
+    this.logo,
     this.passport,
     this.ngr,
     this.businessName,

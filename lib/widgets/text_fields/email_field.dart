@@ -8,7 +8,7 @@ class EmailField extends StatelessWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
 
-  final String? label;
+  final String? label, initialValue;
   final void Function(String)? onChanged, onSubmitted;
   final InputDecoration? inputDecoration;
   final bool readOnly;
@@ -20,7 +20,7 @@ class EmailField extends StatelessWidget {
     this.label,
     this.onSubmitted,
     this.inputDecoration,
-    this.readOnly = false,
+    this.readOnly = false, this.initialValue,
   });
 
   @override
@@ -28,6 +28,7 @@ class EmailField extends StatelessWidget {
     // final iconColor = Theme.of(context).iconTheme.color;
     return MyTextField(
       // textCapitalization: TextCapitalization.,
+      initialValue: initialValue,
       inputFormatters: [LowerCaseTextFormatter()],
       focusNode: focusNode,
       controller: controller,

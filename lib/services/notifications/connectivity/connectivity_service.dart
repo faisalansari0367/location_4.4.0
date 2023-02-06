@@ -38,7 +38,9 @@ class MyConnectivity {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
-        _controller.add(true);
+        if (!_controller.value) {
+          _controller.add(true);
+        }
         _show(
           title: 'Internet found',
           msg: 'You can use our services in normal mode',

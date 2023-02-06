@@ -1,13 +1,14 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/features/webview/flutter_webview.dart';
 import 'package:bioplus/ui/admin/cubit/admin_cubit.dart';
 import 'package:bioplus/ui/admin/cubit/admin_state.dart';
 import 'package:bioplus/ui/admin/pages/users_list/view/users_page.dart';
-import 'package:bioplus/ui/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
 import 'package:bioplus/ui/forms/warakirri_entry_form/view/warakirri_entry_form_page.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/select_role/view/select_role_page.dart';
+import 'package:bioplus/ui/visitor_log_book/view/logbook_page.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/biosecure_logo.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -36,6 +37,16 @@ class AdminView extends StatelessWidget {
               spacing: Gap(2.5.height),
               children: [
                 const Center(child: AppLogo()),
+
+                MyListTile(
+                  text: 'Admin Web Panel',
+                  onTap: () async => Get.to(
+                    () => const Webview(
+                      url: 'https://admin-development.itrakassets.com/',
+                      title: 'Admin Web Panel',
+                    ),
+                  ),
+                ),
                 MyListTile(
                   text: 'Users',
                   onTap: () async => Get.to(() => const UsersPage()),
@@ -65,7 +76,8 @@ class AdminView extends StatelessWidget {
                   onTap: () async {
                     await Get.to(
                       () => const PdfViewer(
-                        path: 'assets/terms_and_conditions/BIOPLUS Price List 19122022.pdf',
+                        path:
+                            'assets/terms_and_conditions/BIOPLUS Price List 19122022.pdf',
                         title: 'Price List',
                       ),
                     );
@@ -91,7 +103,9 @@ class AdminView extends StatelessWidget {
                     Get.to(
                       () {
                         final api = context.read<Api>();
-                        final id = api.logbookRecords.isNotEmpty ? api.logbookRecords.first.id : 0;
+                        final id = api.logbookRecords.isNotEmpty
+                            ? api.logbookRecords.first.id
+                            : 0;
                         return FormsPage(zoneId: id.toString());
                       },
                     );
@@ -119,10 +133,12 @@ class AdminView extends StatelessWidget {
                     try {
                       final api = context.read<Api>();
                       final userId = api.getUserData()!.id;
-                      final recordsCreatedByCurrentUser =
-                          api.logbookRecords.where((element) => element.user!.id == userId);
-                      final loggedInZones = recordsCreatedByCurrentUser.where((element) => element.exitDate == null);
-                      final futures = loggedInZones.map((e) => api.markExitById(e.id.toString()));
+                      final recordsCreatedByCurrentUser = api.logbookRecords
+                          .where((element) => element.user!.id == userId);
+                      final loggedInZones = recordsCreatedByCurrentUser
+                          .where((element) => element.exitDate == null);
+                      final futures = loggedInZones
+                          .map((e) => api.markExitById(e.id.toString()));
                       await Future.wait(futures);
                     } catch (e) {
                       print(e);

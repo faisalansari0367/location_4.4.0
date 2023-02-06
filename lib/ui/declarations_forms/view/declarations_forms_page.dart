@@ -1,6 +1,8 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/declarations_forms/cubit/cubit.dart';
 import 'package:bioplus/ui/declarations_forms/widgets/declarations_forms_body.dart';
+import 'package:bioplus/widgets/my_appbar.dart';
 import 'package:flutter/material.dart';
 
 /// {@template declarations_forms_page}
@@ -16,9 +18,10 @@ class DeclarationsFormsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DeclarationsFormsCubit(context, form: form),
-      child: const Scaffold(
-        body: DeclarationsFormsView(),
-      ),
+      child: const DeclarationsFormsView(),
+      // child: const Scaffold(
+
+      // ),
     );
   }
 }
@@ -32,6 +35,18 @@ class DeclarationsFormsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DeclarationsFormsBody();
+    return Scaffold(
+      appBar: MyAppBar(
+        elevation: 3,
+        title: BlocBuilder<DeclarationsFormsCubit, DeclarationsFormsState>(
+          builder: (context, state) {
+            return Text(
+              '${context.read<DeclarationsFormsCubit>().form.type.name.capitalize!} Declaration Form',
+            );
+          },
+        ),
+      ),
+      body: const DeclarationsFormsBody(),
+    );
   }
 }

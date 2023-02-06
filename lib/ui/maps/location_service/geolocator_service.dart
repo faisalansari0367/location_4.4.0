@@ -13,8 +13,9 @@ class GeolocatorService {
 
   static Future<Position> getCurrentPosition() async {
     try {
-      final locationService = location.Location();
-      final result = await locationService.requestService();
+      // location.setLocationInstance(platform: location.LocationPlatform());
+      // final locationService = location.Location();
+      final result = await location.Location().serviceEnabled();
       if (!result) {
         await DialogService.showDialog(
           child: const LocationPermissionDialog(),
@@ -71,10 +72,11 @@ class GeolocatorService {
 
   static Future<Stream<Position>> getLocationUpdates() async {
     final l = location.Location();
+    // location.onLocationChanged(inBackground: true)
     await l.enableBackgroundMode();
     // await l.changeSettings();
-    final isBackgroundMode = await l.isBackgroundModeEnabled();
-    print('isBackgroundMode $isBackgroundMode');
+    // final isBackgroundMode = await l.isBackgroundModeEnabled();
+    // print('isBackgroundMode $isBackgroundMode');
     final stream = l.onLocationChanged.map(_getPosition);
     return stream;
   }

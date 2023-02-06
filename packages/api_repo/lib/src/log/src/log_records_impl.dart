@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:api_client/api_client.dart';
@@ -100,17 +101,27 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       log('final offline records: ${offlineRecords.length}');
       final json = offlineRecords.map((e) {
+        // final form = e.form?.toJson();
+
         final map = e.toJson();
+        // map.remove('declarationForm');
+        // if (form != null) {
+        //   map.addAll(form);
+        // }
         // because api accepts geofence id not geofence object
         // remove geofence object and add geofence id
         map
+          // ..remove('declarationForm')
           ..remove('id')
-          ..remove('updatedAt');
+          ..remove('updatedAt')
+          ..remove('isOffline');
         map['geofence'] = e.geofence?.id;
         return map;
       }).toList();
 
       // return true;
+
+      log(jsonEncode({'records': json}));
 
       final result = await client
           .post(Endpoints.logRecordsOffline, data: {'records': json});
@@ -119,8 +130,9 @@ class LogRecordsImpl implements LogRecordsRepo {
       if (isSuccess) {
         await storage.offlineLogRecords.clearOfflineRecords();
         await getLogbookRecords();
-
-        log('geofences synced successfully: offline Records ${storage.offlineLogRecords.logRecords.length}');
+        log(
+          'geofences synced successfully: offline Records ${storage.offlineLogRecords.logRecords.length}',
+        );
       }
       // _isSyncing = false;
       return isSuccess;
@@ -282,9 +294,9 @@ class LogRecordsImpl implements LogRecordsRepo {
   Future<ApiResult<LogbookEntry>> _patchForm(
       Map<String, dynamic> form, int logRecordId) async {
     try {
-      final _form = <String, dynamic>{};
+      final form0 = <String, dynamic>{};
       form.forEach((key, value) {
-        if (value != null) _form[key] = value;
+        if (value != null) form0[key] = value;
       });
 
       // if (form['expectedDepartureTime'] == null) {
@@ -296,7 +308,7 @@ class LogRecordsImpl implements LogRecordsRepo {
       final result = await client.patch(
         '${Endpoints.logRecords}/$logRecordId',
         // data: {'form': form, 'geofenceID': geofenceId},
-        data: _form,
+        data: form0,
       );
       final data = Map<String, dynamic>.from(result.data['data']);
       final logbookEntry = LogbookEntry.fromJson(data);
@@ -335,12 +347,10 @@ class LogRecordsImpl implements LogRecordsRepo {
     // records created by the current user for this geofence in the last 15 minutes
     final recordsPast15Minutes = recordsByUser.where((element) {
       final difference = DateTime.now().difference(element.enterDate!);
-      if (element.form?.isEmpty ?? true) {
+      if (!(element.hasForm)) {
         return difference.inHours <= 24;
       }
-      if (element.exitDate == null) {
-        return true;
-      }
+      if (element.exitDate == null) return true;
 
       return difference.inMinutes <= 30;
     });

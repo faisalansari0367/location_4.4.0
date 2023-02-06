@@ -78,6 +78,7 @@ class WarakirriEntryFormNotifier extends BaseModel {
     );
     if (pickedDate != null) {
       // Navigator.pop(context);
+      // ignore: use_build_context_synchronously
       final time = await _timePicker(context);
       if (time != null) {
         final dt = DateTime(

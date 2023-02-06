@@ -8,9 +8,17 @@ class Strings {
   static const name = 'Name',
       warakirri = 'Warakirri',
       sos = 'SOS',
+      owner = 'Owner',
       email = 'Email',
+      delete = 'Delete',
+      your = 'Your',
+      account = 'Account',
+      company = 'Company',
+      ngr = 'NGR',
       first = 'First',
       last = 'Last',
+      countryOfResidency = 'Country of Residency',
+      city = 'City',
       password = 'Password',
       confirm = 'Confirm',
       continue_ = 'Continue',
@@ -26,7 +34,6 @@ class Strings {
       role = 'Role',
       select = 'Select',
       details = 'Details',
-      your = 'Your',
       pic = 'PIC',
       property = 'Property',
       address = 'Address',
@@ -39,8 +46,10 @@ class Strings {
       a = 'A',
       i = 'I',
       am = 'Am',
+      about = 'About',
       retry = 'Retry',
       forgot = 'Forgot',
+      edit = 'Edit',
       new_ = 'New',
       register = 'Register',
       reset = 'Reset',
@@ -62,6 +71,7 @@ class Strings {
 
       /// Drawer items
       admin = 'Admin',
+      profile = 'Profile',
       home = 'Home',
       map = 'Map',
       settings = 'Settings',
@@ -81,6 +91,7 @@ class Strings {
       book = 'Book',
       geofence = 'Geofence',
       envds = 'eNVD',
+      add = 'Add',
       livestock = 'Livestock',
       movement = 'Movement',
       waybill = 'Waybill',
@@ -158,4 +169,7 @@ class Strings {
   static String get cvdForms => 'CVD ${form}s';
 
   static String get sosRecords => '$sos $records';
+  static String get editProfile => '$edit $profile';
+  static String get deleteYourAccount => '$delete $your $account';
+  static String get addPic => '$add $pic';
 }

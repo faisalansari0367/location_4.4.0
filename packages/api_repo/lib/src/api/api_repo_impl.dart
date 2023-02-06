@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:api_repo/src/user/src/models/pic/pic_model.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -536,5 +537,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<String>> createPortal() {
     return _paymentRepo.createPortal();
+  }
+
+  @override
+  Future<ApiResult<List<PicModel>>> getPics() {
+    return _userRepo.getPics();
   }
 }

@@ -31,8 +31,11 @@ class SosBody extends StatelessWidget {
             final sos = state.sosNotifications[index];
             return ListTile(
               title: Text(sos.createdBy?.fullName ?? ''),
-              subtitle:
-                  Text(MyDecoration.formatDate(sos.sosDate ?? sos.createdAt)),
+              subtitle: Text(
+                MyDecoration.formatDateWithTime(
+                  sos.sosDate ?? sos.createdAt,
+                ),
+              ),
               trailing: IconButton(
                 onPressed: () {
                   try {

@@ -42,6 +42,9 @@ class OtpCubit extends Cubit<OtpState> {
         onContinue: () async {
           Get.back();
           Get.offAll(() => const DrawerPage());
+
+          
+
           Get.to(() => const MapsPage());
         },
       ),

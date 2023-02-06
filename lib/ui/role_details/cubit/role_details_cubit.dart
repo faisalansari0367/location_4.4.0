@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/models/enum/field_type.dart';
 import 'package:bioplus/services/notifications/connectivity/connectivity_service.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/role_details/cubit/role_details_state.dart';
 import 'package:bioplus/ui/role_details/models/field_data.dart';
-import 'package:bioplus/ui/role_details/models/field_types.dart';
 import 'package:bioplus/ui/role_details/widgets/property_address.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';

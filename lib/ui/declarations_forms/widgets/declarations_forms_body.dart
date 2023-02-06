@@ -1,6 +1,9 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/declarations_forms/cubit/cubit.dart';
 import 'package:bioplus/ui/declarations_forms/widgets/declaration_form_card.dart';
+import 'package:bioplus/widgets/signature/signature_widget.dart';
+import 'package:bioplus/widgets/user_info.dart';
 import 'package:flutter/material.dart';
 
 /// {@template declarations_forms_body}
@@ -8,49 +11,76 @@ import 'package:flutter/material.dart';
 ///
 /// Add what it does
 /// {@endtemplate}
-class DeclarationsFormsBody extends StatelessWidget {
+class DeclarationsFormsBody extends StatefulWidget {
   /// {@macro declarations_forms_body}
   const DeclarationsFormsBody({super.key});
 
+  @override
+  State<DeclarationsFormsBody> createState() => _DeclarationsFormsBodyState();
+}
+
+class _DeclarationsFormsBodyState extends State<DeclarationsFormsBody> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DeclarationsFormsCubit, DeclarationsFormsState>(
       builder: (context, state) {
         final cubit = context.read<DeclarationsFormsCubit>();
-        final form = cubit.getFormByType();
-        final logbookForm = cubit.form;
-        // final values = logbookForm.toJson();
 
-        return Column(
-          children: [
-            // ..._buildFormCards(state.forms, values),
-            // for(final form in state.forms)
+        if (state.forms.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-            // DeclarationFormCard(question: ),
-
-            _buildCard(
-              logbookForm.keys.userTravelingAlong,
-              logbookForm.usersTravellingAlong?.join(', '),
-              form,
-            ),
-          ],
+        return SingleChildScrollView(
+          padding: kPadding,
+          child: Column(
+            children: [
+              UserInfo(
+                user: cubit.user,
+                expectedDepartureTime: cubit.form.expectedDepartureTime,
+              ),
+              if (cubit.getFormByType() != null)
+                for (final formKey in cubit.getFormByType()!.formKeys)
+                  _buildCard(formKey),
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget _buildCard(String key, String? value, DeclarationForms form) {
-    String question = '';
+  Widget _buildCard(FormKeys formKey) {
+    final cubit = context.read<DeclarationsFormsCubit>();
+    // final form = cubit.getFormByType();
+    final logbookForm = cubit.form;
 
-    for (final formKey in form.formKeys) {
-      if (formKey.key == key) {
-        question = formKey.description;
-      }
+    String? answer = '';
+
+    final value = logbookForm.toJson()[formKey.key];
+
+    switch (formKey.dataType) {
+      case 'array':
+        answer = (value as List).join(', ');
+        if (answer.isEmpty) answer = 'No';
+        break;
+      case 'boolean':
+        answer = value ? 'Yes' : 'No';
+        break;
+      default:
+        answer = value;
+    }
+
+    if (formKey.key == 'signature') {
+      if (answer?.isEmpty ?? true) return Container();
+      return SignatureWidget(
+        signature: answer,
+      );
     }
 
     return DeclarationFormCard(
-      question: question,
-      value: value,
+      question: '${formKey.index}. ${formKey.description}',
+      value: answer,
     );
   }
 

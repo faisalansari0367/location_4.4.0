@@ -120,6 +120,8 @@ dependencies:
   open_file_safe: ^3.2.3
   flutter_cached_pdfview: ^0.4.1
   location:
+    4.4.0
+    # path: packages/flutterlocation/packages/location
     # git: https://github.com/faisalansari0367/flutterlocation/tree/master/packages/location
   # very_good_analysis: ^2.4.0
   # lint: ^1.9.0
@@ -173,7 +175,7 @@ dev_dependencies:
 #   ios: true
 #   image_path: "assets/images/play_store_512.png"
 #   adaptive_icon_background: "#3E4893"
-  # adaptive_icon_background: "assets/icons/background.png"
+# adaptive_icon_background: "assets/icons/background.png"
 
 flutter_gen:
   output: lib/gen/

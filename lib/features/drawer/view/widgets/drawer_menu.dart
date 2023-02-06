@@ -113,7 +113,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
         initialData: true,
         builder: (context, snapshot) {
           final api = context.read<Api>();
-          final localApi = context.read<LocalApi>();
+          // final localApi = context.read<LocalApi>();
           // final userRole = localApi.getUserData();
           return StreamBuilder<User?>(
             stream: (snapshot.data ?? false) ? api.userStream : api.userStream,
@@ -122,7 +122,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
               final role = hasName ? snapshot.data?.role : '';
               return Text(
                 role ?? '',
-                style: context.textTheme.bodyText2?.copyWith(
+                style: context.textTheme.bodyMedium?.copyWith(
                   color: context.theme.primaryColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,

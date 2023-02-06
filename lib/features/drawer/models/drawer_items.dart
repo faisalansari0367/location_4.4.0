@@ -5,6 +5,7 @@ import 'package:bioplus/features/drawer/cubit/my_drawer_controller.dart';
 import 'package:bioplus/features/drawer/models/drawer_item.dart';
 import 'package:bioplus/ui/admin/view/admin_page.dart';
 import 'package:bioplus/ui/settings/view/settings_page.dart';
+import 'package:bioplus/ui/user_profile/user_profile.dart';
 import 'package:flutter/material.dart';
 
 class DrawerItems {
@@ -31,6 +32,12 @@ class DrawerItems {
           text: Strings.admin,
           iconData: Icons.admin_panel_settings_outlined,
           page: AdminPage(),
+        ),
+      if (isAdmin)
+        const DrawerItem(
+          text: Strings.profile,
+          iconData: Icons.account_box_outlined,
+          page: UserProfilePage(),
         ),
       const DrawerItem(
         text: Strings.settings,

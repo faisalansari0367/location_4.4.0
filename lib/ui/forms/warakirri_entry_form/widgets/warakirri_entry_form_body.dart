@@ -1,4 +1,5 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/forms/models/global_form_model.dart';
 import 'package:bioplus/ui/forms/warakirri_entry_form/provider/provider.dart';
 import 'package:bioplus/ui/forms/widget/add_list.dart';
@@ -59,7 +60,9 @@ class WarakirriEntryFormBody extends StatelessWidget {
                 _buildZoneName(state),
                 _buildTextField('Full Name', state.userData?.fullName),
                 _buildTextField(
-                    'Phone Number', '${state.userData?.countryCode ?? ''}${state.userData?.phoneNumber ?? ''}',),
+                  'Phone Number',
+                  '${state.userData?.countryCode ?? ''}${state.userData?.phoneNumber ?? ''}',
+                ),
                 _buildTextField('Company Name', state.userData?.company),
                 _additionalInfo(context, state),
                 _buildSignOff(context),
@@ -80,16 +83,18 @@ class WarakirriEntryFormBody extends StatelessWidget {
   Text _buildHeading(BuildContext context) {
     return Text(
       'All visitors and contract workers on farm must complete this check in form.',
-      style: context.textTheme.headline6?.copyWith(
+      style: context.textTheme.titleLarge?.copyWith(
         fontWeight: FontWeight.bold,
         color: Colors.red,
       ),
     );
   }
 
-  GestureDetector _dateField(WarakirriEntryFormNotifier state, BuildContext context) {
+  GestureDetector _dateField(
+      WarakirriEntryFormNotifier state, BuildContext context) {
     return GestureDetector(
-      onTap: () => state.pickDateTime(state.model.expectedDepartureDate, context),
+      onTap: () =>
+          state.pickDateTime(state.model.expectedDepartureDate, context),
       child: AbsorbPointer(
         child: MyDateField(
           label: state.model.expectedDepartureDate.question,
@@ -107,7 +112,8 @@ class WarakirriEntryFormBody extends StatelessWidget {
     return MyTextField(
       enabled: false,
       hintText: state.model.warakirriFarm.question,
-      initialValue: state.model.warakirriFarm.value ?? state.warakirriFarms.last,
+      initialValue:
+          state.model.warakirriFarm.value ?? state.warakirriFarms.last,
     );
   }
 
@@ -116,12 +122,14 @@ class WarakirriEntryFormBody extends StatelessWidget {
       hintText: label,
       // initialValue: '${state.userData?.countryCode ?? ''} ${state.userData?.phoneNumber ?? ''}',
       initialValue: value,
+      validator: Validator.none,
       // controller: TextEditingController(text: value),
       enabled: false,
     );
   }
 
-  TextFormField _additionalInfo(BuildContext context, WarakirriEntryFormNotifier state) {
+  TextFormField _additionalInfo(
+      BuildContext context, WarakirriEntryFormNotifier state) {
     return TextFormField(
       minLines: 3,
       maxLines: 5,
@@ -135,7 +143,7 @@ class WarakirriEntryFormBody extends StatelessWidget {
   Text _buildSignOff(BuildContext context) {
     return Text(
       'Sign Off:',
-      style: context.textTheme.headline6?.copyWith(
+      style: context.textTheme.titleLarge?.copyWith(
         fontWeight: FontWeight.bold,
         decoration: TextDecoration.underline,
       ),
@@ -193,7 +201,8 @@ class WarakirriEntryFormBody extends StatelessWidget {
     );
   }
 
-  Widget _card(WarakirriEntryFormNotifier state, QuestionData data, {ValueChanged<bool>? onChanged}) {
+  Widget _card(WarakirriEntryFormNotifier state, QuestionData data,
+      {ValueChanged<bool>? onChanged}) {
     return Container(
       child: QuestionCard(
         question: data.question,

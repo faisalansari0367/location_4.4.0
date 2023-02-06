@@ -98,11 +98,11 @@ class TrackPolygons {
         if (currentPolygon?.id != null) {
           final entry = await api.getLogRecord(currentPolygon!.id!);
           log('logRecord id is : ${entry?.id}');
-          log('form is empty : ${entry?.form?.isEmpty}');
-          log('should show pop up : ${entry?.form?.isEmpty}');
+          log('form is empty : ${entry?.hasForm}');
+          // log('should show pop up : ${entry?.hasForm}');
           if (entry != null) {
             // final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
-            if (entry.form?.isNotEmpty ?? false) {
+            if (entry.hasForm ?? false) {
               final difference =
                   DateTime.now().difference(entry.enterDate!).inDays;
               if (difference >= 1) {
@@ -159,7 +159,9 @@ class TrackPolygons {
   }
 
   Future<void> _userIsInside(
-      Set<PolygonModel> polygons, LatLng currentPosition) async {
+    Set<PolygonModel> polygons,
+    LatLng currentPosition,
+  ) async {
     final userIsInside = polygons.where(
       (element) => MapsToolkitService.isInsidePolygon(
         latLng: currentPosition,

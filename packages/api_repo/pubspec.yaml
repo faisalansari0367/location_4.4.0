@@ -23,10 +23,10 @@ dependencies:
   cvd_forms:
     path: ../cvd_forms
 
-  
   path_provider: ^2.0.11
   json_serializable: ^6.6.0
   json_annotation: ^4.8.0
+  equatable: ^2.0.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

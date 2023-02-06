@@ -1,12 +1,17 @@
-# include: package:lint/recommended.yaml
-# include: package:lint/casual.yaml
 include: package:lint/strict.yaml
+# include: package:lint/casual.yaml
+# include: package:lint/recommended.yaml
 # language:
 #   strict-casts: false
 #   strict-inference: false
 #   strict-raw-types: false
 #   implicit-casts: true
 # await_only_futures: true
+
+linter:
+  rules:
+    avoid_classes_with_only_static_members: false
+
 analyzer:
   strong-mode:
     implicit-casts: true
@@ -21,6 +26,6 @@ rules:
   - package_api_docs
   - prefer_final_in_for_each
   - prefer_single_quotes
-
+    # avoid_classes_with_only_static_members: false
 # avoid leading underscro to false
-# 
+#

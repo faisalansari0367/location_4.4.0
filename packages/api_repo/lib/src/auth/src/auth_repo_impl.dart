@@ -54,7 +54,8 @@ class AuthRepoImpl implements AuthRepo {
 
       // open the user's hive box
       final storageBox = StorageService(box: await Hive.openBox('storage'));
-      final userStorage = StorageService(box: await Hive.openBox(model.data!.user!.email!));
+      final userStorage =
+          StorageService(box: await Hive.openBox(model.data!.user!.email!));
 
       await Future.wait(
         [
@@ -87,7 +88,8 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<ApiResult<User>> verifyOtp({required OtpModel otpModel}) async {
     try {
-      final result = await client.post(Endpoints.verifyOtp, data: otpModel.toMap());
+      final result =
+          await client.post(Endpoints.verifyOtp, data: otpModel.toMap());
       final model = UserResponse.fromJson((result.data));
       storage.setToken(model.token!);
       storage.setUser(model.data!.user!.toJson());
@@ -98,9 +100,11 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true}) async {
+  Future<ApiResult<User>> updateMe(
+      {required User user, bool isUpdate = true}) async {
     try {
-      final result = await client.patch(Endpoints.updateMe, data: isUpdate ? user.updateUser() : {});
+      final result = await client.patch(Endpoints.updateMe,
+          data: isUpdate ? user.updateUser() : {});
       final model = User.fromJson(result.data['data']);
       final signature = storage.getUserData()?.signature;
       UserData userData = UserData.fromJson(result.data['data']);
@@ -118,9 +122,11 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<ResponseModel>> forgotPassword({required String email}) async {
+  Future<ApiResult<ResponseModel>> forgotPassword(
+      {required String email}) async {
     try {
-      final result = await client.post(Endpoints.forgotPassword, data: {"email": email.toLowerCase().trim()});
+      final result = await client.post(Endpoints.forgotPassword,
+          data: {"email": email.toLowerCase().trim()});
       final model = ResponseModel.fromMap((result.data));
       return ApiResult.success(data: model);
     } catch (e) {
@@ -129,9 +135,11 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<ResponseModel>> resetPassword({required OtpModel model}) async {
+  Future<ApiResult<ResponseModel>> resetPassword(
+      {required OtpModel model}) async {
     try {
-      final result = await client.post(Endpoints.resetPassword, data: model.toMap());
+      final result =
+          await client.post(Endpoints.resetPassword, data: model.toMap());
       final data = ResponseModel.fromMap(result.data);
       return ApiResult.success(data: data);
     } catch (e) {
@@ -148,10 +156,12 @@ class AuthRepoImpl implements AuthRepo {
         options: Options(headers: {"Content-Type": "application/json"}),
         data: json,
       );
-      final model = User.fromJson((result.data));
-      final _userData = UserData.fromJson(result.data['data']);
-      await storage.setUserData(_userData);
-      await storage.setUser(_userData.toJson());
+      final model = User.fromJson(result.data);
+      final oldUserData = storage.getUserData();
+      final userData0 = UserData.fromJson(result.data['data']);
+      userData0.signature ??= oldUserData?.signature;
+      await storage.setUserData(userData0);
+      await storage.setUser(userData0.toJson());
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -159,7 +169,8 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs}) async {
+  Future<ApiResult<User>> updateCvdForms(
+      {required List<String> base64pdfs}) async {
     try {
       // final json = userData.updateAllowedRoles();
       final result = await client.patch(
@@ -168,8 +179,8 @@ class AuthRepoImpl implements AuthRepo {
         data: {'cvdForms': base64pdfs},
       );
       final model = User.fromJson((result.data));
-      final _userData = UserData.fromJson(result.data['data']);
-      await storage.setUserData(_userData);
+      final userData = UserData.fromJson(result.data['data']);
+      await storage.setUserData(userData);
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -179,10 +190,11 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future<ApiResult<User>> updateStatus({required UserData userData}) async {
     try {
-      final result = await client.patch('${Endpoints.users}/${userData.id}', data: userData.updateStatus());
+      final result = await client.patch('${Endpoints.users}/${userData.id}',
+          data: userData.updateStatus());
       final model = User.fromJson((result.data));
-      final _userData = UserData.fromJson(result.data['data']);
-      await storage.setUserData(_userData);
+      final userData0 = UserData.fromJson(result.data['data']);
+      await storage.setUserData(userData0);
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
@@ -217,7 +229,8 @@ class AuthRepoImpl implements AuthRepo {
   bool get isLoggedIn => storage.isLoggedIn;
 
   @override
-  Future<void> setUserData(UserData userData) async => await storage.setUserData(userData);
+  Future<void> setUserData(UserData userData) async =>
+      await storage.setUserData(userData);
 
   @override
   bool setIsInit(bool isInit) {

@@ -5,15 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserInfo extends StatelessWidget {
-  final UserData user;
+  final UserData? user;
   final DateTime? expectedDepartureTime;
-  const UserInfo({super.key, required this.user, required this.expectedDepartureTime});
+  const UserInfo({
+    super.key,
+    required this.user,
+    required this.expectedDepartureTime,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // padding: kPadding,
-      margin: kPadding,
+      decoration: MyDecoration.decoration(
+        shadow: false,
+      ).copyWith(
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      padding: kPadding,
+      // margin: kPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -24,14 +33,14 @@ class UserInfo extends StatelessWidget {
           Gap(20.h),
           _buildRow(
             'Full Name',
-            user.fullName,
+            user?.fullName ?? '',
             'Company Name',
-            user.company ?? '',
+            user?.company ?? '',
           ),
           Gap(20.h),
           _buildRow(
             'Phone Number',
-            '${user.countryCode} ${user.phoneNumber}',
+            '${user?.countryCode} ${user?.phoneNumber}',
             'Expected Departure Time',
             MyDecoration.formatDateWithTime(expectedDepartureTime),
           )

@@ -3,7 +3,6 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/forms/widget/form_card.dart';
 import 'package:bioplus/ui/role_details/cubit/role_details_cubit.dart';
-import 'package:bioplus/ui/role_details/models/field_types.dart';
 import 'package:bioplus/ui/role_details/widgets/property_address.dart';
 import 'package:bioplus/ui/role_details/widgets/species.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
@@ -52,7 +51,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                 children: [
                   Text(
                     Strings.yourDetails,
-                    style: context.textTheme.headline5,
+                    style: context.textTheme.headlineSmall,
                   ),
                   Gap(3.height),
                   MyCrossFade(
@@ -112,8 +111,6 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     if (hasSignature) {
       _fields.remove('Signature');
       _fields.add('Signature');
-
-
     }
     return _fields;
   }
@@ -212,7 +209,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         return MyTextField(
           inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,
-          hintText: FieldType.pic.name.toUpperCase(),
+          hintText: name.toUpperCase(),
           validator: Validator.pic,
           maxLength: 8,
         );

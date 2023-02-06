@@ -10,7 +10,8 @@ class MyDecoration {
   static final inputBorderRadius = BorderRadius.circular(inputRadius);
   static const inputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(inputRadius)),
-    borderSide: BorderSide(color: Color.fromARGB(158, 152, 152, 152)),
+    borderSide: BorderSide(color: Color.fromARGB(158, 212, 212, 212)),
+    // borderSide: BorderSide(color: Color(0xfff3f5fc)),
   );
 
   static const dialogShape = OutlineInputBorder(
@@ -18,7 +19,11 @@ class MyDecoration {
     borderSide: BorderSide(color: Colors.transparent),
   );
 
-  static BoxDecoration decoration({Color color = Colors.white, bool isCircle = false, bool shadow = true}) {
+  static BoxDecoration decoration({
+    Color color = Colors.white,
+    bool isCircle = false,
+    bool shadow = true,
+  }) {
     return BoxDecoration(
       color: color,
       shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
@@ -41,10 +46,10 @@ class MyDecoration {
       isDense: true,
       fillColor: const Color.fromARGB(0, 250, 250, 250),
       enabledBorder: MyDecoration.inputBorder.copyWith(
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       focusedBorder: MyDecoration.inputBorder.copyWith(
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(12.r),
         borderSide: BorderSide(
           color: context.theme.primaryColor,
           width: 2.w,
@@ -52,7 +57,7 @@ class MyDecoration {
       ),
       disabledBorder: MyDecoration.inputBorder,
       border: MyDecoration.inputBorder.copyWith(
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(12.r),
       ),
     );
   }
@@ -84,10 +89,58 @@ class MyDecoration {
     );
   }
 
-  static String formatDate(DateTime? date) => date == null ? '' : DateFormat('dd-MM-yyyy').format(date);
-  static String formatTime(DateTime? date) => date == null ? '' : DateFormat('hh:mm:ss a').format(date);
-  static String formatDateInYMMMED(DateTime? date) => date == null ? '' : DateFormat.yMMMEd().format(date);
+  static String formatDate(DateTime? date) =>
+      date == null ? '' : DateFormat('dd-MM-yyyy').format(date);
+  static String formatTime(DateTime? date) =>
+      date == null ? '' : DateFormat('hh:mm:ss a').format(date);
+  static String formatDateInYMMMED(DateTime? date) =>
+      date == null ? '' : DateFormat.yMMMEd().format(date);
   static String formatDateWithTime(DateTime? dateTime) {
     return '${MyDecoration.formatDate(dateTime)}  ${MyDecoration.formatTime(dateTime)}';
+  }
+
+  static InputDecoration stadiumInputDecoration(BuildContext context) {
+    final theme = context.theme;
+    return InputDecoration(
+      // labelText: hintText,
+      // contentPadding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+      contentPadding: kInputPadding,
+      // isDense: isDense,
+
+      // prefixIcon: prefixIcon,
+      // suffixIcon: suffixIcon,
+      labelStyle: const TextStyle(
+        // color: theme.iconTheme.color,
+        fontWeight: FontWeight.bold,
+        // color
+      ),
+
+      // labelText: hintText,
+      // fillColor: fillColor,
+      // hintText: hintText,
+      hintStyle: TextStyle(
+        color: theme.iconTheme.color,
+        // fontWeight: FontWeight.bold,
+      ),
+      filled: false,
+      // focusColor: theme.primaryColor,
+      enabledBorder: MyDecoration.inputBorder,
+      focusedBorder: MyDecoration.inputBorder.copyWith(
+        borderSide: BorderSide(
+          width: 2.w,
+          color: theme.primaryColor,
+        ),
+      ),
+      disabledBorder: MyDecoration.inputBorder.copyWith(
+        borderSide: BorderSide(
+          width: 2.w,
+          color: Colors.grey.shade200,
+        ),
+      ),
+      border: MyDecoration.inputBorder,
+      // enabled: false,
+
+      // contentPadding: EdgeInsets.only(left: .padding),
+    );
   }
 }

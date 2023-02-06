@@ -184,9 +184,10 @@ class _LogbookViewState extends State<LogbookView> {
 
   DataCell _buildFormButton(LogbookEntry item) {
     return DataCell(
-      (item.form != null)
+      (item.hasForm)
           ? _textButton(
               'View',
+              // onPressed: () => Get.to(() => LogbookDetails(item: item)),
               onPressed: () => Get.to(() => LogbookDetails(item: item)),
             )
           : _textButton(

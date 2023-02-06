@@ -20,6 +20,8 @@ class DeclarationsFormsCubit extends HydratedCubit<DeclarationsFormsState> {
     getForms();
   }
 
+  UserData? get user => api.getUserData();
+
   Future<void> getForms() async {
     final result = await api.getDeclarationForms();
     result.when(
@@ -30,17 +32,12 @@ class DeclarationsFormsCubit extends HydratedCubit<DeclarationsFormsState> {
 
   @override
   DeclarationsFormsState? fromJson(Map<String, dynamic> json) {
-    return null;
-
-    // return null;
+    return DeclarationsFormsState.fromJson(json);
   }
 
   @override
   Map<String, dynamic>? toJson(DeclarationsFormsState state) {
-    return null;
-
-    // TODO: implement toJson
-    // throw UnimplementedError();
+    return state.toJson();
   }
 
   void success(List<DeclarationForms> data) {
@@ -51,7 +48,8 @@ class DeclarationsFormsCubit extends HydratedCubit<DeclarationsFormsState> {
     DialogService.failure(error: error);
   }
 
-  DeclarationForms getFormByType() {
+  DeclarationForms? getFormByType() {
+    if(state.forms.isEmpty) return null;
     return state.forms.firstWhere((element) => element.type == form.type);
   }
 }

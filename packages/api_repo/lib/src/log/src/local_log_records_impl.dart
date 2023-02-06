@@ -153,11 +153,11 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
 
       if (element.enterDate != null &&
           element.exitDate != null &&
-          (element.form?.isNotEmpty ?? false)) {
+          (element.hasForm ?? false)) {
         return entryDifference.inHours <= 24;
       }
 
-      if (element.form?.isEmpty ?? true) {
+      if (!(element.hasForm) ?? true) {
         return entryDifference.inHours <= 24;
       }
       if (element.exitDate == null) {
@@ -221,7 +221,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
 
         if (entryExitDifference > 10) {
           // final entryExitDifference =
-          if (hasEntry.form?.isNotEmpty ?? false) {
+          if (!(hasEntry.hasForm) ?? false) {
             final isSameDay = hasEntry.enterDate!.day == now.day;
             if (isSameDay) {
               return await createLogRecord(geofenceId, form: hasEntry.form);
@@ -310,8 +310,11 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
 
   @override
   Future<ApiResult<LogbookEntry>> udpateForm(
-      String geofenceId, Map<String, dynamic> form,
-      {int? logId}) async {
+    String geofenceId,
+    // DeclarationFormType formType,
+    Map<String, dynamic> form, {
+    int? logId,
+  }) async {
     try {
       if (logId != null) {
         return await _patchForm(logId, form);
@@ -321,6 +324,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
           return const ApiResult.failure(
               error: NetworkExceptions.defaultError('no log record found'));
         }
+
         return await _patchForm(logRecord.id!, form);
       }
     } catch (e) {

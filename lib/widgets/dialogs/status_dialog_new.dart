@@ -24,13 +24,20 @@ class StatusDialog extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(lottieAsset, height: 20.height),
+          AspectRatio(
+            aspectRatio: 2.1,
+            child: Lottie.asset(
+              lottieAsset,
+              addRepaintBoundary: true,
+              fit: BoxFit.contain,
+            ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               message,
               textAlign: TextAlign.center,
-              style: context.textTheme.headline6,
+              style: context.textTheme.titleLarge,
             ),
           ),
           Gap(2.height),

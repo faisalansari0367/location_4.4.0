@@ -28,6 +28,7 @@ class MyTextField extends StatelessWidget {
   final AutovalidateMode autovalidateMode;
   final int? maxLines, minLine;
   final InputDecoration? decoration;
+  final TextStyle? style;
 
   final TextCapitalization textCapitalization;
 
@@ -61,6 +62,7 @@ class MyTextField extends StatelessWidget {
     this.minLine,
     this.filled = false,
     this.decoration,
+    this.style,
   });
 
   @override
@@ -84,11 +86,12 @@ class MyTextField extends StatelessWidget {
       validator: validator ?? Validator.text,
       textInputAction: textInputAction,
       buildCounter: _buildCounter,
-      style: const TextStyle(
-        // color: theme.iconTheme.color,
-        fontWeight: FontWeight.bold,
-        // color
-      ),
+      style: style ??
+          const TextStyle(
+            // color: theme.iconTheme.color,
+            fontWeight: FontWeight.bold,
+            // color
+          ),
       onTap: onTap,
       autofocus: autoFocus,
       readOnly: readOnly,
@@ -108,7 +111,7 @@ class MyTextField extends StatelessWidget {
             ),
 
             // labelText: hintText,
-            fillColor: fillColor,
+            fillColor: fillColor ,
             // hintText: hintText,
             hintStyle: hintStyle ??
                 TextStyle(
@@ -138,8 +141,12 @@ class MyTextField extends StatelessWidget {
     );
   }
 
-  Widget? _buildCounter(BuildContext context,
-      {required int currentLength, required bool isFocused, required int? maxLength,}) {
+  Widget? _buildCounter(
+    BuildContext context, {
+    required int currentLength,
+    required bool isFocused,
+    required int? maxLength,
+  }) {
     return const SizedBox.shrink();
   }
 }

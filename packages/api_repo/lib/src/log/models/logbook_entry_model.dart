@@ -3,7 +3,6 @@
 import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:api_repo/src/log/models/enum/declaration_form_type.dart';
 
 class LogbookResponseModel {
   String? status;
@@ -116,6 +115,9 @@ class LogbookEntry {
     this.geofence,
   });
 
+
+  bool get hasForm => form != null;
+
   LogbookEntry.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     enterDate = _getDateTime(json['enterDate']);
@@ -124,7 +126,8 @@ class LogbookEntry {
 
     form = json['declarationForm'] == null
         ? null
-        : LogbookFormModel.fromJson(json['declarationForm']);
+        : LogbookFormModel.fromJson(
+            Map<String, dynamic>.from(json['declarationForm']));
     createdAt = _getDateTime(json['createdAt']);
     updatedAt = _getDateTime(json['updatedAt']);
     user = json['user'] != null
@@ -180,7 +183,7 @@ class LogbookEntry {
 
 class LogbookFormModel {
   final DeclarationFormType type;
-  final bool? isPeopleTravelingWith;
+  // final bool? isPeopleTravelingWith;
   final List<String>? usersTravellingAlong;
   final bool? isQfeverVaccinated;
   final bool? isFluSymptoms;
@@ -204,7 +207,7 @@ class LogbookFormModel {
 
   LogbookFormModel({
     this.type = DeclarationFormType.global,
-    required this.isPeopleTravelingWith,
+    // required this.isPeopleTravelingWith,
     this.usersTravellingAlong = const [],
     required this.isQfeverVaccinated,
     required this.isFluSymptoms,
@@ -225,7 +228,7 @@ class LogbookFormModel {
   Map<String, dynamic> toJson() {
     final map = {
       'type': type.name,
-      'isPeopleTravelingWith': isPeopleTravelingWith,
+      // 'isPeopleTravelingWith': isPeopleTravelingWith,
       'userTravelingAlong': usersTravellingAlong,
       'isQfeverVaccinated': isQfeverVaccinated,
       'isFluSymptoms': isFluSymptoms,
@@ -249,7 +252,8 @@ class LogbookFormModel {
 
   // fromJson
   LogbookFormModel.fromJson(Map<String, dynamic> json)
-      : isPeopleTravelingWith = json['isPeopleTravelingWith'],
+      : 
+      // isPeopleTravelingWith = json['isPeopleTravelingWith'],
         type = DeclarationFormType.values.firstWhere(
             (e) => e.name == json['type'],
             orElse: () => DeclarationFormType.global),
@@ -282,7 +286,8 @@ class LogbookFormModel {
       ? _warakirriModel.question(key)
       : _model.question(key);
 
-  bool get isEmpty => isPeopleTravelingWith == null;
+  // bool get isEmpty => isPeopleTravelingWith == null;
+  // bool get isEmpty => type == null;
 
   String? getValue(bool? value) {
     return value == null
@@ -298,7 +303,7 @@ class LogbookFormModel {
         : usersTravellingAlong!.join(', ');
   }
 
-  bool get isNotEmpty => !isEmpty;
+  // bool get isNotEmpty => !isEmpty;
 }
 
 // class LogbookFormField {

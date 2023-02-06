@@ -1,6 +1,6 @@
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/helpers/validator.dart';
-import 'package:bioplus/ui/role_details/models/field_types.dart';
+import 'package:bioplus/models/enum/field_type.dart';
 import 'package:bioplus/ui/role_details/widgets/property_address.dart';
 import 'package:bioplus/ui/role_details/widgets/species.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
@@ -180,7 +180,8 @@ class FieldData {
         );
 
       case FieldType.company:
-        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        if (controller.text.isNotEmpty)
+          controller.text = controller.text.toUpperCase();
         return MyTextField(
           // isOriginCountry: fieldType.isCountryOfOrigin,
           hintText: name,
@@ -191,7 +192,8 @@ class FieldData {
           // onCountryChanged: (value) => controller.text = value,
         );
       case FieldType.city:
-        if (controller.text.isNotEmpty) controller.text = controller.text.toUpperCase();
+        if (controller.text.isNotEmpty)
+          controller.text = controller.text.toUpperCase();
         return MyTextField(
           // isOriginCountry: fieldType.isCountryOfOrigin,
           hintText: name,
@@ -211,7 +213,8 @@ class FieldData {
         );
 
       default:
-        if (controller.text.isNotEmpty) controller.text = controller.text.capitalize!;
+        if (controller.text.isNotEmpty)
+          controller.text = controller.text.capitalize!;
         return MyTextField(
           hintText: name.capitalize,
           controller: controller,

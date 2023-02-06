@@ -1,11 +1,9 @@
-import 'package:bioplus/constants/strings.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/role_details/widgets/states.dart';
 import 'package:bioplus/widgets/bottom_sheet/bottom_sheet_service.dart';
 import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
-import 'package:bioplus/widgets/text_fields/my_text_field.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class StateDropdownField extends StatefulWidget {
   final ValueChanged<String>? onChanged;

@@ -7,3 +7,4 @@ export 'role_details_response.dart';
 export 'roles.dart';
 export 'user_roles.dart';
 export './form_model/index.dart';
+export 'pic/pic_model.dart';

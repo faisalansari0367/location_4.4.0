@@ -76,15 +76,22 @@ class LogBookCubit extends BaseModel {
             ('${MyDecoration.formatTime(item.exitDate)}\n${MyDecoration.formatDate(item.exitDate)}'),
             (item.geofence?.name ?? ''),
             item.geofence?.pic ?? item.user?.ngr ?? '',
-            if (item.user?.postcode == null) '' else (item.user?.postcode).toString(),
-            if (item.form?.isNotEmpty ?? false) 'Registered'.toUpperCase() else 'Unregistered'.toUpperCase()
+            if (item.user?.postcode == null)
+              ''
+            else
+              (item.user?.postcode).toString(),
+            if (item.hasForm ?? false)
+              'Registered'.toUpperCase()
+            else
+              'Unregistered'.toUpperCase()
           ],
         )
         .toList();
     return rows;
   }
 
-  String timeAndDate(DateTime? dt) => '${MyDecoration.formatTime(dt)}\n${MyDecoration.formatDate(dt)}';
+  String timeAndDate(DateTime? dt) =>
+      '${MyDecoration.formatTime(dt)}\n${MyDecoration.formatDate(dt)}';
 
   Future<void> onRefresh() async {
     final page = state.entries.length / state.limit;
@@ -98,7 +105,8 @@ class LogBookCubit extends BaseModel {
     if (isGetting) return;
     isGetting = true;
 
-    final result = await apiService.getLogbookRecords(page: state.page, limit: state.limit);
+    final result = await apiService.getLogbookRecords(
+        page: state.page, limit: state.limit);
     result.when(
       success: (s) async {
         emit(

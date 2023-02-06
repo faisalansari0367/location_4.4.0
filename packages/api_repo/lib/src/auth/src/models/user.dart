@@ -1,17 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class User {
-  String? firstName;
-  String? lastName;
-  String? email;
-  String? phoneNumber;
-  int? id;
-  String? role;
-  String? createdAt;
-  String? updatedAt;
-  String? countryCode;
-  String? registerationToken;
 
-  User({
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user.g.dart';
+
+@JsonSerializable()
+class User extends Equatable {
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? phoneNumber;
+  final int? id;
+  final String? role;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? countryCode;
+  final String? registerationToken;
+
+  const User({
     this.firstName,
     this.lastName,
     this.email,
@@ -24,33 +31,9 @@ class User {
     this.registerationToken,
   });
 
-  User.fromJson(Map<String, dynamic> json) {
-    firstName = json[UserKeys.firstName];
-    lastName = json[UserKeys.lastName];
-    email = json[UserKeys.email].toString().trim();
-    phoneNumber = json[UserKeys.phoneNumber];
-    id = json['id'];
-    role = json[UserKeys.role];
-    createdAt = json[UserKeys.createdAt];
-    updatedAt = json['updatedAt'];
-    countryCode = json['countryCode'];
-    registerationToken = json['registrationToken'];
-  }
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data[UserKeys.firstName] = firstName;
-    data[UserKeys.lastName] = lastName;
-    data[UserKeys.email] = email;
-    data[UserKeys.phoneNumber] = phoneNumber;
-    data[UserKeys.id] = id;
-    data[UserKeys.role] = role;
-    data[UserKeys.createdAt] = createdAt;
-    data[UserKeys.updatedAt] = updatedAt;
-    data['countryCode'] = countryCode;
-    data['registrationToken'] = registerationToken;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   Map<String, dynamic> updateUser() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -67,6 +50,22 @@ class User {
   }
 
   String get fullName => '$firstName $lastName';
+
+  @override
+  List<Object?> get props {
+    return [
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      id,
+      role,
+      createdAt,
+      updatedAt,
+      countryCode,
+      registerationToken,
+    ];
+  }
 }
 
 class UserKeys {

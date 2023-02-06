@@ -1,20 +1,15 @@
 import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
-import 'package:bioplus/constants/constans.dart';
-import 'package:bioplus/constants/strings.dart';
-import 'package:bioplus/extensions/size_config.dart';
+import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/features/drawer/view/drawer_page.dart';
 import 'package:bioplus/ui/login/view/login_page.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/sign_up/view/sign_up_page.dart';
 import 'package:bioplus/widgets/logo/app_name_widget.dart';
-import 'package:bioplus/widgets/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import 'package:get/get.dart';
 import 'package:local_auth_repo/local_auth.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -76,10 +71,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = 13.width;
+    // final size = 13.width;
 
     return Scaffold(
-      backgroundColor: const Color(0XFF79C351),
+      backgroundColor:
+          ApiConstants.isDegugMode ? Colors.black87 : const Color(0XFF79C351),
       body: SingleChildScrollView(
         padding: kPadding,
         child: Column(

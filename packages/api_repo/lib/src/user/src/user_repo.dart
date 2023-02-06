@@ -1,5 +1,6 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:api_repo/src/user/src/models/pic/pic_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
 abstract class UserRepo {
@@ -22,6 +23,7 @@ abstract class UserRepo {
   Future<ApiResult> openPdf(String url);
   Future<ApiResult<String>> deleteUser();
   Future<ApiResult<String>> deleteUserById({required int userId});
+  Future<ApiResult<List<PicModel>>> getPics();
 }
 
 class UserRepoImpl extends UserRepo {
@@ -232,6 +234,20 @@ class UserRepoImpl extends UserRepo {
       final result = await client.delete('${Endpoints.deleteUserById}/$userId');
       final model = result.data['data'];
       return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<List<PicModel>>> getPics() async {
+    try {
+      final result = await client.get(Endpoints.getAllPics);
+      final model = result.data['data'];
+      final list = model
+          .map<PicModel>((e) => PicModel.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+      return ApiResult.success(data: list);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
