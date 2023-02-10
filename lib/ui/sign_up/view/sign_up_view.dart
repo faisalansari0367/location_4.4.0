@@ -107,7 +107,7 @@ class _SignUpViewState extends State<SignUpView> {
                                 PdfViewer(
                                   title: Strings.termsAndConditions,
                                   path:
-                                      'assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf',
+                                      'assets/terms_and_conditions/Terms  Conditions EULA - BioPlus mobile application 20112022.pdf',
                                 ),
                               ),
                               style: context.textTheme.bodyText2?.copyWith(

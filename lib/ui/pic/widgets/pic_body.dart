@@ -1,6 +1,6 @@
 import 'package:bioplus/constants/index.dart';
+import 'package:bioplus/ui/add_pic/add_pic.dart';
 import 'package:bioplus/ui/pic/cubit/pic_cubit.dart';
-import 'package:bioplus/ui/pic/widgets/add_pic_form.dart';
 import 'package:bioplus/ui/pic/widgets/pic_card.dart';
 import 'package:bioplus/ui/pic/widgets/pic_details_view.dart';
 import 'package:bioplus/widgets/empty_screen.dart';
@@ -32,6 +32,23 @@ class PicBody extends StatelessWidget {
     }
 
     if (state is PicLoaded) {
+      if (state.pics.isEmpty) {
+        return Column(
+          children: [
+            const EmptyScreen(
+              message: 'No Records Found',
+            ),
+            const SizedBox(height: 10),
+            MyElevatedButton(
+              text: Strings.addPic,
+              width: 70.width,
+              height: 6.height,
+              onPressed: () async => Get.to(() => const AddPicPage()),
+            ),
+          ],
+        );
+      }
+
       return Padding(
         padding: kPadding,
         child: Column(
@@ -53,7 +70,7 @@ class PicBody extends StatelessWidget {
             Gap(10.h),
             MyElevatedButton(
               text: Strings.addPic,
-              onPressed: () async => Get.to(() => const AddPicForm()),
+              onPressed: () async => Get.to(() => const AddPicPage()),
             ),
             Gap(10.h),
           ],

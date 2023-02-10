@@ -12,15 +12,19 @@ class PicModel extends Equatable {
   final String state;
   final String street;
   final String town;
-  final String city;
+  final String? city;
+
+  @JsonKey(fromJson: parseInt)
   final int postcode;
-  final String countryOfResidency;
-  final String company;
-  final String owner;
+  final String? countryOfResidency;
+  final String? company;
+  final String? owner;
+
+  @JsonKey(name: 'species', defaultValue: <String>[])
   final List<String> species;
   final String ngr;
 
-  const PicModel( {
+  const PicModel({
     required this.id,
     required this.pic,
     required this.propertyName,
@@ -39,10 +43,14 @@ class PicModel extends Equatable {
   factory PicModel.fromJson(Map<String, dynamic> json) =>
       _$PicModelFromJson(json);
 
+  static int parseInt(dynamic value) {
+    return int.parse(value.toString());
+  }
+
   Map<String, dynamic> toJson() => _$PicModelToJson(this);
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       pic,
       propertyName,

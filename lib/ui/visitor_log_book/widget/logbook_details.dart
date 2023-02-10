@@ -144,7 +144,7 @@ class _LogbookDetailsState extends State<LogbookDetails> {
             'Full Name',
             widget.item.user?.fullName ?? '',
             'Company Name',
-            widget.item.user?.company ?? '',
+            widget.item.user?.companies ?? '',
           ),
           Gap(20.h),
           _buildRow(

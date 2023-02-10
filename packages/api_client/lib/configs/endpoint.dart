@@ -43,6 +43,7 @@ class Endpoints {
       createCvd = '$users/createCvd',
       cvd = '$users/cvd',
       getAllPics = '$users/getAllPic',
+      createPic = '$users/createPic',
       // updateUser = '$users/users',
       usersForms = '$users/forms',
       exportLogRecords = '$users/export-log-records';

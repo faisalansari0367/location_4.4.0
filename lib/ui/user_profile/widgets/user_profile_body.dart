@@ -1,6 +1,6 @@
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/theme/color_constants.dart';
 import 'package:bioplus/ui/PIC/view/pic_page.dart';
+import 'package:bioplus/ui/geofence_delegation/geofence_delegation.dart';
 import 'package:bioplus/ui/user_profile/provider/provider.dart';
 import 'package:bioplus/ui/user_profile/widgets/edit_profile.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
@@ -52,11 +52,18 @@ class UserProfileBody extends StatelessWidget {
             //   ),
             // ),
 
-            _accountTiles(state),
-            const Divider(
-              height: 0,
-              thickness: 2,
+            _accountTiles(state, context),
+            _buildTile(
+              Strings.logout,
+              icon: Icons.logout,
+              onTap: () {
+                state.logout(context);
+              },
             ),
+            // const Divider(
+            //   height: 0,
+            //   thickness: 2,
+            // ),
 
             _tiles(),
 
@@ -67,7 +74,7 @@ class UserProfileBody extends StatelessWidget {
     );
   }
 
-  Widget _accountTiles(UserProfileNotifier provider) {
+  Widget _accountTiles(UserProfileNotifier provider, BuildContext context) {
     return AutoSpacing(
       spacing: const Divider(
         height: 0,
@@ -77,8 +84,11 @@ class UserProfileBody extends StatelessWidget {
           Strings.editProfile,
           icon: Icons.edit,
           onTap: () => to(
-            EditProfile(
-              userData: provider.user,
+            ChangeNotifierProvider.value(
+              value: provider,
+              child: EditProfile(
+                userData: provider.user,
+              ),
             ),
           ),
         ),
@@ -89,57 +99,53 @@ class UserProfileBody extends StatelessWidget {
             to(const PicPage());
           },
         ),
-        _buildTile(
-          Strings.geofenceDelegation,
-          icon: Icons.location_on,
-          onTap: () {},
-        ),
+        if (provider.showGeofenceDelegation)
+          _buildTile(
+            Strings.geofenceDelegation,
+            icon: Icons.location_on,
+            onTap: () => to(const GeofenceDelegationPage()),
+          ),
         _buildTile(
           Strings.deleteYourAccount,
           icon: Icons.delete_forever_rounded,
-          onTap: () {},
+          onTap: () => provider.deleteAccount(context),
         ),
       ],
     );
   }
 
   Widget _tiles() {
-    return AutoSpacing(
-      spacing: const Divider(
+    return const AutoSpacing(
+      spacing: Divider(
         height: 0,
       ),
       children: [
-        _buildTile(
-          Strings.about,
-          icon: Icons.info,
-          onTap: () {},
-        ),
-        _buildTile(
-          Strings.termsAndConditions,
-          icon: Icons.policy,
-          onTap: () {},
-        ),
         // _buildTile(
-        //   Strings.geofenceDelegation,
-        //   icon: Icons.location_on,
+        //   Strings.about,
+        //   icon: Icons.info,
         //   onTap: () {},
         // ),
-        _buildTile(
-          Strings.privacyPolicy,
-          path: 'assets/icons/privacy_policy.png',
-          icon: Icons.privacy_tip,
-          onTap: () {},
-        ),
+        // _buildTile(
+        //   Strings.termsAndConditions,
+        //   icon: Icons.policy,
+        //   onTap: () {},
+        // ),
+        // // _buildTile(
+        // //   Strings.geofenceDelegation,
+        // //   icon: Icons.location_on,
+        // //   onTap: () {},
+        // // ),
+        // _buildTile(
+        //   Strings.privacyPolicy,
+        //   path: 'assets/icons/privacy_policy.png',
+        //   icon: Icons.privacy_tip,
+        //   onTap: () {},
+        // ),
         // _buildTile(
         //   Strings.deleteYourAccount,
         //   icon: Icons.delete_forever_rounded,
         //   onTap: () {},
         // ),
-        _buildTile(
-          Strings.logout,
-          icon: Icons.logout,
-          onTap: () {},
-        ),
       ],
     );
   }
@@ -247,13 +253,13 @@ class UserProfileBody extends StatelessWidget {
       return Image.asset(
         path,
         width: 25,
-        color: kPrimaryColor,
+        color: Colors.grey.shade800,
       );
     }
 
     return Icon(
       icon,
-      color: kPrimaryColor,
+      color: Colors.grey.shade800,
     );
   }
 

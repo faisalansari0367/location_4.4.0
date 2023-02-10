@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:provider/provider.dart';
 
+import '../../../constants/api_constants.dart';
+
 class DashboardNotifier extends BaseModel {
   DashboardNotifier(BuildContext context) : super(context) {
     _init(context);
@@ -17,6 +19,8 @@ class DashboardNotifier extends BaseModel {
 
   UserData? get userData => api.getUserData();
   bool get isVisitor => userData?.role == 'Visitor';
+
+  bool get isDevEnv => api.client.baseUrl == ApiConstants.localUrl;
 
   Future<void> _init(BuildContext context) async {
     if (api.isInit) return;

@@ -52,7 +52,7 @@ class UserData {
   String? questionnaire;
   String? location;
   String? region;
-  String? company;
+  List<String>? company;
   String? picVisiting;
   String? reason;
   String? worksafeQuestionsForm;
@@ -220,6 +220,9 @@ class UserData {
     if (date == null) return null;
     return DateTime.tryParse(date)?.toLocal();
   }
+
+
+  String get companies => company!.join(', ');
 
   static UserStatus getStatus(String? status) {
     final result = UserStatus.values.where(

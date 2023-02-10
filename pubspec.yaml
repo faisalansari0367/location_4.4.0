@@ -205,7 +205,7 @@ flutter:
     - assets/animations/mail_sent.json
     - assets/animations/error.json
     - assets/terms_and_conditions/
-    - assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf
+    - assets/terms_and_conditions/Terms  Conditions EULA - BioPlus mobile application 20112022.pdf
 
     - assets/animations/network_error.json
     - assets/images/

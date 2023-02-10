@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:api_repo/src/user/src/models/pic/pic_model.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -44,8 +43,8 @@ class ApiRepo implements Api {
     required Box box,
     // required ValueChanged<Box> onBoxChange,
   }) async {
-    final _userBox = await _getBox(box);
-    await _initRepos(baseUrl, _userBox);
+    final userBox = await _getBox(box);
+    await _initRepos(baseUrl, userBox);
   }
 
   Future<void> _initRepos(String baseUrl, Box box) async {
@@ -78,10 +77,10 @@ class ApiRepo implements Api {
   }
 
   Future<Box> _getBox(Box oldBox) async {
-    final _storage = StorageService(box: oldBox);
+    final storage = StorageService(box: oldBox);
     late Box finalBox = oldBox;
-    if (_storage.isLoggedIn) {
-      final userBox = await Hive.openBox(_storage.getUser()!.email!);
+    if (storage.isLoggedIn) {
+      final userBox = await Hive.openBox(storage.getUser()!.email!);
       log('userbox name is ${userBox.name}}');
       if (userBox.isNotEmpty) {
         finalBox = userBox;
@@ -542,5 +541,10 @@ class ApiRepo implements Api {
   @override
   Future<ApiResult<List<PicModel>>> getPics() {
     return _userRepo.getPics();
+  }
+
+  @override
+  Future<ApiResult<PicModel>> createPic({required AddPicParams params}) {
+    return _userRepo.createPic(params: params);
   }
 }

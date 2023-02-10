@@ -75,7 +75,7 @@ class DashboardBody extends StatelessWidget {
             ),
             if (!state.isVisitor)
               DashboardCard(
-                text: 'My DECs\nForms',
+                text: 'My Declaration\nForms',
                 image: 'assets/icons/eDEC forms.png',
                 onTap: () {
                   Get.to(() => const EdecFormsPage());
@@ -86,13 +86,13 @@ class DashboardBody extends StatelessWidget {
               image: 'assets/icons/Links.png',
               onTap: () => Get.to(() => const LinksPage()),
             ),
-            if (ApiConstants.isDegugMode)
+            if (state.isDevEnv)
               DashboardCard(
-                text: 'My eNVD',
+                text: 'My NVD',
                 image: 'assets/icons/eNVD.jpg',
                 size: 65.w,
                 onTap: () async {
-                  final client = GraphQlClient(userData: state.userData!);
+                  final client = GraphQlClient(userData: state.userData);
                   await client.redirect();
                 },
               ),

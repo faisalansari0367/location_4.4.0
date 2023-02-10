@@ -77,6 +77,11 @@ class PicDetailsView extends StatelessWidget {
                 ),
               ],
             ),
+            _column(
+              context,
+              'Address',
+              '${model.street}, ${model.town}, ${model.state}',
+            ),
           ],
         ),
       ),
@@ -90,7 +95,7 @@ class PicDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _column(BuildContext context, String title, String value) {
+  Widget _column(BuildContext context, String title, String? value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,7 +107,7 @@ class PicDetailsView extends StatelessWidget {
           ),
         ),
         Text(
-          value,
+          value ?? '',
           textAlign: TextAlign.end,
           style: context.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,

@@ -11,7 +11,16 @@ abstract class _Keys {
   static const logRecords = 'logRecords';
 }
 
-class LogRecordsLocalService {
+
+abstract class LogRecordsLocalStorage {
+  Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(
+      LogbookResponseModel logbookResponseModel);
+  Future<ApiResult<LogbookResponseModel>> getLogbookRecords();
+  List<LogbookEntry> get logRecords;
+  Stream<List<LogbookEntry>> get logbookRecordsStream;
+}
+
+class LogRecordsLocalService extends LogRecordsLocalStorage {
   LogRecordsLocalService({required this.box}) {
     offlineLogRecords = OfflineLogRecordsImpl(box: box);
     getLogbookRecords();
@@ -29,6 +38,7 @@ class LogRecordsLocalService {
 
   final _controller = BehaviorSubject<List<LogbookEntry>>.seeded([]);
 
+  @override
   Future<ApiResult<LogbookResponseModel>> getLogbookRecords() async {
 
     final data = box.get(_Keys.logRecords);
@@ -40,6 +50,7 @@ class LogRecordsLocalService {
     return ApiResult.success(data: responseModel);
   }
 
+  @override
   Future<ApiResult<LogbookResponseModel>> saveLogbookRecords(
       LogbookResponseModel logbookResponseModel) async {
     try {
@@ -58,6 +69,9 @@ class LogRecordsLocalService {
     return Map<String, dynamic>.from(data);
   }
 
+  @override
   List<LogbookEntry> get logRecords => _controller.value;
+
+  @override
   Stream<List<LogbookEntry>> get logbookRecordsStream => _controller.stream;
 }

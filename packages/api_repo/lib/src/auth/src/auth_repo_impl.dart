@@ -64,11 +64,6 @@ class AuthRepoImpl implements AuthRepo {
           storageBox.setUser(model.data!.user!.toJson()),
           storageBox.setIsLoggedIn(true),
           storageBox.setSignInData(data.toMap()),
-        ],
-      );
-
-      await Future.wait(
-        [
           userStorage.setUserData(userData),
           userStorage.setToken(model.token!),
           userStorage.setUser(model.data!.user!.toJson()),
@@ -109,12 +104,10 @@ class AuthRepoImpl implements AuthRepo {
       final signature = storage.getUserData()?.signature;
       UserData userData = UserData.fromJson(result.data['data']);
       userData.signature ??= signature;
-      await Future.wait(
-        [
-          storage.setUserData(userData),
-          storage.setUser(model.toJson()),
-        ],
-      );
+      await Future.wait([
+        storage.setUserData(userData),
+        storage.setUser(model.toJson()),
+      ]);
       return ApiResult.success(data: model);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));

@@ -533,4 +533,10 @@ class LocalApi extends Api {
     // TODO: implement getPics
     throw UnimplementedError();
   }
+  
+  @override
+  Future<ApiResult<PicModel>> createPic({required AddPicParams params}) {
+    // TODO: implement createPic
+    throw UnimplementedError();
+  }
 }

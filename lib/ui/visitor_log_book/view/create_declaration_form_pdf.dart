@@ -12,8 +12,10 @@ import 'package:pdf/widgets.dart' as pw;
 class DeclarationFormPrinter {
   final LogbookEntry entry;
   final FormsStorageService formsStorageService;
-  const DeclarationFormPrinter(
-      {required this.entry, required this.formsStorageService,});
+  const DeclarationFormPrinter({
+    required this.entry,
+    required this.formsStorageService,
+  });
 
   Future<void> createPdf() async {
     final pdf = pw.Document();
@@ -56,11 +58,17 @@ class DeclarationFormPrinter {
         _card(_warakirriKeys.isPeopleTravelingWith, form.getVisitorsNames()),
         _card(_warakirriKeys.isFluSymptoms, form.getValue(form.isFluSymptoms)),
         _card(
-            _warakirriKeys.isOverSeaVisit, form.getValue(form.isOverSeaVisit),),
-        _card(_warakirriKeys.hasBeenInducted,
-            form.getValue(form.hasBeenInducted),),
-        _card(_warakirriKeys.isConfinedSpace,
-            form.getValue(form.isConfinedSpace),),
+          _warakirriKeys.isOverSeaVisit,
+          form.getValue(form.isOverSeaVisit),
+        ),
+        _card(
+          _warakirriKeys.hasBeenInducted,
+          form.getValue(form.hasBeenInducted),
+        ),
+        _card(
+          _warakirriKeys.isConfinedSpace,
+          form.getValue(form.isConfinedSpace),
+        ),
         _card(_warakirriKeys.additionalInfo, form.additionalInfo),
         _card(_warakirriKeys.warakirriFarm, form.warakirriFarm),
       ],
@@ -78,12 +86,16 @@ class DeclarationFormPrinter {
               : form.usersTravellingAlong!.join(', '),
         ),
         // if(form.isQfeverVaccinated != null)
-        _card(form.keys.isQfeverVaccinated,
-            form.getValue(form.isQfeverVaccinated!),),
+        _card(
+          form.keys.isQfeverVaccinated,
+          form.getValue(form.isQfeverVaccinated!),
+        ),
         _card(form.keys.isFluSymptoms, form.getValue(form.isFluSymptoms)),
         _card(form.keys.isOverSeaVisit, form.getValue(form.isOverSeaVisit)),
         _card(
-            form.keys.isAllMeasureTaken, form.getValue(form.isAllMeasureTaken),),
+          form.keys.isAllMeasureTaken,
+          form.getValue(form.isAllMeasureTaken),
+        ),
         _card(form.keys.isOwnerNotified, form.getValue(form.isOwnerNotified)),
         // _card(
         //   form.keys.expectedDepartureDate,
@@ -197,8 +209,12 @@ class DeclarationFormPrinter {
             style: const pw.TextStyle(fontSize: 20),
           ),
           pw.SizedBox(height: 20.h),
-          _buildRow('Full Name', entry.user?.fullName ?? '', 'Company Name',
-              entry.user?.company ?? '',),
+          _buildRow(
+            'Full Name',
+            entry.user?.fullName ?? '',
+            'Company Name',
+            entry.user?.companies ?? '',
+          ),
           pw.SizedBox(height: 20.h),
           _buildRow(
             'Phone Number',

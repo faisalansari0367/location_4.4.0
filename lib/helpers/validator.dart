@@ -36,6 +36,10 @@ class Validator {
 
   static String? postcode(String? value) {
     final validate = ValidationBuilder().minLength(4).build();
+    if (value?.isNotEmpty ?? false) {
+      final parseCode = int.tryParse(value!);
+      if (parseCode == null) return 'Postcode must be in the format 1234';
+    }
     final result = validate(value);
     return result;
   }

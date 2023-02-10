@@ -31,7 +31,7 @@ class _SelfDeclarationState extends State<SelfDeclaration> {
   @override
   void initState() {
     orgController =
-        TextEditingController(text: context.read<Api>().getUserData()?.company);
+        TextEditingController(text: context.read<Api>().getUserData()?.companies);
     context.read<CvdCubit>().setOrgName(orgController.text);
     nameController = TextEditingController(text: getName());
     // _init();

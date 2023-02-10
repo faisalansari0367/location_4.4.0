@@ -5,21 +5,22 @@ import '../log_records.dart';
 
 class LogRecordsHelper {
   final int? userId;
-  final LogRecordsLocalService storage;
+  final LogRecordsLocalStorage storage;
   LogRecordsHelper({
     required this.userId,
     required this.storage,
   });
 
   Iterable<LogbookEntry> _getLogRecordsByGeofenceId(String id) =>
-      storage.logRecords.where((element) => element.id == int.parse(id));
+      storage.logRecords
+          .where((element) => element.geofence?.id == int.parse(id));
 
   bool isCreatedByUser(LogbookEntry element) => element.user?.id == userId;
   bool isLoggedInZone(LogbookEntry element) => element.exitDate == null;
 
-  bool isCreatedIn15Minutes(element) {
+  bool isCreatedIn15Minutes(LogbookEntry element) {
     final difference = DateTime.now().difference(element.enterDate!);
-    if (element.form?.isEmpty ?? true) {
+    if (!element.hasForm) {
       return difference.inHours <= 24;
     }
     if (element.exitDate == null) {

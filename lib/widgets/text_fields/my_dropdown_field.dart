@@ -62,6 +62,7 @@ class _MyDropdownFieldState extends State<MyDropdownField> {
               items: widget.options,
               onChanged: (value) => setState(
                 () {
+                  FocusScope.of(context).nextFocus();
                   controller.text = value;
                   // address.state = value;
                   widget.onChanged.call(value);
@@ -137,7 +138,7 @@ class Options extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           hintText ?? 'Please select an option',
-          style: context.textTheme.headline6?.copyWith(
+          style: context.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             // color: Colors.black,
           ),
@@ -157,7 +158,7 @@ class Options extends StatelessWidget {
                       },
                       title: Text(
                         e.trim(),
-                        style: context.textTheme.subtitle1?.copyWith(
+                        style: context.textTheme.titleMedium?.copyWith(
                           color: Colors.grey.shade700,
                           fontWeight: FontWeight.w600,
                         ),

@@ -71,6 +71,12 @@ class PicCard extends StatelessWidget {
                   _column(context, 'Company', picModel.company),
                 ],
               ),
+              Gap(10.h),
+              _column(
+                context,
+                'Address',
+                '${picModel.street}, ${picModel.town}, ${picModel.state}',
+              ),
               // Text(
               //   'Owner',
               //   style: context.textTheme.titleSmall?.copyWith(
@@ -106,7 +112,7 @@ class PicCard extends StatelessWidget {
     );
   }
 
-  Widget _column(BuildContext context, String title, String value) {
+  Widget _column(BuildContext context, String title, String? value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -118,7 +124,7 @@ class PicCard extends StatelessWidget {
           ),
         ),
         Text(
-          value,
+          value ?? '',
           textAlign: TextAlign.end,
           style: context.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.bold,

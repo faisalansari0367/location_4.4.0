@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 part of 'maps_cubit.dart';
-// part 'maps_state.g.dart';
 
 // @JsonSerializable()
 class MapsState extends Equatable {
@@ -8,6 +8,7 @@ class MapsState extends Equatable {
   final bool isEditingFence;
   final bool myLocationEnabled;
   final LatLng currentLocation;
+  final String? query;
   final MapType mapType;
   final List<LatLng> polylines;
   final Set<PolygonModel> polygons;
@@ -21,6 +22,7 @@ class MapsState extends Equatable {
   final bool isTracking;
 
   const MapsState({
+    this.query,
     this.myLocationEnabled = false,
     this.isTracking = true,
     this.isConnected = true,
@@ -39,58 +41,64 @@ class MapsState extends Equatable {
   });
 
   MapsState copyWith({
-    bool? myLocationEnabled,
     bool? insideFence,
-    bool? isConnected,
+    bool? isEditingFence,
+    bool? myLocationEnabled,
     LatLng? currentLocation,
+    String? query,
     MapType? mapType,
     List<LatLng>? polylines,
     Set<PolygonModel>? polygons,
     Set<Circle>? circles,
     bool? addingGeofence,
-    bool? isEditingFence,
     FieldAssets? fieldAsset,
     double? zoom,
     PolygonModel? currentPolygon,
-    Color? polygonColor,
+    Color? selectedColor,
+    bool? isConnected,
     bool? isTracking,
   }) {
     return MapsState(
-      myLocationEnabled: myLocationEnabled ?? this.myLocationEnabled,
-      isTracking: isTracking ?? this.isTracking,
-      isConnected: isConnected ?? this.isConnected,
       insideFence: insideFence ?? this.insideFence,
+      isEditingFence: isEditingFence ?? this.isEditingFence,
+      myLocationEnabled: myLocationEnabled ?? this.myLocationEnabled,
       currentLocation: currentLocation ?? this.currentLocation,
+      query: query ?? this.query,
       mapType: mapType ?? this.mapType,
       polylines: polylines ?? this.polylines,
-      isEditingFence: isEditingFence ?? this.isEditingFence,
       polygons: polygons ?? this.polygons,
       circles: circles ?? this.circles,
       addingGeofence: addingGeofence ?? this.addingGeofence,
       fieldAsset: fieldAsset ?? this.fieldAsset,
       zoom: zoom ?? this.zoom,
       currentPolygon: currentPolygon ?? this.currentPolygon,
-      selectedColor: polygonColor ?? selectedColor,
+      selectedColor: selectedColor ?? this.selectedColor,
+      isConnected: isConnected ?? this.isConnected,
+      isTracking: isTracking ?? this.isTracking,
     );
   }
 
   @override
-  List<Object> get props => [
-        insideFence,
-        currentLocation,
-        mapType,
-        myLocationEnabled,
-        // latLngs,
-        polygons, isTracking,
-        isEditingFence,
-        circles,
-        addingGeofence,
-
-        fieldAsset,
-        zoom,
-        if (currentPolygon != null) currentPolygon!,
-        selectedColor,
-      ];
+  List<Object?> get props {
+    return [
+      insideFence,
+      isEditingFence,
+      myLocationEnabled,
+      currentLocation,
+      query,
+      mapType,
+      polylines,
+      polygons,
+      circles,
+      addingGeofence,
+      fieldAsset,
+      zoom,
+      currentPolygon,
+      selectedColor,
+      isConnected,
+      isTracking,
+    ];
+  }
 
   // factory MapsState.fromJson(Map<String, dynamic> json) => _$MapsStateFromJson(json);
 

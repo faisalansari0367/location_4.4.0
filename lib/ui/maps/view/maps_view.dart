@@ -120,6 +120,9 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         return true;
       },
       child: Scaffold(
+        // appBar: MyAppBar(
+        //   backgroundColor: Colors.white.withOpacity(1),
+        // ),
         extendBody: true,
         backgroundColor: Colors.transparent,
         bottomNavigationBar: _buildNavbar(),
@@ -279,13 +282,31 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   Positioned _buildAppbar() {
     return Positioned(
-      top: 5.height,
+      top: 2.height,
       child: Container(
         width: 100.width,
         padding: kPadding,
+        // color: Colors.black.withAlpha(100),
         child: Row(
           children: [
             _buildBackButton(),
+            // Expanded(
+            //   child: Selector<MapsCubit, String?>(
+            //     selector: (p0, p1) => p1.state.query,
+            //     builder: (context, state, child) {
+            //       return MyTextField(
+            //         suffixIcon: IconButton(
+            //           icon: const Icon(Icons.search),
+            //           onPressed: cubit.onSearchSubmitted,
+            //         ),
+            //         hintText: 'Enter Lat,Lng to search',
+            //         fillColor: Colors.white,
+            //         filled: true,
+            //         onChanged: cubit.onSearchChanged,
+            //       );
+            //     },
+            //   ),
+            // ),
             // BackButton(),
           ],
         ),
@@ -356,7 +377,7 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         BottomSheetService.showSheet(
           child: PolygonDetails(
             polygonModel: data,
-            canEdit: cubit.canUserEdit(data.createdBy!.id!),
+            canEdit: cubit.canUserEdit(data.createdBy!.id),
             onTap: () {
               cubit.startEditPolygon(data);
               Get.back();
@@ -365,10 +386,6 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
         );
       },
     );
-  }
-
-  List<LatLng> _getMtLatLangs(List<LatLng> polypoints) {
-    return polypoints;
   }
 
   bool isClosedPolygon(List<LatLng> polypoints) {
@@ -393,10 +410,11 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
 
   Widget _buildBackButton() {
     return Container(
-      padding: EdgeInsets.only(left: widget.fromDrawer ? 0 : 8),
+      padding: EdgeInsets.only(left: widget.fromDrawer ? 0 : 10),
       decoration: MyDecoration.decoration(
         isCircle: true,
-        color: const Color.fromARGB(26, 255, 255, 255).withOpacity(.71),
+        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(1),
+        // color: Colors.transparent,
       ),
       child: widget.fromDrawer
           ? const DrawerMenuIcon()

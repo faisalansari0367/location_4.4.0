@@ -13,13 +13,15 @@ PicModel _$PicModelFromJson(Map<String, dynamic> json) => PicModel(
       state: json['state'] as String,
       street: json['street'] as String,
       town: json['town'] as String,
-      city: json['city'] as String,
-      postcode: json['postcode'] as int,
-      countryOfResidency: json['countryOfResidency'] as String,
-      company: json['company'] as String,
-      owner: json['owner'] as String,
-      species:
-          (json['species'] as List<dynamic>).map((e) => e as String).toList(),
+      city: json['city'] as String?,
+      postcode: PicModel.parseInt(json['postcode']),
+      countryOfResidency: json['countryOfResidency'] as String?,
+      company: json['company'] as String?,
+      owner: json['owner'] as String?,
+      species: (json['species'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       ngr: json['ngr'] as String,
     );
 

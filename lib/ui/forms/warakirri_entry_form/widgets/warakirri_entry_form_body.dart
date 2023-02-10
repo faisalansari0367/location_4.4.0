@@ -63,7 +63,7 @@ class WarakirriEntryFormBody extends StatelessWidget {
                   'Phone Number',
                   '${state.userData?.countryCode ?? ''}${state.userData?.phoneNumber ?? ''}',
                 ),
-                _buildTextField('Company Name', state.userData?.company),
+                _buildTextField('Company Name', state.userData?.companies),
                 _additionalInfo(context, state),
                 _buildSignOff(context),
                 _buildPoints(state),
@@ -217,22 +217,18 @@ class WarakirriEntryFormBody extends StatelessWidget {
       alignment: Alignment.topCenter,
       duration: 375.milliseconds,
       curve: Curves.easeInOut,
-      child: Container(
-        // decoration: MyDecoration.decoration(),
-        // padding: EdgeInsets.only(bottom: 10.h),
-        child: Column(
-          children: [
-            QuestionCard(
-              question: data.question,
-              selectedValue: data.value,
-              onChanged: (value) async => state.onChanged(data, value),
-            ),
-            if (data.value ?? false) ...[
-              Gap(10.h),
-              AddList(onChanged: state.onChangePeopleList),
-            ]
-          ],
-        ),
+      child: Column(
+        children: [
+          QuestionCard(
+            question: data.question,
+            selectedValue: data.value,
+            onChanged: (value) async => state.onChanged(data, value),
+          ),
+          if (data.value ?? false) ...[
+            Gap(10.h),
+            AddList(onChanged: state.onChangePeopleList),
+          ]
+        ],
       ),
     );
   }

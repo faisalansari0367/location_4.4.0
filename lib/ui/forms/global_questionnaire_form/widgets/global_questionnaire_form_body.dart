@@ -49,7 +49,8 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                       onChanged: (value) {
                         if (value) {
                           DialogService.error(
-                              'Consider the safety of others before you enter this zone.');
+                            'Consider the safety of others before you enter this zone.',
+                          );
                         }
                         state.onChanged(state.model.isFluSymptoms, value);
                       },
@@ -60,7 +61,8 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                       onChanged: (s) {
                         if (s) {
                           DialogService.error(
-                              'Make sure you contact the owner before entering the Property.');
+                            'Make sure you contact the owner before entering the Property.',
+                          );
                         }
                         state.onChanged(state.model.isOverSeaVisit, s);
                       },
@@ -90,7 +92,9 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () => state.pickDateTime(
-                          state.model.expectedDepartureDate, context),
+                        state.model.expectedDepartureDate,
+                        context,
+                      ),
                       child: AbsorbPointer(
                         child: MyDateField(
                           label: state.model.expectedDepartureDate.question,
@@ -113,7 +117,7 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
                       signature: state.model.signature.value,
                       onChanged: (s) async {
                         state.onChanged(state.model.signature, s);
-                        await 500.milliseconds.delay();
+                        await 800.milliseconds.delay();
                         state.scrollToEnd();
                       },
                     ),
@@ -144,8 +148,11 @@ class GlobalQuestionnaireFormBody extends StatelessWidget {
     );
   }
 
-  Widget _card(GlobalQuestionnaireFormNotifier state, QuestionData data,
-      {ValueChanged<bool>? onChanged}) {
+  Widget _card(
+    GlobalQuestionnaireFormNotifier state,
+    QuestionData data, {
+    ValueChanged<bool>? onChanged,
+  }) {
     return Container(
       decoration: MyDecoration.decoration(),
       child: QuestionCard(

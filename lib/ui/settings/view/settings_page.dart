@@ -136,7 +136,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () async => Get.to(
                 () => PdfViewer(
                   path:
-                      'assets/terms_and_conditions/Terms  Conditions (EULA) - BioPlus mobile application 20112022.pdf',
+                      'assets/terms_and_conditions/Terms  Conditions EULA - BioPlus mobile application 20112022.pdf',
                   title: Strings.termsAndConditions,
                 ),
               ),
@@ -164,15 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       onCancel: () {},
                       onConfirm: () async {
                         _deleteAccount();
-                        // await Future.delayed(50.milliseconds);
-                        // DialogService.success(
-                        //   'Your account is now deleted and data removed from your device.',
-                        //   onCancel: () async {
-                        //     _deleteAccount();
-                        //     await _logout(context);
-                        //     Get.back();
-                        //   },
-                        // );
+                        
                       },
                     ),
                   );

@@ -102,7 +102,7 @@ class TrackPolygons {
           // log('should show pop up : ${entry?.hasForm}');
           if (entry != null) {
             // final difference = DateTime.now().difference(entry.enterDate!).inMinutes;
-            if (entry.hasForm ?? false) {
+            if (entry.hasForm) {
               final difference =
                   DateTime.now().difference(entry.enterDate!).inDays;
               if (difference >= 1) {

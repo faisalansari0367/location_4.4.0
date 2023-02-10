@@ -35,7 +35,7 @@ class UserInfo extends StatelessWidget {
             'Full Name',
             user?.fullName ?? '',
             'Company Name',
-            user?.company ?? '',
+            user?.companies ?? '',
           ),
           Gap(20.h),
           _buildRow(

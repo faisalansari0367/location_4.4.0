@@ -180,7 +180,7 @@ class MapsCubit extends BaseModel {
   }
 
   void setPolygonColor(Color color) {
-    emit(state.copyWith(polygonColor: color));
+    emit(state.copyWith(selectedColor: color));
   }
 
   Future<void> addPolygon(String name, {String? companyOwner}) async {
@@ -305,5 +305,21 @@ class MapsCubit extends BaseModel {
   Future<void> dispose() async {
     _polygonsService.clear();
     super.dispose();
+  }
+
+  void onSearchChanged(String p1) {
+    emit(state.copyWith(query: p1));
+  }
+
+  void onSearchSubmitted() {
+    final query = state.query;
+    if (query?.isEmpty ?? true) return;
+    final queryList = query!.split(', ');
+    final lat = double.tryParse(queryList[0]);
+    final lng = double.tryParse(queryList[1]);
+    if (lat != null && lng != null) {
+      final latLng = LatLng(lat, lng);
+      animateCamera(latLng);
+    }
   }
 }

@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:api_client/api_client.dart';
@@ -57,11 +56,19 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       for (var offRecord in offlineRecords) {
         final offlineLog = logbookRecords.where(
-          (element) =>
-              element.id == offRecord.id && !element.isOffline ||
-              element.enterDate == offRecord.enterDate &&
-                  offRecord.geofence?.id == element.geofence?.id &&
-                  offRecord.user?.id == element.user?.id,
+          (element) {
+            // record is present in the online and offline records
+            // and it is not offline
+            final elementExist =
+                element.id == offRecord.id && !element.isOffline;
+            final isIdentical = element.enterDate == offRecord.enterDate &&
+                offRecord.geofence?.id == element.geofence?.id &&
+                offRecord.user?.id == element.user?.id;
+            
+            final elementHasForm = element.form == offRecord.form;
+
+            return elementExist || isIdentical;
+          },
         );
 
         if (offlineLog.isNotEmpty) {
@@ -101,17 +108,8 @@ class LogRecordsImpl implements LogRecordsRepo {
 
       log('final offline records: ${offlineRecords.length}');
       final json = offlineRecords.map((e) {
-        // final form = e.form?.toJson();
-
         final map = e.toJson();
-        // map.remove('declarationForm');
-        // if (form != null) {
-        //   map.addAll(form);
-        // }
-        // because api accepts geofence id not geofence object
-        // remove geofence object and add geofence id
         map
-          // ..remove('declarationForm')
           ..remove('id')
           ..remove('updatedAt')
           ..remove('isOffline');
@@ -120,8 +118,6 @@ class LogRecordsImpl implements LogRecordsRepo {
       }).toList();
 
       // return true;
-
-      log(jsonEncode({'records': json}));
 
       final result = await client
           .post(Endpoints.logRecordsOffline, data: {'records': json});

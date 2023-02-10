@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 enum FieldType {
   text,
   email,
@@ -48,4 +50,16 @@ extension FieldTypeExt on FieldType {
   bool get isPassport => this == FieldType.passport;
   bool get isSpecies => this == FieldType.species;
   bool get isLicenceCategory => this == FieldType.licenseCategory;
+
+  String get label {
+    final index = name.codeUnits
+        .firstWhereOrNull((element) => element >= 65 && element <= 90);
+    if (index != null) {
+      final first = name.substring(0, name.indexOf(String.fromCharCode(index)));
+      final second = name.substring(name.indexOf(String.fromCharCode(index)));
+      return '${first.capitalize} $second';
+    } else {
+      return name.capitalize!;
+    }
+  }
 }

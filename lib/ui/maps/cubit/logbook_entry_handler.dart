@@ -34,7 +34,7 @@ class LogbookEntryHandler {
     // log('isExiting $isExiting \n polygonModel ${polygonModel?.toJson()}');
     if (polygonModel == null) return;
     if (isExiting) {
-      markExitHandler?.callExit(polygonModel, isExiting);
+      // markExitHandler?.callExit(polygonModel, isExiting);
       return;
     } else {
       // if current polygon is the same as the previous polygon

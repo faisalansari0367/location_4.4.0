@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:developer' show log;
-import 'dart:math' show Random;
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
@@ -53,7 +52,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
 
       if (index == -1) {
         return const ApiResult.failure(
-            error: NetworkExceptions.defaultError('Geofence not found'));
+          error: NetworkExceptions.defaultError('Geofence not found'),
+        );
       }
 
       final geofence = geofences[index];
@@ -65,7 +65,7 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
         form: form,
         // id: (_logRecords.first.id ?? 0) + 1,
         isOffline: true,
-        id: Random().nextInt(10000000) + id,
+        id: -(id + 1),
         createdAt: currentUtcTime,
         enterDate: currentUtcTime,
         user: _storageService.getUserData(),
@@ -94,7 +94,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
     } catch (e) {
       log(e.toString());
       return const ApiResult.failure(
-          error: NetworkExceptions.defaultError('No polygons found'));
+        error: NetworkExceptions.defaultError('No polygons found'),
+      );
     }
   }
 
@@ -133,8 +134,9 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
     // _sortById();
 
     /// records of this geofence
-    final geofenceRecords = _logRecords
-        .where((element) => element.geofence?.id == int.parse(geofenceId));
+    final geofenceRecords = _logRecords.where(
+      (element) => element.geofence?.id == int.parse(geofenceId),
+    );
 
     if (kDebugMode) {
       print('geofence $geofenceId records: ${geofenceRecords.length}');
@@ -153,16 +155,16 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
 
       if (element.enterDate != null &&
           element.exitDate != null &&
-          (element.hasForm ?? false)) {
-        return entryDifference.inHours <= 24;
+          (element.hasForm)) {
+        // return entryDifference.inHours <= 24;
+        return DateTime.now().day == element.enterDate!.day;
       }
 
-      if (!(element.hasForm) ?? true) {
-        return entryDifference.inHours <= 24;
-      }
-      if (element.exitDate == null) {
-        return true;
-      }
+      // record has entry date and exit date but no form
+      if (!element.hasForm) return entryDifference.inHours <= 24;
+
+      // record has no exit date and no form
+      if (element.exitDate == null) return true;
 
       if (element.updatedAt != null) {
         return DateTime.now().difference(element.updatedAt!).inMinutes <= 30;
@@ -205,29 +207,28 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       {bool isExiting = false, LogbookFormModel? form}) async {
     try {
       // get the latest entry from the logRecords
-      final hasEntry = await getLogRecord(geofenceId);
+      final logRecord = await getLogRecord(geofenceId);
 
       // if no entry create new entry
-      if (hasEntry == null) {
+      if (logRecord == null) {
         return await createLogRecord(geofenceId, form: form);
       }
 
       // if has entry
-      final hasExitDate = hasEntry.exitDate?.microsecond != null;
+      final hasExitDate = logRecord.exitDate?.microsecond != null;
       if (hasExitDate) {
         final now = DateTime.now();
         final entryExitDifference =
-            now.difference(hasEntry.exitDate!).inMinutes.abs();
+            now.difference(logRecord.exitDate!).inMinutes.abs();
 
         if (entryExitDifference > 10) {
-          // final entryExitDifference =
-          if (!(hasEntry.hasForm) ?? false) {
-            final isSameDay = hasEntry.enterDate!.day == now.day;
+          if (logRecord.hasForm) {
+            final isSameDay = logRecord.enterDate!.day == now.day;
             if (isSameDay) {
-              return await createLogRecord(geofenceId, form: hasEntry.form);
+              return await createLogRecord(geofenceId, form: logRecord.form);
             }
           }
-          //     DateTime.now().difference(hasEntry.enterDate!).inDays.abs();
+
           return await createLogRecord(geofenceId, form: form);
         } else {
           return ApiResult.failure(

@@ -1,8 +1,14 @@
+# flutter build apk --target=lib/main_prod.dart --flavor=dev
+# flutter build apk --target=lib/main_dev.dart --flavor=dev
+
+
+
+
 
 NAME="Bioplus Prod.apk"
 APKPATH="build/app/outputs/flutter-apk/$NAME"
 echo "Building $NAME"
-flutter build apk --target=lib/main_prod.dart
+flutter build apk --target=lib/main_prod.dart --flavor=dev
 
 # cd build/app/outputs/flutter-apk
 echo "Changing to $NAME"

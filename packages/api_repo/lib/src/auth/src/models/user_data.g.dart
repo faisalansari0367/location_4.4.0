@@ -43,7 +43,8 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) => UserData(
       ohsRequirements: json['ohsRequirements'] as String?,
       questionnaire: json['questionnaire'] as String?,
       region: json['region'] as String?,
-      company: json['company'] as String?,
+      company:
+          (json['company'] as List<dynamic>?)?.map((e) => e as String).toList(),
       picVisiting: json['picVisiting'] as String?,
       reason: json['reason'] as String?,
       worksafeQuestionsForm: json['worksafeQuestionsForm'] as String?,

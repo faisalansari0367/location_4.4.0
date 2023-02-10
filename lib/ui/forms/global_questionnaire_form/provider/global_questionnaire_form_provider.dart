@@ -16,13 +16,20 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
   final String zoneId;
   final int? logrecordId;
 
-  GlobalQuestionnaireFormNotifier(super.context, {this.logrecordId, required this.zoneId}) {
+  GlobalQuestionnaireFormNotifier(
+    super.context, {
+    this.logrecordId,
+    required this.zoneId,
+  }) {
     model = FormQuestionDataModel.fromLocal();
   }
   final formKey = GlobalKey<FormState>();
   final sc = ScrollController();
 
-  Future<void> pickDateTime(QuestionData questionData, BuildContext context) async {
+  Future<void> pickDateTime(
+    QuestionData questionData,
+    BuildContext context,
+  ) async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -33,7 +40,13 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
       // Navigator.pop(context);
       final time = await _timePicker(context);
       if (time != null) {
-        final dt = DateTime(pickedDate.year, pickedDate.month, pickedDate.day, time.hour, time.minute);
+        final dt = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          time.hour,
+          time.minute,
+        );
         questionData.value = dt.toIso8601String();
         notifyListeners();
       }
@@ -66,12 +79,16 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
     notifyListeners();
   }
 
-  void scrollToEnd() {
-    sc.animateTo(
-      sc.position.maxScrollExtent,
-      duration: kDuration,
-      curve: kCurve,
-    );
+  Future<void> scrollToEnd() async {
+    try {
+      await sc.animateTo(
+        sc.position.maxScrollExtent,
+        duration: kDuration,
+        curve: kCurve,
+      );
+    } on Exception {
+      // TODO
+    }
   }
   // void onChanged(QuestionData questionData, dynamic value) {
   //   questionData.value = value;
@@ -96,7 +113,9 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
       final data = model.toJson();
       for (final element in data.entries) {
         if (element.value == null) {
-          DialogService.error('Please fill Question ${model.question(element.key)}');
+          DialogService.error(
+            'Please fill Question ${model.question(element.key)}',
+          );
           return;
         }
       }
@@ -107,10 +126,12 @@ class GlobalQuestionnaireFormNotifier extends BaseModel {
   }
 
   Future<void> submitFormData(Map<String, dynamic> json) async {
-    final result = await localApi.udpateForm(zoneId.toString(), json, logId: logrecordId);
+    final result =
+        await localApi.udpateForm(zoneId.toString(), json, logId: logrecordId);
     result.when(
       success: (data) {
-        final msg = baseState.isConnected ? 'Form Submitted' : 'Form Saved Locally';
+        final msg =
+            baseState.isConnected ? 'Form Submitted' : 'Form Saved Locally';
         DialogService.success(msg, onCancel: () => Get.close(2));
       },
       failure: (e) => DialogService.failure(error: e),

@@ -17,6 +17,17 @@ class PicCubit extends HydratedCubit<PicState> {
         emit(PicLoaded(pics: data));
       },
       failure: (error) {
+        final message = NetworkExceptions.getErrorMessage(error);
+        if (message
+            .contains('duplicate key value violates unique constraint')) {
+          emit(
+            PicError(
+              error: 'Pic already exists, please try with a different one',
+            ),
+          );
+          return;
+        }
+
         emit(PicError(error: NetworkExceptions.getErrorMessage(error)));
       },
     );
@@ -31,8 +42,9 @@ class PicCubit extends HydratedCubit<PicState> {
   Map<String, dynamic>? toJson(PicState state) {
     // TODO: implement toJson
     if (state is PicInitial) return null;
+    if (state is PicError) return {};
     if (state is PicLoaded) {
-      return state.toMap();
+      return state.pics.isEmpty ? {} : state.toMap();
     }
     return null;
   }
