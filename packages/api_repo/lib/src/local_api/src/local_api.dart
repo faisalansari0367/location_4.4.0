@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
 import 'package:api_repo/src/log/src/local_log_records_impl.dart';
-import 'package:api_repo/src/user/src/models/pic/pic_model.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -533,10 +532,25 @@ class LocalApi extends Api {
     // TODO: implement getPics
     throw UnimplementedError();
   }
-  
+
   @override
   Future<ApiResult<PicModel>> createPic({required AddPicParams params}) {
     // TODO: implement createPic
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResult<PicModel>> updatePic(
+      {required AddPicParams params, required int picId}) {
+    // TODO: implement updatePic
+    throw UnimplementedError();
+  }
+  
+  @override
+  // TODO: implement pics
+  List<PicModel> get pics => throw UnimplementedError();
+  
+  @override
+  // TODO: implement picsStream
+  Stream<List<PicModel>> get picsStream => throw UnimplementedError();
 }

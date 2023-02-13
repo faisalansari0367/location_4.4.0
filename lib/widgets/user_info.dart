@@ -10,7 +10,7 @@ class UserInfo extends StatelessWidget {
   const UserInfo({
     super.key,
     required this.user,
-    required this.expectedDepartureTime,
+    this.expectedDepartureTime,
   });
 
   @override

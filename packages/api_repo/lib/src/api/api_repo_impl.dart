@@ -23,6 +23,7 @@ class ApiRepo implements Api {
   late CvdFormsRepo _cvdFormsRepo;
   late GeofencesRepo _geofencesRepo;
   late PaymentRepo _paymentRepo;
+  late PicRepo _picRepo;
   late Directory _cacheDir;
 
   // final BehaviorSubject<Box> _userBoxController = BehaviorSubject<Box>();
@@ -64,6 +65,7 @@ class ApiRepo implements Api {
         CvdFormsRepoImpl(box: box, client: _client, cacheDir: _cacheDir);
     _geofencesRepo = GeofencesRepoImpl(client: client, box: box);
     _paymentRepo = PaymentRepoImpl(client: client);
+    _picRepo = PicRepoImpl(client: client);
 
     _userStream(_box, storage.userKey);
   }
@@ -540,11 +542,23 @@ class ApiRepo implements Api {
 
   @override
   Future<ApiResult<List<PicModel>>> getPics() {
-    return _userRepo.getPics();
+    return _picRepo.getPics();
   }
 
   @override
   Future<ApiResult<PicModel>> createPic({required AddPicParams params}) {
-    return _userRepo.createPic(params: params);
+    return _picRepo.createPic(params: params);
   }
+
+  @override
+  Future<ApiResult<PicModel>> updatePic(
+      {required AddPicParams params, required int picId}) {
+    return _picRepo.updatePic(params: params, picId: picId);
+  }
+
+  @override
+  List<PicModel> get pics => _picRepo.pics;
+
+  @override
+  Stream<List<PicModel>> get picsStream => _picRepo.picsStream;
 }

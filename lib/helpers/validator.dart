@@ -44,6 +44,25 @@ class Validator {
     return result;
   }
 
+  static String? lpaUsername(String? value) {
+    if (value == null || value.isEmpty) return 'Username is required';
+
+    // not contains -
+    if (!value.contains('-')) return 'Username is not valid';
+
+    // contains - but pic is less than
+    final split = value.split('-');
+    if (split[0].length < 8) return 'Entered PIC is not valid';
+
+    // nothing after -
+
+    if (split[1].isEmpty) return 'Username is not valid';
+
+    final validate = ValidationBuilder().minLength(8).build();
+    final result = validate(value);
+    return result;
+  }
+
   static String? mobileNo(String? value) {
     final validate = ValidationBuilder().phone('Mobile is not valid').build();
     final result = validate(value);

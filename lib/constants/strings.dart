@@ -81,6 +81,7 @@ class Strings {
       ok = 'Ok',
       cancel = 'Cancel',
       terms = 'Terms',
+      user = 'User',
       and = 'And',
       conditions = 'Conditions',
       dashboard = 'Dashboard',
@@ -90,15 +91,27 @@ class Strings {
       policy = 'Policy',
       book = 'Book',
       geofence = 'Geofence',
+      credentials = 'Credentials',
       envds = 'eNVD',
+      emergency = 'Emergency',
+      contact = 'Contact',
+      lpa = 'LPA',
       add = 'Add',
       livestock = 'Livestock',
       movement = 'Movement',
       waybill = 'Waybill',
       links = 'Links',
       check = 'Check',
+      nlis = 'NLIS',
+      msa = 'MSA',
+      number = 'Number',
+      nfas = 'NFAS',
+      accreditation = 'Accreditation',
       delegation = 'Delegation',
       commodities = 'Commodities';
+
+  static String get nlisUsername => '$nlis $username';
+  static String get nlisPassword => '$nlis $password';
 
   static String get firstName => '$first $name';
   static String get lastName => '$last $name';
@@ -109,6 +122,7 @@ class Strings {
   static String get propertyAddress => '$property $address';
   static String get welcomeTo => '$welcome $to';
   static String get signUp => '$sign $up';
+
   static String get forgotPassword => '$forgot $password';
   static String get newToItrack => '$new_ $to $appName';
   static String get visitorLogBook => '$visitor $log$book';
@@ -172,4 +186,13 @@ class Strings {
   static String get editProfile => '$edit $profile';
   static String get deleteYourAccount => '$delete $your $account';
   static String get addPic => '$add $pic';
+  static String get emergencyMobileContact => '$emergency $mobile $contact';
+  static String get emergencyEmailContact => '$emergency $email $contact';
+  static String get username => '$user $name';
+  static String get lpaUsername => '$lpa $username';
+  static String get lpaPassword => '$lpa $password';
+  static String get lpaCrdentials => '$lpa $credentials';
+  static String get nlisCredentials => '$nlis $credentials';
+  static String get msaNumber => '$msa $number';
+  static String get accreditations => '${accreditation}s';
 }

@@ -8,7 +8,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class BottomNavbar extends StatefulWidget {
   final Color color;
   final List<BottomNavbarItem> items;
-  const BottomNavbar({super.key, required this.items, this.color = Colors.white});
+  const BottomNavbar({
+    super.key,
+    required this.items,
+    this.color = Colors.white,
+  });
 
   @override
   State<BottomNavbar> createState() => _BottomNavbarState();

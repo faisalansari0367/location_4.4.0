@@ -15,9 +15,6 @@ class EnvdListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final breeds = ((items.answers ?? [])
-    //     .where((element) => element.questionId == '1')).toList().toList();
-   
     return Container(
       padding: kPadding,
       decoration: BoxDecoration(
@@ -37,19 +34,28 @@ class EnvdListItem extends StatelessWidget {
             'Created',
             items.submittedAt != null || items.updatedAt != null
                 ? MyDecoration.formatDate(
-                    DateTime.parse(items.submittedAt ?? items.updatedAt!))
+                    DateTime.parse(items.submittedAt ?? items.updatedAt!),
+                  )
                 : '',
           ),
           _gap(),
-          _buildRow('From PIC', items.origin!.pic!, 'To PIC',
-              items.destination!.pic!),
+          _buildRow(
+            'From PIC',
+            items.origin!.pic!,
+            'To PIC',
+            items.destination!.pic!,
+          ),
           _gap(),
           _buildRow('Species', items.species!, 'Quantity', _getQuantity()),
           _gap(),
           _buildText('Accreditations', items.getAccredentials()),
           _gap(),
-          _buildRow('Transporter', _findById('158')?.value ?? '', 'Mobile',
-              _findById('160')?.value ?? ''),
+          _buildRow(
+            'Transporter',
+            _findById('158')?.value ?? '',
+            'Mobile',
+            _findById('160')?.value ?? '',
+          ),
           _gap(),
           Row(
             children: [

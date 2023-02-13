@@ -42,7 +42,7 @@ class PicCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        picModel.propertyName,
+                        picModel.propertyName ?? '',
                         style: context.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -68,7 +68,7 @@ class PicCard extends StatelessWidget {
                 children: [
                   _column(context, 'Owner', picModel.owner),
                   const Spacer(),
-                  _column(context, 'Company', picModel.company),
+                  _column(context, 'Company', picModel.companies),
                 ],
               ),
               Gap(10.h),

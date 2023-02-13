@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 /// A description for UserProfilePage
 /// {@endtemplate}
 class UserProfilePage extends StatelessWidget {
+  final bool showBackButton;
+
   /// {@macro user_profile_page}
-  const UserProfilePage({super.key});
+  const UserProfilePage({super.key, this.showBackButton = false});
 
   /// The static route for UserProfilePage
   static Route<dynamic> route() {
@@ -20,13 +22,13 @@ class UserProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => UserProfileNotifier(context),
-      child: const Scaffold(
+      child: Scaffold(
         appBar: MyAppBar(
           // centreTitle: true,
-          showBackButton: false,
-          title: Text(Strings.profile),
+          showBackButton: showBackButton,
+          title: const Text(Strings.profile),
         ),
-        body: UserProfileView(),
+        body: const UserProfileView(),
       ),
     );
   }

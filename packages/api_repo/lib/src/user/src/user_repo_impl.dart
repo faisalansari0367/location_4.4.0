@@ -219,33 +219,4 @@ class UserRepoImpl extends UserRepo {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
-
-  @override
-  Future<ApiResult<List<PicModel>>> getPics() async {
-    try {
-      final result = await client.get(Endpoints.getAllPics);
-      final model = result.data['data'];
-      final list = model
-          .map<PicModel>((e) => PicModel.fromJson(Map<String, dynamic>.from(e)))
-          .toList();
-      return ApiResult.success(data: list);
-    } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-    }
-  }
-
-  @override
-  Future<ApiResult<PicModel>> createPic({required AddPicParams params}) async {
-    try {
-      final result =
-          await client.post(Endpoints.createPic, data: params.toJson());
-      final model = result.data['data'];
-      final PicModel picModel =
-          PicModel.fromJson(Map<String, dynamic>.from(model));
-
-      return ApiResult.success(data: picModel);
-    } catch (e) {
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-    }
-  }
 }

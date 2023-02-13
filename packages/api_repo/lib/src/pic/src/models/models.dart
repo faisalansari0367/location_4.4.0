@@ -1,0 +1,1 @@
+export './pic/pic.dart';

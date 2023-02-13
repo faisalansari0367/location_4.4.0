@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/add_pic/provider/provider.dart';
 import 'package:bioplus/ui/add_pic/widgets/add_pic_body.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -8,23 +9,22 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 class AddPicPage extends StatelessWidget {
   /// {@macro add_pic_page}
-  const AddPicPage({super.key});
+  const AddPicPage({super.key, this.pic, this.updatePic = false});
 
-  /// The static route for AddPicPage
-  static Route<dynamic> route() {
-    return MaterialPageRoute<dynamic>(builder: (_) => const AddPicPage());
-  }
+  final PicModel? pic;
+  final bool updatePic;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => AddPicNotifier(context),
-      child: const Scaffold(
+      create: (context) =>
+          AddPicNotifier(context, model: pic, updatePic: updatePic),
+      child: Scaffold(
         appBar: MyAppBar(
           elevation: 2,
-          title: Text('Add PIC'),
+          title: Text(updatePic ? 'Update PIC' : 'Add PIC'),
         ),
-        body: AddPicView(),
+        body: const AddPicView(),
       ),
     );
   }

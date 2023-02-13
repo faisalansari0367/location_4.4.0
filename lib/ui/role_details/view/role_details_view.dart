@@ -4,7 +4,6 @@ import 'package:bioplus/helpers/validator.dart';
 import 'package:bioplus/ui/forms/widget/form_card.dart';
 import 'package:bioplus/ui/role_details/cubit/role_details_cubit.dart';
 import 'package:bioplus/ui/role_details/widgets/property_address.dart';
-import 'package:bioplus/ui/role_details/widgets/species.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
@@ -12,6 +11,7 @@ import 'package:bioplus/widgets/my_cross_fade.dart';
 import 'package:bioplus/widgets/signature/signature_widget.dart';
 import 'package:bioplus/widgets/state_dropdown_field.dart';
 import 'package:bioplus/widgets/text_fields/text_formatters/input_formatters.dart';
+import 'package:bioplus/widgets/user_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,9 +49,13 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    Strings.yourDetails,
-                    style: context.textTheme.headlineSmall,
+                  // Text(
+                  //   Strings.yourDetails,
+                  //   style: context.textTheme.headlineSmall,
+                  // ),
+                  // Gap(3.height),
+                  UserProfileWidget(
+                    user: context.read<Api>().getUserData()!,
                   ),
                   Gap(3.height),
                   MyCrossFade(
@@ -65,12 +69,12 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                             child: itemBuilder(e, state),
                           ),
                         ),
-                        if (state.userSpecies != null)
-                          SpeciesWidget(
-                            data: state.userSpecies!,
-                          )
-                        else
-                          Container(),
+                        // if (state.userSpecies != null)
+                        //   SpeciesWidget(
+                        //     data: state.userSpecies!,
+                        //   )
+                        // else
+                        //   Container(),
                       ],
                     ),
                   ),
@@ -102,6 +106,14 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     // ignore: no_leading_underscores_for_local_identifiers
     final _fields = [...fields];
     _fields.remove('Species');
+    _fields.remove(Strings.lastName);
+    _fields.remove(Strings.firstName);
+    _fields.remove(Strings.mobile);
+    _fields.remove(Strings.email.toLowerCase());
+    _fields.remove(Strings.emergencyEmailContact);
+    _fields.remove(Strings.emergencyMobileContact);
+    // _fields.remove('Company Name');
+    // _fields.remove('Company Address');
     final hasSignature = fields.contains('Signature');
     final hasCompanyAddress = fields.contains('Company Address');
     if (hasCompanyAddress) {

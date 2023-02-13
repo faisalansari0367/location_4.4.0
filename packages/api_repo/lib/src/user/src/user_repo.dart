@@ -22,6 +22,5 @@ abstract class UserRepo {
   Future<ApiResult> openPdf(String url);
   Future<ApiResult<String>> deleteUser();
   Future<ApiResult<String>> deleteUserById({required int userId});
-  Future<ApiResult<List<PicModel>>> getPics();
-  Future<ApiResult<PicModel>> createPic({required AddPicParams params});
+
 }

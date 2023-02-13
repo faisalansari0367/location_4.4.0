@@ -37,7 +37,9 @@ class _MyDropdownFieldState extends State<MyDropdownField> {
   @override
   void didUpdateWidget(covariant MyDropdownField oldWidget) {
     if (oldWidget.value != widget.value) {
-      controller.text = widget.value.toString();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        controller.text = widget.value.toString();
+      });
     }
     super.didUpdateWidget(oldWidget);
   }

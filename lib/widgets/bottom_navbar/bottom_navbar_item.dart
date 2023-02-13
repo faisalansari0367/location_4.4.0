@@ -23,7 +23,8 @@ class BottomNavbarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = color ?? (isSelected ? context.theme.primaryColor : Colors.grey.shade900);
+    final iconColor = color ??
+        (isSelected ? context.theme.primaryColor : Colors.grey.shade900);
 
     return Material(
       color: Colors.white,
@@ -56,7 +57,7 @@ class BottomNavbarItem extends StatelessWidget {
                   softWrap: true,
                   textAlign: TextAlign.center,
                   maxLines: 2,
-                  style: context.textTheme.subtitle2?.copyWith(
+                  style: context.textTheme.titleSmall?.copyWith(
                     fontSize: 13.w,
                     fontWeight: FontWeight.w600,
                     color: iconColor,

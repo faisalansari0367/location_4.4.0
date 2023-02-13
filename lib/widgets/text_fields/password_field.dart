@@ -7,10 +7,13 @@ class PasswordField extends StatefulWidget {
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final String? hintText;
+  final String? initialValue;
+
   final TextInputAction textInputAction;
   const PasswordField({
     super.key,
     this.onChanged,
+    this.initialValue,
     this.onSubmitted,
     this.controller,
     this.validator,
@@ -34,6 +37,7 @@ class _PasswordFieldState extends State<PasswordField> {
   Widget build(BuildContext context) {
     final iconColor = Theme.of(context).iconTheme.color;
     return MyTextField(
+      initialValue: widget.initialValue,
       controller: widget.controller,
       validator: widget.validator ?? Validator.password,
       onChanged: widget.onChanged,
@@ -42,7 +46,9 @@ class _PasswordFieldState extends State<PasswordField> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         icon: Icon(
-          obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+          obscureText
+              ? Icons.visibility_outlined
+              : Icons.visibility_off_outlined,
           color: iconColor,
         ),
         onPressed: updateObscureText,

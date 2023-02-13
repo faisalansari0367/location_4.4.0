@@ -13,5 +13,6 @@ export 'src/log/log_records.dart';
 export 'src/payment/payment_repo.dart';
 export 'src/user/user_repo.dart';
 export 'src/functions/functions_repo.dart';
+export 'src/pic/pic_repo.dart';
 // export '';
 

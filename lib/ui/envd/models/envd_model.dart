@@ -180,15 +180,19 @@ class Items {
     final msaType = 'MSA${species!.characters.first}';
     final nfasType = 'NFAS${species!.characters.first}';
 
-    final ahsResults =
-        forms!.where((element) => (element.type ?? '').contains(ahsType));
-    if (ahsResults.isNotEmpty) availableTypes.add('Animal Health Statement');
-    final msaResults =
-        forms!.where((element) => (element.type ?? '').contains(msaType));
-    if (msaResults.isNotEmpty) availableTypes.add('MSA');
-    final nfasResults =
-        forms!.where((element) => (element.type ?? '').contains(nfasType));
-    if (nfasResults.isNotEmpty) availableTypes.add('NFAS');
+    for (final form in forms!) {
+      final type = form.type ?? '';
+      if (type.contains(ahsType)) {
+        availableTypes.add('Animal Health Statement');
+      }
+      if (type.contains(msaType)) {
+        availableTypes.add('MSA');
+      }
+      if (type.contains(nfasType)) {
+        availableTypes.add('NFAS');
+      }
+    }
+
     return availableTypes.join(' , ');
   }
 
@@ -341,13 +345,14 @@ class Questions {
   List<AcceptableAnswers>? acceptableAnswers;
   List<ChildQuestions>? childQuestions;
 
-  Questions(
-      {this.id,
-      this.text,
-      this.help,
-      this.type,
-      this.acceptableAnswers,
-      this.childQuestions});
+  Questions({
+    this.id,
+    this.text,
+    this.help,
+    this.type,
+    this.acceptableAnswers,
+    this.childQuestions,
+  });
 
   Questions.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -412,13 +417,14 @@ class ChildQuestions {
   List<AcceptableAnswers>? acceptableAnswers;
   List<Triggers>? triggers;
 
-  ChildQuestions(
-      {this.id,
-      this.text,
-      this.help,
-      this.type,
-      this.acceptableAnswers,
-      this.triggers});
+  ChildQuestions({
+    this.id,
+    this.text,
+    this.help,
+    this.type,
+    this.acceptableAnswers,
+    this.triggers,
+  });
 
   ChildQuestions.fromJson(Map<String, dynamic> json) {
     id = json['id'];
