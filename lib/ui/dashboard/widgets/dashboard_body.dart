@@ -2,7 +2,7 @@ import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/dashboard/dashboard.dart';
 import 'package:bioplus/ui/edec_forms/view/edec_forms_page.dart';
 import 'package:bioplus/ui/emergency_warning_page/view/emergency_warning_page_page.dart';
-import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
+import 'package:bioplus/ui/envd/view/evnd_page.dart';
 import 'package:bioplus/ui/links_page/links_page.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/records/records_page.dart';
@@ -92,8 +92,9 @@ class DashboardBody extends StatelessWidget {
                 image: 'assets/icons/eNVD.jpg',
                 size: 65.w,
                 onTap: () async {
-                  final client = GraphQlClient(userData: state.userData);
-                  await client.redirect();
+                  Get.to(() => const EnvdPage());
+                  // final client = GraphQlClient(userData: state.userData);
+                  // await client.redirect();
                 },
               ),
             DashboardCard(

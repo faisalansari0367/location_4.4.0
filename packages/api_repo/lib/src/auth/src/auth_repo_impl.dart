@@ -141,7 +141,10 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<ApiResult<User>> updateUser({required UserData userData}) async {
+  Future<ApiResult<User>> updateAllowedRoles(
+      {required List<String> allowedRoles}) async {
+    final userData = UserData(allowedRoles: allowedRoles);
+
     try {
       final json = userData.updateAllowedRoles();
       final result = await client.patch(
@@ -156,6 +159,28 @@ class AuthRepoImpl implements AuthRepo {
       await storage.setUserData(userData0);
       await storage.setUser(userData0.toJson());
       return ApiResult.success(data: model);
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<UserData>> updateUserData({required UserData data}) async {
+    try {
+      final json = data.toJson()
+        ..removeWhere((key, value) => value == null || value == '');
+      final result = await client.patch(
+        '${Endpoints.users}/me',
+        options: Options(headers: {"Content-Type": "application/json"}),
+        data: json,
+      );
+      // final model = User.fromJson(result.data);
+      final oldUserData = storage.getUserData();
+      final userData0 = UserData.fromJson(result.data['data']);
+      userData0.signature ??= oldUserData?.signature;
+      await storage.setUserData(userData0);
+      await storage.setUser(userData0.toJson());
+      return ApiResult.success(data: userData0);
     } catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }

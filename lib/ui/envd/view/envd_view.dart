@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_query_strings.dart';
-import 'package:bioplus/ui/envd/models/envd_model.dart';
+// import 'package:bioplus/ui/envd/models/envd_model.dart';
 import 'package:bioplus/ui/envd/view/envd_list_item.dart';
 import 'package:bioplus/widgets/dialogs/error.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -49,7 +51,11 @@ class _EnvdViewState extends State<EnvdView> {
     );
   }
 
-  Widget _builder(QueryResult<Object?> result, {FetchMore<Object?>? fetchMore, Refetch<Object?>? refetch}) {
+  Widget _builder(
+    QueryResult<Object?> result, {
+    FetchMore<Object?>? fetchMore,
+    Refetch<Object?>? refetch,
+  }) {
     if (result.hasException) {
       return SingleChildScrollView(
         child: Padding(
@@ -62,24 +68,17 @@ class _EnvdViewState extends State<EnvdView> {
         ),
       );
     }
-    print(result.exception);
+    // print(result.exception);
 
     if (result.isLoading) {
       return const Center(
         child: CircularProgressIndicator.adaptive(),
       );
     }
-    if (result.isNotLoading) {
-      print(result.data);
-    }
     // var list = <Items>[];
     if (result.data != null) {
-      try {
-        final consignments = Consignments.fromJson(result.data!['consignments']);
-        list = consignments.items ?? [];
-      } catch (e) {
-        print(e);
-      }
+      final consignments = Consignments.fromJson(result.data!['consignments']);
+      list = consignments.items ?? [];
     }
 
     return ListView.separated(
@@ -124,11 +123,8 @@ class _EnvdViewState extends State<EnvdView> {
     final data = const ListToCsvConverter().convert(rows);
     final String directory = (await getApplicationSupportDirectory()).path;
     final path = "$directory/envd_csv-${DateTime.now()}.csv";
-    print(path);
     final File file = File(path);
     await file.writeAsString(data);
-
-    await Share.shareFiles([(file.path)]);
-    // exportCSV.myCSV(newHeaders, rows);
+    await Share.shareXFiles([XFile(file.path)]);
   }
 }

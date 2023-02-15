@@ -28,7 +28,7 @@ class SosWarningBody extends StatelessWidget {
               Text(
                 'Emergency SOS',
                 textAlign: TextAlign.center,
-                style: context.textTheme.headline5?.copyWith(
+                style: context.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.red,
                 ),
@@ -37,13 +37,13 @@ class SosWarningBody extends StatelessWidget {
               Text(
                 'Are you sure you want to send an SOS?',
                 textAlign: TextAlign.center,
-                style: context.textTheme.headline6?.copyWith(),
+                style: context.textTheme.titleLarge?.copyWith(),
               ),
               Gap(20.h),
               Text(
                 'This will send your location to your emergency contacts.',
                 textAlign: TextAlign.center,
-                style: context.textTheme.bodyText1?.copyWith(
+                style: context.textTheme.bodyLarge?.copyWith(
                   fontSize: 16.sp,
                 ),
               ),

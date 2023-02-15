@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -21,7 +24,7 @@ class _Keys {
 
 abstract class LocalStorage {
   List<String> get users;
-  Future<void> setUsers(String user);
+  // Future<void> setUsers(String user);
   User? getUser();
   Future<void> setUser(Map<String, dynamic> user);
   Future<void> setUserForms(UserFormsData forms);
@@ -68,7 +71,10 @@ class StorageService implements LocalStorage {
   StorageService({
     required this.box,
   }) {
-    // _userStream = BehaviorSubject<User?>.seeded(getUser());
+    // _userStream = BehaviorSubject<User?>.seeded(getUser())
+    // ;
+
+    log('storage service is initializing');
     getUser();
     _userRoles.add(getRoles());
     _userDataStream.add(getUserData());
@@ -80,7 +86,10 @@ class StorageService implements LocalStorage {
   // late final BehaviorSubject<User?> _controller;
   final _controller = BehaviorSubject<User?>.seeded(null);
   final _userRoles = BehaviorSubject<List<UserRoles>>.seeded([]);
-  final _userDataStream = BehaviorSubject<UserData?>.seeded(null);
+  final BehaviorSubject<UserData?> _userDataStream =
+      BehaviorSubject<UserData?>.seeded(null);
+
+  StreamSubscription<UserData>? _userStreamSubscription;
 
   String get userKey => _Keys.user;
 
@@ -146,7 +155,8 @@ class StorageService implements LocalStorage {
   UserData? getUserData() {
     final data = box.get(_Keys.userData);
     if (data == null) return null;
-    return UserData.fromJson(Map<String, dynamic>.from(box.get(_Keys.userData)));
+    return UserData.fromJson(
+        Map<String, dynamic>.from(box.get(_Keys.userData)));
   }
 
   @override
@@ -208,7 +218,9 @@ class StorageService implements LocalStorage {
   @override
   Future<void> setRoleFields(String role, Map<String, dynamic> data) async {
     final boxData = box.get(role);
-    final dataFields = boxData != null && (boxData as Map).containsKey('data') ? boxData['data'] : null;
+    final dataFields = boxData != null && (boxData as Map).containsKey('data')
+        ? boxData['data']
+        : null;
     await box.put(role, {'data': dataFields, 'fields': data});
   }
 
@@ -227,7 +239,9 @@ class StorageService implements LocalStorage {
   @override
   Future<void> setRoleData(String role, Map<String, dynamic> data) async {
     final boxData = box.get(role);
-    final dataFields = boxData != null && (boxData as Map).containsKey('fields') ? boxData['fields'] : null;
+    final dataFields = boxData != null && (boxData as Map).containsKey('fields')
+        ? boxData['fields']
+        : null;
     await box.put(role, {'data': data, 'fields': dataFields});
   }
 
@@ -256,23 +270,24 @@ class StorageService implements LocalStorage {
   }
 
   @override
-  Future<void> setUsers(String user) {
-    final _users = users.toSet();
-    _users.add(user);
-    return box.put(_Keys.users, _users);
-  }
-
-  @override
   List<String> get users => box.get(_Keys.users, defaultValue: []);
 
   @override
-  Stream<bool> get isLoggedInStream => box.watch(key: _Keys.isLoggedIn).map((event) => event.value ?? false);
+  Stream<bool> get isLoggedInStream =>
+      box.watch(key: _Keys.isLoggedIn).map((event) => event.value ?? false);
 
-  void _listenForUserDataStream() {
-    box.watch(key: _Keys.userData).map((event) {
-      if (event.value == null) return null;
-      final userData = UserData.fromJson(Map<String, dynamic>.from(event.value));
-      _userDataStream.add(userData);
-    });
+  void _listenForUserDataStream() async {
+    await for (final event in box.watch(key: _Keys.userData)) {
+      try {
+        if (event.value == null) return null;
+        final userData =
+            UserData.fromJson(Map<String, dynamic>.from(event.value));
+        _userDataStream.add(userData);
+      } on Exception catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
+    }
   }
 }

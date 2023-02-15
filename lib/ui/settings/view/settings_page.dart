@@ -55,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Text(
               'Settings',
-              style: context.textTheme.headline6?.copyWith(
+              style: context.textTheme.titleLarge?.copyWith(
                 fontSize: 40.h,
               ),
             ),
@@ -96,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           Gap(20.h),
                           Text(
                             packageInfo?.appName ?? '',
-                            style: context.textTheme.headline5,
+                            style: context.textTheme.headlineSmall,
                           ),
                           if (context.read<Api>().client.baseUrl ==
                               ApiConstants.localUrl)
@@ -107,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           Gap(10.h),
                           Text(
                             Strings.appVersion,
-                            style: context.textTheme.headline6,
+                            style: context.textTheme.titleLarge,
                           ),
                           Gap(20.h),
                           MyElevatedButton(
@@ -164,7 +164,6 @@ class _SettingsPageState extends State<SettingsPage> {
                       onCancel: () {},
                       onConfirm: () async {
                         _deleteAccount();
-                        
                       },
                     ),
                   );
@@ -185,7 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       : context.read<LocalApi>();
                   apiService.cancel();
                   context.read<GeofenceService>().cancel();
-                  final client = GraphQlClient();
+                  final client = GraphQlClient(username: '', password: '');
                   await client.clearStorage();
                   await context.read<Api>().logout();
                   await Get.offAll(() => const LoginPage());
@@ -209,7 +208,7 @@ class _SettingsPageState extends State<SettingsPage> {
         : context.read<LocalApi>();
     apiService.cancel();
     context.read<GeofenceService>().cancel();
-    final client = GraphQlClient();
+    final client = GraphQlClient(username: '', password: '');
     await client.clearStorage();
     await context.read<Api>().logout();
     await Get.offAll(() => const LoginPage());

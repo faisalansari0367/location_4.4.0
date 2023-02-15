@@ -16,8 +16,7 @@ PicModel _$PicModelFromJson(Map<String, dynamic> json) => PicModel(
       city: json['city'] as String?,
       postcode: PicModel.parseInt(json['postcode']),
       countryOfResidency: json['countryOfResidency'] as String?,
-      company:
-          (json['company'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      company: json['company'] as String?,
       owner: json['owner'] as String?,
       lpaUsername: json['lpaUsername'] as String?,
       lpaPassword: json['lpaPassword'] as String?,

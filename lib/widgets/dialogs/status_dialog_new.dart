@@ -25,7 +25,7 @@ class StatusDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           AspectRatio(
-            aspectRatio: 2.1,
+            aspectRatio: 2.9,
             child: Lottie.asset(
               lottieAsset,
               addRepaintBoundary: true,

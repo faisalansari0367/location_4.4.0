@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:api_repo/src/envd/envd_repo.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -24,6 +25,7 @@ class ApiRepo implements Api {
   late GeofencesRepo _geofencesRepo;
   late PaymentRepo _paymentRepo;
   late PicRepo _picRepo;
+  late EnvdRepo _envdRepo;
   late Directory _cacheDir;
 
   // final BehaviorSubject<Box> _userBoxController = BehaviorSubject<Box>();
@@ -66,6 +68,7 @@ class ApiRepo implements Api {
     _geofencesRepo = GeofencesRepoImpl(client: client, box: box);
     _paymentRepo = PaymentRepoImpl(client: client);
     _picRepo = PicRepoImpl(client: client);
+    _envdRepo = EnvdRepoImpl(client: client, box: box);
 
     _userStream(_box, storage.userKey);
   }
@@ -266,8 +269,9 @@ class ApiRepo implements Api {
   }
 
   @override
-  Future<ApiResult<User>> updateUser({required UserData userData}) {
-    return _authRepo.updateUser(userData: userData);
+  Future<ApiResult<User>> updateAllowedRoles(
+      {required List<String> allowedRoles}) {
+    return _authRepo.updateAllowedRoles(allowedRoles: allowedRoles);
   }
 
   @override
@@ -561,4 +565,19 @@ class ApiRepo implements Api {
 
   @override
   Stream<List<PicModel>> get picsStream => _picRepo.picsStream;
+
+  @override
+  Future<ApiResult<UserData>> updateUserData({required UserData data}) {
+    return _authRepo.updateUserData(data: data);
+  }
+  
+  @override
+  Future<ApiResult<Consignments>> getEnvdForms(String lpaUsername, String lpaPassword) {
+    return _envdRepo.getEnvdForms(lpaUsername, lpaPassword);
+  }
+  
+  @override
+  Future<ApiResult> getEnvdToken({required String username, required String password}) {
+    return _envdRepo.getEnvdToken(username: username, password: password);
+  }
 }

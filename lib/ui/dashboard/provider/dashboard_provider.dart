@@ -1,4 +1,5 @@
 import 'package:api_repo/api_repo.dart';
+import 'package:bioplus/constants/api_constants.dart';
 import 'package:bioplus/provider/base_model.dart';
 import 'package:bioplus/services/in_app_update/in_app_update.dart';
 import 'package:bioplus/services/notifications/push_notifications.dart';
@@ -6,8 +7,6 @@ import 'package:bioplus/services/notifications/sync_service.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:provider/provider.dart';
-
-import '../../../constants/api_constants.dart';
 
 class DashboardNotifier extends BaseModel {
   DashboardNotifier(BuildContext context) : super(context) {
@@ -32,7 +31,10 @@ class DashboardNotifier extends BaseModel {
     final user = api.getUser();
     if (user != null) {
       // user.registerationToken = await notificationService.getFCMtoken();
-      await api.updateMe(user: user);
+      final newUser = user.copyWith(
+        registerationToken: await PushNotificationService().getFCMtoken(),
+      );
+      await api.updateMe(user: newUser);
       await api.getRoleData(user.role!);
       await InAppUpdateService().checkUpdate();
     }

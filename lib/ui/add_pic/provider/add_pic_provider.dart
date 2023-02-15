@@ -8,11 +8,12 @@ import 'package:get/get.dart';
 class AddPicNotifier extends BaseModel {
   AddPicNotifier(super.context, {this.model, this.updatePic = false}) {
     if (model == null) return;
+    lpaUsernameController.text = model?.lpaUsername ?? '';
     emit(
       state.copyWith(
         pic: model?.pic,
         ngr: model?.ngr,
-        companyName: model?.company,
+        company: model?.company,
         propertyName: model?.propertyName,
         owner: model?.owner,
         street: model?.street,
@@ -20,6 +21,7 @@ class AddPicNotifier extends BaseModel {
         state: model?.state,
         postcode: model?.postcode == null ? null : model!.postcode!.toString(),
         lpaUsername: model?.lpaUsername,
+        lpaPassword: model?.lpaPassword,
         nlisPassword: model?.nlisPassword,
         msaNumber: model?.msaNumber,
         nfasAccreditationNumber: model?.nfasAccreditationNumber,
@@ -43,8 +45,7 @@ class AddPicNotifier extends BaseModel {
 
   void onNgrChanged(String value) => emit(state.copyWith(ngr: value));
 
-  void onCompanyChanged(String value) =>
-      emit(state.copyWith(companyName: value.split(',')));
+  void onCompanyChanged(String value) => emit(state.copyWith(company: value));
 
   void onPropertyChanged(String value) =>
       emit(state.copyWith(propertyName: value));
@@ -83,23 +84,23 @@ class AddPicNotifier extends BaseModel {
     emit(state.copyWith(nfasAccreditationNumber: p1));
   }
 
-  Future<bool> validateLpaCreds() async {
-    if (state.lpaUsername == null) {
+  Future<bool> validateLpaCreds(String? username, String? password) async {
+    if (username == null) {
       DialogService.error('Please enter a valid PIC');
       return false;
     }
 
-    if (state.lpaPassword == null) {
+    if (password == null) {
       DialogService.error('Please enter a valid password');
       return false;
     }
 
     try {
-      final client = GraphQlClient(userData: api.getUserData());
-      final result = await client.getEnvdToken(
-        state.lpaUsername!,
-        state.lpaPassword!,
+      final client = GraphQlClient(
+        username: username,
+        password: password,
       );
+      final result = await client.getEnvdToken();
 
       print(result);
 
@@ -111,8 +112,9 @@ class AddPicNotifier extends BaseModel {
   }
 
   Future<void> submit() async {
-    if (state.lpaPassword != null && state.lpaPassword != null) {
-      if (!await validateLpaCreds()) {
+    emit(state.copyWith(lpaUsername: lpaUsernameController.text));
+    if (state.lpaPassword != null && state.lpaUsername != null) {
+      if (!await validateLpaCreds(state.lpaUsername, state.lpaPassword)) {
         return;
       }
     }

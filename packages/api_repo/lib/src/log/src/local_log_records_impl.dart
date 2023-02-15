@@ -178,9 +178,6 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
     });
 
     if (kDebugMode) {
-      for (var element in recordsByUser) {
-        print('record: ${element.id}');
-      }
       print('records in last 15 minutes: ${recordsPast15Minutes.length}');
     }
 
@@ -323,7 +320,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
         final logRecord = await getLogRecord(geofenceId);
         if (logRecord == null) {
           return const ApiResult.failure(
-              error: NetworkExceptions.defaultError('no log record found'));
+            error: NetworkExceptions.defaultError('no log record found'),
+          );
         }
 
         return await _patchForm(logRecord.id!, form);
@@ -355,7 +353,8 @@ class LocalLogRecordsImpl extends LogRecordsRepo {
       return ApiResult.success(data: logRecord);
     } else {
       return const ApiResult.failure(
-          error: NetworkExceptions.defaultError('log record not found'));
+        error: NetworkExceptions.defaultError('log record not found'),
+      );
     }
   }
 

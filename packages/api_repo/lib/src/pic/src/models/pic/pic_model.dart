@@ -17,7 +17,7 @@ class PicModel extends Equatable {
   @JsonKey(fromJson: parseInt)
   final int? postcode;
   final String? countryOfResidency;
-  final List<String>? company;
+  final String? company;
   final String? owner;
 
   final String? lpaUsername;
@@ -59,7 +59,7 @@ class PicModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$PicModelToJson(this);
 
-  String get companies => company?.join(', ') ?? '';
+  // String get companies => company?.join(', ') ?? '';
 
   @override
   List<Object?> get props {
@@ -95,7 +95,7 @@ class PicModel extends Equatable {
     String? city,
     int? postcode,
     String? countryOfResidency,
-    List<String>? company,
+    String? company,
     String? owner,
     String? lpaUsername,
     String? lpaPassword,

@@ -28,6 +28,7 @@ class UserData {
   int? id;
   String? firstName;
   String? logo;
+  String? rego;
   String? lastName;
   String? email;
   String? phoneNumber;
@@ -79,8 +80,7 @@ class UserData {
   String? employerCompany;
   String? temporaryOwner;
 
-  @JsonKey(defaultValue: false)
-  bool isTemporaryOwner = false;
+  bool? isTemporaryOwner;
 
   String? emergencyMobileContact;
   String? emergencyEmailContact;
@@ -89,17 +89,13 @@ class UserData {
   String? titleName;
   int? geofenceLimit;
 
-  @JsonKey(defaultValue: false)
-  bool isSubscribed = false;
+  bool? isSubscribed;
 
-  @JsonKey(defaultValue: [])
-  List<String> allowedRoles = const [];
+  List<String>? allowedRoles;
 
-  @JsonKey(defaultValue: [])
-  List<String> species = const <String>[];
+  List<String>? species;
 
-  @JsonKey(defaultValue: [])
-  List<String> cvdForms = const [];
+  List<String>? cvdForms;
 
   String? registrationToken;
 
@@ -131,7 +127,7 @@ class UserData {
   DateTime? updatedAt;
 
   UserData({
-    this.species = const <String>[],
+    this.species,
     this.employerCompany,
     this.emergencyMobileContact,
     this.temporaryOwner,
@@ -178,13 +174,14 @@ class UserData {
     this.sector,
     this.contactName,
     this.eventName,
+    this.rego,
     this.contactEmail,
     this.contactNumber,
-    this.cvdForms = const [],
+    this.cvdForms,
     this.startDate,
     this.endDate,
     this.edec,
-    this.allowedRoles = const [],
+    this.allowedRoles,
     this.registrationToken,
     this.updatedAt,
     this.status,
@@ -196,12 +193,12 @@ class UserData {
     this.nfasAccreditationNumber,
     this.stripeCusId,
     this.geofenceLimit,
-    this.isSubscribed = false,
+    this.isSubscribed,
     this.subscriptionStartDate,
     this.subscriptionEndDate,
     this.createdAt,
     this.emergencyEmailContact,
-    this.isTemporaryOwner = false,
+    this.isTemporaryOwner,
     this.city,
     this.location,
   });
@@ -221,8 +218,7 @@ class UserData {
     return DateTime.tryParse(date)?.toLocal();
   }
 
-
-  String get companies => company!.join(', ');
+  String get companies => (company ?? []).join(', ');
 
   static UserStatus getStatus(String? status) {
     final result = UserStatus.values.where(

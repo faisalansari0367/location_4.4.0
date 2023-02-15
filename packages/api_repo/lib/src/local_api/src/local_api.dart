@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:api_repo/src/auth/src/storage/storage_service.dart';
+import 'package:api_repo/src/envd/models/envd/envd_model.dart';
 import 'package:api_repo/src/log/src/local_log_records_impl.dart';
 import 'package:cvd_forms/cvd_forms.dart';
 import 'package:flutter/foundation.dart';
@@ -240,7 +241,8 @@ class LocalApi extends Api {
   }
 
   @override
-  Future<ApiResult<User>> updateUser({required UserData userData}) {
+  Future<ApiResult<User>> updateAllowedRoles(
+      {required List<String> allowedRoles}) {
     // TODO: implement updateUser
     throw UnimplementedError();
   }
@@ -297,11 +299,7 @@ class LocalApi extends Api {
         error: NetworkExceptions.defaultError('Not available in offline mode'));
   }
 
-  @override
-  Future<void> getEnvdToken() {
-    // TODO: implement getEnvdToken
-    throw UnimplementedError();
-  }
+
 
   @override
   List<LogbookEntry> get logbookRecords => [];
@@ -545,12 +543,29 @@ class LocalApi extends Api {
     // TODO: implement updatePic
     throw UnimplementedError();
   }
-  
+
   @override
   // TODO: implement pics
   List<PicModel> get pics => throw UnimplementedError();
-  
+
   @override
   // TODO: implement picsStream
   Stream<List<PicModel>> get picsStream => throw UnimplementedError();
+
+  @override
+  Future<ApiResult<UserData>> updateUserData({required UserData data}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResult<Consignments>> getEnvdForms(String lpaUsername, String lpaPassword) {
+    // TODO: implement getEnvdForms
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<ApiResult> getEnvdToken({required String username, required String password}) {
+    // TODO: implement getEnvdToken
+    throw UnimplementedError();
+  }
 }

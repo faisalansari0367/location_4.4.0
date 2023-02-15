@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/add_pic/view/add_pic_page.dart';
@@ -34,143 +35,116 @@ class PicDetailsView extends StatelessWidget {
         padding: kPadding,
         child: AutoSpacing(
           children: [
-            row(
+            _BoxWidget(
+              spacing: Gap(15.h),
               children: [
-                _column(context, Strings.pic, model.pic),
+                row(
+                  children: [
+                    _column(context, Strings.pic, model.pic),
+                    _column(
+                      context,
+                      Strings.ngr,
+                      model.ngr,
+                    ),
+                  ],
+                ),
+                row(
+                  children: [
+                    _column(context, Strings.company, model.company),
+                  ],
+                ),
+                row(
+                  children: [
+                    _column(
+                      context,
+                      Strings.properyName,
+                      model.propertyName,
+                    ),
+                    _column(
+                      context,
+                      Strings.owner,
+                      model.owner,
+                    ),
+                  ],
+                ),
                 _column(
                   context,
-                  Strings.ngr,
-                  model.ngr,
+                  Strings.address,
+                  '${model.street}, ${model.town}, ${model.state}',
+                ),
+                row(
+                  children: [
+                    _column(
+                      context,
+                      Strings.state,
+                      model.state,
+                    ),
+                    _column(
+                      context,
+                      Strings.postCode,
+                      model.postcode == null ? '' : model.postcode.toString(),
+                    ),
+                  ],
                 ),
               ],
             ),
-            row(
-              children: [
-                _column(context, Strings.company, model.companies),
-              ],
-            ),
-            row(
+            _BoxWidget(
+              titleLarge: Strings.lpaCrdentials,
               children: [
                 _column(
                   context,
-                  Strings.properyName,
-                  model.propertyName,
+                  Strings.lpaUsername,
+                  model.lpaUsername,
+                  isRow: true,
                 ),
+                Gap(20.h),
                 _column(
                   context,
-                  Strings.owner,
-                  model.owner,
+                  Strings.lpaPassword,
+                  maskPassword(model.lpaPassword),
+                  isRow: true,
                 ),
               ],
             ),
-            _column(
-              context,
-              'Address',
-              '${model.street}, ${model.town}, ${model.state}',
-            ),
-            row(
+            _BoxWidget(
+              titleLarge: Strings.accreditations,
               children: [
                 _column(
                   context,
-                  Strings.state,
-                  model.state,
+                  Strings.msa,
+                  model.msaNumber,
+                  isRow: true,
                 ),
+                Gap(20.h),
                 _column(
                   context,
-                  Strings.postCode,
-                  model.postcode == null ? '' : model.postcode.toString(),
+                  Strings.nfas,
+                  model.nfasAccreditationNumber,
+                  isRow: true,
                 ),
               ],
             ),
-            _container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Strings.lpaCrdentials,
-                    style: context.textTheme.headlineSmall,
-                  ),
-                  Gap(25.h),
-                  _column(
-                    context,
-                    Strings.lpaUsername,
-                    model.lpaUsername,
-                    isRow: true,
-                  ),
-                  Gap(20.h),
-                  _column(
-                    context,
-                    Strings.lpaPassword,
-                    model.lpaPassword,
-                    isRow: true,
-                  ),
-                ],
-              ),
-            ),
-            _container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Strings.accreditations,
-                    style: context.textTheme.headlineSmall,
-                  ),
-                  Gap(25.h),
-                  _column(
-                    context,
-                    Strings.msa,
-                    model.msaNumber,
-                    isRow: true,
-                  ),
-                  Gap(20.h),
-                  _column(
-                    context,
-                    Strings.nfas,
-                    model.nfasAccreditationNumber,
-                    isRow: true,
-                  ),
-                ],
-              ),
-            ),
-            _container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Strings.nlisCredentials,
-                    style: context.textTheme.headlineSmall,
-                  ),
-                  Gap(25.h),
-                  _column(
-                    context,
-                    Strings.nlisUsername,
-                    model.nlisUsername,
-                    isRow: true,
-                  ),
-                  Gap(20.h),
-                  _column(
-                    context,
-                    Strings.nlisPassword,
-                    model.nlisPassword,
-                    isRow: true,
-                  ),
-                ],
-              ),
+            _BoxWidget(
+              titleLarge: Strings.nlisCredentials,
+              children: [
+                _column(
+                  context,
+                  Strings.nlisUsername,
+                  model.nlisUsername,
+                  isRow: true,
+                ),
+                Gap(20.h),
+                _column(
+                  context,
+                  Strings.nlisPassword,
+                  model.nlisPassword,
+                  isRow: true,
+                ),
+              ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _container({required Widget child}) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        borderRadius: kBorderRadius,
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: child,
     );
   }
 
@@ -214,6 +188,57 @@ class PicDetailsView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
+    );
+  }
+
+  String maskPassword(String? password) {
+    return List.generate(
+      password?.length ?? 0,
+      (index) => '*',
+    ).join();
+  }
+}
+
+class _BoxWidget extends StatelessWidget {
+  final String? titleLarge;
+  final Widget? spacing;
+  final List<Widget> children;
+  const _BoxWidget({
+    required this.children,
+    this.titleLarge,
+    this.spacing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (titleLarge != null) ...[
+            Text(
+              titleLarge!,
+              style: context.textTheme.headlineSmall,
+            ),
+            Gap(25.h),
+          ],
+          if (spacing != null)
+            AutoSpacing(spacing: spacing, children: children)
+          else
+            ...children,
+        ],
+      ),
+    );
+  }
+
+  Widget _container({required Widget child}) {
+    return Container(
+      padding: kPadding,
+      decoration: BoxDecoration(
+        borderRadius: kBorderRadius,
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: child,
     );
   }
 }

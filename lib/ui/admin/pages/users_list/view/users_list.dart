@@ -175,7 +175,7 @@ class UsersView extends StatelessWidget {
       child: ExpandedTile(
         title: Text(
           '${user.firstName!} ${user.lastName!}',
-          style: context.textTheme.subtitle2?.copyWith(
+          style: context.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -239,6 +239,26 @@ class UsersView extends StatelessWidget {
             ],
           ),
           const Divider(),
+
+          Row(
+            children: [
+              Text(
+                'Registration Date: ',
+                style: context.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              // const Spacer(),
+              Text(
+                MyDecoration.formatDate(user.createdAt),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+          const Divider(),
           Row(
             children: [
               const Text('Delete User'),
@@ -261,11 +281,12 @@ class UsersView extends StatelessWidget {
           ),
 
           // Text
+
           Row(
             children: [
               Text(
                 'Status ',
-                style: context.textTheme.subtitle1?.copyWith(
+                style: context.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
               ),

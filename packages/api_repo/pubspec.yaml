@@ -22,6 +22,8 @@ dependencies:
     path: ../api_client
   cvd_forms:
     path: ../cvd_forms
+  date_format:
+    path: ../date_format
 
   path_provider: ^2.0.11
   json_serializable: ^6.6.0

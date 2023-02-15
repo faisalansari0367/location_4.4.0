@@ -49,18 +49,19 @@ class PicRepoImpl implements PicRepo {
   Future<ApiResult<PicModel>> updatePic(
       {required AddPicParams params, required int picId}) async {
     try {
-      final result = await client.patch(
-        Endpoints.updatePic + picId.toString(),
-        data: params.toJson()
-          ..remove('pic')
-          ..remove('ngr')
-          ..remove('company_name')
-          ..remove('property_name')
-          ..remove('owner')
-          ..remove('street')
-          ..remove('town')
-          ..remove('postcode'),
-      );
+      final result = await client.patch('${Endpoints.updatePic}/$picId',
+          data: params.toJson()
+            ..removeWhere((key, value) => value == null || value == '')
+            ..remove('pic')
+
+          // ..remove('ngr')
+          // ..remove('company_name')
+          // ..remove('property_name')
+          // ..remove('owner')
+          // ..remove('street')
+          // ..remove('town')
+          // ..remove('postcode'),
+          );
       final data = Map<String, dynamic>.from(result.data['data']);
       final PicModel picModel = PicModel.fromJson(data);
       final index = _pics.value.indexWhere((element) => element.id == picId);

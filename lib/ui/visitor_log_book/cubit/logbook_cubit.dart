@@ -80,7 +80,7 @@ class LogBookCubit extends BaseModel {
               ''
             else
               (item.user?.postcode).toString(),
-            if (item.hasForm ?? false)
+            if (item.hasForm)
               'Registered'.toUpperCase()
             else
               'Unregistered'.toUpperCase()
@@ -106,7 +106,9 @@ class LogBookCubit extends BaseModel {
     isGetting = true;
 
     final result = await apiService.getLogbookRecords(
-        page: state.page, limit: state.limit);
+      page: state.page,
+      limit: state.limit,
+    );
     result.when(
       success: (s) async {
         emit(

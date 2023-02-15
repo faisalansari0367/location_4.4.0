@@ -208,7 +208,7 @@ packages:
     source: hosted
     version: "2.2.4"
   date_format:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "../date_format"
       relative: true

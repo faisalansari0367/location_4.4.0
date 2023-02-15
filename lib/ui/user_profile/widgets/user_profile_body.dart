@@ -1,3 +1,4 @@
+import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/PIC/view/pic_page.dart';
 import 'package:bioplus/ui/geofence_delegation/geofence_delegation.dart';
@@ -163,24 +164,29 @@ class UserProfileBody extends StatelessWidget {
 
               // border: Border.all(color: Colors.grey.shade200),
             ),
-            child: _userProfile(state.user?.logo),
+            child: _userProfile(state.user.logo),
           ),
           Gap(15.h),
           RoleTag(
             bgColor: context.theme.primaryColor,
           ),
           Gap(5.h),
-          Text(
-            state.user?.fullName ?? 'User',
-            style: context.textTheme.bodyLarge?.copyWith(
-              color: Colors.grey.shade900,
-              fontWeight: FontWeight.w600,
-              fontSize: 18.sp,
-            ),
+          StreamBuilder<UserData?>(
+            stream: state.api.userDataStream,
+            builder: (context, snapshot) {
+              return Text(
+                snapshot.data?.fullName ?? 'User',
+                style: context.textTheme.bodyLarge?.copyWith(
+                  color: Colors.grey.shade900,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.sp,
+                ),
+              );
+            },
           ),
           // Gap(5.h),
           Text(
-            state.user?.email ?? '',
+            state.user.email ?? '',
             style: context.textTheme.bodyMedium?.copyWith(
               color: Colors.grey.shade600,
               fontWeight: FontWeight.w600,

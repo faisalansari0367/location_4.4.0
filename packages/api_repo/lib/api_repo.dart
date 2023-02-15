@@ -14,5 +14,6 @@ export 'src/payment/payment_repo.dart';
 export 'src/user/user_repo.dart';
 export 'src/functions/functions_repo.dart';
 export 'src/pic/pic_repo.dart';
+export 'src/envd/envd_repo.dart';
 // export '';
 

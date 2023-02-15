@@ -41,8 +41,8 @@ class RolesRegistrationCubit extends BaseModel {
       }
       final user = api.getUserData() ?? UserData();
 
-      user.allowedRoles = selectedRoles.map((e) => e.role).toList();
-      final result = await api.updateUser(userData: user);
+      final allowedRoles = selectedRoles.map((e) => e.role).toList();
+      final result = await api.updateAllowedRoles(allowedRoles: allowedRoles);
       result.when(
         success: (data) {
           if (onRoleUpdated != null) {
@@ -56,7 +56,7 @@ class RolesRegistrationCubit extends BaseModel {
         failure: (error) => DialogService.failure(error: error),
       );
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -92,7 +92,7 @@ class RolesRegistrationCubit extends BaseModel {
               rolesList: roles.map(
                 (e) {
                   final isSubscribed = allowedRoles.contains(e);
-                  
+
                   return SelectRoleModel(
                     role: e,
                     isSelected: allowedRoles.contains(e) || e == 'Visitor',

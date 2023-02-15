@@ -11,40 +11,39 @@ class AddPicParams extends Equatable {
   final String? ngr;
 
   @JsonKey(name: 'company')
-  final List<String>? companyName;
+  final String? company;
 
-  @JsonKey(name: 'property_name')
   final String? propertyName;
   final String? owner;
   final String? street;
   final String? town;
   final String? state;
 
-  @JsonKey(name: 'postcode')
+  // @JsonKey(name: 'postcode')
   final String? postcode;
 
-  @JsonKey(name: 'lpa_username')
+  // @JsonKey(name: 'lpaUsername')
   final String? lpaUsername;
 
-  @JsonKey(name: 'lpa_password')
+  // @JsonKey(name: 'lp')
   final String? lpaPassword;
 
-  @JsonKey(name: 'nlis_username')
+  // @JsonKey(name: 'nlis_username')
   final String? nlisUsername;
 
-  @JsonKey(name: 'nlis_password')
+  // @JsonKey(name: 'nlis_password')
   final String? nlisPassword;
 
-  @JsonKey(name: 'msa_number')
+  // @JsonKey(name: 'msa_number')
   final String? msaNumber;
 
-  @JsonKey(name: 'nfas_accreditation_number')
+  // @JsonKey(name: 'nfas_accreditation_number')
   final String? nfasAccreditationNumber;
 
   const AddPicParams({
     this.pic,
     this.ngr,
-    this.companyName,
+    this.company,
     this.propertyName,
     this.owner,
     this.street,
@@ -67,7 +66,7 @@ class AddPicParams extends Equatable {
   AddPicParams copyWith({
     String? pic,
     String? ngr,
-    List<String>? companyName,
+    String? company,
     String? propertyName,
     String? owner,
     String? street,
@@ -84,7 +83,7 @@ class AddPicParams extends Equatable {
     return AddPicParams(
       pic: pic ?? this.pic,
       ngr: ngr ?? this.ngr,
-      companyName: companyName ?? this.companyName,
+      company: company ?? this.company,
       propertyName: propertyName ?? this.propertyName,
       owner: owner ?? this.owner,
       street: street ?? this.street,
@@ -105,7 +104,7 @@ class AddPicParams extends Equatable {
     return [
       pic,
       ngr,
-      companyName,
+      company,
       propertyName,
       owner,
       street,

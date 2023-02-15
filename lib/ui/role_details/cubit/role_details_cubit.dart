@@ -8,7 +8,7 @@ import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
 import 'package:bioplus/ui/maps/view/maps_page.dart';
 import 'package:bioplus/ui/role_details/cubit/role_details_state.dart';
 import 'package:bioplus/ui/role_details/models/field_data.dart';
-import 'package:bioplus/ui/role_details/widgets/property_address.dart';
+import 'package:bioplus/ui/role_details/widgets/property_address.dart' as pa;
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
 import 'package:bioplus/widgets/dialogs/network_error_dialog.dart';
 import 'package:bioplus/widgets/dialogs/no_signature_found.dart';
@@ -188,7 +188,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
     if (addressFields.containsValue(true)) {
       addressFields.removeWhere((key, value) => addressFields[key] == false);
-      final address = Address.fromMap(map);
+      final address = pa.Address.fromMap(map);
       address.fieldsToShow = addressFields;
 
       final isCompanyAddress = state.fields.indexWhere(
@@ -224,7 +224,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
   Future<void> _getFields() async {
     if (state.fields.isNotEmpty) {
-      _getFieldsData();
+      // _getFieldsData();
     }
   }
 
@@ -369,7 +369,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
 
   Future<bool> _validateLpaCreds(String userName, String password) async {
     try {
-      final result = await GraphQlClient().getEnvdToken(userName, password);
+      final result = await GraphQlClient(username: userName, password: password)
+          .getEnvdToken();
       if (result != null) return true;
       return false;
     } catch (e) {
@@ -413,15 +414,8 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
         var message = '';
         final entryDate = DateTime.parse(data['startDate']);
         final exitDate = DateTime.parse(data['endDate']);
-        print(exitDate.difference(entryDate).inDays);
         if (entryDate.isAfter(exitDate)) {
           message = 'Entry date cannot be after exit date';
-        } else if (entryDate.compareTo(exitDate) == 0) {
-          message = 'Entry date cannot be equal to exit date';
-        } else if (entryDate.isBefore(DateTime.now().subtract(10.days))) {
-          message = "Can't be more than 10 days before today's date";
-        } else if (exitDate.difference(entryDate).inDays > 10) {
-          message = 'Entry date cannot be more than 10 days after today';
         }
         if (message.isNotEmpty) {
           await DialogService.showDialog(
@@ -522,7 +516,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       // if (data.containsKey('pic')) {}
       final keys = [];
       data.forEach((key, value) {
-        if (value == null || value == '') {
+        if (value == null) {
           keys.add(key);
         }
       });
@@ -538,6 +532,18 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
           trimmedData[key] = value;
         }
       });
+
+      if (trimmedData.containsKey('company')) {
+        trimmedData['company'] = trimmedData['company'].split(',');
+      }
+
+      // if (data.containsKey('signature')) {
+      //   final isSameSignature =
+      //       state.userRoleDetails['signature'] == data['signature'];
+      //   if (isSameSignature) {
+      //     trimmedData.remove('signature');
+      //   }
+      // }
 
       final result = await apiService.updateRole(role, trimmedData);
       result.when(

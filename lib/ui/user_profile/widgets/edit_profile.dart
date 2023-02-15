@@ -4,6 +4,7 @@ import 'package:bioplus/models/enum/field_type.dart';
 import 'package:bioplus/ui/user_profile/provider/provider.dart';
 import 'package:bioplus/widgets/auto_spacing.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
+import 'package:bioplus/widgets/text_fields/focus_nodes/always_disabled_focus_node.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,20 +37,22 @@ class EditProfile extends StatelessWidget {
                   children: [
                     MyTextField(
                       hintText: FieldType.firstName.label,
-                      initialValue: user?.firstName ?? '',
+                      initialValue: user.firstName ?? '',
                       onChanged: state.onFirstNameChanged,
                     ),
                     MyTextField(
                       hintText: 'Last Name',
-                      initialValue: user?.lastName ?? '',
+                      initialValue: user.lastName ?? '',
                       onChanged: state.onLastNameChanged,
                     ),
                     EmailField(
-                      initialValue: user?.email ?? '',
+                      initialValue: user.email ?? '',
                       onChanged: state.onEmailChanged,
+                      readOnly: true,
+                      focusNode: AlwaysDisabledFocusNode(),
                     ),
                     PhoneTextField(
-                      initialValue: user?.phoneNumber ?? '',
+                      initialValue: user.phoneNumber ?? '',
                       onChanged: (number, _) =>
                           state.onPhoneNumberChanged(number),
                     ),
@@ -76,16 +79,19 @@ class EditProfile extends StatelessWidget {
                     // ),
                     PhoneTextField(
                       hintText: 'Emergency Mobile Contact',
-                      initialValue:
-                          user?.emergencyMobileContact.toString() ?? '',
+                      initialValue: user.emergencyMobileContact ?? '',
                       onChanged: (number, countryCode) =>
-                          state.onPhoneNumberChanged(number),
+                          state.onEmergencyMobileContactChanged(number),
                     ),
                     EmailField(
-                      label: 'Emergency Mobile Email',
-                      initialValue:
-                          user?.emergencyEmailContact.toString() ?? '',
+                      label: 'Emergency Email',
+                      initialValue: user.emergencyEmailContact ?? '',
                       onChanged: state.onEmergencyEmailChanged,
+                    ),
+                    MyTextField(
+                      hintText: 'Company',
+                      initialValue: user.companies,
+                      onChanged: state.onCompanyChanged,
                     ),
                   ],
                 ),

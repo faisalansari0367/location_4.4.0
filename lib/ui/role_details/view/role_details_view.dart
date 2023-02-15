@@ -54,6 +54,12 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
                   //   style: context.textTheme.headlineSmall,
                   // ),
                   // Gap(3.height),
+                  // StreamBuilder<UserData?>(
+                  //   stream: context.read<Api>().userDataStream,
+                  //   builder: (context, snapshot) => UserProfileWidget(
+                  //     user: context.read<Api>().getUserData()!,
+                  //   ),
+                  // ),
                   UserProfileWidget(
                     user: context.read<Api>().getUserData()!,
                   ),
@@ -106,19 +112,19 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     // ignore: no_leading_underscores_for_local_identifiers
     final _fields = [...fields];
     _fields.remove('Species');
-    _fields.remove(Strings.lastName);
-    _fields.remove(Strings.firstName);
-    _fields.remove(Strings.mobile);
-    _fields.remove(Strings.email.toLowerCase());
-    _fields.remove(Strings.emergencyEmailContact);
-    _fields.remove(Strings.emergencyMobileContact);
+    // _fields.remove(Strings.lastName);
+    // _fields.remove(Strings.firstName);
+    // _fields.remove(Strings.mobile);
+    // _fields.remove(Strings.email.toLowerCase());
+    // _fields.remove(Strings.emergencyEmailContact);
+    // _fields.remove(Strings.emergencyMobileContact);
     // _fields.remove('Company Name');
     // _fields.remove('Company Address');
     final hasSignature = fields.contains('Signature');
-    final hasCompanyAddress = fields.contains('Company Address');
-    if (hasCompanyAddress) {
-      _fields.remove('Company Address');
-    }
+    // final hasCompanyAddress = fields.contains('Company Address');
+    // if (hasCompanyAddress) {
+    //   _fields.remove('Company Address');
+    // }
 
     if (hasSignature) {
       _fields.remove('Signature');
@@ -143,8 +149,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
     final userData = state.userRoleDetails;
 
     if (userData.containsKey(name.toCamelCase)) {
-      final value = (map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '')
-          .toString();
+      final data = map[name.toCamelCase] ?? userData[name.toCamelCase] ?? '';
+      final value = data is List ? data.join(',') : data.toString();
       controller.text = value;
       map[name.toCamelCase] = value;
     }
@@ -155,7 +161,14 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
 
         return MyDropdownField(
           hintText: 'Please select Sector',
-          options: const ['Government', 'Water', 'Gas', 'Power', 'Waste'],
+          options: const [
+            'Government',
+            'Agriculture',
+            'Water',
+            'Gas',
+            'Power',
+            'Waste'
+          ],
           value: map[name.toCamelCase],
           onChanged: (value) {
             map[name.toCamelCase] = value;
@@ -295,7 +308,7 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
         return MyTextField(
           hintText: name,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          validator: Validator.text,
+          validator: Validator.none,
           controller: controller,
         );
 
@@ -394,7 +407,8 @@ class _RoleDetailsViewState extends State<RoleDetailsView> {
       case 'street':
         return MyTextField(
           hintText: name.capitalize,
-          textCapitalization: TextCapitalization.characters,
+          // textCapitalization: ,
+          inputFormatters: [CapitalizeAllInputFormatter()],
           controller: controller,
           validator: Validator.text,
         );

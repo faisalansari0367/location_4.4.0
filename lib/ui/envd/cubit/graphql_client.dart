@@ -2,9 +2,8 @@ import 'dart:developer';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/api_constants.dart';
+import 'package:bioplus/ui/add_pic/add_pic.dart';
 import 'package:bioplus/ui/envd/cubit/graphql_storage.dart';
-import 'package:bioplus/ui/envd/view/evnd_page.dart';
-import 'package:bioplus/ui/select_role/view/select_role_page.dart';
 import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,24 +12,26 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class GraphQlClient {
-  // static const _envdProdUrl = 'https://auth.integritysystems.com.au/connect/token';
-  // static const _envdUATUrl = 'https://auth-uat.integritysystems.com.au/connect/token';
-  // static final HttpLink _httpLink = HttpLink('https://api.uat.integritysystems.com.au/graphql');
-
   static final HttpLink _httpLink = HttpLink(ApiConstants.envdGraphQl);
 
   static final _instance = GraphQlClient._();
-  late UserData _userData;
+  // late UserData _userData;
 
-  factory GraphQlClient({UserData? userData}) {
-    if (userData != null) {
-      _instance._userData = userData;
-    }
+  static late String? lpaUsername;
+  static late String? lpaPassword;
 
+  factory GraphQlClient({
+    required String? username,
+    required String? password,
+  }) {
+    lpaUsername = username;
+    lpaPassword = password;
     return _instance;
   }
 
-  GraphQlClient._();
+  GraphQlClient._() {
+    init(lpaUsername, lpaPassword);
+  }
 
   late Dio dio = Dio();
   late Box<Map<dynamic, dynamic>?> box;
@@ -49,10 +50,10 @@ class GraphQlClient {
     await hiveStore.reset();
   }
 
-  Future<bool> init() async {
+  Future<bool> init(String? username, String? password) async {
     await initStorage();
     storage = GrahphQlStorage(box: hiveStore.box);
-    token = await _getEnvdToken();
+    token = await _getEnvdToken(username, password);
     if (token == null) {
       return false;
     }
@@ -73,22 +74,22 @@ class GraphQlClient {
   }
 
   bool hasCredentials() {
-    if (_isNull(_userData.lpaUsername) || _isNull(_userData.lpaPassword)) {
+    if (_isNull(lpaUsername) || _isNull(lpaPassword)) {
       return false;
     } else {
       return true;
     }
   }
 
-  Future<String?> _getEnvdToken() async {
+  Future<String?> _getEnvdToken(String? username, String? password) async {
     try {
       if (isTokenValid()) {
         return 'Bearer ${storage.getToken()!.accessToken}';
       }
-      if (_isNull(_userData.lpaUsername) || _isNull(_userData.lpaPassword)) {
+      if (_isNull(username) || _isNull(password)) {
         return null;
       }
-      final result = await getEnvdToken(_userData.lpaUsername!, _userData.lpaPassword!);
+      final result = await getEnvdToken();
       final tokenData = await storage.saveToken(result);
       log(tokenData.accessToken);
       return 'Bearer ${tokenData.accessToken}';
@@ -98,9 +99,10 @@ class GraphQlClient {
     // return null;
   }
 
-  Future<bool> validateCreds() async {
+  Future<bool> validateCreds(PicModel pic) async {
     if (!hasCredentials()) {
-      const message = "Please provide valid LPA credentials in your role settings to use this feature.";
+      const message =
+          "Please provide valid LPA credentials in your PIC details to use this feature.";
       await Get.dialog(
         StatusDialog(
           lottieAsset: 'assets/animations/error.json',
@@ -108,8 +110,9 @@ class GraphQlClient {
           onContinue: () async {
             Get.back();
             Get.to(
-              () => const SelectRolePage(
-                showBackArrow: true,
+              () => AddPicPage(
+                pic: pic,
+                updatePic: true,
               ),
             );
           },
@@ -120,18 +123,18 @@ class GraphQlClient {
     return true;
   }
 
-  Future<void> redirect() async {
-    final isInit = await init();
-    final isCredsValid = await validateCreds();
-    if (!isCredsValid) return;
-    if (isInit) {
-      Get.to(() => const EnvdPage());
-    } else {
-      DialogService.error(
-        "Unable to connect with the ISC server currently. Please try again later.",
-      );
-    }
-  }
+  // Future<void> redirect() async {
+  //   final isInit = await init();
+  //   final isCredsValid = await validateCreds();
+  //   if (!isCredsValid) return;
+  //   if (isInit) {
+  //     Get.to(() => const EnvdPage());
+  //   } else {
+  //     DialogService.error(
+  //       "Unable to connect with the ISC server currently. Please try again later.",
+  //     );
+  //   }
+  // }
 
   // Map<String, dynamic> _itrackClientUAT() {
   //   return {
@@ -142,7 +145,7 @@ class GraphQlClient {
   //   };
   // }
 
-  Future<dynamic> getEnvdToken(String lpaUsername, String lpaPassword) async {
+  Future<dynamic> getEnvdToken() async {
     try {
       final userCreds = <String, dynamic>{
         'username': lpaUsername,
@@ -164,7 +167,9 @@ class GraphQlClient {
       log(e.toString());
       final response = e.response?.data['error'];
       if (response != null) {
-        if (response == 'invalid_client') DialogService.error('$response \n Please contact support');
+        if (response == 'invalid_client') {
+          DialogService.error('$response \n Please contact support');
+        }
       } else {
         DialogService.error('Something went wrong');
       }

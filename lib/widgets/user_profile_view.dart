@@ -19,51 +19,103 @@ class UserProfileWidget extends StatelessWidget {
       ).copyWith(
         border: Border.all(color: Colors.grey.shade300),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: StreamBuilder<UserData?>(
+        stream: context.read<Api>().userDataStream,
+        builder: (context, snapshot) {
+          final user = snapshot.data ?? this.user;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'User Profile',
-                style: context.textTheme.titleLarge,
+              Row(
+                children: [
+                  Text(
+                    'User Profile',
+                    style: context.textTheme.titleLarge,
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: _openProfilePage,
+                    icon: const Icon(Icons.edit),
+                  )
+                ],
               ),
-              const Spacer(),
-              IconButton(
-                onPressed: _openProfilePage,
-                icon: const Icon(Icons.edit),
-              )
+              Gap(20.h),
+              // _buildRow(
+              //   Strings.firstName,
+              //   user.firstName ?? '',
+              //   Strings.lastName,
+              //   user.lastName ?? '',
+              // ),
+
+              _buildText(
+                Strings.firstName,
+                user.firstName ?? '',
+                isRow: true,
+              ),
+              Gap(20.h),
+              _buildText(
+                Strings.lastName,
+                user.lastName ?? '',
+                isRow: true,
+              ),
+              Gap(20.h),
+              // _buildRow(
+              //   Strings.email,
+              //   user.email ?? '',
+              //   Strings.mobile,
+              //   '${user.countryCode ?? ''} ${user.phoneNumber ?? ''}',
+              // ),
+              _buildText(
+                Strings.email,
+                user.email ?? '',
+                isRow: true,
+              ),
+              Gap(20.h),
+              _buildText(
+                Strings.mobile,
+                '${user.countryCode ?? ''} ${user.phoneNumber ?? ''}',
+                isRow: true,
+              ),
+              Gap(20.h),
+              // _buildRow(
+              //   Strings.emergencyMobileContact,
+              //   user.emergencyEmailContact ?? '',
+              //   Strings.emergencyEmailContact,
+              //   user.emergencyMobileContact != null
+              //       ? '${user.countryCode ?? ''} ${user.emergencyMobileContact ?? ''}'
+              //       : '',
+              // ),
+              // Gap(20.h),
+              _buildText(
+                Strings.emergencyEmailContact,
+                user.emergencyEmailContact ?? '',
+                isRow: true,
+              ),
+              Gap(20.h),
+
+              _buildText(
+                Strings.emergencyMobileContact,
+                user.emergencyMobileContact != null
+                    ? '${user.countryCode ?? ''} ${user.emergencyMobileContact ?? ''}'
+                    : '',
+                isRow: true,
+              ),
+              // Gap(20.h),
+              // _buildText(
+              //   Strings.company,
+              //   user.companies,
+              //   isRow: true,
+              // ),
+              // Gap(20.h),
+              // _buildRow(
+              //   Strings.emergencyEmailContact,
+              //   user.email ?? '',
+              //   Strings.mobile,
+              //   user.emergencyEmailContact ?? '',
+              // )
             ],
-          ),
-          Gap(20.h),
-          _buildRow(
-            Strings.firstName,
-            user.firstName ?? '',
-            Strings.lastName,
-            user.lastName ?? '',
-          ),
-          Gap(20.h),
-          _buildRow(
-            Strings.email,
-            user.email ?? '',
-            Strings.mobile,
-            '${user.countryCode ?? ''} ${user.phoneNumber ?? ''}',
-          ),
-          Gap(20.h),
-          _buildRow(
-            Strings.emergencyMobileContact,
-            user.emergencyEmailContact ?? '',
-            Strings.emergencyEmailContact,
-            '${user.countryCode ?? ''} ${user.emergencyMobileContact ?? ''}',
-          ),
-          // Gap(20.h),
-          // _buildRow(
-          //   Strings.emergencyEmailContact,
-          //   user.email ?? '',
-          //   Strings.mobile,
-          //   user.emergencyEmailContact ?? '',
-          // )
-        ],
+          );
+        },
       ),
     );
   }
@@ -76,7 +128,8 @@ class UserProfileWidget extends StatelessWidget {
           flex: 2,
           child: _buildText(field1, value1),
         ),
-        const Spacer(),
+        // const Spacer(),
+        Gap(20.w),
         Expanded(
           flex: 2,
           child: _buildText(field2, value2),
@@ -85,27 +138,37 @@ class UserProfileWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildText(String text, String value) {
+  Widget _buildText(String text, String value, {isRow = false}) {
+    final children = [
+      AutoSizeText(
+        text,
+        maxLines: 1,
+        style: TextStyle(
+          color: Colors.grey.shade600,
+        ),
+      ),
+      const Gap(10),
+      // const Spacer(),
+      AutoSizeText(
+        value,
+        maxLines: 2,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ];
+
+    if (isRow) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AutoSizeText(
-          text,
-          maxLines: 1,
-          style: TextStyle(
-            color: Colors.grey.shade600,
-          ),
-        ),
-        Gap(5.h),
-        AutoSizeText(
-          value,
-          maxLines: 2,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
+      children: children,
     );
   }
 

@@ -5,8 +5,10 @@ abstract class AuthRepo {
   Future<ApiResult<User>> signIn({required SignInModel data});
   Future<ApiResult<User>> verifyOtp({required OtpModel otpModel});
   Future<ApiResult<User>> updateMe({required User user, bool isUpdate = true});
-  Future<ApiResult<User>> updateUser({required UserData userData});
+  Future<ApiResult<User>> updateAllowedRoles(
+      {required List<String> allowedRoles});
   Future<ApiResult<User>> updateStatus({required UserData userData});
+  Future<ApiResult<UserData>> updateUserData({required UserData data});
   Future<ApiResult<User>> updateCvdForms({required List<String> base64pdfs});
 
   Future<ApiResult<ResponseModel>> forgotPassword({required String email});

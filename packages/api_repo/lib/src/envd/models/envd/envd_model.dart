@@ -1,4 +1,4 @@
-import 'package:bioplus/constants/my_decoration.dart';
+import 'package:date_format/date_format.dart';
 
 class EnvdResponseModel {
   EnvdData? data;
@@ -66,7 +66,7 @@ class Consignments {
 
 class Items {
   String? number;
-  List<Forms>? forms;
+  List<UserForms>? forms;
   String? pdfUrl;
   String? submittedAt;
   String? updatedAt;
@@ -102,9 +102,9 @@ class Items {
   Items.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     if (json['forms'] != null) {
-      forms = <Forms>[];
+      forms = <UserForms>[];
       json['forms'].forEach((v) {
-        forms!.add(Forms.fromJson(v));
+        forms!.add(UserForms.fromJson(v));
       });
     }
     pdfUrl = json['pdfUrl'];
@@ -213,7 +213,7 @@ class Items {
 
   String createdAt() {
     return submittedAt != null || updatedAt != null
-        ? MyDecoration.formatDate(DateTime.parse(submittedAt ?? updatedAt!))
+        ? MyDateFormat.formatDate(DateTime.parse(submittedAt ?? updatedAt!))
         : '';
   }
 
@@ -228,13 +228,13 @@ class Items {
   String get toPIC => destination?.pic ?? '';
 }
 
-class Forms {
+class UserForms {
   String? type;
   String? serialNumber;
 
-  Forms({this.type, this.serialNumber});
+  UserForms({this.type, this.serialNumber});
 
-  Forms.fromJson(Map<String, dynamic> json) {
+  UserForms.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     serialNumber = json['serialNumber'];
   }

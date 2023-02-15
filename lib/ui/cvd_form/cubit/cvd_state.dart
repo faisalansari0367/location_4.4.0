@@ -9,7 +9,6 @@ class CvdState extends Equatable {
   final bool isLoading;
   final bool showOfflineForms;
 
-
   const CvdState({
     this.showOfflineForms = false,
     this.isLoading = false,
@@ -20,7 +19,8 @@ class CvdState extends Equatable {
   });
 
   @override
-  List<Object> get props => [forms,  currentStep, data, isLoading, showOfflineForms];
+  List<Object> get props =>
+      [forms, currentStep, data, isLoading, showOfflineForms];
 
   CvdState copyWith({
     bool? isLoading,

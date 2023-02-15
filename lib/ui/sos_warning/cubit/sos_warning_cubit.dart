@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/maps/location_service/geolocator_service.dart';
-import 'package:bioplus/widgets/dialogs/dialog_service.dart';
-import 'package:bioplus/widgets/dialogs/mail_sent_dialog.dart';
+import 'package:bioplus/ui/user_profile/provider/user_profile_provider.dart';
+import 'package:bioplus/ui/user_profile/widgets/edit_profile.dart';
+import 'package:bioplus/widgets/dialogs/dialogs.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
-
-import '../../../services/csv_service.dart';
+import 'package:provider/provider.dart';
 
 part 'sos_warning_state.dart';
 
@@ -50,9 +50,32 @@ class SosWarningCubit extends Cubit<SosWarningState> {
     }
   }
 
-  Object? failure(NetworkExceptions error) {
-    DialogService.failure(error: error);
-    return null;
+  Future<void> failure(NetworkExceptions error) async {
+    final message = NetworkExceptions.getErrorMessage(error);
+
+    if (message.contains('You must add')) {
+      await DialogService.showDialog(
+        child: ErrorDialog(
+          message:
+              'You must add emergency contact details in your profile for this to work.',
+          onTap: () {
+            Get.back();
+            Get.to(
+              () => ChangeNotifierProvider(
+                create: (context) => UserProfileNotifier(context),
+                child: const EditProfile(),
+              ),
+            );
+          },
+        ),
+      );
+      // Get.back();
+      return;
+    }
+
+    DialogService.failure(
+      error: error,
+    );
   }
 
   Object? success(dynamic data) {
@@ -65,6 +88,4 @@ class SosWarningCubit extends Cubit<SosWarningState> {
     );
     return null;
   }
-
- 
 }

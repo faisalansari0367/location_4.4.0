@@ -7,10 +7,8 @@ part of 'user_data.dart';
 // **************************************************************************
 
 UserData _$UserDataFromJson(Map<String, dynamic> json) => UserData(
-      species: (json['species'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+      species:
+          (json['species'] as List<dynamic>?)?.map((e) => e as String).toList(),
       employerCompany: json['employerCompany'] as String?,
       emergencyMobileContact: json['emergencyMobileContact'] as String?,
       temporaryOwner: json['temporaryOwner'] as String?,
@@ -59,19 +57,18 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) => UserData(
       sector: json['sector'] as String?,
       contactName: json['contactName'] as String?,
       eventName: json['eventName'] as String?,
+      rego: json['rego'] as String?,
       contactEmail: json['contactEmail'] as String?,
       contactNumber: json['contactNumber'] as String?,
       cvdForms: (json['cvdForms'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+          ?.map((e) => e as String)
+          .toList(),
       startDate: UserData._parseDate(json['startDate'] as String?),
       endDate: UserData._parseDate(json['endDate'] as String?),
       edec: json['edec'] as String?,
       allowedRoles: (json['allowedRoles'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
+          ?.map((e) => e as String)
+          .toList(),
       registrationToken: json['registrationToken'] as String?,
       updatedAt: UserData._parseDate(json['updatedAt'] as String?),
       status: UserData.getStatus(json['status'] as String?),
@@ -83,14 +80,14 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) => UserData(
       nfasAccreditationNumber: json['nfasAccreditationNumber'] as String?,
       stripeCusId: json['stripeCusId'] as String?,
       geofenceLimit: json['geofenceLimit'] as int?,
-      isSubscribed: json['isSubscribed'] as bool? ?? false,
+      isSubscribed: json['isSubscribed'] as bool?,
       subscriptionStartDate:
           UserData._parseDate(json['subscriptionStartDate'] as String?),
       subscriptionEndDate:
           UserData._parseDate(json['subscriptionEndDate'] as String?),
       createdAt: UserData._parseDate(json['createdAt'] as String?),
       emergencyEmailContact: json['emergencyEmailContact'] as String?,
-      isTemporaryOwner: json['isTemporaryOwner'] as bool? ?? false,
+      isTemporaryOwner: json['isTemporaryOwner'] as bool?,
       city: json['city'] as String?,
       location: json['location'] as String?,
     )
@@ -102,6 +99,7 @@ Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
       'id': instance.id,
       'firstName': instance.firstName,
       'logo': instance.logo,
+      'rego': instance.rego,
       'lastName': instance.lastName,
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,

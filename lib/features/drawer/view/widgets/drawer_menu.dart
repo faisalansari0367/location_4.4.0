@@ -15,7 +15,11 @@ class DrawerMenu extends StatefulWidget {
   final Function(int) onItemSelected;
   final int selectedIndex;
 
-  const DrawerMenu({super.key, required this.onItemSelected, required this.selectedIndex});
+  const DrawerMenu({
+    super.key,
+    required this.onItemSelected,
+    required this.selectedIndex,
+  });
 
   @override
   State<DrawerMenu> createState() => _DrawerMenuState();
@@ -56,7 +60,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
         _buildWelcome(context),
         Gap(10.height),
         Gap(2.height),
-        ..._drawerItems.items.map(_customTile).toList(),
+        ..._drawerItems.items.map(_customTile),
         // Gap(2.height),
         // Spacer(),
         // Spacer(),
@@ -75,7 +79,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   }
 
   Padding _buildWelcome(BuildContext context) {
-    final style = Theme.of(context).textTheme.headline6?.copyWith(
+    final style = Theme.of(context).textTheme.titleLarge?.copyWith(
           color: Colors.white,
           fontWeight: FontWeight.w600,
           fontSize: 24.sp,
@@ -95,9 +99,14 @@ class _DrawerMenuState extends State<DrawerMenu> {
               _buildRole(context),
             ],
           ),
-          Text(
-            user?.fullName ?? '',
-            style: style,
+          StreamBuilder<UserData?>(
+            stream: context.read<Api>().userDataStream,
+            builder: (context, snapshot) {
+              return Text(
+                snapshot.data?.fullName ?? '',
+                style: style,
+              );
+            },
           ),
         ],
       ),
@@ -115,8 +124,10 @@ class _DrawerMenuState extends State<DrawerMenu> {
           final api = context.read<Api>();
           // final localApi = context.read<LocalApi>();
           // final userRole = localApi.getUserData();
-          return StreamBuilder<User?>(
-            stream: (snapshot.data ?? false) ? api.userStream : api.userStream,
+          return StreamBuilder<UserData?>(
+            stream: (snapshot.data ?? false)
+                ? api.userDataStream
+                : api.userDataStream,
             builder: (context, snapshot) {
               final hasName = ![null, ''].contains(snapshot.data?.role);
               final role = hasName ? snapshot.data?.role : '';
@@ -143,7 +154,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           children: [
             Text(
               'Copyright',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 18.h,
@@ -157,7 +168,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
             Gap(5.w),
             Text(
               '${DateTime.now().year}',
-              style: Theme.of(context).textTheme.headline6?.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                     fontSize: 18.h,
@@ -168,7 +179,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
         AutoSizeText(
           'FoodFibreTracePtyLtd.',
           maxLines: 1,
-          style: Theme.of(context).textTheme.headline6?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
                 fontSize: 18.h,

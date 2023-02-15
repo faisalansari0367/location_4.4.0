@@ -10,24 +10,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserProfileNotifier extends BaseModel {
-  UserProfileNotifier(super.context);
+  UserProfileNotifier(super.context) {
+    user = apiService.getUserData() ?? UserData();
+  }
 
-  UserData? get user => apiService.getUserData();
+  // UserData? get userData => apiService.getUserData();
 
-  UserData userData = UserData();
+  UserData user = UserData();
 
-  void onFirstNameChanged(String value) => userData.firstName = value;
-  void onLastNameChanged(String value) => userData.lastName = value;
-  void onEmailChanged(String value) => userData.email = value;
+  void onFirstNameChanged(String value) => user.firstName = value;
+  void onLastNameChanged(String value) => user.lastName = value;
+  void onEmailChanged(String value) => user.email = value;
   void onEmergencyEmailChanged(String value) =>
-      userData.emergencyEmailContact = value;
-  void onPhoneNumberChanged(String value) => userData.phoneNumber = value;
-  // void onAddressChanged(String value) => userData.address = value;
-  void onCityChanged(String value) => userData.city = value;
-  // void onCountryChanged(String value) => userData.countr = value;
-  void onStateChanged(String value) => userData.state = value;
-  void onPostCodeChanged(String value) =>
-      userData.postcode = int.tryParse(value);
+      user.emergencyEmailContact = value;
+  void onPhoneNumberChanged(String value) => user.phoneNumber = value;
+  // void onAddressChanged(String value) => user.address = value;
+  void onCityChanged(String value) => user.city = value;
+  // void onCountryChanged(String value) => user.countr = value;
+  void onStateChanged(String value) => user.state = value;
+  void onPostCodeChanged(String value) => user.postcode = int.tryParse(value);
+
+  void onEmergencyMobileContactChanged(String value) =>
+      user.emergencyMobileContact = value;
+
+  void onCompanyChanged(String? value) {
+    if (value == null) return;
+    user.company = [value];
+    notifyListeners();
+  }
 
   bool get showGeofenceDelegation => [
         Roles.producer.name,
@@ -35,10 +45,21 @@ class UserProfileNotifier extends BaseModel {
         Roles.agent.name,
         Roles.feedlotter.name,
         Roles.admin.name,
-      ].contains(user?.role?.toLowerCase());
+      ].contains(user.role?.toLowerCase());
 
   Future<void> updateUser() async {
-    final result = await apiService.updateUser(userData: userData);
+    final result = await apiService.updateUserData(
+      data: UserData(
+        firstName: user.firstName,
+        lastName: user.lastName,
+        emergencyEmailContact: user.emergencyEmailContact,
+        phoneNumber: user.phoneNumber,
+        emergencyMobileContact: user.emergencyMobileContact,
+        city: user.city,
+        state: user.state,
+        postcode: user.postcode,
+      ),
+    );
     result.when(
       success: (data) {
         DialogService.success(
@@ -53,7 +74,7 @@ class UserProfileNotifier extends BaseModel {
   Future<void> logout(BuildContext context) async {
     geofenceRepo.cancel();
     context.read<GeofenceService>().cancel();
-    final client = GraphQlClient();
+    final client = GraphQlClient(username: '', password: '');
     await client.clearStorage();
     await api.logout();
     await Get.offAll(() => const LoginPage());

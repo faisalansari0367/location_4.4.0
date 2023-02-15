@@ -46,7 +46,7 @@ class AddPicBody extends StatelessWidget {
                   hintText: 'Company Name',
                   textCapitalization: TextCapitalization.characters,
                   onChanged: provider.onCompanyChanged,
-                  initialValue: provider.model?.companies,
+                  initialValue: provider.model?.company,
                 ),
                 MyTextField(
                   hintText: 'Property Name',
@@ -54,11 +54,11 @@ class AddPicBody extends StatelessWidget {
                   onChanged: provider.onPropertyChanged,
                   initialValue: provider.model?.propertyName,
                 ),
-                MyTextField(
-                  hintText: 'Owner / Manager',
-                  onChanged: provider.onOwnerChanged,
-                  initialValue: provider.model?.owner,
-                ),
+                // MyTextField(
+                //   hintText: 'Owner / Manager',
+                //   onChanged: provider.onOwnerChanged,
+                //   initialValue: provider.model?.owner,
+                // ),
                 MyTextField(
                   hintText: Strings.street,
                   textCapitalization: TextCapitalization.characters,
@@ -88,7 +88,7 @@ class AddPicBody extends StatelessWidget {
                   hintText: 'LPA Username',
                   inputFormatters: [LpaUsernameTextFormatter()],
                   controller: provider.lpaUsernameController,
-                  initialValue: provider.model?.lpaUsername,
+                  // initialValue: provider.model?.lpaUsername, 
                   // readOnly: true,
                   validator: provider.lpaUsernameController.text.isEmpty
                       ? Validator.none

@@ -7,7 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PicCard extends StatelessWidget {
   final PicModel picModel;
-  const PicCard({super.key, required this.picModel});
+  final VoidCallback? onTap;
+  const PicCard({super.key, required this.picModel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +17,17 @@ class PicCard extends StatelessWidget {
 
   Widget _buildWidget(BuildContext context) {
     return GestureDetector(
-      // onTap: onTap,
+      onTap: onTap,
       child: ClipRRect(
-        borderRadius: kBorderRadius,
+        // borderRadius: kBorderRadius,
         child: AnimatedContainer(
           duration: 250.milliseconds,
           padding: kPadding,
           decoration: BoxDecoration(
-            border: _border(),
-            // borderRadius: kBorderRadius,
+            border: Border.all(
+              color: Colors.grey.shade300,
+            ),
+            borderRadius: kBorderRadius,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,61 +53,28 @@ class PicCard extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  // Text(
-                  //   MyDecoration.formatDate(DateTime.now()),
-                  //   textAlign: TextAlign.end,
-                  //   style: context.textTheme.titleSmall?.copyWith(
-                  //     fontWeight: FontWeight.bold,
-                  //     color: Colors.grey.shade700,
-                  //   ),
-                  // ),
                   const Icon(
                     Icons.chevron_right_outlined,
                   ),
                 ],
               ),
               Gap(10.h),
-              Row(
-                children: [
-                  _column(context, 'Owner', picModel.owner),
-                  const Spacer(),
-                  _column(context, 'Company', picModel.companies),
-                ],
-              ),
-              Gap(10.h),
+              if (picModel.owner != null &&
+                  picModel.company?.isNotEmpty == true) ...[
+                Row(
+                  children: [
+                    _column(context, 'Owner', picModel.owner),
+                    const Spacer(),
+                    _column(context, 'Company', picModel.company),
+                  ],
+                ),
+                Gap(10.h),
+              ],
               _column(
                 context,
                 'Address',
                 '${picModel.street}, ${picModel.town}, ${picModel.state}',
               ),
-              // Text(
-              //   'Owner',
-              //   style: context.textTheme.titleSmall?.copyWith(
-              //     fontWeight: FontWeight.bold,
-              //     color: Colors.grey.shade700,
-              //   ),
-              // ),
-              // Row(
-              //   children: [
-              //     Text(
-              //       picModel.owner,
-              //       style: context.textTheme.titleSmall?.copyWith(
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     ),
-              //     // Spacer(),
-              //     Expanded(
-              //       child: Text(
-              //         MyDecoration.formatDate(DateTime.now()),
-              //         textAlign: TextAlign.end,
-              //         style: context.textTheme.titleSmall?.copyWith(
-              //           fontWeight: FontWeight.bold,
-              //           color: Colors.grey.shade700,
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
             ],
           ),
         ),

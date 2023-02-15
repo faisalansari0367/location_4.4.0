@@ -33,12 +33,12 @@ class DrawerItems {
           iconData: Icons.admin_panel_settings_outlined,
           page: AdminPage(),
         ),
-      if (isAdmin)
-        const DrawerItem(
-          text: Strings.profile,
-          iconData: Icons.account_box_outlined,
-          page: UserProfilePage(),
-        ),
+      // if (isAdmin)
+      const DrawerItem(
+        text: Strings.profile,
+        iconData: Icons.account_box_outlined,
+        page: UserProfilePage(),
+      ),
       const DrawerItem(
         text: Strings.settings,
         iconData: Icons.settings,

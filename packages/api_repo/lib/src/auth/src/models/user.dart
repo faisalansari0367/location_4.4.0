@@ -66,6 +66,32 @@ class User extends Equatable {
       registerationToken,
     ];
   }
+
+  User copyWith({
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? phoneNumber,
+    int? id,
+    String? role,
+    String? createdAt,
+    String? updatedAt,
+    String? countryCode,
+    String? registerationToken,
+  }) {
+    return User(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      id: id ?? this.id,
+      role: role ?? this.role,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      countryCode: countryCode ?? this.countryCode,
+      registerationToken: registerationToken ?? this.registerationToken,
+    );
+  }
 }
 
 class UserKeys {
