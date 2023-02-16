@@ -88,7 +88,7 @@ class AddPicBody extends StatelessWidget {
                   hintText: 'LPA Username',
                   inputFormatters: [LpaUsernameTextFormatter()],
                   controller: provider.lpaUsernameController,
-                  // initialValue: provider.model?.lpaUsername, 
+                  // initialValue: provider.model?.lpaUsername,
                   // readOnly: true,
                   validator: provider.lpaUsernameController.text.isEmpty
                       ? Validator.none

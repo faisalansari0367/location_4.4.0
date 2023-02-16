@@ -202,8 +202,8 @@ class Client {
   }) async {
     final headers = builder().setProtectedApiHeader();
     final dio = headers.setUrlEncoded().build();
-    final fromFile =
-        await MultipartFile.fromFile(file.path, filename: fileName);
+    final fromFile = await MultipartFile.fromFile(file.path,
+        filename: file.path.split('/').last);
     final FormData formData = FormData.fromMap({"photo": fromFile});
     formData.fields.add(MapEntry("file", fileName));
     formData.fields.addAll(fields);

@@ -61,9 +61,13 @@ class SelectRoleCubit extends Cubit<SelectRoleState> {
     //   return;
     // }
 
-    // user.role = userRole.role;
+    // // user.role = userRole.role;
+    // final updateUser = user.copyWith(
+    //   role: userRole.role,
+    //   registerationToken: await pushNotificationService.getFCMtoken(),
+    // );
     // // user.registerationToken = await pushNotificationService.getFCMtoken();
-    // final result = await apiService.updateMe(user: user);
+    // final result = await apiService.updateMe(user: updateUser);
     // result.when(
     //   success: (data) => Get.to(() => RoleDetailsPage(userRole: userRole)),
     //   failure: (error) => DialogService.failure(error: error),

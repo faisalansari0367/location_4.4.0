@@ -1,0 +1,1282 @@
+{
+    "number": "C-101434286",
+    "forms": [
+        {
+            "type": "LPAC1",
+            "serialNumber": "41289569"
+        },
+        {
+            "type": "HSC2",
+            "serialNumber": "41289570"
+        }
+    ],
+    "pdfUrl": "https://api.envd.uat.integritysystems.com.au/api/v3/vendordeclaration/consignments/C-101434286/$print?authToken=CfDJ8O9IVAwLPrNErxOxwJQeY-Xw7Z5VA5wJEnT4AWTQjzbgt1sPjhmaaI0_FTpOGs3vmScVhMSdBHRsV-0WoJcVO28OGphAPgzsP9xzNb3GxORNFURBA6FZLqBDO5eIbQfH8g",
+    "submittedAt": "2023-02-15T16:22:02.1528742+00:00",
+    "updatedAt": "2023-02-15T16:22:02.1617999+00:00",
+    "updatedBy": null,
+    "status": "SUBMITTED",
+    "species": "CATTLE",
+    "owner": {
+        "address": {
+            "line1": "410",
+            "postcode": "3859",
+            "state": "QLD",
+            "town": "Port Estevanton"
+        },
+        "name": "ISCTestAutomationGQL-Source",
+        "pic": "QDZZ3333"
+    },
+    "destination": {
+        "address": {
+            "line1": "3628",
+            "postcode": "7373",
+            "state": "NSW",
+            "town": "Ullrichton"
+        },
+        "name": "ISCTestAutomationGQL-Dest",
+        "pic": "QECN0381"
+    },
+    "consignee": {
+        "address": {
+            "line1": "3628",
+            "postcode": "7373",
+            "state": "NSW",
+            "town": "Ullrichton"
+        },
+        "name": "ISCTestAutomationGQL-Dest",
+        "pic": "QECN0381"
+    },
+    "origin": {
+        "address": {
+            "line1": "410",
+            "postcode": "3859",
+            "state": "QLD",
+            "town": "Port Estevanton"
+        },
+        "name": "ISCTestAutomationGQL-Source",
+        "pic": "QDZZ3333"
+    },
+    "declaration": {
+        "accept": false,
+        "address": {
+            "line1": "3628",
+            "postcode": "2060",
+            "state": "NSW",
+            "town": "Ullrichton"
+        },
+        "certificateNumber": null,
+        "date": "2023-02-16T00:00:00",
+        "email": "Marshall62@example.org",
+        "fullName": "ISCTestAutomationGQL",
+        "phone": "0478216287",
+        "signature": null
+    },
+    "questions": [
+        {
+            "id": "1",
+            "text": "Please provide a description of the livestock moving",
+            "help": "If you don’t know yet, you can submit/print your forms, fill in this part by hand and update it here later\n",
+            "type": "REPEATABLE",
+            "acceptableAnswers": [],
+            "childQuestions": [
+                {
+                    "id": "3",
+                    "text": "Number of head",
+                    "help": "The total number of livestock being sold must be included on the original LPA NVD\n",
+                    "type": "NUMBER",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "4",
+                    "text": "Breed",
+                    "help": "The total number of livestock being sold must be included on the original consignment.\n\nIf sheep:\n- All PICs on sheep ear tags, or brands in WA, must be listed.\n- Alternatively, a pink post-breeder tag may be attached to every animal.\n- Ear notching, tattooing or distinctive nose or head raddled may be used for other identification purposes.\n- You are required to state which option you have chosen to identify PICs within the consignment.\n\nIf goat:\n- Harvested rangeland goat - a goat that has been captured from a wild state, that has not been born as a result of a managed breeding program, and has not been subjected to any animal husbandry procedure or treatment.\n- Registered Goat Depot - a property that is used to aggregate harvested rangeland goats prior to sale and/or slaughter.\n- It meets the conditions in the Industry NLIS Standards for Operating a Goat Depot\n- Where goats carry NLIS approved breeder or postbreeder devices, the number of animals and device types must be recorded.\nFor more information on NLIS visit \\[http://www.mla.com.au/nlis]\\(<http://www.mla.com.au/nlis>)\n\n",
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "5",
+                    "text": "Sex",
+                    "help": null,
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Bull",
+                            "value": "Bull : M"
+                        },
+                        {
+                            "displayName": "Steer",
+                            "value": "Steer : M"
+                        },
+                        {
+                            "displayName": "Cow",
+                            "value": "Cow : F"
+                        },
+                        {
+                            "displayName": "Heifer",
+                            "value": "Heifer : F"
+                        },
+                        {
+                            "displayName": "Spayed",
+                            "value": "Spayed : F"
+                        },
+                        {
+                            "displayName": "Cow and Calves",
+                            "value": "Cows and Calves : F"
+                        },
+                        {
+                            "displayName": "Calves",
+                            "value": "Calves : F"
+                        }
+                    ],
+                    "triggers": null
+                },
+                {
+                    "id": "8",
+                    "text": "Do you want to draw the brand?",
+                    "help": "\n",
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "displayName": "No",
+                            "value": "No"
+                        }
+                    ],
+                    "triggers": null
+                },
+                {
+                    "id": "15",
+                    "text": "Total head with NLIS electronic ear tags",
+                    "help": "The total number of electronic NLIS ear tags applied to the livestock\n",
+                    "type": "NUMBER",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "16",
+                    "text": "Total head with NLIS rumen devices",
+                    "help": null,
+                    "type": "NUMBER",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                }
+            ]
+        },
+        {
+            "id": "17",
+            "text": "Were the livestock owned by the owner since their birth? ",
+            "help": "**If you DON’T KNOW, you must tick NO**\n\nWhen sending in stock in one lot that are both vendor-bred and non vendor-bred, you must:\n- tick NO and answer the subsequent question on how long they have been owned for, or\n- use separate consignment for vendor-bred stock and the non vendor-bred stock\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "20",
+                    "text": "How long ago were the livestock obtained or purchased?\n\n(If purchased at different times, select the option corresponding to the time of the most recent purchase.)",
+                    "help": null,
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Less than 2 Months",
+                            "value": "LT2Months"
+                        },
+                        {
+                            "displayName": "2 - 6 Months",
+                            "value": "2to6Months"
+                        },
+                        {
+                            "displayName": "6 - 12 Months",
+                            "value": "6to12Months"
+                        },
+                        {
+                            "displayName": "More than 12 months",
+                            "value": "GT12Months"
+                        }
+                    ],
+                    "triggers": [
+                        {
+                            "questionId": "17",
+                            "value": "No"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "28",
+            "text": "BEEF CATTLE: On the property of origin, have cattle been co-grazed with dairy cattle?",
+            "help": "\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                },
+                {
+                    "displayName": "Unsure",
+                    "value": "Unsure"
+                }
+            ],
+            "childQuestions": []
+        },
+        {
+            "id": "29",
+            "text": "Does the property of origin have a completed on-farm biosecurity plan?",
+            "help": "This question is from the National Cattle Health Declaration (NCHD)\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": []
+        },
+        {
+            "id": "56",
+            "text": "In the past 6 months have any of these animals been on a property listed on the ERP database or placed under any restrictions because of chemical residues?",
+            "help": "**Extended Residue Program (ERP) status**\n\n**If you DON’T KNOW, you must tick YES**\n\nProperties with known risks of persistent chemical residues such as DDT may have a ‘T’ status applied to that property by a state or territory authority. If you are unsure of the ERP status of your property, contact your state residue coordinator <http://www.mla.com.au/lpa>.\n\nAnswer YES to this question if, in the past 6 months:\n\n- The cattle have been on a property that currently has a “T” status. Properties with a C (clear), R, M or T5 classification do not have an ERP status for the purposes of this question. OR\n- The cattle have been placed under restrictions, such as quarantine or detention, by a due to chemical residues that exceeded the maximum residue limit (MRL) for agvet chemicals or the maximum level (ML) for contaminants such as lead or cadmium. Attach any relevant report or state authority letter of clearance to all copies of the LPA NVD.\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "57",
+                    "text": "Give details",
+                    "help": "\n",
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "56",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "58",
+            "text": "Have the livestock in this consignment ever in their lives been fed feed containing animal fats?",
+            "help": "**Animal fats**\n\n**If you DON’T KNOW, you must tick YES Only tick NO if:**\n\n- they were bred on your property and you know they have never been fed feed containing animal fats\n- you have evidence showing that these cattle have never consumed feed containing animal fats\n\nAcceptable evidence includes an agent’s post-sale summary or a signed statement or LPA NVD from the previous owner that declares:\n\n- the animals as ‘Saudi eligible’, or\n- the animals have not consumed feed containing animal fats.\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": []
+        },
+        {
+            "id": "59",
+            "text": "In the past 60 days, have any of these cattle been fed by-product stockfeeds?",
+            "help": "**By-product stockfeed**\n\n**If you DON’T KNOW, you must tick YES**\n\nIncludes any plant material not produced primarily for livestock consumption, such as waste fruit, vegetables and fibre crops including peel, pulp, pressings, stem and leaf material. It does not include grain and grain by-products, cotton seed, oilseed meals, tallow or molasses\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "60",
+                    "text": "Attach a list of the by-product stockfeeds date when last fed and a copy of an analyst’s report if available",
+                    "help": "\n",
+                    "type": "REPEATABLE",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "59",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "70",
+            "text": "In the past 60 days, have any of the livestock in this consignment consumed any material that, was still within a withholding period when harvested, collected or first grazed?",
+            "help": "**Agricultural chemicals**\n\n**If you DON’T KNOW, you must tick YES**\n\nUnacceptable residues in livestock may be present in livestock after consuming conventional stockfeeds, such as pasture, crop, stubble, grain or a prepared stockfeed, previously treated with agricultural chemicals.\n\nIf sheep:\n\n- If the sheep have consumed feed sprayed or treated in the past 60 days and you are unsure of the WHP, or there was no WHP on the label, you must answer YES and provide details.\n- If sheep have been fed purchased feeds within 60 days prior to sale you must answer YES unless you hold commodity (CVD) or by-product (BVD) vendor declarations which confirm that all WHPs have been met.\n\nIf cattle, goats or bobby calves:\n\n- If the livestock have consumed purchased feeds within 60 days prior to sale the vendor must answer YES unless they hold commodity (CVD) or by-product (BVD) vendor declarations which confirm that all required WHPs have been met.\n- If you are unsure, or there was no WHP on the label, you must answer YES and provide details.\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "71",
+                    "text": "Give details",
+                    "help": "\n",
+                    "type": "REPEATABLE",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "70",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "77",
+            "text": "Has the property of origin had an occurrence\nof clinical JD in any species in the past five years?",
+            "help": "JD is a notifiable disease, so it is important to answer these questions. Occurrence of JD refers to clinical disease in the herd or on the property(s). Clinical disease is an infected animal with chronic diarrhoea and weight-loss that does not respond to treatment. The Johne’s Beef Assurance Score (J-BAS) is a voluntary tool developed for JD risk profiling. Details are available at <http://www.animalhealthaustralia.com.au/jd-cattle-tools>.\n\nThe J-BAS is an initial guide and purchasers should ask for more information about JD in the origin herd (see the JD in Cattle Biosecurity Checklist on the ‘JD in cattle’ webpage). The National Farm Biosecurity Reference Manual - Grazing Livestock Production provides a template to use for the property biosecurity plan. All plans should include the JD in Cattle Biosecurity Plan Checklist.\n\n**Check test** – testing of 50 adult animals in the herd (or all eligible animals in a herd if less than 50 adult animals) biased to increase the probability of detecting infection, tested by (pooled) faecal culture or (pooled) HT-J faecal PCR. An ELISA test is available but is not recommended and also not accepted for entry of cattle to WA.\n\n**Sample test **– screening of the adult herd or a large representative sample of the adult herd by an approved test (pooled) faecal culture or (pooled) HT-J faecal PCR. See note above for ELISA test.\n\n**Grazing of non-bovine species **– Buyers of cattle from this consignment may consider the grazing of other JD-susceptible species (sheep, goats, alpacas) on the source property as important to their risk-management decisions. These buyers are entitled to seek information on how you have managed disease risks for all your livestock.\n\nThis question is from the National Cattle Health Declaration (NCHD)\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                },
+                {
+                    "displayName": "Unsure",
+                    "value": "Unsure"
+                }
+            ],
+            "childQuestions": []
+        },
+        {
+            "id": "78",
+            "text": "The property's J-BAS score is",
+            "help": null,
+            "type": "NUMBER",
+            "acceptableAnswers": [],
+            "childQuestions": []
+        },
+        {
+            "id": "79",
+            "text": "Has the source herd had a test for Johne’s disease (JD)",
+            "help": "This question is from the National Cattle Health Declaration (NCHD).\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "80",
+                    "text": "Which test?",
+                    "help": null,
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Check Test",
+                            "value": "CheckTest"
+                        },
+                        {
+                            "displayName": "Sample Test",
+                            "value": "SampleTest"
+                        },
+                        {
+                            "displayName": "HEC Test (dairy only)",
+                            "value": "HECTest"
+                        }
+                    ],
+                    "triggers": [
+                        {
+                            "questionId": "79",
+                            "value": "Yes"
+                        }
+                    ]
+                },
+                {
+                    "id": "81",
+                    "text": "Date test conducted?",
+                    "help": null,
+                    "type": "DATE",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "79",
+                            "value": "Yes"
+                        }
+                    ]
+                },
+                {
+                    "id": "82",
+                    "text": "Was the result negative",
+                    "help": null,
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "displayName": "No",
+                            "value": "No"
+                        },
+                        {
+                            "displayName": "Pending",
+                            "value": "Pending"
+                        }
+                    ],
+                    "triggers": [
+                        {
+                            "questionId": "79",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "83",
+            "text": "Have these cattle been tested for the presence of bovine viral\ndiarrhoea virus (BVDV, pestivirus)?",
+            "help": "Persistently infected animals can be detected by conducting a pestivirus antigen test. This test only needs to be conducted once in an animal’s life. Cattle that test positive in most cases are persistently infected animals. Pestivirus antibody testing may be done to check the pestivirus status of the herd. Contact your veterinarian for assistance.\n\nThis question is from the National Cattle Health Declaration (NCHD)\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "84",
+                    "text": "Were any cattle found to be persistently infected?",
+                    "help": null,
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Yes",
+                            "value": "Yes"
+                        },
+                        {
+                            "displayName": "No",
+                            "value": "No"
+                        }
+                    ],
+                    "triggers": [
+                        {
+                            "questionId": "83",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "85",
+            "text": "Have these cattle been tested for the presence of BVDV(pestivirus) antibody",
+            "help": "This question is from the National Cattle Health Declaration (NCHD)\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "180",
+                    "text": "Test results",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "85",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "88",
+            "text": "Have any of the cattle in this consignment ever in their lives been treated with a hormonal growth promotant (HGP)? (Use a second document for mixed consignments.)",
+            "help": "**Hormonal growth promotant (HGP) status**\n\n**If you DON’T KNOW, you must tick YES Only tick NO if:**\n\n- they were bred on your property and you know they have never been treated with HGPs or;\n- you have evidence showing that these cattle have never in their lives been treated with HGPs. Acceptable evidence includes an agent’s post-sale summary, or a signed statement or LPA NVD from the previous owner.\n\nIf you want non-HGP and HGP treated cattle to be managed separately by the receiver, use separate consignments.\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": []
+        },
+        {
+            "id": "96",
+            "text": "Are any of the livestock in this consignment still within a Withholding Period (WHP) or Export Slaughter Interval (ESI) as set by APVMA or SAFEMEAT following treatment with any veterinary drug or chemical?",
+            "help": "**If you DON’T KNOW, you must tick YES**\n\nVeterinary drugs include chemicals administered orally, by injection or to the skin such as antibiotics, vaccines, worm and externally applied insecticides but exclude vitamin and mineral treatments.\n\nExport Slaughter Intervals (ESIs) are the period following treatment when livestocks are unsuitable for export processing. Withholding Periods (WHPs) are the period following treatment when livestocks are unsuitable for processing for consumption in Australia.\n\nESIs and WHPs for commonly used vet chemicals registered for use are available at [www.apvma.gov.au/ESI](http://www.apvma.gov.au/ESI). It is important to check that WHP and ESI information is current. Livestock ESI information can be found by identifying the product name in the Livestock ESI lists.\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "97",
+                    "text": "Product chemical",
+                    "help": "Provide details on any livestock treatments in the last six (6) months and vaccinations within the last twelve (12) months. Some manufacturers include more than one of the categories listed in the same vaccine, known as a combination vaccine. If you use a combination vaccine, each agent(s), as appropriate, should be detailed. For vaccinations to be current, you must have followed the manufacturer’s recommendation for vaccination. Typically, young livestock or first time vaccinated livestock need two (2) doses, followed by annual boosters. As variations to this general rule do occur (e.g. Silirum is given once only), you must use the manufacturer’s recommendations. At the date the declaration is made and as a result of the vaccination(s) given, the livestock are considered protected from the diseases marked as treated.\n\nThis question is from the National Cattle Health Declaration (NCHD).\n",
+                    "type": "REPEATABLE",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "96",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "102",
+            "text": "In the past 42 days were any of these cattle (a) grazed in a spray risk area; or (b) fed fodders cut from a spray drift risk area? (See Explanatory Notes for definition of spray drift risk area).",
+            "help": "**Spray Drift**\n\n**If you DON’T KNOW, you must tick YES**\n\nA spray drift risk area can exist for up to 10 weeks after any application and can include all grazing land, fodder and forage crops that at the time of application were within 750 metres downwind of a site treated by aerial application and 200m downwind of a site treated by ground rig. Refer to the product label for any downwind mandatory no-spray zone information. Label information is available at <https://portal.apvma.gov.au/pubcris>\n",
+            "type": "SINGLE_CHOICE",
+            "acceptableAnswers": [
+                {
+                    "displayName": "Yes",
+                    "value": "Yes"
+                },
+                {
+                    "displayName": "No",
+                    "value": "No"
+                }
+            ],
+            "childQuestions": [
+                {
+                    "id": "103",
+                    "text": "Date sprayed",
+                    "help": null,
+                    "type": "DATE",
+                    "acceptableAnswers": [],
+                    "triggers": [
+                        {
+                            "questionId": "102",
+                            "value": "Yes"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "130",
+            "text": "Treatments",
+            "help": null,
+            "type": "REPEATABLE",
+            "acceptableAnswers": [],
+            "childQuestions": [
+                {
+                    "id": "131",
+                    "text": "Treatment",
+                    "help": null,
+                    "type": "SINGLE_CHOICE",
+                    "acceptableAnswers": [
+                        {
+                            "displayName": "Other",
+                            "value": "other"
+                        },
+                        {
+                            "displayName": "Parasites",
+                            "value": "parasite"
+                        },
+                        {
+                            "displayName": "Tick",
+                            "value": "tick"
+                        },
+                        {
+                            "displayName": "Pain relief",
+                            "value": "painRelief"
+                        }
+                    ],
+                    "triggers": null
+                },
+                {
+                    "id": "132",
+                    "text": "Product",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "133",
+                    "text": "Date of treatment",
+                    "help": null,
+                    "type": "DATE",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                }
+            ]
+        },
+        {
+            "id": "134",
+            "text": "Current vaccinations for cattle being moved",
+            "help": "Provide details on any cattle treatments in the last six (6) months and vaccinations within the last twelve (12) months. Some manufacturers include more than one of the categories listed in the same vaccine, known as a combination vaccine. If you use a combination vaccine, each agent(s), as appropriate, should be detailed. For vaccinations to be current, you must have followed the manufacturer’s recommendation for vaccination. Typically, young animals or first time vaccinated animals need two (2) doses, followed by annual boosters. As variations to this general rule do occur (e.g. Silirum is given once only), you must use the manufacturer’s recommendations. At the date the declaration is made and as a result of the vaccination(s) given, the animals are considered protected from the diseases marked as treated.\n\nThis question is from the National Cattle Health Declaration (NCHD).\n",
+            "type": "MULTIPLE_CHOICE",
+            "acceptableAnswers": [],
+            "childQuestions": [
+                {
+                    "id": "135",
+                    "text": "Clostridial (e.g. 5 in 1)",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "136",
+                    "text": "Leptospira (e.g. 7 in 1)",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "137",
+                    "text": "Pestivirus",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "138",
+                    "text": "JD (Silirum)",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "139",
+                    "text": "Botulism",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "140",
+                    "text": "Bovine ephemeral fever",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "141",
+                    "text": "Tick fever",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "142",
+                    "text": "Vibrio",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "143",
+                    "text": "Other vaccinations? Please specify",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                }
+            ]
+        },
+        {
+            "id": "146",
+            "text": "Details of other forms included in this consignment are automatically added in this field. However, other documents accompanying the livestock (e.g. tick permits) can be added by clicking below.",
+            "help": "Examples include health statements, permits, additional description sheets, the attachment pages Attachment to the LPA NVD Form. All additional documentation must be labelled with the corresponding consignment number LPA NVD serial number and attached to each printed copy of the consignment\n",
+            "type": "REPEATABLE",
+            "acceptableAnswers": [],
+            "childQuestions": [
+                {
+                    "id": "147",
+                    "text": "Document type",
+                    "help": "Examples include health statements, permits, additional description sheets, the Attachment to the LPA NVD Form. All additional documentation must be labelled with the corresponding LPA NVD serial number and attached to each copy of the LPA NVD\n",
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "148",
+                    "text": "Number",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "149",
+                    "text": "Office of issue",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "150",
+                    "text": "Expiry date",
+                    "help": null,
+                    "type": "DATE",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                }
+            ]
+        },
+        {
+            "id": "151",
+            "text": "Additional information",
+            "help": "List any required attached documents, and attach copies of the documents to the original LPA NVD and all copies of the LPA NVD. Examples include the Attachment to the LPA NVD form, health statements, by-product stockfeed list, residue reports and clearances, treatment details.\n",
+            "type": "STRING",
+            "acceptableAnswers": [],
+            "childQuestions": []
+        },
+        {
+            "id": "157",
+            "text": "Transporter",
+            "help": "Don't know your transporter details?\n\nSimply click 'Submit & print' and get the transporter to fill out the printed form.\n",
+            "type": "REPEATABLE",
+            "acceptableAnswers": [],
+            "childQuestions": [
+                {
+                    "id": "158",
+                    "text": "Transporter's full name",
+                    "help": "\n",
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "159",
+                    "text": "Vehicle Registration Number",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "160",
+                    "text": "Transporter phone number",
+                    "help": null,
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "161",
+                    "text": "Signature",
+                    "help": null,
+                    "type": "IMAGE",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "162",
+                    "text": "Date of movement",
+                    "help": null,
+                    "type": "DATE",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "163",
+                    "text": "Time of movement",
+                    "help": null,
+                    "type": "DATE_TIME",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "164",
+                    "text": "I am the person in charge of the livestock during the movement and declare all the information in Part B is true and correct",
+                    "help": null,
+                    "type": "BOOLEAN",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                },
+                {
+                    "id": "182",
+                    "text": "Transporter Email",
+                    "help": "\n",
+                    "type": "STRING",
+                    "acceptableAnswers": [],
+                    "triggers": null
+                }
+            ]
+        },
+        {
+            "id": "170",
+            "text": "The property's J-DDS score is",
+            "help": null,
+            "type": "NUMBER",
+            "acceptableAnswers": [],
+            "childQuestions": []
+        }
+    ],
+    "answers": [
+        {
+            "questionId": "3",
+            "value": "3686",
+            "index": 0
+        },
+        {
+            "questionId": "4",
+            "value": "k7",
+            "index": 0
+        },
+        {
+            "questionId": "5",
+            "value": "Bull : M",
+            "index": 0
+        },
+        {
+            "questionId": "8",
+            "value": "No",
+            "index": 0
+        },
+        {
+            "questionId": "10",
+            "value": "7tjeoes21hk12nbooa4fee9qb00re1qenexo6zf9jqw037z50y",
+            "index": 0
+        },
+        {
+            "questionId": "15",
+            "value": "2811",
+            "index": 0
+        },
+        {
+            "questionId": "16",
+            "value": "1001",
+            "index": 0
+        },
+        {
+            "questionId": "17",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "20",
+            "value": "LT2Months",
+            "index": null
+        },
+        {
+            "questionId": "28",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "29",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "56",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "57",
+            "value": "06s9i7bln4qiwglx0y6pwhfsd7youjmj3cdlrrhuw1d4",
+            "index": null
+        },
+        {
+            "questionId": "58",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "59",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "61",
+            "value": "Carol Mayert",
+            "index": 0
+        },
+        {
+            "questionId": "63",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "70",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "72",
+            "value": "Devin Jaskolski",
+            "index": 0
+        },
+        {
+            "questionId": "73",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "74",
+            "value": "699",
+            "index": 0
+        },
+        {
+            "questionId": "75",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "76",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "77",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "78",
+            "value": "2",
+            "index": null
+        },
+        {
+            "questionId": "79",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "80",
+            "value": "CheckTest",
+            "index": null
+        },
+        {
+            "questionId": "81",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "82",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "83",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "84",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "85",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "88",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "96",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "98",
+            "value": "Leslie Powlowski I",
+            "index": 0
+        },
+        {
+            "questionId": "99",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "100",
+            "value": "1",
+            "index": 0
+        },
+        {
+            "questionId": "101",
+            "value": "2",
+            "index": 0
+        },
+        {
+            "questionId": "102",
+            "value": "Yes",
+            "index": null
+        },
+        {
+            "questionId": "103",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "131",
+            "value": "other",
+            "index": 0
+        },
+        {
+            "questionId": "132",
+            "value": "kexesjemgy5veog6siu0mfp13",
+            "index": 0
+        },
+        {
+            "questionId": "133",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "134",
+            "value": "",
+            "index": null
+        },
+        {
+            "questionId": "135",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "136",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "137",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "138",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "139",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "140",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "141",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "142",
+            "value": "True",
+            "index": null
+        },
+        {
+            "questionId": "143",
+            "value": "3bb4a33kur93goki0wgtr9ohyrk",
+            "index": null
+        },
+        {
+            "questionId": "147",
+            "value": "l9krpcms8qyxkqn",
+            "index": 0
+        },
+        {
+            "questionId": "147",
+            "value": "Health (Cattle)",
+            "index": 1
+        },
+        {
+            "questionId": "148",
+            "value": "07cbsg7q77n",
+            "index": 0
+        },
+        {
+            "questionId": "148",
+            "value": "41289570",
+            "index": 1
+        },
+        {
+            "questionId": "149",
+            "value": "AHA",
+            "index": 1
+        },
+        {
+            "questionId": "149",
+            "value": "fxxvaq5nb8ie914xdxaowrgjwdm3odqho13cphsk92vx4t",
+            "index": 0
+        },
+        {
+            "questionId": "150",
+            "value": "2022-01-04",
+            "index": 0
+        },
+        {
+            "questionId": "151",
+            "value": "6a4qwnxvpo337u5s2cl00f3j6ja7ka05efbum6c4ucddzfrpzpgew8ltn408k5kat236i24dfik9j9g6nhjm4nawqywtct7",
+            "index": null
+        },
+        {
+            "questionId": "158",
+            "value": "Tracy Gottlieb",
+            "index": 0
+        },
+        {
+            "questionId": "159",
+            "value": "ix",
+            "index": 0
+        },
+        {
+            "questionId": "160",
+            "value": "0410395613",
+            "index": 0
+        },
+        {
+            "questionId": "162",
+            "value": "2023-02-15",
+            "index": 0
+        },
+        {
+            "questionId": "163",
+            "value": "10:13",
+            "index": 0
+        },
+        {
+            "questionId": "164",
+            "value": "True",
+            "index": 0
+        },
+        {
+            "questionId": "170",
+            "value": "1",
+            "index": null
+        },
+        {
+            "questionId": "171",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "172",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "173",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "174",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "175",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "176",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "177",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "178",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "179",
+            "value": "2023-02-15",
+            "index": null
+        },
+        {
+            "questionId": "180",
+            "value": "cyym89cyax6s41n8lwtp9cr5wx6kg6q0si9ib4x9vtnw4krnpv7se06mx7fdtnb3wz",
+            "index": null
+        }
+    ]
+}

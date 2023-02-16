@@ -56,7 +56,8 @@
 			"args": [
 				"build",
 				"apk",
-				"--target=lib/main_dev.dart"
+				"--target=lib/main_dev.dart",
+				"--flavor=dev"
 			],
 			"problemMatcher": [],
 			"group": {
@@ -71,7 +72,8 @@
 			"args": [
 				"build",
 				"ipa",
-				"--target=lib/main_dev.dart"
+				"--target=lib/main_dev.dart",
+				"--flavor=dev"
 			],
 			"problemMatcher": [],
 			"group": {

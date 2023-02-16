@@ -568,4 +568,8 @@ class LocalApi extends Api {
     // TODO: implement getEnvdToken
     throw UnimplementedError();
   }
+  
+  @override
+  // TODO: implement consignmentsStream
+  Stream<Consignments> get consignmentsStream => throw UnimplementedError();
 }

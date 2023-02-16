@@ -287,6 +287,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       }
 
       final data = <String, dynamic>{};
+
       for (final field in state.fieldsData) {
         if (field.fieldType.isAddress) {
           final address = field.address!.toMap();
@@ -352,6 +353,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       }
 
       final trimmedMap = <String, dynamic>{};
+      trimmedMap['role'] = role;
       data.forEach((key, value) {
         trimmedMap[key] = value.toString().trim();
       });
@@ -525,6 +527,7 @@ class RoleDetailsCubit extends Cubit<RoleDetailsState> {
       }
 
       final trimmedData = <String, dynamic>{};
+      data['role'] = role;
       data.forEach((key, value) {
         if (value is String) {
           trimmedData[key] = value.trim();

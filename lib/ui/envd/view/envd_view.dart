@@ -1,18 +1,12 @@
-import 'dart:io';
-
-import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
-import 'package:bioplus/ui/envd/cubit/graphql_query_strings.dart';
+import 'package:bioplus/ui/edec_forms/page/livestock_waybill/livestock_waybill.dart';
+import 'package:bioplus/ui/envd/cubit/envd_cubit.dart';
 // import 'package:bioplus/ui/envd/models/envd_model.dart';
 import 'package:bioplus/ui/envd/view/envd_list_item.dart';
-import 'package:bioplus/widgets/dialogs/error.dart';
+import 'package:bioplus/widgets/empty_screen.dart';
+import 'package:bioplus/widgets/fetching_screen.dart';
 import 'package:bioplus/widgets/my_appbar.dart';
-import 'package:cross_file/cross_file.dart';
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class EnvdView extends StatefulWidget {
   const EnvdView({super.key});
@@ -22,7 +16,6 @@ class EnvdView extends StatefulWidget {
 }
 
 class _EnvdViewState extends State<EnvdView> {
-  List<Items> list = <Items>[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,96 +28,47 @@ class _EnvdViewState extends State<EnvdView> {
               'assets/icons/export.png',
               width: 30,
             ),
-            onPressed: () {
-              generateEnvdCSV();
-              // context.read<GraphQLClient>().cache.reset();
-            },
+            onPressed: context.read<EnvdCubit>().generateCsv,
           ),
         ],
       ),
-      body: Query(
-        options: QueryOptions(
-          document: gql(GraphQlQueryStrings.envdQuery),
-        ),
-        builder: _builder,
+      body: Consumer<EnvdCubit>(
+        // stream: context.read<EnvdCubit>().picsStream,
+        // builder: _builder,
+        builder: (context, value, child) {
+          return AnimatedSwitcher(
+            duration: kDuration,
+            child: _handleState(value),
+          );
+        },
       ),
     );
   }
 
-  Widget _builder(
-    QueryResult<Object?> result, {
-    FetchMore<Object?>? fetchMore,
-    Refetch<Object?>? refetch,
-  }) {
-    if (result.hasException) {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: kPadding,
-          child: ErrorDialog(
-            message: result.exception.toString(),
-            showCloseButton: false,
-            onTap: () {},
-          ),
-        ),
-      );
-    }
-    // print(result.exception);
-
-    if (result.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
-    }
-    // var list = <Items>[];
-    if (result.data != null) {
-      final consignments = Consignments.fromJson(result.data!['consignments']);
-      list = consignments.items ?? [];
-    }
-
+  ListView _buildList(EnvdCubit value) {
     return ListView.separated(
       padding: kPadding,
       separatorBuilder: (context, index) => const SizedBox(height: 20),
-      itemCount: list.length,
-      itemBuilder: (context, index) => EnvdListItem(items: list[index]),
+      itemCount: value.consignments.length,
+      itemBuilder: (context, index) => EnvdListItem(
+        items: value.consignments[index],
+      ),
     );
   }
 
-  Future<void> generateEnvdCSV() async {
-    final headers = [
-      'Consignment',
-      'Created',
-      'From PIC',
-      'To PIC',
-      'Species',
-      'Breed',
-      'Quantity',
-      'Accreditations',
-      'Transporter',
-      'Status'
-    ];
-    final newHeaders = headers.map((e) => e.toUpperCase()).toList();
-    final rows = list
-        .map(
-          (item) => [
-            item.number ?? '',
-            item.createdAt(),
-            item.fromPIC,
-            item.toPIC,
-            item.species ?? '',
-            '',
-            item.getQuantity(),
-            item.getAccredentials(),
-            item.transporter,
-            item.status ?? '',
-          ],
-        )
-        .toList();
-    rows.insert(0, newHeaders);
-    final data = const ListToCsvConverter().convert(rows);
-    final String directory = (await getApplicationSupportDirectory()).path;
-    final path = "$directory/envd_csv-${DateTime.now()}.csv";
-    final File file = File(path);
-    await file.writeAsString(data);
-    await Share.shareXFiles([XFile(file.path)]);
+  Widget _handleState(EnvdCubit value) {
+    if (value.isLoading) {
+      return const FetchingScreen();
+    }
+
+    if (value.consignments.isEmpty) {
+      return const Center(
+        child: EmptyScreen(
+          message: 'No Records Found',
+        ),
+      );
+    }
+
+    return _buildList(value);
   }
 }

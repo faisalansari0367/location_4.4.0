@@ -7,7 +7,8 @@ class UpdatePolygonDetails extends StatefulWidget {
   final String? name;
   final String? companyOwner;
 
-  final void Function(String name, String? companyOwnerName) onDone;
+  final void Function(String name, String? companyOwnerName, String? pic)
+      onDone;
   const UpdatePolygonDetails({
     super.key,
     required this.onDone,
@@ -23,11 +24,13 @@ class _UpdatePolygonDetailsState extends State<UpdatePolygonDetails> {
   final form = GlobalKey<FormState>();
   late TextEditingController controller;
   late TextEditingController _cw;
+  late TextEditingController _pic;
 
   @override
   void initState() {
     controller = TextEditingController(text: widget.name);
     _cw = TextEditingController(text: widget.companyOwner);
+    _pic = TextEditingController();
 
     super.initState();
   }
@@ -51,7 +54,8 @@ class _UpdatePolygonDetailsState extends State<UpdatePolygonDetails> {
           children: [
             Text(
               'Enter zone details',
-              style: context.textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+              style: context.textTheme.titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             Gap(3.height),
             MyTextField(
@@ -66,11 +70,21 @@ class _UpdatePolygonDetailsState extends State<UpdatePolygonDetails> {
               controller: _cw,
             ),
             Gap(2.height),
+            MyTextField(
+              hintText: 'PIC',
+              validator: _pic.text.isEmpty ? Validator.none : Validator.pic,
+              controller: _pic,
+            ),
+            Gap(2.height),
             MyElevatedButton(
               onPressed: () async {
                 if (form.currentState?.validate() ?? false) {
                   Get.back();
-                  widget.onDone(controller.text, _cw.text.isEmpty ? null : _cw.text);
+                  widget.onDone(
+                    controller.text,
+                    _cw.text.isEmpty ? null : _cw.text,
+                    _pic.text.isEmpty ? null : _pic.text,
+                  );
                 }
               },
               text: 'Done',

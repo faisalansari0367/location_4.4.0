@@ -49,7 +49,7 @@ class Consignments {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        items!.add(Items.fromJson(v));
+        items!.add(Items.fromJson(Map<String, dynamic>.from(v)));
       });
     }
   }
@@ -104,7 +104,7 @@ class Items {
     if (json['forms'] != null) {
       forms = <UserForms>[];
       json['forms'].forEach((v) {
-        forms!.add(UserForms.fromJson(v));
+        forms!.add(UserForms.fromJson(Map<String, dynamic>.from(v)));
       });
     }
     pdfUrl = json['pdfUrl'];
@@ -113,7 +113,9 @@ class Items {
     updatedBy = json['updatedBy'];
     status = json['status'];
     species = json['species'];
-    owner = json['owner'] != null ? Owner.fromJson(json['owner']) : null;
+    owner = json['owner'] != null
+        ? Owner.fromJson(Map<String, dynamic>.from(json['owner']))
+        : null;
     destination = json['destination'] != null
         ? Owner.fromJson(json['destination'])
         : null;
@@ -211,6 +213,14 @@ class Items {
     return data.first.value!;
   }
 
+  String get breed {
+    // final q = _findQById('1');
+    // return _findChildQById('4', q?.childQuestions)?.text ?? '';
+    return _findById('4')?.value ?? '';
+  }
+
+  String get breedSex => _findById('5')?.value ?? '';
+
   String createdAt() {
     return submittedAt != null || updatedAt != null
         ? MyDateFormat.formatDate(DateTime.parse(submittedAt ?? updatedAt!))
@@ -223,8 +233,21 @@ class Items {
     return data.first;
   }
 
+  // ChildQuestions? _findChildQById(String id, List<ChildQuestions>? questions) {
+  //   final data = (questions ?? []).where((element) => element.id == id);
+  //   if (data.isEmpty) return null;
+  //   return data.first;
+  // }
+
+  // Questions? _findQById(String id) {
+  //   final data = (questions ?? []).where((element) => element.id == id);
+  //   if (data.isEmpty) return null;
+  //   return data.first;
+  // }
+
   String get fromPIC => origin?.pic ?? '';
   String get transporter => _findById('158')?.value ?? '';
+  String get mobile => _findById('160')?.value ?? '';
   String get toPIC => destination?.pic ?? '';
 }
 

@@ -149,14 +149,26 @@ class UserProfileWidget extends StatelessWidget {
       ),
       const Gap(10),
       // const Spacer(),
-      AutoSizeText(
-        value,
-        maxLines: 2,
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      if (isRow)
+        Expanded(
+          child: AutoSizeText(
+            value,
+            maxLines: 2,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+      else
+        AutoSizeText(
+          value,
+          maxLines: 2,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        )
     ];
 
     if (isRow) {

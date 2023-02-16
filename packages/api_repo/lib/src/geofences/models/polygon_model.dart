@@ -53,6 +53,7 @@ class PolygonModel {
       'points': points.map(_latLngToJson).toList(),
       'name': name,
       'companyOwner': companyOwner,
+      if (pic != null) 'pic': pic,
     };
   }
 
@@ -86,7 +87,8 @@ class PolygonModel {
         pic: json['pic'],
         id: json['id'].toString(),
         color: _colorFromHex(json['color']),
-        points: List<LatLng>.from(polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),
+        points: List<LatLng>.from(
+            polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),
         name: json['name'],
         updatedAt: parseDateTime(json['updatedAt']),
         createdAt: parseDateTime(json['createdAt']),
@@ -119,7 +121,8 @@ class PolygonModel {
       temporaryOwner: _getUserData(json['temporaryOwner']),
       id: json['id'].toString(),
       color: _colorFromHex(json['color']),
-      points: List<LatLng>.from(polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),
+      points: List<LatLng>.from(
+          polygons.map<LatLng>((e) => _latLngFromJson(e)).toList()),
       name: json['name'],
       updatedAt: parseDateTime(json['updatedAt']),
       createdAt: parseDateTime(json['createdAt']),
@@ -128,10 +131,12 @@ class PolygonModel {
     );
   }
 
-  static DateTime? parseDateTime(String? date) => date == null ? null : DateTime.tryParse(date)?.toLocal();
+  static DateTime? parseDateTime(String? date) =>
+      date == null ? null : DateTime.tryParse(date)?.toLocal();
 
   // color to hex
-  String colorToHex(Color color) => color.value.toRadixString(16).padLeft(6, '0');
+  String colorToHex(Color color) =>
+      color.value.toRadixString(16).padLeft(6, '0');
 
   static Color _colorFromHex(String hex) => Color(int.parse(hex, radix: 16));
 

@@ -580,4 +580,8 @@ class ApiRepo implements Api {
   Future<ApiResult> getEnvdToken({required String username, required String password}) {
     return _envdRepo.getEnvdToken(username: username, password: password);
   }
+  
+  @override
+  // TODO: implement consignmentsStream
+  Stream<Consignments> get consignmentsStream => _envdRepo.consignmentsStream;
 }

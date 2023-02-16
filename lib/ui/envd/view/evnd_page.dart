@@ -1,29 +1,37 @@
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/constants/index.dart';
 import 'package:bioplus/ui/envd/cubit/envd_cubit.dart';
-import 'package:bioplus/ui/envd/cubit/graphql_client.dart';
-import 'package:bioplus/ui/envd/view/envd_view.dart';
 import 'package:bioplus/ui/pic/widgets/pic_card.dart';
 import 'package:bioplus/widgets/empty_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
-class EnvdPage extends StatelessWidget {
+class EnvdPage extends StatefulWidget {
   const EnvdPage({super.key});
 
   @override
+  State<EnvdPage> createState() => _EnvdPageState();
+}
+
+class _EnvdPageState extends State<EnvdPage> {
+  late EnvdCubit cubit;
+  @override
+  void initState() {
+    cubit = EnvdCubit(context);
+    cubit.api.getPics();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final model = EnvdCubit(context);
     return ChangeNotifierProvider.value(
-      value: model,
+      value: cubit,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('eNVDs'),
           elevation: 3,
         ),
-        // body:  _listPics(context, model.picsStream),
-        body: _handleStates(context, model),
+        body: _handleStates(context, cubit),
       ),
     );
     // return GraphQLProvider(
@@ -57,37 +65,23 @@ class EnvdPage extends StatelessWidget {
           );
         }
 
-        return ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 20),
-          padding: kPadding,
-          itemCount: state.data?.length ?? 0,
-          itemBuilder: (context, index) {
-            final picModel = state.data![index];
-            return PicCard(
-              onTap: () async {
-                final graphQl = GraphQlClient(
-                  username: picModel.lpaUsername,
-                  password: picModel.lpaPassword,
-                );
+        return _buildPIc(state);
+      },
+    );
+  }
 
-                final isValidated = await graphQl.validateCreds(picModel);
-                if (!isValidated) return;
-
-                Get.to(
-                  () => GraphQLProvider(
-                    client: GraphQlClient(
-                      username: picModel.lpaUsername,
-                      password: picModel.lpaPassword,
-                    ).client,
-                    child: ChangeNotifierProvider(
-                      create: (context) => EnvdCubit(context),
-                      child: const EnvdView(),
-                    ),
-                  ),
-                );
-              },
-              picModel: picModel,
-            );
+  ListView _buildPIc(AsyncSnapshot<List<PicModel>> state) {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const SizedBox(height: 20),
+      padding: kPadding,
+      itemCount: state.data?.length ?? 0,
+      itemBuilder: (context, index) {
+        final picModel = state.data![index];
+        return PicCard(
+          picModel: picModel,
+          onTap: () async {
+            final model = EnvdCubit(context);
+            model.onPicSelect(picModel);
           },
         );
       },

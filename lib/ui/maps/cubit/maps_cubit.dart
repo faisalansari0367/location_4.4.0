@@ -183,11 +183,12 @@ class MapsCubit extends BaseModel {
     emit(state.copyWith(selectedColor: color));
   }
 
-  Future<void> addPolygon(String name, {String? companyOwner}) async {
+  Future<void> addPolygon(String name, {String? companyOwner, String? pic}) async {
     final model = PolygonModel(
       name: name,
       color: state.selectedColor,
       points: _polygonsService.latLngs,
+      pic: pic,
       id: Random().nextInt(10000000).toString(),
       companyOwner: companyOwner,
     );

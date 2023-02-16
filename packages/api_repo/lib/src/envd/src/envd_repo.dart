@@ -10,4 +10,6 @@ abstract class EnvdRepo {
     required String username,
     required String password,
   });
+
+  Stream<Consignments> get consignmentsStream;
 }

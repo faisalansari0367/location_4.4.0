@@ -105,11 +105,11 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  void showSnackbar(String text) {
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar
-      ..showSnackBar(SnackBar(content: Text(text)));
-  }
+  // void showSnackbar(String text) {
+  //   ScaffoldMessenger.of(context)
+  //     ..removeCurrentSnackBar
+  //     ..showSnackBar(SnackBar(content: Text(text)));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -261,11 +261,12 @@ class _MapsViewState extends State<MapsView> with WidgetsBindingObserver {
                 child: UpdatePolygonDetails(
                   companyOwner: state.currentPolygon?.companyOwner,
                   name: state.currentPolygon?.name,
-                  onDone: (name, companyOwnerName) {
+                  onDone: (name, companyOwnerName, pic) {
                     final polygon = state.currentPolygon!;
                     final updatePolygon = polygon.copyWith(
                       companyOwner: companyOwnerName,
                       name: name,
+                      pic: pic,
                     );
                     cubit.updatePolygon(updatePolygon);
                     cubit.toggleIsEditingFence();

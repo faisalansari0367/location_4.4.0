@@ -2,11 +2,12 @@
 // import 'package:api_repo/configs/client.dart';
 // import 'package:hive_flutter/adapters.dart';
 
+import 'dart:convert';
+
 import 'package:api_repo/api_repo.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../envd_repo.dart';
 import 'graph_query.dart';
 import 'storage/envd_storage_service.dart';
 
@@ -24,6 +25,7 @@ class EnvdRepoImpl implements EnvdRepo {
   final BehaviorSubject<Consignments> _controller =
       BehaviorSubject<Consignments>.seeded(Consignments(items: []));
 
+  static const _graphQlUrl = "https://api.uat.integritysystems.com.au/graphql";
   static const _envdUrl = 'https://auth-uat.integritysystems.com.au';
   static const _clientData = {
     'client_id': 'itrack',
@@ -43,7 +45,7 @@ class EnvdRepoImpl implements EnvdRepo {
       final options = Options(headers: headers);
       final result = await client.build().post(
             '$_envdUrl/connect/token',
-            data: _clientData..addAll(data),
+            data: data..addAll(_clientData),
             options: options,
           );
       final envdModel = EnvdTokenModel.fromJson(result.data);
@@ -68,28 +70,39 @@ class EnvdRepoImpl implements EnvdRepo {
   Future<ApiResult<Consignments>> getEnvdForms(
       String lpaUsername, String lpaPassword) async {
     final consignments = storageService.getConsignments(lpaUsername);
-    if (consignments != null) _controller.add(consignments);
+    if (consignments?.items?.isNotEmpty ?? false) {
+      // _controller.add(consignments!);
+    }
 
     try {
-      EnvdTokenModel? token = storageService.getToken(lpaUsername);
-      if (token == null) {
+      EnvdTokenModel? hasToken = storageService.getToken(lpaUsername);
+      if (hasToken?.isExpired() ?? true) {
         await getEnvdToken(username: lpaUsername, password: lpaPassword);
       }
 
-      final result = await client.build().post(
-            '$_envdUrl/graphql',
-            data: {'query': GraphQuery.envdQuery},
-            options: Options(headers: {
-              'Authorizaiton':
-                  'Bearer ${storageService.getToken(lpaUsername)?.accessToken}',
-            }),
+      final token = storageService.getToken(lpaUsername)?.accessToken;
+
+      final result = await client.build(logging: false).post(
+            _graphQlUrl,
+            data: jsonEncode({'query': GraphQuery.envdQuery}),
+            // data: GraphQuery.envdQuery,
+            options: Options(
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+            ),
           );
 
-      final envdModel = Consignments.fromJson(result.data!['consignments']);
-      storageService.saveConsignments(lpaUsername, envdModel);
-      return ApiResult.success(data: envdModel);
+      final envdModel = EnvdResponseModel.fromJson(result.data);
+      final consignments = envdModel.data!.consignments!;
+      storageService.saveConsignments(lpaUsername, consignments);
+      _controller.add(consignments);
+      return ApiResult.success(data: consignments);
     } on Exception catch (e) {
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }
+
+  @override
+  Stream<Consignments> get consignmentsStream => _controller.stream;
 }

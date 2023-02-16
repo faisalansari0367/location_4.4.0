@@ -46,16 +46,18 @@ class EnvdListItem extends StatelessWidget {
             items.destination!.pic!,
           ),
           _gap(),
-          _buildRow('Species', items.species!, 'Quantity', _getQuantity()),
+          _buildRow('Species', items.species!, 'Quantity', items.getQuantity()),
           _gap(),
-          _buildText('Accreditations', items.getAccredentials()),
+          _buildRow('Breed', items.breed, 'Breed Sex', items.breedSex),
           _gap(),
           _buildRow(
             'Transporter',
-            _findById('158')?.value ?? '',
+            items.transporter,
             'Mobile',
-            _findById('160')?.value ?? '',
+            items.mobile,
           ),
+          _gap(),
+          _buildText('Accreditations', items.getAccredentials()),
           _gap(),
           Row(
             children: [
@@ -69,29 +71,11 @@ class EnvdListItem extends StatelessWidget {
     );
   }
 
-  String _getAccredentials() {
-    final List<String> availableTypes = [];
-    final ahsType = 'HS${items.species!.characters.first}';
-    final msaType = 'MSA${items.species!.characters.first}';
-    final nfasType = 'NFAS${items.species!.characters.first}';
-
-    final ahsResults =
-        items.forms!.where((element) => (element.type ?? '').contains(ahsType));
-    if (ahsResults.isNotEmpty) availableTypes.add('AHS');
-    final msaResults =
-        items.forms!.where((element) => (element.type ?? '').contains(msaType));
-    if (msaResults.isNotEmpty) availableTypes.add('MSA');
-    final nfasResults = items.forms!
-        .where((element) => (element.type ?? '').contains(nfasType));
-    if (nfasResults.isNotEmpty) availableTypes.add('NFAS');
-    return availableTypes.join(' , ');
-  }
-
-  Answers? _findById(String id) {
-    final data = items.answers!.where((element) => element.questionId == id);
-    if (data.isEmpty) return null;
-    return data.first;
-  }
+  // Answers? _findById(String id) {
+  //   final data = items.answers!.where((element) => element.questionId == id);
+  //   if (data.isEmpty) return null;
+  //   return data.first;
+  // }
 
   Widget _buildRow(String field1, String value1, String field2, String value2) {
     return Row(
@@ -176,11 +160,5 @@ class EnvdListItem extends StatelessWidget {
       default:
         return Colors.transparent;
     }
-  }
-
-  String _getQuantity() {
-    final data = items.answers!.where((element) => element.questionId == '3');
-    if (data.isEmpty) return '';
-    return data.first.value!;
   }
 }

@@ -54,9 +54,9 @@ class AddFence extends StatelessWidget {
 
           BottomSheetService.showSheet(
             child: UpdatePolygonDetails(
-              onDone: (name, companyOwnerName) {
+              onDone: (name, companyOwnerName, pic) {
                 cubit.setIsAddingGeofence();
-                cubit.addPolygon(name, companyOwner: companyOwnerName);
+                cubit.addPolygon(name, companyOwner: companyOwnerName, pic: pic);
               },
             ),
           );

@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:api_repo/api_repo.dart';
 import 'package:bioplus/ui/forms/forms_page.dart';
@@ -9,7 +8,10 @@ import 'package:bioplus/ui/maps/cubit/logbook_entry_handler.dart';
 import 'package:bioplus/ui/maps/cubit/notify_manager_handler.dart';
 import 'package:bioplus/ui/maps/location_service/map_toolkit_utils.dart';
 import 'package:bioplus/ui/maps/view/widgets/dialog/enter_property.dart';
+import 'package:bioplus/ui/maps/view/widgets/lardner_farm_world_popup.dart';
+import 'package:bioplus/widgets/dialogs/dialog_layout.dart';
 import 'package:bioplus/widgets/dialogs/dialog_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rxdart/rxdart.dart';
@@ -96,6 +98,20 @@ class TrackPolygons {
     hidePopUpTimer.call(
       () async {
         if (currentPolygon?.id != null) {
+          if (currentPolygon?.name.trim() == 'Lardner Farm World') {
+            final entry = await api.getLogRecord(currentPolygon!.id!);
+            if (entry != null) {
+              return;
+            }
+            dontShowAgain.call(
+              () => showPopup(
+                currentPosition,
+                popUp: const DialogLayout(child: LardnerFarmWorld()),
+              ),
+            );
+            return;
+          }
+
           final entry = await api.getLogRecord(currentPolygon!.id!);
           log('logRecord id is : ${entry?.id}');
           log('form is empty : ${entry?.hasForm}');
@@ -129,7 +145,7 @@ class TrackPolygons {
   //   return difference.inMinutes;
   // }
 
-  Future<void> showPopup(LatLng position) async {
+  Future<void> showPopup(LatLng position, {Widget? popUp}) async {
     if (currentPolygon == null) return;
     if (attemptOfShowingPopUp >= 3) return;
     if (attemptOfShowingPopUp == 2) {
@@ -138,22 +154,23 @@ class TrackPolygons {
     attemptOfShowingPopUp++;
     isShowingPopUp = true;
     await DialogService.showDialog(
-      child: EnterProperty(
-        stream: polygonsInCoverage.stream,
-        onTap: (s) async {
-          _stopTimers();
+      child: popUp ??
+          EnterProperty(
+            stream: polygonsInCoverage.stream,
+            onTap: (s) async {
+              _stopTimers();
 
-          final logRecord = await api.getLogRecord(s.id!);
-          Get.to(
-            () => FormsPage(
-              zoneId: s.id!,
-              logRecord: logRecord,
-              polygon: currentPolygon,
-            ),
-          );
-        },
-        onNO: () {},
-      ),
+              final logRecord = await api.getLogRecord(s.id!);
+              Get.to(
+                () => FormsPage(
+                  zoneId: s.id!,
+                  logRecord: logRecord,
+                  polygon: currentPolygon,
+                ),
+              );
+            },
+            onNO: () {},
+          ),
     );
     hidePopUp();
   }
